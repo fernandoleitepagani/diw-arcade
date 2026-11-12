@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { SessionSummary, useSessionBar } from '../../components/session';
 import { Button, Mascot, ProgressBar } from '../../components/ui';
 import { pickLine } from '../../content/copy';
 import type { NodeId } from '../../content/tree';
@@ -46,6 +47,12 @@ function correctAnswer(question: Question): string {
   }
 }
 
+function correctOptionIndex(question: Question): number {
+  if (question.type === 'mcq') return question.answer;
+  if (question.type === 'tf') return question.answer ? 0 : 1;
+  return -1;
+}
+
 function sourceLabel(question: Question): string {
   const aula = String(question.source.aula).padStart(3, '0');
   return `Fonte: aula-${aula}, slide ${question.source.slide}`;
@@ -78,6 +85,22 @@ export function QuizRound({
   const canSubmit =
     question !== undefined &&
     (question.type === 'fill' ? fillValue.trim().length > 0 : selected !== null);
+
+  const answered = session.asked.size;
+  useSessionBar({
+    value: answered,
+    max: session.total,
+    // The session layout defaults to "/" until the round has progress; after
+    // the first answer, exiting returns to the node the quiz belongs to.
+    exitTo: answered > 0 ? `/no/${nodeId}` : '/',
+    confirmExit:
+      answered > 0 && !finished
+        ? {
+            title: 'Sair da rodada?',
+            message: 'O progresso desta rodada será perdido.',
+          }
+        : null,
+  });
 
   function isCorrect(current: Question): boolean {
     if (current.type === 'mcq') {
@@ -177,30 +200,35 @@ export function QuizRound({
     return (
       <section
         className="quiz-round quiz-round__summary"
-        aria-labelledby="quiz-summary-title"
+        aria-label="Resumo da rodada"
       >
-        <Mascot
-          mood={accuracy >= 60 ? 'happy' : 'sad'}
-          line={pickLine(accuracy >= 60 ? 'correct' : 'wrong', accuracy)}
+        <SessionSummary
+          title="Rodada concluída"
+          xp={xpEarned}
+          stats={[
+            {
+              label: 'Acertos de primeira',
+              value: `${firstTry} de ${total} (${accuracy}%)`,
+            },
+          ]}
+          nextHref={`/no/${nodeId}`}
+          mascotMood={accuracy >= 60 ? 'happy' : 'sad'}
+          secondary={
+            <>
+              <Button onClick={onRestart}>Nova rodada</Button>
+              <Button variant="secondary" onClick={onExit}>
+                Voltar ao nó
+              </Button>
+            </>
+          }
         />
-        <h2 id="quiz-summary-title">Rodada concluída</h2>
-        <p className="quiz-round__stat">
-          Acertos de primeira: <strong>{firstTry} de {total}</strong> ({accuracy}%)
-        </p>
-        <p className="quiz-round__stat">
-          XP ganho: <strong>+{xpEarned}</strong>
-        </p>
-        <div className="quiz-round__summary-actions">
-          <Button onClick={onRestart}>Nova rodada</Button>
-          <Button variant="secondary" onClick={onExit}>
-            Voltar ao nó
-          </Button>
-        </div>
       </section>
     );
   }
 
   const number = feedback ? feedback.number : questionNumber(session);
+  const active = feedback ? feedback.question : question;
+  const locked = feedback !== null;
 
   return (
     <section className="quiz-round" aria-label="Rodada do quiz">
@@ -215,6 +243,153 @@ export function QuizRound({
         />
       </div>
 
+      {active ? (
+        <form
+          ref={formRef}
+          className="quiz-round__form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            submit();
+          }}
+        >
+          {active.type === 'mcq' ? (
+            <fieldset className="quiz-round__options">
+              <legend className="quiz-round__prompt">{active.prompt}</legend>
+              {active.options.map((option, index) => {
+                const picked = locked && selected === index;
+                const correct = locked && index === correctOptionIndex(active);
+                const classes = [
+                  'quiz-round__option',
+                  !locked && selected === index
+                    ? 'quiz-round__option--selected'
+                    : '',
+                  picked ? 'quiz-round__option--picked' : '',
+                  correct ? 'quiz-round__option--correct' : '',
+                  locked ? 'quiz-round__option--readonly' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ');
+
+                return (
+                  <label key={option} className={classes}>
+                    <input
+                      type="radio"
+                      name="quiz-option"
+                      value={index}
+                      checked={selected === index}
+                      disabled={locked}
+                      onChange={() => setSelected(index)}
+                    />
+                    <span className="quiz-round__key" aria-hidden="true">
+                      {index + 1}
+                    </span>
+                    <span className="quiz-round__option-text">{option}</span>
+                    {locked ? (
+                      <span className="quiz-round__tags">
+                        {picked ? (
+                          <span className="quiz-round__tag quiz-round__tag--picked">
+                            Sua resposta
+                          </span>
+                        ) : null}
+                        {correct ? (
+                          <span className="quiz-round__tag quiz-round__tag--correct">
+                            Resposta correta
+                          </span>
+                        ) : null}
+                      </span>
+                    ) : null}
+                  </label>
+                );
+              })}
+            </fieldset>
+          ) : active.type === 'tf' ? (
+            <fieldset className="quiz-round__options">
+              <legend className="quiz-round__prompt">{active.prompt}</legend>
+              {['Verdadeiro', 'Falso'].map((option, index) => {
+                const picked = locked && selected === index;
+                const correct = locked && index === correctOptionIndex(active);
+                const classes = [
+                  'quiz-round__option',
+                  !locked && selected === index
+                    ? 'quiz-round__option--selected'
+                    : '',
+                  picked ? 'quiz-round__option--picked' : '',
+                  correct ? 'quiz-round__option--correct' : '',
+                  locked ? 'quiz-round__option--readonly' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ');
+
+                return (
+                  <label key={option} className={classes}>
+                    <input
+                      type="radio"
+                      name="quiz-option"
+                      value={index}
+                      checked={selected === index}
+                      disabled={locked}
+                      onChange={() => setSelected(index)}
+                    />
+                    <span className="quiz-round__option-text">{option}</span>
+                    {locked ? (
+                      <span className="quiz-round__tags">
+                        {picked ? (
+                          <span className="quiz-round__tag quiz-round__tag--picked">
+                            Sua resposta
+                          </span>
+                        ) : null}
+                        {correct ? (
+                          <span className="quiz-round__tag quiz-round__tag--correct">
+                            Resposta correta
+                          </span>
+                        ) : null}
+                      </span>
+                    ) : null}
+                  </label>
+                );
+              })}
+            </fieldset>
+          ) : (
+            <div className="quiz-round__fill">
+              <p id={`quiz-prompt-${active.id}`} className="quiz-round__prompt">
+                {active.prompt}
+              </p>
+              <label htmlFor={`quiz-fill-${active.id}`}>Sua resposta</label>
+              <input
+                id={`quiz-fill-${active.id}`}
+                type="text"
+                autoComplete="off"
+                value={fillValue}
+                disabled={locked}
+                readOnly={locked}
+                aria-describedby={`quiz-prompt-${active.id}`}
+                onChange={(event) => setFillValue(event.target.value)}
+              />
+              {locked ? (
+                <p className="quiz-round__fill-answer">
+                  Sua resposta: <strong>{fillValue}</strong>
+                </p>
+              ) : null}
+            </div>
+          )}
+
+          {locked ? null : (
+            <div className="quiz-round__actions">
+              <Button type="submit" disabled={!canSubmit}>
+                Responder
+              </Button>
+              <span className="quiz-round__hint">
+                {active.type === 'mcq'
+                  ? 'Teclas 1–4 escolhem; Enter responde.'
+                  : 'Enter responde.'}
+              </span>
+            </div>
+          )}
+        </form>
+      ) : (
+        <p className="quiz-round__empty">Conteúdo em breve</p>
+      )}
+
       {feedback ? (
         <div
           className={`quiz-round__feedback quiz-round__feedback--${
@@ -226,10 +401,12 @@ export function QuizRound({
           <p className="quiz-round__verdict">
             {feedback.correct ? 'Correto!' : 'Incorreto'}
           </p>
-          <p className="quiz-round__answer">
-            Resposta correta:{' '}
-            <strong>{correctAnswer(feedback.question)}</strong>
-          </p>
+          {feedback.question.type === 'fill' ? (
+            <p className="quiz-round__answer">
+              Resposta correta:{' '}
+              <strong>{correctAnswer(feedback.question)}</strong>
+            </p>
+          ) : null}
           <p className="quiz-round__explanation">
             {feedback.question.explanation}
           </p>
@@ -248,91 +425,7 @@ export function QuizRound({
             </Button>
           </div>
         </div>
-      ) : question ? (
-        <form
-          ref={formRef}
-          className="quiz-round__form"
-          onSubmit={(event) => {
-            event.preventDefault();
-            submit();
-          }}
-        >
-          {question.type === 'mcq' ? (
-            <fieldset className="quiz-round__options">
-              <legend className="quiz-round__prompt">{question.prompt}</legend>
-              {question.options.map((option, index) => (
-                <label
-                  key={option}
-                  className={`quiz-round__option${
-                    selected === index ? ' quiz-round__option--selected' : ''
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="quiz-option"
-                    value={index}
-                    checked={selected === index}
-                    onChange={() => setSelected(index)}
-                  />
-                  <span className="quiz-round__key" aria-hidden="true">
-                    {index + 1}
-                  </span>
-                  <span className="quiz-round__option-text">{option}</span>
-                </label>
-              ))}
-            </fieldset>
-          ) : question.type === 'tf' ? (
-            <fieldset className="quiz-round__options">
-              <legend className="quiz-round__prompt">{question.prompt}</legend>
-              {['Verdadeiro', 'Falso'].map((option, index) => (
-                <label
-                  key={option}
-                  className={`quiz-round__option${
-                    selected === index ? ' quiz-round__option--selected' : ''
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="quiz-option"
-                    value={index}
-                    checked={selected === index}
-                    onChange={() => setSelected(index)}
-                  />
-                  <span className="quiz-round__option-text">{option}</span>
-                </label>
-              ))}
-            </fieldset>
-          ) : (
-            <div className="quiz-round__fill">
-              <p id={`quiz-prompt-${question.id}`} className="quiz-round__prompt">
-                {question.prompt}
-              </p>
-              <label htmlFor={`quiz-fill-${question.id}`}>Sua resposta</label>
-              <input
-                id={`quiz-fill-${question.id}`}
-                type="text"
-                autoComplete="off"
-                value={fillValue}
-                aria-describedby={`quiz-prompt-${question.id}`}
-                onChange={(event) => setFillValue(event.target.value)}
-              />
-            </div>
-          )}
-
-          <div className="quiz-round__actions">
-            <Button type="submit" disabled={!canSubmit}>
-              Responder
-            </Button>
-            <span className="quiz-round__hint">
-              {question.type === 'mcq'
-                ? 'Teclas 1–4 escolhem; Enter responde.'
-                : 'Enter responde.'}
-            </span>
-          </div>
-        </form>
-      ) : (
-        <p className="quiz-round__empty">Conteúdo em breve</p>
-      )}
+      ) : null}
     </section>
   );
 }
