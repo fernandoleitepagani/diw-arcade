@@ -15,53 +15,50 @@
   gap: clamp(1.25rem, 3vw, 2rem);
   width: min(100%, 36rem);
   padding: clamp(1.75rem, 4vw, 3rem);
-  border: 1px solid var(--border);
-  border-radius: 1rem;
-  background: rgb(17 26 54 / 0.88);
+  text-align: center;
   box-shadow:
     0 24px 60px rgb(0 0 0 / 0.45),
     inset 0 0 0 1px rgb(45 226 230 / 0.08);
-  text-align: center;
 }
 
 .onboarding__intro {
   display: grid;
-  gap: 0.5rem;
+  gap: var(--space-2);
   justify-items: center;
 }
 
 .onboarding__brand {
   color: var(--text);
   font-family: var(--font-display), monospace;
-  font-size: clamp(1.1rem, 4vw, 1.75rem);
+  font-size: var(--font-size-h1);
   font-weight: 400;
-  line-height: 1.5;
+  line-height: var(--line-height-display);
 }
 
 .onboarding__welcome {
   color: var(--text-muted);
-  font-size: clamp(1rem, 2.6vw, 1.125rem);
+  font-size: var(--font-size-body);
   line-height: 1.5;
 }
 
 .onboarding__question {
-  margin-top: 0.5rem;
+  margin-block-start: var(--space-2);
   color: var(--text);
-  font-size: clamp(1.05rem, 3vw, 1.3rem);
-  font-weight: 600;
-  line-height: 1.4;
+  font-size: var(--font-size-h3);
+  font-weight: 400;
+  line-height: var(--line-height-display);
 }
 
 .onboarding__goals {
   display: grid;
-  gap: 0.75rem;
+  gap: var(--space-3);
   width: 100%;
 }
 
 .onboarding__goal.ui-button {
   justify-content: center;
-  min-height: 3.75rem;
-  font-size: 1.0625rem;
+  min-height: 4rem;
+  font-size: var(--font-size-h3);
 }
 
 .onboarding__skip {
@@ -71,11 +68,11 @@
 
 @media (max-width: 420px) {
   .onboarding__card {
-    padding: 1.5rem 1.25rem;
+    padding: var(--space-5) var(--space-4);
   }
 
   .onboarding__goal.ui-button {
-    min-height: 3.25rem;
-    padding-inline: 1rem;
+    min-height: 3.5rem;
+    padding-inline: var(--space-4);
   }
 }
