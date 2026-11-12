@@ -2,7 +2,7 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Route, Routes } from 'react-router';
 import { describe, expect, it } from 'vitest';
-import { getFlashcards } from '../../content';
+import { getChallenges, getFlashcards } from '../../content';
 import { newCard } from '../../lib/srs/fsrs';
 import { SAVE_KEY, type SaveV1 } from '../../lib/storage';
 import {
@@ -136,31 +136,35 @@ describe('árvore de habilidades', () => {
 });
 
 describe('página do nó', () => {
-  it('shows aulas, the star rating and the three modes', () => {
+  it('shows the node title as the h1, with aulas, state, stars and the three modes', () => {
     renderNode('/no/n07');
 
     expect(
-      screen.getByRole('heading', { level: 1, name: 'Nó' }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: 'Propriedades CSS' }),
+      screen.getByRole('heading', { level: 1, name: 'Propriedades CSS' }),
     ).toBeInTheDocument();
     expect(screen.getByText(/Aulas:.*172/)).toBeInTheDocument();
+    expect(screen.getByText('Nova')).toBeInTheDocument();
     expect(
       screen.getByRole('img', { name: /^Domínio: / }),
     ).toBeInTheDocument();
 
-    expect(screen.getByRole('link', { name: 'Quiz' })).toHaveAttribute(
-      'href',
-      '/no/n07/quiz',
-    );
-    expect(screen.getByRole('link', { name: 'Cartas' })).toHaveAttribute(
-      'href',
-      '/no/n07/cartas',
-    );
+    expect(
+      screen.getByRole('link', { name: 'Começar quiz' }),
+    ).toHaveAttribute('href', '/no/n07/quiz');
+    expect(
+      screen.getByRole('link', { name: 'Revisar cartas' }),
+    ).toHaveAttribute('href', '/no/n07/cartas');
     expect(
       screen.getByRole('heading', { name: 'Código' }),
     ).toBeInTheDocument();
+  });
+
+  it('lists the node challenges as pending status rows', () => {
+    renderNode('/no/n07');
+
+    expect(screen.getAllByText('pendente')).toHaveLength(
+      getChallenges('n07').length,
+    );
   });
 
   it('introduces the whole deck and reports how many cards were added', async () => {

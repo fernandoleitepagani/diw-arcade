@@ -26,7 +26,7 @@ function renderAt(path: string) {
 
 const pages = [
   { path: '/', heading: 'DIW Arcade' },
-  { path: '/no/n01', heading: 'Nó' },
+  { path: '/no/n01', heading: 'Introdução à Web e tecnologias' },
   { path: '/no/n01/quiz', heading: 'Quiz' },
   { path: '/no/n01/cartas', heading: 'Cartas' },
   { path: '/revisao', heading: 'Revisão' },
