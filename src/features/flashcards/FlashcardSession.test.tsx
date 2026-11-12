@@ -116,6 +116,33 @@ describe('FlashcardSession', () => {
     expect(screen.getByText(/Próxima revisão: em/)).toBeInTheDocument();
   });
 
+  it('mostra o resumo com XP, lembradas e próximo passo', async () => {
+    const user = userEvent.setup();
+    const card = makeFlashcard(1);
+    renderWithProgress(<FlashcardSession flashcards={[card]} />, {
+      now: FIXED_NOW,
+      save: {
+        cards: { [card.id]: dueCard(card.id, 60) },
+        introduced: { [card.id]: PAST_DAY },
+      },
+    });
+
+    await user.keyboard('{Enter}');
+    await user.keyboard('3');
+
+    expect(
+      screen.getByRole('heading', { name: 'Revisão concluída' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Lembradas')).toBeInTheDocument();
+    expect(screen.getByText('1 de 1')).toBeInTheDocument();
+    expect(screen.getByText('1 carta revisada')).toBeInTheDocument();
+    expect(screen.getByText('+5')).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Próximo passo' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Próxima revisão: em/)).toBeInTheDocument();
+  });
+
   it('requeues a card that is due again within 15 minutes', async () => {
     const user = userEvent.setup();
     const card = makeFlashcard(1);

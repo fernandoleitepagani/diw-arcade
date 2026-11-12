@@ -2,6 +2,8 @@
   display: grid;
   gap: 1rem;
   width: 100%;
+  max-width: 46rem;
+  margin-inline: auto;
 }
 
 .flashcard-session__header {
@@ -57,17 +59,18 @@
 
 .flashcard-session__card {
   display: grid;
-  align-content: start;
+  align-content: center;
   gap: 1.15rem;
-  min-height: 17rem;
-  padding: clamp(1.15rem, 4vw, 2rem);
+  width: 100%;
+  min-height: clamp(17rem, 42vh, 24rem);
+  padding: clamp(1.25rem, 4vw, 2.25rem);
   border: 1px solid var(--border);
   border-radius: 0.9rem;
   background:
     radial-gradient(circle at 12% 0%, rgb(45 226 230 / 0.1), transparent 52%),
     linear-gradient(160deg, var(--surface-2), var(--surface) 55%);
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
-  animation: flashcard-enter 180ms ease-out both;
+  animation: flashcard-enter 220ms var(--ease-out, ease-out) both;
 }
 
 .flashcard-session .flashcard-session__front {
@@ -80,7 +83,7 @@
 }
 
 .flashcard-session .flashcard-session__reveal {
-  justify-self: start;
+  justify-self: center;
   min-width: min(100%, 18rem);
   min-height: 3rem;
 }
@@ -90,7 +93,7 @@
   gap: 0.9rem;
   padding-top: 1.15rem;
   border-top: 1px solid var(--border);
-  animation: flashcard-answer 160ms ease-out both;
+  animation: flashcard-answer 220ms var(--ease-out, ease-out) both;
 }
 
 .flashcard-session .flashcard-session__back {
@@ -163,8 +166,7 @@
   transform: scale(0.96);
 }
 
-.flashcard-session__empty,
-.flashcard-session__done {
+.flashcard-session__empty {
   display: grid;
   justify-items: center;
   gap: 0.85rem;
@@ -175,6 +177,24 @@
   text-align: center;
 }
 
+.flashcard-session__done {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  background:
+    radial-gradient(circle at 50% 0%, rgb(45 226 230 / 0.09), transparent 60%),
+    linear-gradient(160deg, var(--surface-2), var(--surface) 60%);
+  text-align: center;
+  animation: flashcard-enter 220ms var(--ease-out, ease-out) both;
+}
+
+.flashcard-session__done .session-summary {
+  padding: 0;
+}
+
 .flashcard-session__empty h2,
 .flashcard-session__done h2 {
   color: var(--text);
@@ -182,11 +202,6 @@
   font-size: clamp(0.95rem, 2.5vw, 1.15rem);
   font-weight: 400;
   line-height: 1.6;
-}
-
-.flashcard-session .flashcard-session__done-count {
-  color: var(--success);
-  font-weight: 700;
 }
 
 .flashcard-session .flashcard-session__next {
@@ -202,7 +217,7 @@
 @keyframes flashcard-enter {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(8px);
   }
 
   to {
@@ -214,10 +229,12 @@
 @keyframes flashcard-answer {
   from {
     opacity: 0;
+    transform: translateY(6px) scale(0.985);
   }
 
   to {
     opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -233,7 +250,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .flashcard-session__card,
-  .flashcard-session__answer {
+  .flashcard-session__answer,
+  .flashcard-session__done {
     animation: none;
   }
 
