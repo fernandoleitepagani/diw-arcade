@@ -470,24 +470,23 @@
   overflow-wrap: anywhere;
 }
 
-/* Bit reaction */
+/* Bit reaction: the mascot and one full-width message stack vertically. */
 .challenge-view__bit {
-  display: flex;
-  align-items: center;
+  display: grid;
+  justify-items: center;
   gap: var(--space-3);
+  text-align: center;
 }
 
 .challenge-view__bit .mascot {
   flex: none;
 }
 
-.challenge-view__bit .mascot__bubble {
-  max-width: 14rem;
-}
-
-.challenge-view__attempts {
+.challenge-view__bit-message {
+  width: 100%;
   color: var(--text-muted);
   font-size: 0.85rem;
+  line-height: 1.5;
 }
 
 .challenge-view__bit--pass {
@@ -552,11 +551,6 @@
 
   .challenge-view__actions .ui-button {
     width: 100%;
-  }
-
-  .challenge-view__bit {
-    align-items: flex-start;
-    flex-direction: column;
   }
 
   .challenge-view__summary-actions {

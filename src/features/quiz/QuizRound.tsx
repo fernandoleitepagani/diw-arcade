@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { SessionSummary, useSessionBar } from '../../components/session';
-import { Button, Mascot, ProgressBar } from '../../components/ui';
+import { Button, Mascot } from '../../components/ui';
 import { pickLine } from '../../content/copy';
 import type { NodeId } from '../../content/tree';
 import type { Question } from '../../content/schema';
@@ -87,8 +87,9 @@ export function QuizRound({
     (question.type === 'fill' ? fillValue.trim().length > 0 : selected !== null);
 
   const answered = session.asked.size;
+  const progressNumber = feedback ? feedback.number : questionNumber(session);
   useSessionBar({
-    value: answered,
+    value: progressNumber,
     max: session.total,
     // The session layout defaults to "/" until the round has progress; after
     // the first answer, exiting returns to the node the quiz belongs to.
@@ -226,7 +227,6 @@ export function QuizRound({
     );
   }
 
-  const number = feedback ? feedback.number : questionNumber(session);
   const active = feedback ? feedback.question : question;
   const locked = feedback !== null;
 
@@ -234,13 +234,8 @@ export function QuizRound({
     <section className="quiz-round" aria-label="Rodada do quiz">
       <div className="quiz-round__progress">
         <p className="quiz-round__progress-text">
-          Questão {number} de {session.total}
+          Questão {progressNumber} de {session.total}
         </p>
-        <ProgressBar
-          value={number}
-          max={session.total}
-          label="Progresso da rodada"
-        />
       </div>
 
       {active ? (

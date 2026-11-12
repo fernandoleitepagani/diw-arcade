@@ -73,6 +73,13 @@ describe('QuizRound', () => {
     });
   });
 
+  it('keeps the question counter without a second progress bar', () => {
+    renderRound();
+
+    expect(screen.getByText('Questão 1 de 2')).toBeInTheDocument();
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+  });
+
   it('mostra a fonte do slide junto da explicação', async () => {
     const user = userEvent.setup();
     renderRound([mcqQuestions[0] as McqQuestion]);

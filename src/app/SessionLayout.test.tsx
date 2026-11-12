@@ -81,6 +81,37 @@ describe('SessionLayout', () => {
     );
   });
 
+  it('keeps a single quiz progress bar and puts the header in the content column', async () => {
+    const { container } = renderAt('/no/n07/quiz');
+
+    const bars = screen.getAllByRole('progressbar');
+    expect(bars).toHaveLength(1);
+    expect(bars[0]).toHaveAccessibleName('Progresso da sessão');
+    expect(bars[0]).toHaveAttribute('aria-valuenow', '1');
+
+    const heading = await screen.findByRole('heading', {
+      level: 1,
+      name: 'Quiz',
+    });
+    const column = heading.closest('.session-page');
+    expect(column).not.toBeNull();
+    expect(column).toContainElement(container.querySelector('.quiz-round'));
+  });
+
+  it('puts the flashcards header in the content column', async () => {
+    const { container } = renderAt('/no/n07/cartas');
+
+    const heading = await screen.findByRole('heading', {
+      level: 1,
+      name: 'Cartas',
+    });
+    const column = heading.closest('.session-page');
+    expect(column).not.toBeNull();
+    expect(column).toContainElement(
+      container.querySelector('.flashcard-session'),
+    );
+  });
+
   it('asks for confirmation before leaving when the page requests it', async () => {
     const user = userEvent.setup();
     renderConfirmingSession();

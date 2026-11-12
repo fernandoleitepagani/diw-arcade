@@ -38,7 +38,7 @@ export function QuizPage() {
   const questions = nodeId ? getQuestions(nodeId) : [];
 
   return (
-    <section className="page">
+    <section className="page session-page">
       <h1>Quiz</h1>
       {node ? <p>{node.title}</p> : null}
       {nodeId && questions.length > 0 ? (

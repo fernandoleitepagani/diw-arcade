@@ -230,6 +230,39 @@ describe('ChallengeView', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
+  it('keeps the header and the workspace in the same session column', () => {
+    const { container } = renderView(vi.fn());
+
+    const article = container.querySelector('.challenge-view');
+    expect(article).not.toBeNull();
+    expect(article).toHaveClass('session-page');
+    expect(article?.querySelector('.challenge-view__header')).not.toBeNull();
+    expect(article?.querySelector('.challenge-view__grid')).not.toBeNull();
+  });
+
+  it('stacks the mascot with a single result message', async () => {
+    const user = userEvent.setup();
+    const { container } = renderView(vi.fn().mockResolvedValue(failedResult));
+
+    await user.click(screen.getByRole('button', { name: 'Executar testes' }));
+
+    const panel = await waitFor(() => {
+      const element = container.querySelector('.challenge-view__bit');
+      expect(element).not.toBeNull();
+      return element as HTMLElement;
+    });
+
+    const message = within(panel).getByText(
+      'Revise os requisitos e tente de novo.',
+    );
+    const mascot = panel.querySelector('.mascot');
+    expect(mascot).not.toBeNull();
+    expect(message).toHaveClass('challenge-view__bit-message');
+    expect(message.parentElement).toBe(panel);
+    expect(mascot?.parentElement).toBe(panel);
+    expect(panel.querySelector('.mascot__bubble')).toBeNull();
+  });
+
   it('wraps the preview iframe in device chrome', async () => {
     const { container } = renderView(vi.fn());
 

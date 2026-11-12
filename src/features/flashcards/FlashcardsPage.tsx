@@ -34,7 +34,7 @@ export function FlashcardsPage() {
 
   if (hasNodeRoute && node === undefined) {
     return (
-      <section className="page">
+      <section className="page session-page">
         <h1>{heading}</h1>
         <p>Nó não encontrado.</p>
         <Link to="/">Voltar para a árvore</Link>
@@ -43,7 +43,7 @@ export function FlashcardsPage() {
   }
 
   return (
-    <section className="page">
+    <section className="page session-page">
       <h1>{heading}</h1>
       {node ? <p>{node.title}</p> : null}
       <FlashcardSession key={node?.id ?? 'revisao'} flashcards={flashcards} />

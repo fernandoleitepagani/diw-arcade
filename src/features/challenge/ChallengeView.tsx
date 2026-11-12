@@ -3,7 +3,6 @@ import type { KeyboardEvent } from 'react';
 import { Link } from 'react-router';
 import { Dialog } from '../../components/session/Dialog';
 import { Button, Mascot, Panel } from '../../components/ui';
-import { pickLine } from '../../content/copy';
 import type { Challenge, CodeFiles } from '../../content/schema';
 import type { HintTier, Outcome, ProgressEvent } from '../../lib/progress/events';
 import type { SaveV1 } from '../../lib/storage/schema';
@@ -214,13 +213,9 @@ export function ChallengeView({
   );
 
   const solutionUnlocked = passed || failedRuns >= FAILURES_TO_UNLOCK;
-  const bitLine = pickLine(
-    lastRun === 'pass' ? 'challengePass' : 'wrong',
-    failedRuns + hintsUsed,
-  );
 
   return (
-    <article className="challenge-view">
+    <article className="challenge-view session-page session-page--wide">
       <header className="challenge-view__header">
         <div className="challenge-view__heading">
           <p className="challenge-view__eyebrow">
@@ -376,11 +371,8 @@ export function ChallengeView({
               className={`challenge-view__bit challenge-view__bit--${lastRun}`}
               aria-live="polite"
             >
-              <Mascot
-                mood={lastRun === 'pass' ? 'happy' : 'sad'}
-                line={bitLine}
-              />
-              <p className="challenge-view__attempts">
+              <Mascot mood={lastRun === 'pass' ? 'happy' : 'sad'} />
+              <p className="challenge-view__bit-message">
                 {lastRun === 'pass'
                   ? 'Todos os requisitos foram cumpridos.'
                   : 'Revise os requisitos e tente de novo.'}

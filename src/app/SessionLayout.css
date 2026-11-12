@@ -53,6 +53,18 @@
   padding-block: var(--space-5) var(--space-7);
 }
 
+/* Session pages keep the header and the working surface in one centered
+   column, so titles, counters and cards share the same edges on desktop. */
+.session-page {
+  width: min(100%, 46rem);
+  margin-inline: auto;
+}
+
+.session-page--wide {
+  width: 100%;
+  max-width: none;
+}
+
 .session-layout__main:focus {
   outline: none;
 }
