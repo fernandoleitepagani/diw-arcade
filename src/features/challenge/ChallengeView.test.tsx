@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -38,6 +44,15 @@ const failedResult = {
   requirements: [
     { id: 'fundo-escuro', passed: false },
     { id: 'titulo-visivel', passed: false },
+  ],
+  errors: [],
+};
+
+const passingResult = {
+  status: 'ok' as const,
+  requirements: [
+    { id: 'fundo-escuro', passed: true },
+    { id: 'titulo-visivel', passed: true },
   ],
   errors: [],
 };
@@ -164,6 +179,73 @@ describe('ChallengeView', () => {
     const jsTab = screen.getByRole('tab', { name: 'JS' });
     expect(jsTab).toHaveAttribute('aria-selected', 'true');
     expect(jsTab).toHaveFocus();
+  });
+
+  it('shows every requirement as pending before the first run', () => {
+    renderView(vi.fn());
+
+    expect(screen.getAllByText('pendente')).toHaveLength(
+      fixtureChallenge.requirements.length,
+    );
+  });
+
+  it('marks the requirements as passed and opens the summary dialog', async () => {
+    const user = userEvent.setup();
+    const onRun = vi.fn().mockResolvedValue(passingResult);
+
+    renderView(onRun);
+
+    await user.click(screen.getByRole('button', { name: 'Executar testes' }));
+
+    expect(await screen.findByText('2 de 2 requisitos')).toBeInTheDocument();
+    expect(screen.getAllByText('passou')).toHaveLength(
+      fixtureChallenge.requirements.length,
+    );
+
+    const dialog = await screen.findByRole('dialog');
+    expect(within(dialog).getByText('Próximo passo')).toBeInTheDocument();
+    expect(
+      within(dialog).getByRole('button', { name: 'Continuar editando' }),
+    ).toBeInTheDocument();
+
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Continuar editando' }),
+    );
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('marks the requirements as failed without opening the summary', async () => {
+    const user = userEvent.setup();
+    const onRun = vi.fn().mockResolvedValue(failedResult);
+
+    renderView(onRun);
+
+    await user.click(screen.getByRole('button', { name: 'Executar testes' }));
+
+    expect(await screen.findByText('0 de 2 requisitos')).toBeInTheDocument();
+    expect(screen.getAllByText('falhou')).toHaveLength(
+      fixtureChallenge.requirements.length,
+    );
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('wraps the preview iframe in device chrome', async () => {
+    const { container } = renderView(vi.fn());
+
+    const device = container.querySelector('.challenge-view__device');
+    expect(device).not.toBeNull();
+    expect(
+      within(device as HTMLElement).getByLabelText('Prévia do desafio'),
+    ).toBeInTheDocument();
+
+    const iframe = await waitFor(() => {
+      const element = device?.querySelector('iframe');
+      expect(element).not.toBeNull();
+      return element as HTMLIFrameElement;
+    });
+
+    expect(device).toContainElement(iframe);
   });
 
   it('restores the starter code', async () => {

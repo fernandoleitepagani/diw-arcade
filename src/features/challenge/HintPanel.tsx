@@ -9,17 +9,19 @@ export interface HintPanelProps {
 
 const MAX_HINTS = 3;
 
-/** Sequential hints; each tier costs XP, so only the next one is offered. */
+/**
+ * Sequential hints; each tier costs XP, so only the next one is offered. The
+ * whole panel is a disclosure, open by default so the next hint stays one
+ * click away, and collapsible for a quieter workspace.
+ */
 export function HintPanel({ hints, hintsUsed, onReveal }: HintPanelProps) {
   const revealed = Math.min(MAX_HINTS, Math.max(0, hintsUsed));
   const nextTier = Math.min(MAX_HINTS, revealed + 1) as HintTier;
   const visible = hints.slice(0, revealed);
 
   return (
-    <section className="hint-panel" aria-labelledby="hint-panel-title">
-      <h2 className="hint-panel__title" id="hint-panel-title">
-        Dicas
-      </h2>
+    <details className="hint-panel" open>
+      <summary className="hint-panel__title">Dicas</summary>
       {visible.length > 0 ? (
         <ol className="hint-panel__list">
           {visible.map((hint, index) => (
@@ -39,6 +41,6 @@ export function HintPanel({ hints, hintsUsed, onReveal }: HintPanelProps) {
       ) : (
         <p className="hint-panel__done">Todas as dicas foram usadas.</p>
       )}
-    </section>
+    </details>
   );
 }

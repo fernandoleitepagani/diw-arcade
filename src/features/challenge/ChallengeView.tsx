@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { Link } from 'react-router';
+import { Dialog } from '../../components/session/Dialog';
 import { Button, Mascot, Panel } from '../../components/ui';
 import { pickLine } from '../../content/copy';
 import type { Challenge, CodeFiles } from '../../content/schema';
@@ -69,6 +70,7 @@ export function ChallengeView({
   const [localHints, setLocalHints] = useState(0);
   const [solutionVisible, setSolutionVisible] = useState(false);
   const [runError, setRunError] = useState<string | null>(null);
+  const [summaryOpen, setSummaryOpen] = useState(false);
 
   const passed = (state?.passed ?? false) || localPassed;
   const failedRuns = Math.max(state?.failedRuns ?? 0, localFailedRuns);
@@ -154,6 +156,7 @@ export function ChallengeView({
     setLastRun(didPass ? 'pass' : 'fail');
     if (didPass) {
       setLocalPassed(true);
+      setSummaryOpen(true);
     } else {
       setLocalFailedRuns((current) => current + 1);
     }
@@ -297,14 +300,30 @@ export function ChallengeView({
           ) : null}
         </section>
 
-        <aside className="challenge-view__sidebar">
-          <SandboxFrame
-            files={files}
-            libs={challenge.libs}
-            mocks={challenge.mocks}
-            title="Prévia do desafio"
-          />
+        <section className="challenge-view__preview" aria-label="Prévia">
+          <div className="challenge-view__device">
+            <div className="challenge-view__device-bar" aria-hidden="true">
+              <span className="challenge-view__device-dots">
+                <span className="challenge-view__device-dot" />
+                <span className="challenge-view__device-dot" />
+                <span className="challenge-view__device-dot" />
+              </span>
+              <span className="challenge-view__device-label">
+                Prévia ao vivo
+              </span>
+            </div>
+            <div className="challenge-view__device-screen">
+              <SandboxFrame
+                files={files}
+                libs={challenge.libs}
+                mocks={challenge.mocks}
+                title="Prévia do desafio"
+              />
+            </div>
+          </div>
+        </section>
 
+        <aside className="challenge-view__sidebar">
           <RequirementList
             requirements={challenge.requirements}
             results={results}
@@ -317,41 +336,40 @@ export function ChallengeView({
             onReveal={handleHint}
           />
 
-          <section
-            className="challenge-view__solution"
-            aria-labelledby="challenge-solution-title"
-          >
-            <h2
-              className="challenge-view__solution-title"
-              id="challenge-solution-title"
-            >
+          <details className="challenge-view__solution">
+            <summary className="challenge-view__solution-title">
               Solução
-            </h2>
-            <Button
-              variant="secondary"
-              disabled={!solutionUnlocked}
-              onClick={() => setSolutionVisible(true)}
-            >
-              Ver solução
-            </Button>
-            {!solutionUnlocked ? (
-              <p className="challenge-view__solution-lock">
-                Disponível após 3 tentativas
-              </p>
-            ) : null}
-            {solutionVisible && solutionUnlocked ? (
-              <Panel className="challenge-view__solution-panel">
-                {(['html', 'css', 'js'] as const).map((language) => (
-                  <div key={language}>
-                    <h3>{TAB_LABELS[language]}</h3>
-                    <pre>
-                      <code>{challenge.solution[language]}</code>
-                    </pre>
-                  </div>
-                ))}
-              </Panel>
-            ) : null}
-          </section>
+              <span className="challenge-view__solution-state">
+                {solutionUnlocked ? 'liberada' : 'bloqueada'}
+              </span>
+            </summary>
+            <div className="challenge-view__solution-body">
+              <Button
+                variant="secondary"
+                disabled={!solutionUnlocked}
+                onClick={() => setSolutionVisible(true)}
+              >
+                Ver solução
+              </Button>
+              {!solutionUnlocked ? (
+                <p className="challenge-view__solution-lock">
+                  Disponível após 3 tentativas
+                </p>
+              ) : null}
+              {solutionVisible && solutionUnlocked ? (
+                <Panel className="challenge-view__solution-panel">
+                  {(['html', 'css', 'js'] as const).map((language) => (
+                    <div key={language}>
+                      <h3>{TAB_LABELS[language]}</h3>
+                      <pre>
+                        <code>{challenge.solution[language]}</code>
+                      </pre>
+                    </div>
+                  ))}
+                </Panel>
+              ) : null}
+            </div>
+          </details>
 
           {lastRun !== null ? (
             <Panel
@@ -371,6 +389,27 @@ export function ChallengeView({
           ) : null}
         </aside>
       </div>
+
+      <Dialog
+        open={summaryOpen}
+        title="Desafio concluído"
+        onClose={() => setSummaryOpen(false)}
+      >
+        <p className="challenge-view__summary-text">
+          Você cumpriu todos os requisitos de {challenge.title}.
+        </p>
+        <div className="challenge-view__summary-actions">
+          <Button variant="secondary" onClick={() => setSummaryOpen(false)}>
+            Continuar editando
+          </Button>
+          <Link
+            className="ui-button ui-button--primary"
+            to={`/no/${challenge.nodeId}`}
+          >
+            Próximo passo
+          </Link>
+        </div>
+      </Dialog>
     </article>
   );
 }
