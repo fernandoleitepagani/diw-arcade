@@ -68,9 +68,9 @@ describe('rotas', () => {
   });
 
   it('marks the active nav link with aria-current', () => {
-    renderAt('/revisao');
+    renderAt('/estatisticas');
 
-    expect(screen.getByRole('link', { name: 'Revisão' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Estatísticas' })).toHaveAttribute(
       'aria-current',
       'page',
     );
