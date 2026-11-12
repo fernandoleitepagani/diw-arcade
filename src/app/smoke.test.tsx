@@ -33,7 +33,7 @@ function renderApp(path: string, storage: StorageLike) {
 
 const pages = [
   { path: '/', heading: 'DIW Arcade', content: 'Introdução à Web e tecnologias' },
-  { path: '/no/n07', heading: 'Nó', content: 'Propriedades CSS' },
+  { path: '/no/n07', heading: 'Propriedades CSS' },
   { path: '/no/n07/quiz', heading: 'Quiz' },
   { path: '/no/n07/cartas', heading: 'Cartas', content: 'Propriedades CSS' },
   { path: '/revisao', heading: 'Revisão' },
