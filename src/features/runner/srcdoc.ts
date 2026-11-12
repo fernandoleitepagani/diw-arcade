@@ -29,13 +29,14 @@ export function buildSrcdoc(
   libCss = '',
 ): string {
   const userJs = files.js.replace(/<\/script/gi, '<\\/script');
+  const userCss = files.css.replace(/<\/style/gi, '<\\/style');
 
   return (
     '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">\n' +
     `<meta http-equiv="Content-Security-Policy" content="${CSP}">\n` +
     '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
     `<script>window.__DIW__=${embedJson(config)}</script><script>${harnessSource}</script>\n` +
-    `<style>${libCss}</style><style>${files.css}</style></head>\n` +
+    `<style>${libCss}</style><style>${userCss}</style></head>\n` +
     `<body>${files.html}<script>${userJs}</script></body></html>`
   );
 }

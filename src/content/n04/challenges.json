@@ -2,11 +2,11 @@
   {
     "id": "n04-c01",
     "nodeId": "n04",
-    "title": "Rótulos ligados aos campos",
+    "title": "Campos com type e name",
     "kind": "html",
-    "goal": "Ligue cada rótulo ao seu campo usando o atributo for com o mesmo valor do id do input.",
+    "goal": "Crie os campos do formulário com os atributos type e name: use type=\"text\" para o nome e type=\"email\" para o e-mail, repetindo em name o nome de cada campo.",
     "starter": {
-      "html": "<form>\n  <p>Nome:</p>\n  <input type=\"text\" name=\"nome\">\n\n  <p>E-mail:</p>\n  <input type=\"email\" name=\"email\">\n\n  <button type=\"submit\">Cadastrar</button>\n</form>",
+      "html": "<form>\n  <p>Nome:</p>\n  <input type=\"text\">\n\n  <p>E-mail:</p>\n  <input type=\"text\">\n\n  <button type=\"submit\">Cadastrar</button>\n</form>",
       "css": "",
       "js": ""
     },
@@ -22,33 +22,29 @@
         "check": { "kind": "exists", "selector": "form" }
       },
       {
-        "id": "rotulo-nome",
-        "label": "O rótulo do nome usa for=\"nome\"",
-        "check": { "kind": "exists", "selector": "label[for=\"nome\"]" }
-      },
-      {
         "id": "campo-nome",
-        "label": "O campo do nome tem id=\"nome\"",
-        "check": { "kind": "exists", "selector": "input#nome" }
-      },
-      {
-        "id": "rotulo-email",
-        "label": "O rótulo do e-mail usa for=\"email\"",
-        "check": { "kind": "exists", "selector": "label[for=\"email\"]" }
+        "label": "O campo do nome usa type=\"text\" e name=\"nome\"",
+        "check": {
+          "kind": "exists",
+          "selector": "input[type=\"text\"][name=\"nome\"]"
+        }
       },
       {
         "id": "campo-email",
-        "label": "O campo de e-mail tem id=\"email\"",
-        "check": { "kind": "exists", "selector": "input#email" }
+        "label": "O campo de e-mail usa type=\"email\" e name=\"email\"",
+        "check": {
+          "kind": "exists",
+          "selector": "input[type=\"email\"][name=\"email\"]"
+        }
       }
     ],
     "hints": [
-      "Troque o texto solto de cada campo por um elemento label.",
-      "O valor do atributo for do label precisa ser igual ao id do input correspondente.",
-      "Repita a ligação para o nome e para o e-mail e confira cada par rótulo/campo."
+      "Cada campo do formulário precisa dos atributos type e name.",
+      "Use type=\"text\" no campo de nome e type=\"email\" no campo de e-mail.",
+      "Em name, repita o nome de cada campo para o formulário enviar esses valores."
     ],
     "source": { "aula": 162, "slide": 5 },
-    "evidence": "As tags input definem os campos ou entradas de dados manipulados pelo formulário."
+    "evidence": "O atributo type identifica o tipo do campo: text, password, submit, etc. • O atributo name identifica o campo do formulário"
   },
   {
     "id": "n04-c02",
