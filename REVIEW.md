@@ -4,10 +4,11 @@ What failure looks like in this repo. Keep it short.
 
 ## Failure modes
 
-- <for docs: it lies>
-- <for config: it misroutes>
-- <for UI: it breaks at phone width>
-- <for data: it silently drops or duplicates>
+- content: a question/answer is factually wrong or cites the wrong slide
+- UI: breaks at phone width, ignores reduced-motion, not keyboard-operable
+- progress: localStorage schema change loses or corrupts user progress
+- runner: sandboxed code can touch the parent page or storage
+- SRS/XP: scheduling or XP math silently wrong
 
 ## Paths to skip
 
@@ -55,3 +56,8 @@ A change that touches one of these paths is high-risk and must escalate.
 - `**/*.pem`
 - `**/*.key`
 
+
+## Risk paths
+
+- src/features/runner/**
+- src/lib/storage/**
