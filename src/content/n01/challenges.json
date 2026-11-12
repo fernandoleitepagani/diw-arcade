@@ -1,0 +1,157 @@
+[
+  {
+    "id": "n01-c01",
+    "nodeId": "n01",
+    "title": "Minha primeira página HTML",
+    "kind": "html",
+    "goal": "Monte o corpo de uma página com um título principal e um parágrafo de texto.",
+    "starter": {
+      "html": "<p>Este é o meu primeiro parágrafo.</p>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<h1>Minha primeira página</h1>\n<p>Olá, mundo! Este é o meu primeiro texto na Web.</p>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "h1-existe",
+        "label": "A página tem um título principal (<h1>).",
+        "check": { "kind": "exists", "selector": "h1" }
+      },
+      {
+        "id": "p-existe",
+        "label": "A página tem um parágrafo (<p>).",
+        "check": { "kind": "exists", "selector": "p" }
+      },
+      {
+        "id": "h1-texto",
+        "label": "O título principal diz \"Minha primeira página\".",
+        "check": {
+          "kind": "text",
+          "selector": "h1",
+          "match": { "pattern": "minha primeira página" }
+        }
+      },
+      {
+        "id": "p-texto",
+        "label": "O parágrafo tem algum texto escrito.",
+        "check": {
+          "kind": "text",
+          "selector": "p",
+          "match": { "pattern": "\\w" }
+        }
+      }
+    ],
+    "hints": [
+      "Um título principal usa a tag <h1> e um parágrafo usa a tag <p>.",
+      "Escreva as duas tags dentro do corpo da página, cada uma com o seu texto: <h1>...</h1> e <p>...</p>.",
+      "Falta o título: comece com <h1>Minha primeira página</h1> e depois coloque o parágrafo."
+    ],
+    "source": { "aula": 120, "slide": 5 },
+    "evidence": "<h1>Page</h1> <p>Hello World!</p>"
+  },
+  {
+    "id": "n01-c02",
+    "nodeId": "n01",
+    "title": "Estilizando o parágrafo",
+    "kind": "css",
+    "goal": "No CSS, centralize o parágrafo e defina o tamanho da fonte dele em 20 pixels.",
+    "starter": {
+      "html": "<h1>Minha primeira página</h1>\n<p>Olá, mundo! Este é o meu primeiro texto na Web.</p>",
+      "css": "p {\n  text-align: left;\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<h1>Minha primeira página</h1>\n<p>Olá, mundo! Este é o meu primeiro texto na Web.</p>",
+      "css": "p {\n  text-align: center;\n  font-size: 20px;\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "p-existe",
+        "label": "A página tem um parágrafo (<p>).",
+        "check": { "kind": "exists", "selector": "p" }
+      },
+      {
+        "id": "p-centralizado",
+        "label": "O parágrafo está centralizado com text-align: center.",
+        "check": {
+          "kind": "style",
+          "selector": "p",
+          "prop": "text-align",
+          "match": { "equals": "center" }
+        }
+      },
+      {
+        "id": "p-fonte-20",
+        "label": "O parágrafo usa font-size: 20px.",
+        "check": {
+          "kind": "style",
+          "selector": "p",
+          "prop": "font-size",
+          "match": { "equals": "20px" }
+        }
+      }
+    ],
+    "hints": [
+      "Para estilizar todas as tags <p> da página, use o seletor de elemento p no CSS.",
+      "Dentro das chaves da regra p, declare text-align: center; e font-size: 20px;.",
+      "A regra fica assim: p { text-align: center; font-size: 20px; }."
+    ],
+    "source": { "aula": 120, "slide": 7 },
+    "evidence": "#tit_1 { ... font-size: 20px; }"
+  },
+  {
+    "id": "n01-c03",
+    "nodeId": "n01",
+    "title": "Uma mensagem com JavaScript",
+    "kind": "js",
+    "goal": "Use JavaScript para escrever uma mensagem de boas-vindas dentro do elemento com id \"saida\".",
+    "starter": {
+      "html": "<p id=\"saida\"></p>",
+      "css": "",
+      "js": "// Escreva sua mensagem em #saida\n"
+    },
+    "solution": {
+      "html": "<p id=\"saida\"></p>",
+      "css": "",
+      "js": "const saida = document.querySelector('#saida');\nsaida.textContent = 'Bem-vindo à minha primeira página!';\n"
+    },
+    "requirements": [
+      {
+        "id": "saida-existe",
+        "label": "A página tem o elemento com id \"saida\".",
+        "check": { "kind": "exists", "selector": "#saida" }
+      },
+      {
+        "id": "saida-unica",
+        "label": "Existe exatamente um elemento com id \"saida\".",
+        "check": { "kind": "count", "selector": "#saida", "min": 1, "max": 1 }
+      },
+      {
+        "id": "saida-texto",
+        "label": "O elemento #saida mostra a mensagem \"Bem-vindo\".",
+        "check": {
+          "kind": "text",
+          "selector": "#saida",
+          "match": { "pattern": "bem-vindo" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O JavaScript executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "O JavaScript consegue encontrar um elemento pelo id e trocar o texto que aparece dentro dele.",
+      "Use document.querySelector('#saida') para pegar o parágrafo e depois atribua uma string à propriedade textContent.",
+      "Falta a mensagem: document.querySelector('#saida').textContent = 'Bem-vindo à minha primeira página!';"
+    ],
+    "source": { "aula": 120, "slide": 3 },
+    "evidence": "CSS Imagens JavaScript"
+  }
+]
