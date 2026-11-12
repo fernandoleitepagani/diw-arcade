@@ -1,0 +1,196 @@
+[
+  {
+    "id": "n11-c01",
+    "nodeId": "n11",
+    "title": "Página móvel com viewport e unidades relativas",
+    "kind": "html",
+    "goal": "Monte o topo de uma página de feira com o meta viewport e troque medidas fixas por unidades relativas (% e rem) para o layout se adaptar à tela.",
+    "starter": {
+      "html": "<main class=\"pagina\">\n  <h1>Feira da Praça</h1>\n  <p class=\"resumo\">Frutas, verduras e produtos locais, todos os sábados.</p>\n</main>",
+      "css": "body {\n  margin: 0;\n  font-family: system-ui, sans-serif;\n}\n\n.pagina {\n  width: 960px;\n  margin: 0 auto;\n  padding: 16px;\n}\n\nh1 {\n  font-size: 32px;\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<main class=\"pagina\">\n  <h1>Feira da Praça</h1>\n  <p class=\"resumo\">Frutas, verduras e produtos locais, todos os sábados.</p>\n</main>",
+      "css": "body {\n  margin: 0;\n  font-family: system-ui, sans-serif;\n}\n\n.pagina {\n  width: 100%;\n  max-width: 60rem;\n  margin: 0 auto;\n  padding: 1rem;\n}\n\nh1 {\n  font-size: 1.75rem;\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "viewport",
+        "label": "Declare o meta viewport com width=device-width no HTML",
+        "check": {
+          "kind": "attr",
+          "selector": "body meta[name=\"viewport\"]",
+          "name": "content",
+          "match": { "pattern": "width\\s*=\\s*device-width" }
+        }
+      },
+      {
+        "id": "largura-relativa",
+        "label": "Defina a largura da página em porcentagem",
+        "check": {
+          "kind": "style",
+          "selector": ".pagina",
+          "prop": "width",
+          "match": { "pattern": "\\d+(?:\\.\\d+)?%" }
+        }
+      },
+      {
+        "id": "limite-rem",
+        "label": "Limite a largura máxima da página com rem",
+        "check": {
+          "kind": "style",
+          "selector": ".pagina",
+          "prop": "max-width",
+          "match": { "pattern": "\\d+(?:\\.\\d+)?rem" }
+        }
+      },
+      {
+        "id": "fonte-rem",
+        "label": "Defina o tamanho do título com rem",
+        "check": {
+          "kind": "style",
+          "selector": "h1",
+          "prop": "font-size",
+          "match": { "pattern": "\\d+(?:\\.\\d+)?rem" }
+        }
+      }
+    ],
+    "hints": [
+      "O meta viewport fica dentro do HTML: <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">.",
+      "No CSS, troque width: 960px por width: 100% e use max-width com rem para manter a leitura confortável.",
+      "Medidas fixas como 32px podem virar 1.75rem: o rem acompanha o tamanho de fonte do usuário."
+    ],
+    "source": { "aula": 220, "slide": 8 },
+    "evidence": "Responsive Web Design (RWD) define um layout de site Web que se adapta de forma automática às condições de tamanho do dispositivo do usuário"
+  },
+  {
+    "id": "n11-c02",
+    "nodeId": "n11",
+    "title": "Grade de notícias mobile first",
+    "kind": "css",
+    "goal": "Crie uma grade que começa com uma coluna no celular e passa a duas colunas a partir de 600px, usando uma media query mobile first.",
+    "starter": {
+      "html": "<section class=\"grade\">\n  <article class=\"coluna\">\n    <h2>Notícias</h2>\n    <p>As novidades da semana.</p>\n  </article>\n  <article class=\"coluna\">\n    <h2>Eventos</h2>\n    <p>Agenda da comunidade.</p>\n  </article>\n</section>",
+      "css": ".grade {\n  display: flex;\n  flex-wrap: wrap;\n}\n\n.coluna {\n  width: 50%;\n  padding: 1rem;\n  box-sizing: border-box;\n}\n\n@media (min-width: 600px) {\n  .grade {\n    width: 960px;\n  }\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<section class=\"grade\">\n  <article class=\"coluna\">\n    <h2>Notícias</h2>\n    <p>As novidades da semana.</p>\n  </article>\n  <article class=\"coluna\">\n    <h2>Eventos</h2>\n    <p>Agenda da comunidade.</p>\n  </article>\n</section>",
+      "css": ".grade {\n  display: flex;\n  flex-wrap: wrap;\n}\n\n.coluna {\n  width: 100%;\n  padding: 1rem;\n  box-sizing: border-box;\n}\n\n@media (min-width: 600px) {\n  .coluna {\n    width: 50%;\n  }\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "base-uma-coluna",
+        "label": "No layout base, cada coluna ocupa 100% da largura",
+        "check": {
+          "kind": "style",
+          "selector": ".coluna",
+          "prop": "width",
+          "match": { "pattern": "^100%$" }
+        }
+      },
+      {
+        "id": "media-duas-colunas",
+        "label": "A partir de 600px, cada coluna ocupa 50% da largura",
+        "check": {
+          "kind": "media",
+          "condition": "min-width\\s*:\\s*600px",
+          "selector": ".coluna",
+          "prop": "width",
+          "match": { "pattern": "^50%$" }
+        }
+      },
+      {
+        "id": "espaco-rem",
+        "label": "Use rem no espaçamento interno das colunas",
+        "check": {
+          "kind": "style",
+          "selector": ".coluna",
+          "prop": "padding",
+          "match": { "pattern": "\\d+(?:\\.\\d+)?rem" }
+        }
+      }
+    ],
+    "hints": [
+      "Mobile first significa escrever primeiro o estilo que vale no celular; a media query só amplia o layout.",
+      "A largura base de .coluna deve ser 100%, sem media query nenhuma.",
+      "Dentro de @media (min-width: 600px), declare .coluna com width: 50% para formar duas colunas."
+    ],
+    "source": { "aula": 220, "slide": 13 },
+    "evidence": "Mobile First é um termo criado por Luke Wroblewski que define a abordagem que prioriza os dispositivos móveis no projeto de um site ou aplicação antes dos desktops"
+  },
+  {
+    "id": "n11-c03",
+    "nodeId": "n11",
+    "title": "Imagem responsiva dentro do cartão",
+    "kind": "css",
+    "goal": "Faça a foto de um cartão ocupar a largura disponível sem estourar a tela, usando max-width: 100% e height: auto.",
+    "starter": {
+      "html": "<figure class=\"cartao\">\n  <img class=\"foto\" src=\"imagens/praia.jpg\">\n  <figcaption>Praia ao amanhecer</figcaption>\n</figure>",
+      "css": ".cartao {\n  width: 960px;\n  margin: 0 auto;\n}\n\n.foto {\n  width: 1200px;\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<figure class=\"cartao\">\n  <img class=\"foto\" src=\"imagens/praia.jpg\" alt=\"Praia ao amanhecer\">\n  <figcaption>Praia ao amanhecer</figcaption>\n</figure>",
+      "css": ".cartao {\n  width: 100%;\n  max-width: 40rem;\n  margin: 0 auto;\n}\n\n.foto {\n  display: block;\n  max-width: 100%;\n  height: auto;\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "foto-existe",
+        "label": "Mantenha a imagem com a classe foto",
+        "check": { "kind": "exists", "selector": "img.foto" }
+      },
+      {
+        "id": "texto-alternativo",
+        "label": "Descreva a imagem no atributo alt",
+        "check": {
+          "kind": "attr",
+          "selector": "img.foto",
+          "name": "alt",
+          "match": { "pattern": "\\S" }
+        }
+      },
+      {
+        "id": "largura-maxima",
+        "label": "Limite a imagem a 100% da largura disponível",
+        "check": {
+          "kind": "style",
+          "selector": ".foto",
+          "prop": "max-width",
+          "match": { "pattern": "^100%$" }
+        }
+      },
+      {
+        "id": "altura-automatica",
+        "label": "Deixe a altura da imagem automática para não distorcer",
+        "check": {
+          "kind": "style",
+          "selector": ".foto",
+          "prop": "height",
+          "match": { "pattern": "^auto$" }
+        }
+      },
+      {
+        "id": "cartao-fluido",
+        "label": "Defina a largura do cartão em porcentagem",
+        "check": {
+          "kind": "style",
+          "selector": ".cartao",
+          "prop": "width",
+          "match": { "pattern": "\\d+(?:\\.\\d+)?%" }
+        }
+      }
+    ],
+    "hints": [
+      "Uma imagem com largura fixa maior que a tela provoca rolagem horizontal no celular.",
+      "Use max-width: 100% em .foto para a imagem encolher junto com o cartão.",
+      "Com height: auto e display: block, a imagem mantém a proporção e não cria espaço extra abaixo dela."
+    ],
+    "source": { "aula": 220, "slide": 10 },
+    "evidence": "Estrutura flexível com larguras definidas em percentagens"
+  }
+]
