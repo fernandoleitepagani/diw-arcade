@@ -1,0 +1,375 @@
+[
+  {
+    "id": "n02-q001",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "O que é o Cliente Web segundo a aula?",
+    "options": [
+      "Um programa que hospeda os arquivos do site.",
+      "Um programa ou aplicação, geralmente um navegador, que envia requisições ao servidor.",
+      "Um protocolo usado para traduzir nomes em endereços IP.",
+      "Um servidor que interpreta a URL e devolve o recurso."
+    ],
+    "answer": 1,
+    "explanation": "O Cliente Web é o programa, na maioria das vezes um navegador ou browser, que envia requisições HTTP(S) ao Servidor Web. Ele também é chamado de agente de usuário (user-agent).",
+    "source": { "aula": 130, "slide": 4 },
+    "evidence": "O Cliente Web é um programa ou aplicação"
+  },
+  {
+    "id": "n02-q002",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "Qual é a função do Servidor Web?",
+    "options": [
+      "Traduzir nomes de sites em endereços IP.",
+      "Enviar requisições HTTP ao navegador do usuário.",
+      "Receber requisições HTTP(S), interpretar a URL e enviar o recurso solicitado.",
+      "Armazenar apenas arquivos HTML, sem enviar imagens ou folhas de estilo."
+    ],
+    "answer": 2,
+    "explanation": "O Servidor Web recebe requisições HTTP(S), interpreta a URL e responde ao Cliente Web com o recurso pedido, como HTML, CSS, JavaScript, imagens ou vídeos.",
+    "source": { "aula": 130, "slide": 5 },
+    "evidence": "O Servidor Web é um programa que"
+  },
+  {
+    "id": "n02-q003",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "O que é a Internet de acordo com a aula?",
+    "options": [
+      "Uma rede mundial de computadores baseada no protocolo TCP/IP.",
+      "Um programa instalado no computador do usuário para abrir páginas.",
+      "Um padrão de endereçamento de recursos chamado URI.",
+      "Um tipo de URL usada apenas para arquivos locais."
+    ],
+    "answer": 0,
+    "explanation": "A Internet é uma rede mundial de computadores baseada no protocolo TCP/IP. Cada computador conectado é um host com um endereço IP.",
+    "source": { "aula": 130, "slide": 6 },
+    "evidence": "A Internet é uma rede mundial de computadores baseada no protocolo TCP/IP, onde todo"
+  },
+  {
+    "id": "n02-q004",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "O que é um host na Internet?",
+    "options": [
+      "Um tipo de URL que aponta para um arquivo.",
+      "O navegador instalado no computador do usuário.",
+      "O protocolo que transporta as páginas na rede.",
+      "Todo computador conectado à rede, que possui um endereço IP."
+    ],
+    "answer": 3,
+    "explanation": "Todo computador conectado à Internet é denominado host (hospedeiro). Ele possui um identificador chamado endereço IP, no padrão A.B.C.D.",
+    "source": { "aula": 130, "slide": 6 },
+    "evidence": "computador conectado é denominado host (hospedeiro) e possui um identificador endereço"
+  },
+  {
+    "id": "n02-q005",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "O que é a URL?",
+    "options": [
+      "Um protocolo que define como o servidor interpreta os arquivos.",
+      "Um tipo de URI: o texto na parte superior do navegador que indica o recurso desejado.",
+      "Um identificador de recurso que dispensa localização na rede.",
+      "Uma rede mundial de computadores baseada em TCP/IP."
+    ],
+    "answer": 1,
+    "explanation": "A URL (Uniform Resource Locator) é um tipo de URI. Ela aparece na parte superior do navegador e indica qual recurso o usuário deseja acessar.",
+    "source": { "aula": 130, "slide": 7 },
+    "evidence": "A URL (Uniform Resource Locator), um tipo de URI (Uniform"
+  },
+  {
+    "id": "n02-q006",
+    "nodeId": "n02",
+    "type": "tf",
+    "prompt": "O protocolo HTTP é a forma como clientes e servidores se comunicam na rede.",
+    "answer": true,
+    "explanation": "A aula define o HTTP como a forma de comunicação entre clientes e servidores, com requisições e respostas que seguem os padrões do protocolo.",
+    "source": { "aula": 130, "slide": 8 },
+    "evidence": "O protocolo HTTP é a forma como clientes e servidores se comunicam na rede. As"
+  },
+  {
+    "id": "n02-q007",
+    "nodeId": "n02",
+    "type": "tf",
+    "prompt": "A resposta HTTP é enviada pelo Cliente Web ao Servidor Web.",
+    "answer": false,
+    "explanation": "A resposta HTTP é enviada pelo Servidor Web ao Cliente Web com os recursos solicitados. É a requisição que segue do cliente para o servidor.",
+    "source": { "aula": 130, "slide": 8 },
+    "evidence": "dados enviados pelo Servidor Web para o Cliente Web com os recursos solicitados."
+  },
+  {
+    "id": "n02-q008",
+    "nodeId": "n02",
+    "type": "fill",
+    "prompt": "A Internet é uma rede mundial de computadores baseada no protocolo ____.",
+    "answers": ["TCP/IP", "tcp/ip"],
+    "explanation": "A aula afirma que a Internet se baseia no protocolo TCP/IP. Os computadores conectados são hosts identificados por endereços IP.",
+    "source": { "aula": 130, "slide": 6 },
+    "evidence": "A Internet é uma rede mundial de computadores baseada no protocolo TCP/IP, onde todo"
+  },
+  {
+    "id": "n02-q009",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "O que a requisição HTTP identifica?",
+    "options": [
+      "Apenas o endereço IP do servidor.",
+      "O nome do navegador usado pelo cliente.",
+      "O recurso solicitado pelo Cliente Web ao Servidor Web.",
+      "A folha de estilo aplicada à página."
+    ],
+    "answer": 2,
+    "explanation": "A requisição HTTP é um pacote de dados enviado pela rede pelo Cliente Web ao Servidor Web. Ela identifica o recurso solicitado.",
+    "source": { "aula": 130, "slide": 8 },
+    "evidence": "A requisição HTTP é um pacote de dados enviado pela rede pelo Cliente Web para o"
+  },
+  {
+    "id": "n02-q010",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "O que é URI?",
+    "options": [
+      "Um tipo de servidor que hospeda páginas na Internet.",
+      "Um protocolo de transporte de pacotes entre hosts.",
+      "Um navegador que envia requisições HTTP.",
+      "Um padrão de endereçamento de recursos que engloba URL e URN."
+    ],
+    "answer": 3,
+    "explanation": "URI (Uniform Resource Identifier) é um padrão para endereçar recursos disponíveis na rede. Ele engloba os conceitos de URL e de URN.",
+    "source": { "aula": 131, "slide": 4 },
+    "evidence": "URI (Uniform Resource Identifier) é um padrão para o endereçamento de recursos disponíveis na rede que engloba os conceitos de"
+  },
+  {
+    "id": "n02-q011",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "O que a URL faz?",
+    "options": [
+      "Referencia um recurso e sua localização, normalmente na Internet.",
+      "Identifica um recurso apenas pelo nome, sem indicar sua localização.",
+      "Define a porta TCP/IP usada por qualquer servidor.",
+      "Substitui o protocolo HTTP na comunicação entre cliente e servidor."
+    ],
+    "answer": 0,
+    "explanation": "A URL é um padrão de URI que referencia um recurso e a sua localização. Normalmente essa localização está na Internet.",
+    "source": { "aula": 131, "slide": 5 },
+    "evidence": "referenciar um recurso e sua localização, normalmente na Internet."
+  },
+  {
+    "id": "n02-q012",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "O que o esquema de uma URL identifica?",
+    "options": [
+      "O local exato do recurso dentro do servidor.",
+      "A forma de interação entre cliente e servidor, como http, https ou ftp.",
+      "Os dados não hierárquicos da consulta.",
+      "Uma seção específica dentro do recurso."
+    ],
+    "answer": 1,
+    "explanation": "O esquema identifica a forma de interação entre um cliente e um servidor. Exemplos são http, https e ftp.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Esquema – identifica a forma de interação entre um cliente e um servidor, como"
+  },
+  {
+    "id": "n02-q013",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "O que a porta indica em uma URL?",
+    "options": [
+      "O nome do host onde está a aplicação servidor.",
+      "O caminho completo do recurso no servidor.",
+      "A porta TCP/IP associada ao servidor, sendo a 80 o padrão do HTTP.",
+      "O fragmento que identifica uma seção do recurso."
+    ],
+    "answer": 2,
+    "explanation": "A porta identifica a porta TCP/IP associada ao servidor. A porta padrão do HTTP é a 80 e pode ser omitida da URL.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Porta – identifica a porta TCP/IP associada ao servidor. A porta padrão do HTTP (80) pode ser omitida"
+  },
+  {
+    "id": "n02-q014",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "O que representa a query em uma URL?",
+    "options": [
+      "O esquema que define o protocolo usado.",
+      "O nome ou número IP do servidor.",
+      "Uma seção interna do recurso.",
+      "Dados não hierárquicos, normalmente pares de nome e valor."
+    ],
+    "answer": 3,
+    "explanation": "A query reúne dados não hierárquicos que detalham a consulta. Ela costuma ser escrita como pares de nome e valor.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Query – dados não hierárquicos, detalhando a consulta normalmente sob a forma de pares nome e valor"
+  },
+  {
+    "id": "n02-q015",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "O que é URN?",
+    "options": [
+      "Um tipo de URI que identifica um recurso específico pelo nome em um namespace.",
+      "Um tipo de URL que informa a localização exata de um arquivo.",
+      "O protocolo usado para transferir páginas entre cliente e servidor.",
+      "Um endereço IP no padrão A.B.C.D."
+    ],
+    "answer": 0,
+    "explanation": "A URN (Uniform Resource Name) identifica um recurso específico pelo nome dentro de um namespace. Ela é um tipo de URI, assim como a URL.",
+    "source": { "aula": 131, "slide": 9 },
+    "evidence": "URN (Uniform Resource Name) é um tipo de URI que identifica um recurso específico (NSS) pelo nome em um namespace (NID)."
+  },
+  {
+    "id": "n02-q016",
+    "nodeId": "n02",
+    "type": "tf",
+    "prompt": "O fragmento de uma URL identifica uma seção dentro do recurso.",
+    "answer": true,
+    "explanation": "Segundo a estrutura de URL apresentada, o fragmento identifica uma seção no recurso. Ele aparece após o caractere #.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Fragmento – identifica uma seção no recurso"
+  },
+  {
+    "id": "n02-q017",
+    "nodeId": "n02",
+    "type": "fill",
+    "prompt": "A URL (Uniform Resource Locator) é um padrão de URI que serve para referenciar um recurso e sua ____.",
+    "answers": ["localização", "localizacao"],
+    "explanation": "A URL referencia tanto o recurso quanto a sua localização, normalmente na Internet. Por isso ela é um localizador.",
+    "source": { "aula": 131, "slide": 5 },
+    "evidence": "referenciar um recurso e sua localização, normalmente na Internet."
+  },
+  {
+    "id": "n02-q018",
+    "nodeId": "n02",
+    "type": "fill",
+    "prompt": "Na URN, a sigla NID significa Namespace ____.",
+    "answers": ["Identifier", "identifier"],
+    "explanation": "Na URN, NID é o Namespace Identifier e NSS é o Namespace Specific String. Juntos, eles formam o esquema da URN.",
+    "source": { "aula": 131, "slide": 9 },
+    "evidence": "NID – Namespace Identifier"
+  },
+  {
+    "id": "n02-q019",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "Qual arquivo o navegador solicita primeiro ao acessar o site?",
+    "options": ["style.css", "index.html", "app.js", "logo.jpg"],
+    "answer": 1,
+    "explanation": "O usuário informa a URL e o navegador solicita a página inicial, o arquivo index.html, ao servidor. Só depois ele identifica os demais recursos.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Navegador solicita a página inicial (index.html) ao Servidor"
+  },
+  {
+    "id": "n02-q020",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "O que o navegador faz depois que o servidor envia o index.html?",
+    "options": [
+      "Interpreta o arquivo e identifica o link para style.css.",
+      "Encerra a conexão e apresenta a página sem carregar estilos.",
+      "Solicita o arquivo logo.jpg antes de qualquer folha de estilo.",
+      "Envia uma nova requisição HTTP ao cliente."
+    ],
+    "answer": 0,
+    "explanation": "Ao receber o index.html, o navegador o interpreta. Em seguida, identifica o link para style.css e solicita esse arquivo ao servidor.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Servidor envia o arquivo index.html para o Navegador o interpreta em seguida"
+  },
+  {
+    "id": "n02-q021",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "Quem encaminha o arquivo style.css ao navegador?",
+    "options": [
+      "O próprio navegador, a partir do cache local.",
+      "O usuário, que informa a URL da folha de estilo.",
+      "O Servidor Web, após receber a solicitação do navegador.",
+      "O protocolo HTTP, que gera o arquivo automaticamente."
+    ],
+    "answer": 2,
+    "explanation": "O navegador identifica o link para style.css e solicita o arquivo ao servidor. O Servidor Web então encaminha o style.css ao navegador.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Servidor encaminha o arquivo style.css para o Navegador"
+  },
+  {
+    "id": "n02-q022",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "Qual é a ordem de solicitação dos recursos no exemplo?",
+    "options": [
+      "index.html, style.css, app.js e logo.jpg.",
+      "style.css, index.html, logo.jpg e app.js.",
+      "app.js, index.html, style.css e logo.jpg.",
+      "logo.jpg, app.js, style.css e index.html."
+    ],
+    "answer": 0,
+    "explanation": "O navegador pede primeiro o index.html e depois os recursos que ele referencia: style.css, app.js e logo.jpg. Por último, apresenta a página ao usuário.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Navegador identifica um link para o arquivo style.css e solicita este arquivo ao Servidor"
+  },
+  {
+    "id": "n02-q023",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "Qual é o último passo da dinâmica de carga?",
+    "options": [
+      "O Servidor envia o arquivo logo.jpg.",
+      "O Navegador solicita o app.js.",
+      "O usuário informa a URL no navegador.",
+      "O Navegador apresenta a página para o Usuário."
+    ],
+    "answer": 3,
+    "explanation": "Depois de solicitar e receber todos os recursos, o navegador apresenta a página ao usuário. Esse é o passo 10 do exemplo.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Navegador apresenta a página para o Usuário"
+  },
+  {
+    "id": "n02-q024",
+    "nodeId": "n02",
+    "type": "mcq",
+    "prompt": "Como o HTML do exemplo referencia a folha de estilo?",
+    "options": [
+      "Com a tag <script src=\"style.css\"></script>.",
+      "Com a tag <link rel=\"stylesheet\" href=\"style.css\">.",
+      "Com a tag <meta charset=\"UTF-8\">.",
+      "Com a tag <img src=\"style.css\" alt=\"Logotipo\">."
+    ],
+    "answer": 1,
+    "explanation": "No exemplo, o head da página inclui a tag link com rel igual a stylesheet e href igual a style.css. É assim que o HTML referencia a folha de estilo.",
+    "source": { "aula": 150, "slide": 3 },
+    "evidence": "<link rel=\"stylesheet\" href=\"style.css\">"
+  },
+  {
+    "id": "n02-q025",
+    "nodeId": "n02",
+    "type": "tf",
+    "prompt": "O servidor envia o arquivo app.js depois que o navegador o solicita.",
+    "answer": true,
+    "explanation": "O navegador identifica o link para app.js e solicita o arquivo ao servidor. Em seguida, o Servidor Web encaminha o app.js ao navegador.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Servidor encaminha o arquivo app.js para o Navegador"
+  },
+  {
+    "id": "n02-q026",
+    "nodeId": "n02",
+    "type": "fill",
+    "prompt": "O Navegador solicita a página inicial (____) ao Servidor.",
+    "answers": ["index.html"],
+    "explanation": "A página inicial do exemplo é o arquivo index.html. O navegador solicita esse arquivo ao servidor logo após o usuário informar a URL.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Navegador solicita a página inicial (index.html) ao Servidor"
+  },
+  {
+    "id": "n02-q027",
+    "nodeId": "n02",
+    "type": "fill",
+    "prompt": "O Servidor encaminha o arquivo logo.jpg para o ____.",
+    "answers": ["Navegador", "navegador"],
+    "explanation": "Depois que o navegador solicita logo.jpg, o servidor encaminha o arquivo de volta ao Navegador. Esse é o passo 9 da sequência.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Servidor encaminha o arquivo logo.jpg para o Navegador"
+  }
+]

@@ -1,0 +1,266 @@
+[
+  {
+    "id": "n02-f001",
+    "nodeId": "n02",
+    "front": "O que é o Cliente Web?",
+    "back": "É um programa ou aplicação, geralmente um navegador (user-agent), que envia requisições HTTP(S) ao servidor.",
+    "source": { "aula": 130, "slide": 4 },
+    "evidence": "O Cliente Web é um programa ou aplicação"
+  },
+  {
+    "id": "n02-f002",
+    "nodeId": "n02",
+    "front": "O que é o Servidor Web?",
+    "back": "É o programa que recebe requisições HTTP(S), interpreta a URL e envia o recurso solicitado ao cliente.",
+    "source": { "aula": 130, "slide": 5 },
+    "evidence": "O Servidor Web é um programa que"
+  },
+  {
+    "id": "n02-f003",
+    "nodeId": "n02",
+    "front": "Quais tipos de recursos o Servidor Web pode enviar?",
+    "back": "Arquivos HTML, CSS, JavaScript, imagens, vídeos e folhas de estilo.",
+    "source": { "aula": 130, "slide": 5 },
+    "evidence": "vídeos, folhas de estilo) por meio da rede."
+  },
+  {
+    "id": "n02-f004",
+    "nodeId": "n02",
+    "front": "Em que protocolo a Internet se baseia?",
+    "back": "A Internet é uma rede mundial baseada no protocolo TCP/IP.",
+    "source": { "aula": 130, "slide": 6 },
+    "evidence": "A Internet é uma rede mundial de computadores baseada no protocolo TCP/IP, onde todo"
+  },
+  {
+    "id": "n02-f005",
+    "nodeId": "n02",
+    "front": "O que é um host na Internet?",
+    "back": "É todo computador conectado à rede, identificado por um endereço IP.",
+    "source": { "aula": 130, "slide": 6 },
+    "evidence": "computador conectado é denominado host (hospedeiro) e possui um identificador endereço"
+  },
+  {
+    "id": "n02-f006",
+    "nodeId": "n02",
+    "front": "Qual é o padrão do endereço IP citado na aula?",
+    "back": "O padrão A.B.C.D, como no exemplo 200.20.15.22.",
+    "source": { "aula": 130, "slide": 6 },
+    "evidence": "IP (Internet Protocol) no padrão A.B.C.D (ex: 200.20.15.22)."
+  },
+  {
+    "id": "n02-f007",
+    "nodeId": "n02",
+    "front": "Por que usamos nomes como www.pucminas.br?",
+    "back": "Porque os nomes são traduzidos em endereços IP antes da comunicação.",
+    "source": { "aula": 130, "slide": 6 },
+    "evidence": "Os seres humanos utilizam nomes como www.pucminas.br"
+  },
+  {
+    "id": "n02-f008",
+    "nodeId": "n02",
+    "front": "O que é a URL?",
+    "back": "É um tipo de URI: o texto na parte superior do navegador que indica o recurso desejado.",
+    "source": { "aula": 130, "slide": 7 },
+    "evidence": "A URL (Uniform Resource Locator), um tipo de URI (Uniform"
+  },
+  {
+    "id": "n02-f009",
+    "nodeId": "n02",
+    "front": "O que é o protocolo HTTP?",
+    "back": "É a forma como clientes e servidores se comunicam na rede, com requisições e respostas padronizadas.",
+    "source": { "aula": 130, "slide": 8 },
+    "evidence": "O protocolo HTTP é a forma como clientes e servidores se comunicam na rede. As"
+  },
+  {
+    "id": "n02-f010",
+    "nodeId": "n02",
+    "front": "O que é uma requisição HTTP?",
+    "back": "É um pacote de dados enviado pelo Cliente Web ao Servidor Web que identifica o recurso solicitado.",
+    "source": { "aula": 130, "slide": 8 },
+    "evidence": "A requisição HTTP é um pacote de dados enviado pela rede pelo Cliente Web para o"
+  },
+  {
+    "id": "n02-f011",
+    "nodeId": "n02",
+    "front": "O que é uma resposta HTTP?",
+    "back": "É formada por pacotes de dados que o Servidor Web envia ao Cliente Web com os recursos solicitados.",
+    "source": { "aula": 130, "slide": 8 },
+    "evidence": "dados enviados pelo Servidor Web para o Cliente Web com os recursos solicitados."
+  },
+  {
+    "id": "n02-f012",
+    "nodeId": "n02",
+    "front": "O que é URI?",
+    "back": "É um padrão para o endereçamento de recursos na rede que engloba URL e URN.",
+    "source": { "aula": 131, "slide": 4 },
+    "evidence": "URI (Uniform Resource Identifier) é um padrão para o endereçamento de recursos disponíveis na rede que engloba os conceitos de"
+  },
+  {
+    "id": "n02-f013",
+    "nodeId": "n02",
+    "front": "O que é URL?",
+    "back": "É um padrão de URI que referencia um recurso e sua localização, normalmente na Internet.",
+    "source": { "aula": 131, "slide": 5 },
+    "evidence": "URL (Uniform Resource Locator) é um padrão de URI que serve para"
+  },
+  {
+    "id": "n02-f014",
+    "nodeId": "n02",
+    "front": "O que é URN?",
+    "back": "É um tipo de URI que identifica um recurso específico pelo nome em um namespace.",
+    "source": { "aula": 131, "slide": 9 },
+    "evidence": "URN (Uniform Resource Name) é um tipo de URI que identifica um recurso específico (NSS) pelo nome em um namespace (NID)."
+  },
+  {
+    "id": "n02-f015",
+    "nodeId": "n02",
+    "front": "O que o esquema de uma URL identifica?",
+    "back": "Identifica a forma de interação entre cliente e servidor, como http, https e ftp.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Esquema – identifica a forma de interação entre um cliente e um servidor, como"
+  },
+  {
+    "id": "n02-f016",
+    "nodeId": "n02",
+    "front": "O que é o host em uma URL?",
+    "back": "É o nome ou número IP onde se encontra a aplicação servidor.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Host – nome ou número IP onde se encontra a aplicação servidor"
+  },
+  {
+    "id": "n02-f017",
+    "nodeId": "n02",
+    "front": "O que a porta identifica em uma URL?",
+    "back": "Identifica a porta TCP/IP associada ao servidor; a porta 80 do HTTP pode ser omitida.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Porta – identifica a porta TCP/IP associada ao servidor. A porta padrão do HTTP (80) pode ser omitida"
+  },
+  {
+    "id": "n02-f018",
+    "nodeId": "n02",
+    "front": "O que indica o caminho em uma URL?",
+    "back": "Indica o local exato onde o recurso se encontra.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Caminho – indica o local exato onde o recurso se encontra"
+  },
+  {
+    "id": "n02-f019",
+    "nodeId": "n02",
+    "front": "O que é a query de uma URL?",
+    "back": "São dados não hierárquicos, normalmente pares de nome e valor que detalham a consulta.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Query – dados não hierárquicos, detalhando a consulta normalmente sob a forma de pares nome e valor"
+  },
+  {
+    "id": "n02-f020",
+    "nodeId": "n02",
+    "front": "O que o fragmento identifica em uma URL?",
+    "back": "Identifica uma seção dentro do recurso.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Fragmento – identifica uma seção no recurso"
+  },
+  {
+    "id": "n02-f021",
+    "nodeId": "n02",
+    "front": "O que significam NID e NSS em uma URN?",
+    "back": "NID é Namespace Identifier e NSS é Namespace Specific String.",
+    "source": { "aula": 131, "slide": 9 },
+    "evidence": "NID – Namespace Identifier"
+  },
+  {
+    "id": "n02-f022",
+    "nodeId": "n02",
+    "front": "Dê um exemplo de URN.",
+    "back": "urn:isbn:978-1-491-91866-1 é um exemplo de URN.",
+    "source": { "aula": 131, "slide": 10 },
+    "evidence": "urn:isbn:978-1-491-91866-1"
+  },
+  {
+    "id": "n02-f023",
+    "nodeId": "n02",
+    "front": "Qual é a página inicial solicitada pelo navegador?",
+    "back": "É o arquivo index.html, solicitado ao Servidor.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Navegador solicita a página inicial (index.html) ao Servidor"
+  },
+  {
+    "id": "n02-f024",
+    "nodeId": "n02",
+    "front": "Como o HTML referencia a folha de estilo no exemplo?",
+    "back": "Com a tag <link rel=\"stylesheet\" href=\"style.css\">.",
+    "source": { "aula": 150, "slide": 3 },
+    "evidence": "<link rel=\"stylesheet\" href=\"style.css\">"
+  },
+  {
+    "id": "n02-f025",
+    "nodeId": "n02",
+    "front": "Como o JavaScript é incluído na página de exemplo?",
+    "back": "Com a tag <script src=\"app.js\"></script> no head.",
+    "source": { "aula": 150, "slide": 3 },
+    "evidence": "<script src=\"app.js\"></script>"
+  },
+  {
+    "id": "n02-f026",
+    "nodeId": "n02",
+    "front": "Qual é o primeiro passo da carga de um site?",
+    "back": "O usuário informa a URL no Navegador.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "Usuário informa a URL no Navegador"
+  },
+  {
+    "id": "n02-f027",
+    "nodeId": "n02",
+    "front": "O que o navegador faz ao receber o index.html?",
+    "back": "O Navegador interpreta o arquivo index.html em seguida.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Servidor envia o arquivo index.html para o Navegador o interpreta em seguida"
+  },
+  {
+    "id": "n02-f028",
+    "nodeId": "n02",
+    "front": "Depois do index.html, qual arquivo o navegador solicita?",
+    "back": "O navegador identifica o link para style.css e solicita esse arquivo ao Servidor.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Navegador identifica um link para o arquivo style.css e solicita este arquivo ao Servidor"
+  },
+  {
+    "id": "n02-f029",
+    "nodeId": "n02",
+    "front": "Quem envia o arquivo app.js para o navegador?",
+    "back": "O Servidor encaminha o arquivo app.js para o Navegador.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Servidor encaminha o arquivo app.js para o Navegador"
+  },
+  {
+    "id": "n02-f030",
+    "nodeId": "n02",
+    "front": "Qual é o último recurso solicitado no exemplo?",
+    "back": "O logo.jpg é solicitado depois do app.js.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Navegador identifica um link para o arquivo logo.jpg e solicita este arquivo ao Servidor"
+  },
+  {
+    "id": "n02-f031",
+    "nodeId": "n02",
+    "front": "Qual é o último passo da dinâmica de carga?",
+    "back": "O Navegador apresenta a página para o Usuário.",
+    "source": { "aula": 150, "slide": 5 },
+    "evidence": "O Navegador apresenta a página para o Usuário"
+  },
+  {
+    "id": "n02-f032",
+    "nodeId": "n02",
+    "front": "Quais arquivos compõem a estrutura HTML e CSS do exemplo?",
+    "back": "O exemplo usa index.html para a estrutura e style.css para o estilo.",
+    "source": { "aula": 150, "slide": 3 },
+    "evidence": "index.html style.css"
+  },
+  {
+    "id": "n02-f033",
+    "nodeId": "n02",
+    "front": "Qual tag define o título da página no exemplo?",
+    "back": "A tag <title>Página Exemplo</title> define o título.",
+    "source": { "aula": 150, "slide": 3 },
+    "evidence": "<title>Página Exemplo</title>"
+  }
+]
