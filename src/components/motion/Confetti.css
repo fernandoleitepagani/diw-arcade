@@ -1,0 +1,47 @@
+.confetti {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-toast, 50);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti__piece {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 8px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--confetti-color, var(--reward));
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .confetti__piece {
+    animation: confetti-burst 600ms var(--ease-out, ease-out) forwards;
+    animation-delay: var(--confetti-delay, 0ms);
+  }
+}
+
+@keyframes confetti-burst {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform:
+      translate(
+        calc(-50% + var(--confetti-x, 0px)),
+        calc(-50% + var(--confetti-y, 120px))
+      )
+      rotate(var(--confetti-rotate, 360deg))
+      scale(0.9);
+  }
+}

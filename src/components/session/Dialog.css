@@ -1,0 +1,84 @@
+.session-dialog__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay, 40);
+  display: grid;
+  place-items: center;
+  padding: var(--space-5, 1.5rem);
+  overflow-y: auto;
+  background: var(--overlay, rgb(5 9 24 / 0.72));
+}
+
+.session-dialog {
+  width: min(100%, 30rem);
+  max-height: calc(100dvh - 2 * var(--space-5, 1.5rem));
+  padding: var(--space-6, 2rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border: 1px solid var(--border, #2c3a66);
+  border-radius: var(--radius-lg, 16px);
+  background: var(--surface, #111a36);
+  box-shadow: 0 24px 70px rgb(0 0 0 / 0.5);
+}
+
+.session-dialog__title {
+  margin-bottom: var(--space-3, 0.75rem);
+}
+
+.session-confirm__message {
+  color: var(--text-muted, #a8b4d4);
+}
+
+.session-confirm__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3, 0.75rem);
+  margin-top: var(--space-5, 1.5rem);
+}
+
+.session-confirm__actions > .ui-button {
+  flex: 1 1 10rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .session-dialog__backdrop {
+    animation: session-backdrop-in 150ms var(--ease-out, ease-out) both;
+  }
+
+  .session-dialog {
+    animation: session-dialog-in 200ms var(--ease-out, ease-out) both;
+  }
+}
+
+@keyframes session-backdrop-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes session-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .session-dialog {
+    padding: var(--space-5, 1.5rem);
+  }
+
+  .session-confirm__actions {
+    flex-direction: column-reverse;
+  }
+}
