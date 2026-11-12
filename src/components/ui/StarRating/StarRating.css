@@ -1,0 +1,20 @@
+.ui-stars {
+  display: inline-flex;
+  gap: 0.1rem;
+  color: var(--reward);
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.ui-stars--sm {
+  font-size: 0.95rem;
+}
+
+.ui-stars__star {
+  color: var(--border);
+}
+
+.ui-stars__star--on {
+  color: var(--reward);
+  text-shadow: 0 0 8px rgb(255 79 216 / 0.6);
+}
