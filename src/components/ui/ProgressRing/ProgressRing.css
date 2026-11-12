@@ -1,0 +1,55 @@
+.ui-ring {
+  position: relative;
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  --ui-ring-color: var(--accent);
+}
+
+.ui-ring--xp {
+  --ui-ring-color: var(--xp);
+}
+
+.ui-ring--reward {
+  --ui-ring-color: var(--reward);
+}
+
+.ui-ring--success {
+  --ui-ring-color: var(--success);
+}
+
+.ui-ring__svg {
+  display: block;
+  transform: rotate(-90deg);
+}
+
+.ui-ring__track {
+  fill: none;
+  stroke: var(--surface-3);
+}
+
+.ui-ring__fill {
+  fill: none;
+  stroke: var(--ui-ring-color);
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--dur-slow) var(--ease-out);
+}
+
+.ui-ring__content {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  line-height: 1;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-ring__fill {
+    transition: none;
+  }
+}

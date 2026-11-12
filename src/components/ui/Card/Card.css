@@ -1,0 +1,51 @@
+.ui-card {
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.ui-card--accent {
+  border-color: rgb(45 226 230 / 0.55);
+  box-shadow: 0 0 24px rgb(45 226 230 / 0.12);
+}
+
+.ui-card--reward {
+  border-color: rgb(255 79 216 / 0.55);
+  box-shadow: 0 0 24px rgb(255 79 216 / 0.12);
+}
+
+.ui-card--xp {
+  border-color: rgb(255 194 61 / 0.55);
+  box-shadow: 0 0 24px rgb(255 194 61 / 0.12);
+}
+
+.ui-card--success {
+  border-color: rgb(124 255 107 / 0.55);
+  box-shadow: 0 0 24px rgb(124 255 107 / 0.12);
+}
+
+.ui-card--interactive {
+  transition:
+    border-color var(--dur-fast) ease,
+    box-shadow var(--dur-fast) ease,
+    transform var(--dur-fast) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .ui-card--interactive:hover {
+    border-color: rgb(45 226 230 / 0.5);
+    box-shadow: 0 10px 24px rgb(0 0 0 / 0.25);
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-card--interactive {
+    transition: none;
+  }
+
+  .ui-card--interactive:hover {
+    transform: none;
+  }
+}
