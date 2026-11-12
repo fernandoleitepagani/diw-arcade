@@ -1,0 +1,238 @@
+[
+  {
+    "id": "n03-c01",
+    "nodeId": "n03",
+    "title": "Listas ordenadas e não ordenadas",
+    "kind": "html",
+    "goal": "Monte a receita de um bolo: use uma lista não ordenada para os ingredientes e uma lista ordenada para o modo de preparo.",
+    "starter": {
+      "html": "<h2>Bolo simples</h2>\n\n<h3>Ingredientes</h3>\n<ul>\n  <li>2 ovos</li>\n  <li>1 xícara de açúcar</li>\n  <li>2 xícaras de farinha de trigo</li>\n</ul>\n\n<h3>Modo de preparo</h3>\n<ul>\n  <li>Bata os ovos com o açúcar.</li>\n  <li>Acrescente a farinha e misture.</li>\n  <li>Asse por 30 minutos.</li>\n</ul>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<h2>Bolo simples</h2>\n\n<h3>Ingredientes</h3>\n<ul>\n  <li>2 ovos</li>\n  <li>1 xícara de açúcar</li>\n  <li>2 xícaras de farinha de trigo</li>\n</ul>\n\n<h3>Modo de preparo</h3>\n<ol>\n  <li>Bata os ovos com o açúcar.</li>\n  <li>Acrescente a farinha e misture.</li>\n  <li>Asse por 30 minutos.</li>\n</ol>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "lista-nao-ordenada",
+        "label": "Existe uma lista não ordenada (<ul>).",
+        "check": {
+          "kind": "exists",
+          "selector": "ul"
+        }
+      },
+      {
+        "id": "ingredientes",
+        "label": "A lista não ordenada tem pelo menos 3 ingredientes em itens <li>.",
+        "check": {
+          "kind": "count",
+          "selector": "ul > li",
+          "min": 3,
+          "max": 6
+        }
+      },
+      {
+        "id": "lista-ordenada",
+        "label": "Existe uma lista ordenada (<ol>).",
+        "check": {
+          "kind": "exists",
+          "selector": "ol"
+        }
+      },
+      {
+        "id": "passos",
+        "label": "A lista ordenada tem pelo menos 3 passos em itens <li>.",
+        "check": {
+          "kind": "count",
+          "selector": "ol > li",
+          "min": 3,
+          "max": 6
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": {
+          "kind": "noErrors"
+        }
+      }
+    ],
+    "hints": [
+      "A lista de ingredientes não tem ordem: use <ul> com um <li> para cada ingrediente.",
+      "O modo de preparo tem ordem e deve aparecer numerado: troque o <ul> por <ol>.",
+      "Confira se cada <li> está na lista certa: ingredientes no <ul> e passos no <ol>."
+    ],
+    "source": {
+      "aula": 161,
+      "slide": 12
+    },
+    "evidence": "O HTML oferece 3 tipos de listas : ordenada | não ordenada | definições"
+  },
+  {
+    "id": "n03-c02",
+    "nodeId": "n03",
+    "title": "Tabela com cabeçalho e corpo",
+    "kind": "html",
+    "goal": "Crie uma tabela de preços com o cabeçalho dentro de <thead> e as linhas de produtos dentro de <tbody>.",
+    "starter": {
+      "html": "<h2>Tabela de preços</h2>\n<table>\n  <tr>\n    <th>Produto</th>\n    <th>Preço</th>\n  </tr>\n  <tr>\n    <td>Caderno</td>\n    <td>R$ 12,00</td>\n  </tr>\n  <tr>\n    <td>Caneta</td>\n    <td>R$ 3,00</td>\n  </tr>\n  <tr>\n    <td>Borracha</td>\n    <td>R$ 2,00</td>\n  </tr>\n</table>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<h2>Tabela de preços</h2>\n<table>\n  <thead>\n    <tr>\n      <th>Produto</th>\n      <th>Preço</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Caderno</td>\n      <td>R$ 12,00</td>\n    </tr>\n    <tr>\n      <td>Caneta</td>\n      <td>R$ 3,00</td>\n    </tr>\n    <tr>\n      <td>Borracha</td>\n      <td>R$ 2,00</td>\n    </tr>\n  </tbody>\n</table>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "tabela",
+        "label": "Existe uma tabela (<table>).",
+        "check": {
+          "kind": "exists",
+          "selector": "table"
+        }
+      },
+      {
+        "id": "cabecalho",
+        "label": "A tabela tem um cabeçalho explícito em <thead>.",
+        "check": {
+          "kind": "exists",
+          "selector": "table > thead"
+        }
+      },
+      {
+        "id": "corpo",
+        "label": "A tabela tem um corpo de dados em <tbody>.",
+        "check": {
+          "kind": "exists",
+          "selector": "table > tbody"
+        }
+      },
+      {
+        "id": "colunas",
+        "label": "O cabeçalho tem pelo menos 2 células <th>.",
+        "check": {
+          "kind": "count",
+          "selector": "thead th",
+          "min": 2,
+          "max": 4
+        }
+      },
+      {
+        "id": "produtos",
+        "label": "O corpo da tabela tem pelo menos 3 linhas de produtos.",
+        "check": {
+          "kind": "count",
+          "selector": "tbody tr",
+          "min": 3,
+          "max": 8
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": {
+          "kind": "noErrors"
+        }
+      }
+    ],
+    "hints": [
+      "O cabeçalho fica dentro de <thead> e cada título de coluna usa <th>.",
+      "Os produtos ficam dentro de <tbody>, com um <tr> para cada linha e <td> para cada célula.",
+      "Deixe a linha de títulos no <thead> e mova todas as linhas de dados para o <tbody>."
+    ],
+    "source": {
+      "aula": 161,
+      "slide": 17
+    },
+    "evidence": "Tabelas – Permite a formatação de dados tabulares."
+  },
+  {
+    "id": "n03-c03",
+    "nodeId": "n03",
+    "title": "Imagem com texto alternativo",
+    "kind": "html",
+    "goal": "Exiba uma foto de peixe dentro de um <figure>, com um alt descritivo e uma legenda em <figcaption>.",
+    "starter": {
+      "html": "<h2>Peixe palhaço</h2>\n<img src=\"peixe.jpg\">\n<p>Peixe palhaço no recife de corais.</p>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<h2>Peixe palhaço</h2>\n<figure>\n  <img src=\"peixe.jpg\" alt=\"Peixe palhaço laranja entre anêmonas no recife\">\n  <figcaption>Peixe palhaço no recife de corais.</figcaption>\n</figure>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "imagem",
+        "label": "Existe uma imagem (<img>).",
+        "check": {
+          "kind": "exists",
+          "selector": "img"
+        }
+      },
+      {
+        "id": "origem",
+        "label": "A imagem aponta para um arquivo de imagem em src.",
+        "check": {
+          "kind": "attr",
+          "selector": "img",
+          "name": "src",
+          "match": {
+            "pattern": "peixe\\.(jpg|jpeg|png)$"
+          }
+        }
+      },
+      {
+        "id": "alternativo",
+        "label": "A imagem tem um atributo alt descritivo.",
+        "check": {
+          "kind": "attr",
+          "selector": "img",
+          "name": "alt",
+          "match": {
+            "pattern": "peixe"
+          }
+        }
+      },
+      {
+        "id": "figure",
+        "label": "A imagem está aninhada dentro de um <figure>.",
+        "check": {
+          "kind": "exists",
+          "selector": "figure > img"
+        }
+      },
+      {
+        "id": "legenda",
+        "label": "O <figure> tem uma legenda em <figcaption>.",
+        "check": {
+          "kind": "exists",
+          "selector": "figure > figcaption"
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": {
+          "kind": "noErrors"
+        }
+      }
+    ],
+    "hints": [
+      "Toda <img> precisa de um alt que descreva a imagem para quem não consegue vê-la.",
+      "Agrupe a imagem e a legenda em um <figure>; a legenda fica em <figcaption>.",
+      "O <img> e o <figcaption> devem ser filhos diretos do <figure>."
+    ],
+    "source": {
+      "aula": 161,
+      "slide": 16
+    },
+    "evidence": "O texto contido no atributo alt é utilizado quando a imagem não estiver disponível."
+  }
+]
