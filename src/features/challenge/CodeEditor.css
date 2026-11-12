@@ -1,0 +1,23 @@
+.code-editor {
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface);
+}
+
+.code-editor .cm-editor {
+  min-height: 18rem;
+}
+
+.code-editor .cm-editor.cm-focused {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.code-editor .cm-scroller {
+  font-family: var(--font-mono), monospace;
+}
+
+.code-editor .cm-placeholder {
+  color: var(--text-muted);
+}
