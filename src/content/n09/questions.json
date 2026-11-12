@@ -1,0 +1,202 @@
+[
+  {
+    "id": "n09-q001",
+    "nodeId": "n09",
+    "type": "mcq",
+    "prompt": "No exemplo de Flexbox, qual declaração do contêiner ativa esse modelo de layout?",
+    "options": ["position: flex", "layout: flex", "display: flex", "flex: wrap"],
+    "answer": 2,
+    "explanation": "A regra `.container` usa `display: flex`, que transforma o elemento em um contêiner flexível e habilita o posicionamento dos filhos em linha.",
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": ".container { display: flex; flex-wrap: wrap; }"
+  },
+  {
+    "id": "n09-q002",
+    "nodeId": "n09",
+    "type": "mcq",
+    "prompt": "O que `flex-wrap: wrap` faz no contêiner Flexbox do exemplo?",
+    "options": [
+      "Permite que os itens quebrem para a próxima linha quando não houver espaço.",
+      "Fixa a altura de todos os itens em 80px.",
+      "Centraliza os itens no eixo principal do contêiner.",
+      "Impede que os itens sejam exibidos em linha."
+    ],
+    "answer": 0,
+    "explanation": "Com `flex-wrap: wrap`, os itens deixam de ser forçados a permanecer em uma única linha e podem quebrar para a linha seguinte.",
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": ".container { display: flex; flex-wrap: wrap; }"
+  },
+  {
+    "id": "n09-q003",
+    "nodeId": "n09",
+    "type": "tf",
+    "prompt": "No exemplo, a media query `min-width: 400px` define a largura de `.green` como 70%.",
+    "answer": true,
+    "explanation": "No bloco de 400px, `.green` recebe `width: 70%`; `.orange` fica com 100% e `.yellow` com 30%.",
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": ".green { width: 70%; }"
+  },
+  {
+    "id": "n09-q004",
+    "nodeId": "n09",
+    "type": "fill",
+    "prompt": "No contêiner Flexbox do exemplo, a propriedade `____` com valor `wrap` permite que os itens quebrem linha.",
+    "answers": ["flex-wrap"],
+    "explanation": "`flex-wrap: wrap` é a propriedade que autoriza a quebra dos itens para a próxima linha.",
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": ".container { display: flex; flex-wrap: wrap; }"
+  },
+  {
+    "id": "n09-q005",
+    "nodeId": "n09",
+    "type": "mcq",
+    "prompt": "No exemplo, qual valor de `order` está aplicado à classe `.green`?",
+    "options": ["1", "2", "3", "0"],
+    "answer": 1,
+    "explanation": "As classes usam `order: 1`, `order: 2` e `order: 3` para `.orange`, `.green` e `.yellow`, respectivamente.",
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": ".green { background-color: green; order: 2; }"
+  },
+  {
+    "id": "n09-q006",
+    "nodeId": "n09",
+    "type": "mcq",
+    "prompt": "No breakpoint `min-width: 550px`, qual é a largura definida para `.orange`?",
+    "options": ["100%", "70%", "20%", "40%"],
+    "answer": 3,
+    "explanation": "A partir de 550px, `.orange` e `.green` têm 40% de largura, enquanto `.yellow` fica com 20%.",
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": "@media screen and (min-width: 550px) { .orange { width: 40%; } .green { width: 40%; } .yellow { width: 20%; } }"
+  },
+  {
+    "id": "n09-q007",
+    "nodeId": "n09",
+    "type": "mcq",
+    "prompt": "Segundo a aula, o que são as tracks do CSS Grid?",
+    "options": [
+      "As células formadas pelo cruzamento de linhas e colunas.",
+      "As regiões nomeadas do layout.",
+      "As linhas ou colunas que compõem a grade.",
+      "Os contêineres que recebem `display: grid`."
+    ],
+    "answer": 2,
+    "explanation": "A lista de conceitos fundamentais define tracks como linhas ou colunas; lines, cells e areas completam o conjunto.",
+    "source": { "aula": 174, "slide": 4 },
+    "evidence": "• Tracks (linhas ou colunas)"
+  },
+  {
+    "id": "n09-q008",
+    "nodeId": "n09",
+    "type": "mcq",
+    "prompt": "Quais valores são apresentados para a propriedade `display` de um contêiner Grid?",
+    "options": [
+      "block | inline | flex",
+      "grid | inline-grid | subgrid",
+      "grid | flex | table",
+      "inline-grid | flex | subgrid"
+    ],
+    "answer": 1,
+    "explanation": "A aula lista `grid`, `inline-grid` e `subgrid` como valores de `display` para contêineres Grid.",
+    "source": { "aula": 174, "slide": 7 },
+    "evidence": "display: grid | inline-grid | subgrid"
+  },
+  {
+    "id": "n09-q009",
+    "nodeId": "n09",
+    "type": "mcq",
+    "prompt": "Qual grupo de propriedades do contêiner Grid trata de espaçamento?",
+    "options": [
+      "column-gap, row-gap e gap",
+      "justify-items, align-items e place-items",
+      "grid-template-columns e grid-template-rows",
+      "grid-row-start e grid-column-start"
+    ],
+    "answer": 0,
+    "explanation": "A seção de espaçamento mostra `column-gap`, `row-gap` e `gap`; o alinhamento fica com `justify-items`, `align-items` e `place-items`.",
+    "source": { "aula": 174, "slide": 7 },
+    "evidence": "Espaçamento – column-gap – row-gap – gap"
+  },
+  {
+    "id": "n09-q010",
+    "nodeId": "n09",
+    "type": "mcq",
+    "prompt": "Na regra de exemplo, quantas colunas `grid-template-columns: 50px 50px 50px 50px` define?",
+    "options": ["2", "3", "5", "4"],
+    "answer": 3,
+    "explanation": "São quatro valores de 50px, portanto o template cria quatro colunas de 50px cada.",
+    "source": { "aula": 174, "slide": 8 },
+    "evidence": "grid-template-columns: 50px 50px 50px 50px"
+  },
+  {
+    "id": "n09-q011",
+    "nodeId": "n09",
+    "type": "mcq",
+    "prompt": "Qual é a ordem dos valores no atalho `grid-area`?",
+    "options": [
+      "column-start / row-start / column-end / row-end",
+      "row-start / row-end / column-start / column-end",
+      "row-start / column-start / row-end / column-end",
+      "column-start / column-end / row-start / row-end"
+    ],
+    "answer": 2,
+    "explanation": "O atalho segue `<row-start> / <column-start> / <row-end> / <column-end>`, ou seja, linha inicial, coluna inicial, linha final e coluna final.",
+    "source": { "aula": 174, "slide": 9 },
+    "evidence": "grid-area: <name> | <row-start> / <column-start> / <row-end> / <column-end>"
+  },
+  {
+    "id": "n09-q012",
+    "nodeId": "n09",
+    "type": "tf",
+    "prompt": "A propriedade `place-items` do Grid combina `justify-items` e `align-items`.",
+    "answer": true,
+    "explanation": "A aula apresenta `place-items` na forma `[justify-items] / [align-items]`, ou seja, um atalho para os dois alinhamentos.",
+    "source": { "aula": 174, "slide": 7 },
+    "evidence": "place-items: [justify-items] / [align-items]"
+  },
+  {
+    "id": "n09-q013",
+    "nodeId": "n09",
+    "type": "fill",
+    "prompt": "No Grid, a propriedade `____` define o tamanho e a quantidade das colunas de um contêiner.",
+    "answers": ["grid-template-columns"],
+    "explanation": "`grid-template-columns` recebe uma sequência de tamanhos de track e define as colunas da grade.",
+    "source": { "aula": 174, "slide": 7 },
+    "evidence": "grid-template-columns: <track-size> ..."
+  },
+  {
+    "id": "n09-q014",
+    "nodeId": "n09",
+    "type": "mcq",
+    "prompt": "Na regra `.item-b`, o que significa `grid-row-end: span 2`?",
+    "options": [
+      "Que o item termina exatamente na linha 2.",
+      "Que o item começa na segunda linha.",
+      "Que o item ocupa duas colunas.",
+      "Que o item ocupa duas linhas a partir da linha inicial."
+    ],
+    "answer": 3,
+    "explanation": "O valor `span 2` faz o item se estender por duas linhas a partir da linha inicial definida em `grid-row-start: 2`.",
+    "source": { "aula": 174, "slide": 10 },
+    "evidence": ".item-b { grid-column-start: 1; grid-column-end: span col4-start; grid-row-start: 2; grid-row-end: span 2 }"
+  },
+  {
+    "id": "n09-q015",
+    "nodeId": "n09",
+    "type": "tf",
+    "prompt": "Na media query de largura máxima 600px, o Grid do exemplo passa a usar duas colunas.",
+    "answer": false,
+    "explanation": "No breakpoint de 600px, `grid-template-columns` muda para `1fr`, deixando o layout com uma única coluna.",
+    "source": { "aula": 174, "slide": 12 },
+    "evidence": "grid-template-columns: 1fr;"
+  },
+  {
+    "id": "n09-q016",
+    "nodeId": "n09",
+    "type": "fill",
+    "prompt": "O atalho `____` combina as propriedades `grid-row-start` e `grid-row-end`.",
+    "answers": ["grid-row"],
+    "explanation": "`grid-row` aceita `<start-line> / <end-line>` ou `<start-line> / span <value>` para posicionar o item nas linhas.",
+    "source": { "aula": 174, "slide": 9 },
+    "evidence": "grid-row: <start-line> / <end-line> | <start-line> / span <value>"
+  }
+]
