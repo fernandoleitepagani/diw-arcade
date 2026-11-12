@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
 import { ConfirmDialog } from '../components/session';
 import {
   SessionBarProvider,
   useSessionBarState,
 } from '../components/session/sessionBar';
-import { Button, ProgressBar } from '../components/ui';
+import { Button, PageSkeleton, ProgressBar } from '../components/ui';
 import './SessionLayout.css';
 
 const DEFAULT_EXIT = '/';
@@ -59,7 +59,9 @@ function SessionChrome() {
         ref={mainRef}
         tabIndex={-1}
       >
-        <Outlet />
+        <Suspense fallback={<PageSkeleton />}>
+          <Outlet />
+        </Suspense>
       </main>
 
       <ConfirmDialog

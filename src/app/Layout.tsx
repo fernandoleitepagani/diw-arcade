@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
 import { Aurora } from '../components/effects/Aurora/Aurora';
 import { ClickSpark } from '../components/effects/ClickSpark/ClickSpark';
+import { PageSkeleton } from '../components/ui';
 import { Hud } from '../features/hud/Hud';
 import {
   LabIcon,
@@ -64,7 +65,9 @@ export function Layout() {
           ref={mainRef}
           tabIndex={-1}
         >
-          <Outlet />
+          <Suspense fallback={<PageSkeleton />}>
+            <Outlet />
+          </Suspense>
         </main>
       </div>
     </ClickSpark>
