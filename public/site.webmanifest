@@ -1,0 +1,22 @@
+{
+  "name": "DIW Arcade",
+  "short_name": "DIW Arcade",
+  "description": "Pratique Desenvolvimento de Interfaces Web como num fliperama.",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a1128",
+  "theme_color": "#0a1128",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
