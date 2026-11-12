@@ -1,0 +1,194 @@
+[
+  {
+    "id": "n11-f001",
+    "nodeId": "n11",
+    "front": "De que estudo foi adaptada a classificação de tipos de dispositivos móveis apresentada na aula?",
+    "back": "Do artigo Literature review in mobile technologies and learning, de Naismith et al. (2004).",
+    "source": { "aula": 220, "slide": 3 },
+    "evidence": "Fonte: Adaptado de Literature review in mobile technologies and learning (Naismith et al, 2004)"
+  },
+  {
+    "id": "n11-f002",
+    "nodeId": "n11",
+    "front": "Quais são as três tecnologias de desenvolvimento de aplicações móveis apresentadas?",
+    "back": "São três os tipos de aplicação: nativa, web e híbrida.",
+    "source": { "aula": 220, "slide": 4 },
+    "evidence": "Aplicações Nativas | Aplicações Web | Aplicações Híbridas"
+  },
+  {
+    "id": "n11-f003",
+    "nodeId": "n11",
+    "front": "Em qual sistema operacional uma aplicação nativa executa?",
+    "back": "Ela executa em um SO específico, como Android, iOS ou Windows Phone.",
+    "source": { "aula": 220, "slide": 5 },
+    "evidence": "Executam em um SO específico (Android, iOS, Windows Phone)"
+  },
+  {
+    "id": "n11-f004",
+    "nodeId": "n11",
+    "front": "De que forma as aplicações nativas são adquiridas e instaladas?",
+    "back": "Elas são baixadas das lojas virtuais de aplicativos e instaladas diretamente no dispositivo.",
+    "source": { "aula": 220, "slide": 5 },
+    "evidence": "Adquirida via download a partir das lojas virtuais de aplicativos"
+  },
+  {
+    "id": "n11-f005",
+    "nodeId": "n11",
+    "front": "Quais aplicativos distribuídos com o dispositivo são exemplos de aplicações nativas?",
+    "back": "Câmera, Telefone e Mensagens são exemplos, assim como o Angry Birds.",
+    "source": { "aula": 220, "slide": 5 },
+    "evidence": "Aplicativos distribuídos com o dispositivo (Câmera, Telefone, Mensagens)"
+  },
+  {
+    "id": "n11-f006",
+    "nodeId": "n11",
+    "front": "Quais linguagens de cliente são usadas em aplicações web?",
+    "back": "As linguagens de cliente são HTML, Javascript e CSS.",
+    "source": { "aula": 220, "slide": 6 },
+    "evidence": "Cliente - HTML, Javascript, CSS;"
+  },
+  {
+    "id": "n11-f007",
+    "nodeId": "n11",
+    "front": "Qual é uma limitação de acesso aos recursos em aplicações web?",
+    "back": "Elas acessam apenas os recursos disponíveis para o navegador e, em alguns casos, requerem confirmação do usuário.",
+    "source": { "aula": 220, "slide": 6 },
+    "evidence": "Acesso apenas aos recursos disponíveis para o navegador"
+  },
+  {
+    "id": "n11-f008",
+    "nodeId": "n11",
+    "front": "Qual é o requisito de download ou instalação para uma aplicação web?",
+    "back": "Não: elas não requerem download nem instalação, mas dependem da conexão à Internet.",
+    "source": { "aula": 220, "slide": 6 },
+    "evidence": "Não requerem download ou instalação"
+  },
+  {
+    "id": "n11-f009",
+    "nodeId": "n11",
+    "front": "Como uma aplicação híbrida acessa os recursos do dispositivo?",
+    "back": "O acesso é parcial e ocorre via framework utilizado.",
+    "source": { "aula": 220, "slide": 7 },
+    "evidence": "Acesso parcial aos recursos dos dispositivos, via framework utilizado"
+  },
+  {
+    "id": "n11-f010",
+    "nodeId": "n11",
+    "front": "Quais são exemplos de aplicações híbridas citados na aula?",
+    "back": "Linkedin, Facebook e Sales Force são exemplos de aplicações híbridas.",
+    "source": { "aula": 220, "slide": 7 },
+    "evidence": "Linkedin, Facebook, Sales Force"
+  },
+  {
+    "id": "n11-f011",
+    "nodeId": "n11",
+    "front": "O que é Responsive Web Design (RWD)?",
+    "back": "É um layout que se adapta automaticamente ao tamanho do dispositivo, priorizando os elementos essenciais.",
+    "source": { "aula": 220, "slide": 8 },
+    "evidence": "priorizando os elementos essenciais e ocultando ou rearranjando os demais"
+  },
+  {
+    "id": "n11-f012",
+    "nodeId": "n11",
+    "front": "Quais são os recursos envolvidos em um projeto responsivo?",
+    "back": "Viewport e resolução de tela, media queries, layouts flexíveis e frameworks.",
+    "source": { "aula": 220, "slide": 8 },
+    "evidence": "Layouts flexíveis (flexbox | grid)"
+  },
+  {
+    "id": "n11-f013",
+    "nodeId": "n11",
+    "front": "O que caracteriza o layout fixo?",
+    "back": "A estrutura tem largura fixa em pixels, normalmente 960px, e exige barras de rolagem em telas menores.",
+    "source": { "aula": 220, "slide": 10 },
+    "evidence": "Estrutura de largura fixa, definida em pixels, normalmente um padrão de largura (Ex: 960px)"
+  },
+  {
+    "id": "n11-f014",
+    "nodeId": "n11",
+    "front": "Qual é a diferença entre layout fluído e layout adaptativo?",
+    "back": "O fluído usa percentagens e comprime os elementos; o adaptativo requer uma versão do site para cada dispositivo.",
+    "source": { "aula": 220, "slide": 10 },
+    "evidence": "Estrutura flexível com larguras definidas em percentagens"
+  },
+  {
+    "id": "n11-f015",
+    "nodeId": "n11",
+    "front": "O que o layout responsivo combina?",
+    "back": "Ele mescla os layouts fluidos com os adaptativos em um único site, usando breakpoints.",
+    "source": { "aula": 220, "slide": 10 },
+    "evidence": "Mescla os layouts fluidos com layouts adaptativos em um único site"
+  },
+  {
+    "id": "n11-f016",
+    "nodeId": "n11",
+    "front": "Como funciona o padrão Column Drop?",
+    "back": "As colunas vão sendo empilhadas até sobrar apenas uma em dispositivos de largura reduzida.",
+    "source": { "aula": 220, "slide": 11 },
+    "evidence": "consiste de diversas colunas que vão sendo empilhadas até sobrar apenas uma coluna em dispositivos com largura reduzida"
+  },
+  {
+    "id": "n11-f017",
+    "nodeId": "n11",
+    "front": "O que o padrão Off Canvas permite ao usuário?",
+    "back": "O padrão oculta algumas colunas e permite que o usuário alterne entre as diversas colunas.",
+    "source": { "aula": 220, "slide": 11 },
+    "evidence": "oculta algumas colunas a medida que a largura do dispositivo é reduzida e permite ao usuário alternar entre as diversas colunas"
+  },
+  {
+    "id": "n11-f018",
+    "nodeId": "n11",
+    "front": "Quem criou o termo Mobile First e o que ele define?",
+    "back": "Luke Wroblewski criou o termo, que prioriza os dispositivos móveis antes dos desktops.",
+    "source": { "aula": 220, "slide": 13 },
+    "evidence": "Mobile First é um termo criado por Luke Wroblewski"
+  },
+  {
+    "id": "n11-f019",
+    "nodeId": "n11",
+    "front": "Quais são as restrições de um dispositivo móvel citadas na aula?",
+    "back": "Dificuldade de entrada e saída de informação, telas pequenas, conexões limitadas, baixo armazenamento, bateria e processamento.",
+    "source": { "aula": 220, "slide": 14 },
+    "evidence": "Dificuldade na entrada e saída de informação • Tamanho e resolução das telas • Opções, custos e velocidade de conexões de rede • Baixa capacidade de armazenamento dos equipamentos • Baixa autonomia das baterias • Baixo poder de processamento"
+  },
+  {
+    "id": "n11-f020",
+    "nodeId": "n11",
+    "front": "O que o sensor de proximidade detecta?",
+    "back": "O sensor detecta objetos físicos próximos ao dispositivo.",
+    "source": { "aula": 220, "slide": 15 },
+    "evidence": "Sensor de proximidade – Detecção de objetos físicos"
+  },
+  {
+    "id": "n11-f021",
+    "nodeId": "n11",
+    "front": "Qual é a função do giroscópio?",
+    "back": "Ele detecta o movimento em 360º do dispositivo.",
+    "source": { "aula": 220, "slide": 15 },
+    "evidence": "Giroscópio: movimento em 360º"
+  },
+  {
+    "id": "n11-f022",
+    "nodeId": "n11",
+    "front": "Quais são os quatro tipos de experiência Mobile First apresentados na aula?",
+    "back": "A aula apresenta quatro tipos: Lookup/Find, Explore/Play, Check In/Status e Edit/Create.",
+    "source": { "aula": 220, "slide": 16 },
+    "evidence": "Lookup/Find Explore/Play"
+  },
+  {
+    "id": "n11-f023",
+    "nodeId": "n11",
+    "front": "O que o padrão Layout Shifter faz?",
+    "back": "O layout se ajusta de formas diferenciadas em telas grandes, médias e pequenas.",
+    "source": { "aula": 220, "slide": 11 },
+    "evidence": "o layout se ajusta de formas diferenciadas em telas grandes médias e pequenas"
+  },
+  {
+    "id": "n11-f024",
+    "nodeId": "n11",
+    "front": "Quais vantagens de projetos Mobile First são citadas?",
+    "back": "Acesso simplificado, mais possibilidades de UX, melhor SEO e mais foco no projeto.",
+    "source": { "aula": 220, "slide": 17 },
+    "evidence": "Melhor pontuação no ranking do Google (SEO)"
+  }
+]
