@@ -2,11 +2,26 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { describe, expect, it } from 'vitest';
+import { ToastProvider } from '../components/ui';
+import { createEmptySave, persistSave, SaveV1Schema } from '../lib/storage';
+import { createMemoryStorage, FIXED_NOW } from '../test/renderWithProgress';
+import { ProgressProvider } from './ProgressProvider';
 import { routes } from './router';
 
 function renderAt(path: string) {
+  const storage = createMemoryStorage();
+  persistSave(
+    storage,
+    SaveV1Schema.parse({ ...createEmptySave(FIXED_NOW), onboarded: true }),
+  );
   const router = createMemoryRouter(routes, { initialEntries: [path] });
-  return render(<RouterProvider router={router} />);
+  return render(
+    <ToastProvider>
+      <ProgressProvider storage={storage} clock={() => FIXED_NOW}>
+        <RouterProvider router={router} />
+      </ProgressProvider>
+    </ToastProvider>,
+  );
 }
 
 const pages = [
@@ -15,7 +30,7 @@ const pages = [
   { path: '/no/n01/quiz', heading: 'Quiz' },
   { path: '/no/n01/cartas', heading: 'Cartas' },
   { path: '/revisao', heading: 'Revisão' },
-  { path: '/desafio/n01-c01', heading: 'Desafio' },
+  { path: '/desafio/n01-c01', heading: 'Minha primeira página HTML' },
   { path: '/laboratorios', heading: 'Laboratórios' },
   { path: '/laboratorios/lab-01', heading: 'Laboratório' },
   { path: '/estatisticas', heading: 'Estatísticas' },
