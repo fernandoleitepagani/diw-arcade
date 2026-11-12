@@ -1,0 +1,281 @@
+[
+  {
+    "id": "n12-q001",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "O que é o Bootstrap, segundo a aula?",
+    "options": [
+      "Um framework gratuito e de código aberto para aplicações web responsivas com foco no front-end",
+      "Um banco de dados relacional para armazenar o conteúdo de páginas web",
+      "Um editor de imagens voltado à criação de layouts para impressão",
+      "Uma linguagem de programação executada no servidor web"
+    ],
+    "answer": 0,
+    "explanation": "A aula define o Bootstrap como um framework gratuito e de código aberto para o desenvolvimento de aplicações web responsivas com foco no cliente.",
+    "source": { "aula": 230, "slide": 2 },
+    "evidence": "Framework gratuito e de código aberto para o desenvolvimento de aplicações web responsivas com foco no cliente (front-end)"
+  },
+  {
+    "id": "n12-q002",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "Quais recursos o Bootstrap inclui, de acordo com a aula?",
+    "options": [
+      "Somente plugins JavaScript, sem modelos de design",
+      "Modelos de design em HTML e CSS e plugins JavaScript opcionais",
+      "Um sistema operacional e um servidor de aplicações",
+      "Apenas arquivos de imagem para prototipagem"
+    ],
+    "answer": 1,
+    "explanation": "A aula lista modelos de design em HTML e CSS, além de plugins JavaScript opcionais, entre os recursos do Bootstrap.",
+    "source": { "aula": 230, "slide": 2 },
+    "evidence": "Inclui modelos de design em HTML e CSS para tipografia, formas, botões, tabelas, navegação, modais, carrosséis de imagem e muitos outros, bem como plugins JavaScript opcionais"
+  },
+  {
+    "id": "n12-q003",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "Quem desenvolveu o Bootstrap e em qual empresa?",
+    "options": [
+      "Linus Torvalds e Tim Berners-Lee, no CERN",
+      "Brendan Eich e Mark Zuckerberg, no Facebook",
+      "Steve Jobs e Steve Wozniak, na Apple",
+      "Mark Otto e Jacob Thornton, no Twitter"
+    ],
+    "answer": 3,
+    "explanation": "O Bootstrap foi desenvolvido por Mark Otto e Jacob Thornton no Twitter.",
+    "source": { "aula": 230, "slide": 2 },
+    "evidence": "Foi desenvolvido por Mark Otto e Jacob Thornton no Twitter, e lançado como um produto de código fonte aberto em 2011 no GitHub"
+  },
+  {
+    "id": "n12-q004",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "Em que ano o Bootstrap foi lançado como produto de código fonte aberto no GitHub?",
+    "options": ["2005", "2011", "2014", "2020"],
+    "answer": 1,
+    "explanation": "Ele foi lançado como produto de código fonte aberto em 2011, no GitHub.",
+    "source": { "aula": 230, "slide": 2 },
+    "evidence": "Foi desenvolvido por Mark Otto e Jacob Thornton no Twitter, e lançado como um produto de código fonte aberto em 2011 no GitHub"
+  },
+  {
+    "id": "n12-q005",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "Qual reconhecimento o Bootstrap recebeu em junho de 2014?",
+    "options": [
+      "Foi removido do GitHub por problemas de licença",
+      "Foi escolhido o projeto No.1 no GitHub",
+      "Foi convertido em uma linguagem de programação",
+      "Deixou de receber atualizações da comunidade"
+    ],
+    "answer": 1,
+    "explanation": "Em junho de 2014, o Bootstrap foi escolhido o projeto No.1 no GitHub.",
+    "source": { "aula": 230, "slide": 2 },
+    "evidence": "Em junho 2014, o Bootstrap foi escolhido o projeto No.1 no GitHub!"
+  },
+  {
+    "id": "n12-q006",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "O que é um design responsivo, conforme a aula?",
+    "options": [
+      "Um design que se ajusta automaticamente aos dispositivos, de smartphones a desktops",
+      "Um design que só funciona em desktops de grandes telas",
+      "Um design feito apenas com imagens de alta resolução",
+      "Um design que depende de plugins JavaScript obrigatórios"
+    ],
+    "answer": 0,
+    "explanation": "O design responsivo se adapta automaticamente a smartphones, tablets e grandes telas de desktop.",
+    "source": { "aula": 230, "slide": 3 },
+    "evidence": "Um design responsivo é aquele que se ajusta aos dispositivos automaticamente, desde smartphones, tablets até chegar em grandes telas de desktops."
+  },
+  {
+    "id": "n12-q007",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "Qual é o site oficial do Bootstrap indicado na aula?",
+    "options": [
+      "http://getbootstrap.com/",
+      "http://bootstrap.io/",
+      "http://github.com/bootstrap/",
+      "http://twitter.com/bootstrap/"
+    ],
+    "answer": 0,
+    "explanation": "A aula indica http://getbootstrap.com/ como site oficial do Bootstrap.",
+    "source": { "aula": 230, "slide": 4 },
+    "evidence": "Site oficial: http://getbootstrap.com/"
+  },
+  {
+    "id": "n12-q008",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "O que caracteriza o pacote \"Compiled CSS and JS\"?",
+    "options": [
+      "Traz apenas os arquivos fontes, sem CSS ou JavaScript compilado",
+      "É um pacote pronto para utilização, com CSS e JavaScript já empacotados",
+      "Inclui toda a documentação e os exemplos oficiais",
+      "Exige ferramentas de compilação antes de ser usado"
+    ],
+    "answer": 1,
+    "explanation": "O pacote compilado é pronto para uso e já traz os arquivos CSS e JavaScript empacotados.",
+    "source": { "aula": 230, "slide": 4 },
+    "evidence": "Arquivos CSS e JavaScript já empacotados"
+  },
+  {
+    "id": "n12-q009",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "O que caracteriza a opção \"Código Fonte\" na instalação do Bootstrap?",
+    "options": [
+      "É um pacote pronto para utilização, sem necessidade de compilação",
+      "Traz somente os arquivos CSS e JavaScript empacotados",
+      "Não inclui documentação nem exemplos e depende de outras bibliotecas",
+      "Inclui os fontes do Bootstrap, a documentação e exemplos, mas requer ferramentas para compilação"
+    ],
+    "answer": 3,
+    "explanation": "A opção de código fonte inclui os fontes, a documentação e exemplos, mas exige ferramentas de compilação.",
+    "source": { "aula": 230, "slide": 4 },
+    "evidence": "inclui os fontes do Bootstrap"
+  },
+  {
+    "id": "n12-q010",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "Em quantas colunas o sistema de grid do Bootstrap divide a tela?",
+    "options": ["6 colunas", "10 colunas", "12 colunas", "16 colunas"],
+    "answer": 2,
+    "explanation": "O sistema de grid do Bootstrap divide a tela em 12 colunas.",
+    "source": { "aula": 230, "slide": 6 },
+    "evidence": "Para estruturar layout de sites, o Bootstrap divide a tela em 12 colunas"
+  },
+  {
+    "id": "n12-q011",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "Qual é a hierarquia correta do sistema de grid do Bootstrap?",
+    "options": [
+      "row → container → col",
+      "col → row → container",
+      "container → row → col",
+      "container → col → row"
+    ],
+    "answer": 2,
+    "explanation": "A hierarquia é container, depois row e depois col.",
+    "source": { "aula": 230, "slide": 6 },
+    "evidence": "Colunas (.col) vêm dentro de linhas (.row)"
+  },
+  {
+    "id": "n12-q012",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "Qual classe cria um container de largura fluida?",
+    "options": [".container", ".container-fluid", ".row-fluid", ".col-fluid"],
+    "answer": 1,
+    "explanation": "O container de largura fixa usa .container e o de largura fluida usa .container-fluid.",
+    "source": { "aula": 230, "slide": 6 },
+    "evidence": "Containers têm largura fixa (.container) ou fluida (.container-fluid)"
+  },
+  {
+    "id": "n12-q013",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "No exemplo da aula, o que acontece com quatro colunas que usam col-sm-6 e col-md-3?",
+    "options": [
+      "Ficam com 2 colunas em telas acima de 768px e 4 colunas em telas acima de 992px",
+      "Ficam com 4 colunas em telas acima de 768px e 2 colunas em telas acima de 992px",
+      "Ficam sempre com uma única coluna em qualquer tela",
+      "Não se ajustam a dispositivos diferentes"
+    ],
+    "answer": 0,
+    "explanation": "Com col-sm-6 e col-md-3, o layout mostra 2 colunas acima de 768px e 4 colunas acima de 992px.",
+    "source": { "aula": 230, "slide": 8 },
+    "evidence": "teremos 2 colunas em telas acima de 768px e 4 colunas em telas acima de 992px."
+  },
+  {
+    "id": "n12-q014",
+    "nodeId": "n12",
+    "type": "mcq",
+    "prompt": "O que são breakpoints no sistema de grid?",
+    "options": [
+      "Regras de JavaScript para validar formulários",
+      "Arquivos de configuração do servidor web",
+      "Classes que definem apenas a cor dos componentes",
+      "Pontos de ajuste do layout com base em cada tamanho de tela"
+    ],
+    "answer": 3,
+    "explanation": "Breakpoints são os pontos de ajuste do layout para cada tamanho de tela.",
+    "source": { "aula": 230, "slide": 7 },
+    "evidence": "Pontos de ajuste do layout com base em cada tamanho de tela."
+  },
+  {
+    "id": "n12-q015",
+    "nodeId": "n12",
+    "type": "tf",
+    "prompt": "O pacote \"Compiled CSS and JS\" inclui a documentação e os arquivos fontes do Bootstrap.",
+    "answer": false,
+    "explanation": "O pacote compilado não inclui documentação, arquivos fontes nem dependências.",
+    "source": { "aula": 230, "slide": 4 },
+    "evidence": "Não inclui documentação, arquivos fontes"
+  },
+  {
+    "id": "n12-q016",
+    "nodeId": "n12",
+    "type": "tf",
+    "prompt": "No sistema de grid, as colunas (.col) vêm dentro de linhas (.row).",
+    "answer": true,
+    "explanation": "As colunas ficam dentro das linhas, que por sua vez ficam nos containers.",
+    "source": { "aula": 230, "slide": 6 },
+    "evidence": "Colunas (.col) vêm dentro de linhas (.row)"
+  },
+  {
+    "id": "n12-q017",
+    "nodeId": "n12",
+    "type": "tf",
+    "prompt": "É possível combinar classes de grid para obter comportamentos diferenciados por dispositivo.",
+    "answer": true,
+    "explanation": "A combinação de classes permite comportamentos diferentes conforme o dispositivo.",
+    "source": { "aula": 230, "slide": 8 },
+    "evidence": "É possível combinar classes para comportamentos diferenciados por dispositivos"
+  },
+  {
+    "id": "n12-q018",
+    "nodeId": "n12",
+    "type": "tf",
+    "prompt": "Na instalação, a opção \"Código Fonte\" dispensa ferramentas de compilação.",
+    "answer": false,
+    "explanation": "A opção de código fonte requer ferramentas para compilação.",
+    "source": { "aula": 230, "slide": 4 },
+    "evidence": "Requer ferramentas para compilação"
+  },
+  {
+    "id": "n12-q019",
+    "nodeId": "n12",
+    "type": "fill",
+    "prompt": "O Bootstrap é um framework gratuito e de ____ para o desenvolvimento de aplicações web responsivas.",
+    "answers": ["código aberto", "codigo aberto"],
+    "explanation": "A aula define o Bootstrap como um framework gratuito e de código aberto.",
+    "source": { "aula": 230, "slide": 2 },
+    "evidence": "Framework gratuito e de código aberto para o desenvolvimento de aplicações web responsivas com foco no cliente (front-end)"
+  },
+  {
+    "id": "n12-q020",
+    "nodeId": "n12",
+    "type": "fill",
+    "prompt": "No sistema de grid, o Bootstrap divide a tela em ____ colunas.",
+    "answers": ["12", "doze"],
+    "explanation": "O sistema de grid do Bootstrap divide a tela em 12 colunas.",
+    "source": { "aula": 230, "slide": 6 },
+    "evidence": "Para estruturar layout de sites, o Bootstrap divide a tela em 12 colunas"
+  },
+  {
+    "id": "n12-q021",
+    "nodeId": "n12",
+    "type": "fill",
+    "prompt": "No grid do Bootstrap, as linhas (.row) vêm em ____ (.container).",
+    "answers": ["containers", "container"],
+    "explanation": "A hierarquia do grid é container, depois row e depois col.",
+    "source": { "aula": 230, "slide": 6 },
+    "evidence": "Linhas (.row) vêm em containers (.container)"
+  }
+]
