@@ -3,10 +3,11 @@ import {
   useProgress,
   type ProgressContextValue,
 } from '../../app/ProgressProvider';
-import { Mascot } from '../../components/ui';
-import { pickLine } from '../../content/copy';
+import { UNITS } from '../../content';
 import { createEmptySave } from '../../lib/storage';
+import { ContinueCard } from './ContinueCard';
 import { SkillTree } from './SkillTree';
+import './TreePage.css';
 
 const ISOLATED_SAVE = createEmptySave(new Date(0));
 const ISOLATED_NOW = new Date(0);
@@ -32,19 +33,33 @@ export function TreePage() {
 
   return (
     <section className="page tree-page">
-      <header className="tree-page__header">
-        <h1>DIW Arcade</h1>
-        <p>
-          Sua trilha de Desenvolvimento de Interfaces Web. Todos os nós estão
-          abertos: escolha por onde continuar.
-        </p>
-      </header>
+      <h1 className="sr-only">DIW Arcade</h1>
 
-      <aside className="tree-page__bit" aria-label="Dica do Bit">
-        <Mascot mood="idle" line={pickLine('welcome', 3)} size={88} />
-      </aside>
+      <ContinueCard save={save} now={now} />
 
-      <SkillTree save={save} now={now} />
+      <div className="tree-page__layout">
+        <section className="tree-page__trail" aria-label="Trilha">
+          <SkillTree save={save} now={now} />
+        </section>
+
+        <aside className="tree-page__units" aria-labelledby="tree-units-title">
+          <h2 className="tree-page__units-title" id="tree-units-title">
+            Unidades
+          </h2>
+          <ol className="tree-page__unit-list">
+            {UNITS.map((unit) => (
+              <li key={unit.id}>
+                <a href={`#unit-${unit.id}`}>
+                  <span>{unit.title}</span>
+                  <span className="tree-page__unit-count">
+                    {unit.nodes.length}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </aside>
+      </div>
     </section>
   );
 }

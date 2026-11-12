@@ -1,0 +1,208 @@
+.continue-card {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: var(--space-4) var(--space-5);
+  width: 100%;
+  padding: var(--space-5);
+  overflow: hidden;
+  border-color: rgb(45 226 230 / 0.45);
+  background:
+    radial-gradient(
+      120% 160% at 0% 0%,
+      rgb(45 226 230 / 0.14),
+      transparent 58%
+    ),
+    radial-gradient(
+      90% 120% at 100% 100%,
+      rgb(255 79 216 / 0.07),
+      transparent 60%
+    ),
+    var(--surface);
+}
+
+.continue-card__index {
+  position: absolute;
+  z-index: 0;
+  inset-block-end: -2rem;
+  inset-inline-end: var(--space-4);
+  color: rgb(45 226 230 / 0.08);
+  font-family: var(--font-display), monospace;
+  font-size: 8rem;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.continue-card__intro,
+.continue-card__stats,
+.continue-card__bit {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.continue-card__intro {
+  display: grid;
+  gap: var(--space-2);
+  align-content: start;
+}
+
+.continue-card__kicker {
+  color: var(--accent);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.continue-card__node {
+  color: var(--text);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: clamp(1.2rem, 1.8vw, 1.55rem);
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.continue-card__unit {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.continue-card__reason {
+  max-width: 46ch;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  line-height: 1.4;
+}
+
+.continue-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-block-start: var(--space-2);
+}
+
+.continue-card__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  align-content: center;
+  margin: 0;
+}
+
+.continue-card__stat {
+  display: grid;
+  gap: var(--space-1);
+  align-content: start;
+  min-width: 0;
+  padding-inline-start: var(--space-3);
+  border-inline-start: 1px solid var(--border);
+}
+
+.continue-card__stat:first-child {
+  padding-inline-start: 0;
+  border-inline-start: 0;
+}
+
+.continue-card__stat dt {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.continue-card__stat dd {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  margin: 0;
+}
+
+.continue-card__goal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.continue-card__goal-value {
+  color: var(--text);
+  font-family: var(--font-mono), monospace;
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.3;
+}
+
+.continue-card__stat-value {
+  color: var(--text);
+  font-family: var(--font-mono), monospace;
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.continue-card__stat-note {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  line-height: 1.3;
+}
+
+.continue-card__bit {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--border);
+}
+
+.continue-card__bit .mascot {
+  flex: none;
+}
+
+.continue-card__bit-line {
+  position: relative;
+  max-width: 46rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: var(--font-size-sm);
+  line-height: 1.45;
+}
+
+.continue-card__bit-line::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: -5px;
+  width: 8px;
+  height: 8px;
+  border-inline-start: 1px solid var(--border);
+  border-block-end: 1px solid var(--border);
+  background: var(--surface-2);
+  transform: translateY(-50%) rotate(45deg);
+}
+
+@media (min-width: 900px) {
+  .continue-card {
+    grid-template-columns: minmax(0, 1.35fr) minmax(17rem, 1fr);
+    align-items: center;
+  }
+
+  .continue-card__bit {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 479px) {
+  .continue-card__actions .ui-button {
+    flex: 1 1 100%;
+  }
+}
