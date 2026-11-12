@@ -5,7 +5,7 @@ import {
   type ProgressContextValue,
 } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
-import { Button } from '../../components/ui';
+import { Badge, Button, PageHeader, Panel } from '../../components/ui';
 import {
   LAB_IDS,
   REPO_URL_PREFIX,
@@ -14,6 +14,7 @@ import {
   type LabId,
   type LabStep,
 } from '../../content';
+import { getLabProgress } from '../../lib/progress';
 import './Labs.css';
 
 /**
@@ -178,53 +179,77 @@ export function LabGuidePage({ lab: givenLab }: LabGuidePageProps = {}) {
     );
   }
 
+  const { done, total } = progress
+    ? getLabProgress(progress.save, lab.id, lab)
+    : { done: 0, total: lab.steps.length };
+  const complete = total > 0 && done >= total;
+
   return (
-    <section className="page labs-page">
-      <header className="labs-guide__header">
-        <h1>Laboratório</h1>
+    <section className="page labs-page labs-guide">
+      <PageHeader
+        eyebrow="Guia de projeto"
+        title="Laboratório"
+        actions={
+          <Badge tone={complete ? 'success' : 'xp'}>
+            {done} de {total} passos
+          </Badge>
+        }
+      />
+
+      <div className="labs-guide__intro">
         <h2 className="labs-guide__title">{lab.title}</h2>
         <p className="labs-guide__summary">{lab.summary}</p>
-      </header>
+      </div>
 
-      <section className="labs-section" aria-labelledby="labs-requirements">
-        <h2 id="labs-requirements">Requisitos do laboratório</h2>
-        <ul className="labs-rubric">
-          {lab.requirements.map((requirement, index) => (
-            <li key={`${requirement.text}-${index}`}>
-              <p>{requirement.text}</p>
-              {requirement.source !== undefined ? (
-                <p className="labs-source">
-                  Fonte: laboratório {requirement.source.lab}, slide{' '}
-                  {requirement.source.slide}
-                </p>
-              ) : null}
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="labs-section" aria-labelledby="labs-tips">
-        <h2 id="labs-tips">Dicas de estrutura</h2>
-        <div className="labs-tips">
-          <TipsList title="HTML" tips={lab.tips.html} />
-          <TipsList title="CSS" tips={lab.tips.css} />
-          <TipsList title="JS" tips={lab.tips.js} />
+      <div className="labs-guide__layout">
+        <div className="labs-guide__main">
+          <section className="labs-section" aria-labelledby="labs-steps">
+            <h2 id="labs-steps">Passos</h2>
+            <ol className="labs-steps">
+              {lab.steps.map((step) => (
+                <LabStepItem
+                  key={step.id}
+                  labId={lab.id}
+                  step={step}
+                  progress={progress}
+                />
+              ))}
+            </ol>
+          </section>
         </div>
-      </section>
 
-      <section className="labs-section" aria-labelledby="labs-steps">
-        <h2 id="labs-steps">Passos</h2>
-        <ol className="labs-steps">
-          {lab.steps.map((step) => (
-            <LabStepItem
-              key={step.id}
-              labId={lab.id}
-              step={step}
-              progress={progress}
-            />
-          ))}
-        </ol>
-      </section>
+        <Panel
+          as="aside"
+          className="labs-guide__aside"
+          aria-label="Rubrica e dicas"
+        >
+          <section className="labs-section" aria-labelledby="labs-requirements">
+            <h2 id="labs-requirements">Requisitos do laboratório</h2>
+            <ul className="labs-rubric">
+              {lab.requirements.map((requirement, index) => (
+                <li key={`${requirement.text}-${index}`}>
+                  <p>{requirement.text}</p>
+                  {requirement.source !== undefined ? (
+                    <p className="labs-source">
+                      Fonte: laboratório {requirement.source.lab}, slide{' '}
+                      {requirement.source.slide}
+                    </p>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="labs-section" aria-labelledby="labs-tips">
+            <h2 id="labs-tips">Dicas de estrutura</h2>
+            <div className="labs-tips">
+              <TipsList title="HTML" tips={lab.tips.html} />
+              <TipsList title="CSS" tips={lab.tips.css} />
+              <TipsList title="JS" tips={lab.tips.js} />
+            </div>
+          </section>
+        </Panel>
+      </div>
     </section>
   );
 }

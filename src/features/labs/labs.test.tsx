@@ -1,8 +1,8 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Route, Routes } from 'react-router';
 import { describe, expect, it } from 'vitest';
-import { REPO_URL_PREFIX } from '../../content';
+import { REPO_URL_PREFIX, getLabs } from '../../content';
 import { pickLine } from '../../content/copy';
 import { loadSave, type StorageLike } from '../../lib/storage';
 import { fixtureLab } from '../../test/fixtures';
@@ -35,6 +35,18 @@ describe('LabsPage', () => {
     });
 
     expect(screen.getByText('1 de 5 passos')).toBeInTheDocument();
+  });
+
+  it('gives each lab card a progress ring named after the lab', () => {
+    renderWithProgress(<LabsPage />);
+
+    for (const lab of getLabs()) {
+      const ring = screen.getByRole('progressbar', {
+        name: `Passos concluídos de ${lab.title}`,
+      });
+      expect(ring).toHaveAttribute('aria-valuenow', '0');
+      expect(ring).toHaveAttribute('aria-valuemax', String(lab.steps.length));
+    }
   });
 
   it('shows the empty state with a Bit line when there are no guides', () => {
@@ -84,6 +96,29 @@ describe('LabGuidePage', () => {
         expect(screen.getByText(line)).toBeInTheDocument();
       }
     }
+  });
+
+  it('groups the rubric and structure tips in a named complementary region', () => {
+    renderWithProgress(<LabGuidePage lab={fixtureLab} />);
+
+    const aside = screen.getByRole('complementary', {
+      name: 'Rubrica e dicas',
+    });
+
+    expect(
+      within(aside).getByRole('heading', {
+        name: 'Requisitos do laboratório',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      within(aside).getByRole('heading', { name: 'Dicas de estrutura' }),
+    ).toBeInTheDocument();
+    expect(
+      within(aside).getByText(fixtureLab.requirements[0]!.text),
+    ).toBeInTheDocument();
+    expect(
+      within(aside).getByRole('heading', { level: 3, name: 'HTML' }),
+    ).toBeInTheDocument();
   });
 
   it('renders the numbered steps with copied code and checkboxes', () => {
