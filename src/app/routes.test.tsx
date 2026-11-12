@@ -38,21 +38,30 @@ const pages = [
 ] as const;
 
 describe('rotas', () => {
+  it('lazy pages show the skeleton then the page', async () => {
+    renderAt('/estatisticas');
+
+    expect(screen.getByText('Carregando…')).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Estatísticas' }),
+    ).toBeInTheDocument();
+  });
+
   for (const { path, heading } of pages) {
-    it(`renders the h1 of ${path}`, () => {
+    it(`renders the h1 of ${path}`, async () => {
       renderAt(path);
 
       expect(
-        screen.getByRole('heading', { level: 1, name: heading }),
+        await screen.findByRole('heading', { level: 1, name: heading }),
       ).toBeInTheDocument();
     });
   }
 
-  it('shows the not found page for an unknown path', () => {
+  it('shows the not found page for an unknown path', async () => {
     renderAt('/caminho-inexistente');
 
     expect(
-      screen.getByRole('heading', {
+      await screen.findByRole('heading', {
         level: 1,
         name: 'Página não encontrada',
       }),
@@ -79,10 +88,12 @@ describe('rotas', () => {
     );
   });
 
-  it('sets the page title with the app prefix', () => {
+  it('sets the page title with the app prefix', async () => {
     renderAt('/revisao');
 
-    expect(document.title).toBe('DIW Arcade — Revisão');
+    await waitFor(() => {
+      expect(document.title).toBe('DIW Arcade — Revisão');
+    });
   });
 
   it('moves focus to the main content on navigation', async () => {

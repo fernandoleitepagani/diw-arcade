@@ -1,10 +1,15 @@
 {
   "_measured": {
-    "entryJsGzipKb": 390.65,
-    "entryCssGzipKb": 26.04,
-    "totalJsGzipKb": 420.65
+    "entryJsGzipKb": 67.46,
+    "entryCssGzipKb": 23.76,
+    "totalJsGzipKb": 437.51
   },
-  "entryJsGzipKb": 430,
+  "_previous": {
+    "entryJsGzipKb": 397.09,
+    "entryCssGzipKb": 31.13,
+    "totalJsGzipKb": 427.1
+  },
+  "entryJsGzipKb": 75,
   "entryCssGzipKb": 29,
   "totalJsGzipKb": 463
 }

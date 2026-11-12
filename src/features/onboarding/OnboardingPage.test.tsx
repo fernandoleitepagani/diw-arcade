@@ -51,7 +51,9 @@ describe('OnboardingPage', () => {
       expect(router.state.location.pathname).toBe('/boas-vindas');
     });
 
-    expect(screen.getByText('Bem-vindo ao DIW Arcade')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Bem-vindo ao DIW Arcade'),
+    ).toBeInTheDocument();
     expect(
       screen.getByText(/Eu sou o Bit/),
     ).toBeInTheDocument();
@@ -80,7 +82,7 @@ describe('OnboardingPage', () => {
       expect(router.state.location.pathname).toBe('/');
     });
     expect(
-      screen.getByRole('heading', { level: 1, name: 'DIW Arcade' }),
+      await screen.findByRole('heading', { level: 1, name: 'DIW Arcade' }),
     ).toBeInTheDocument();
 
     const save = readSave(storage);
