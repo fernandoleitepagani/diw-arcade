@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
+import { NODES } from '../../content';
 import { pickLine } from '../../content/copy';
 import type { ProgressContent } from '../../lib/progress';
 import { renderWithProgress } from '../../test/renderWithProgress';
@@ -151,5 +152,52 @@ describe('StatsPage', () => {
     expect(screen.getAllByRole('listitem').length).toBeGreaterThanOrEqual(
       12 + 14,
     );
+  });
+
+  it('usa PageHeader e agrupa os números', () => {
+    renderWithProgress(<StatsPage content={CONTENT} />, {
+      now: NOW,
+      save: {
+        xpTotal: 130,
+        quiz: {
+          answers: {
+            'n07-q001': { seen: 2, correct: 1, lastCorrect: true },
+            'n07-q002': { seen: 2, correct: 2, lastCorrect: true },
+          },
+          rounds: {},
+        },
+      },
+    });
+
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Estatísticas' }),
+    ).toBeInTheDocument();
+
+    const totals = screen.getByText('XP').closest('dl');
+    expect(totals).toHaveClass('stats__totals', 'l-grid');
+    expect(totals?.querySelectorAll('dt')).toHaveLength(7);
+    expect(
+      Array.from(totals?.querySelectorAll('dt') ?? []).map(
+        (term) => term.textContent,
+      ),
+    ).toEqual([
+      'XP',
+      'Nível',
+      'Sequência atual',
+      'Maior sequência',
+      'Revisões',
+      'Desafios concluídos',
+      'Passos de laboratório',
+    ]);
+
+    const accuracy = screen.getByRole('list', { name: 'Precisão por nó' });
+    for (const node of NODES) {
+      const row = within(accuracy).getByText(node.title).closest('li');
+      expect(row).not.toBeNull();
+      expect(
+        within(row as HTMLElement).getByRole('meter', { name: node.title }),
+      ).toBeInTheDocument();
+    }
   });
 });
