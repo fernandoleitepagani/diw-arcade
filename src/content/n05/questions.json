@@ -1,0 +1,291 @@
+[
+  {
+    "id": "n05-q001",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "Qual é a função do elemento <main> em um documento HTML?",
+    "options": [
+      "Definir o rodapé comum a todas as páginas",
+      "Identificar o conteúdo principal que não se repete em outras páginas",
+      "Agrupar os links de navegação do site",
+      "Exibir um resumo que o usuário pode ocultar"
+    ],
+    "answer": 1,
+    "explanation": "O <main> identifica o conteúdo principal do documento, que não se repete em outras páginas.",
+    "source": { "aula": 163, "slide": 4 },
+    "evidence": "Identifica o conteúdo principal do document que não se repete em outras páginas"
+  },
+  {
+    "id": "n05-q002",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "Segundo a aula, quantos elementos <main> um documento pode ter?",
+    "options": [
+      "No máximo um",
+      "Até dois, um por seção",
+      "Um por artigo, sem limite total",
+      "Nenhum, pois o elemento foi removido do HTML5"
+    ],
+    "answer": 0,
+    "explanation": "A aula afirma que não deve haver mais de um elemento <main> no documento.",
+    "source": { "aula": 163, "slide": 4 },
+    "evidence": "There must not be more than one <main> element in a document."
+  },
+  {
+    "id": "n05-q003",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "O elemento <main> NÃO pode ser descendente de quais elementos?",
+    "options": [
+      "html, body ou head",
+      "section, figcaption ou time",
+      "article, aside, footer, header ou nav",
+      "mark, summary ou details"
+    ],
+    "answer": 2,
+    "explanation": "A restrição da aula vale para article, aside, footer, header e nav.",
+    "source": { "aula": 163, "slide": 4 },
+    "evidence": "The <main> element must NOT be a descendant of an <article>, <aside>, <footer>, <header>, or <nav> element."
+  },
+  {
+    "id": "n05-q004",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "Segundo a aula, qual é o valor de display do elemento <main>?",
+    "options": ["block", "inline", "flex", "inline-block"],
+    "answer": 1,
+    "explanation": "A aula registra display inline para o elemento <main>.",
+    "source": { "aula": 163, "slide": 4 },
+    "evidence": "Display: inline – Uso: estrutural | semântico"
+  },
+  {
+    "id": "n05-q005",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "Qual conjunto de elementos aparece no esqueleto de layout HTML5 mostrado na aula?",
+    "options": [
+      "<header>, <nav>, <section>, <article>, <aside> e <footer>",
+      "<table>, <tr>, <td>, <th>, <caption> e <thead>",
+      "<form>, <input>, <button>, <label>, <select> e <textarea>",
+      "<div>, <span>, <b>, <i>, <u> e <font>"
+    ],
+    "answer": 0,
+    "explanation": "O exemplo organiza o body com header, nav, section, article, aside e footer.",
+    "source": { "aula": 163, "slide": 5 },
+    "evidence": "<header></header> <nav></nav> <section></section> <article></article> <aside></aside> <footer></footer>"
+  },
+  {
+    "id": "n05-q006",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "O que o elemento <article> define, segundo a tabela da aula?",
+    "options": [
+      "Um rodapé para o documento ou seção",
+      "Um conteúdo de navegação",
+      "Um artigo",
+      "Uma data/hora"
+    ],
+    "answer": 2,
+    "explanation": "A tabela associa <article> à definição de um artigo.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<article> Define um artigo"
+  },
+  {
+    "id": "n05-q007",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "O elemento <aside> define qual tipo de conteúdo?",
+    "options": [
+      "Detalhes adicionais que o usuário pode ocultar",
+      "Conteúdo além do conteúdo da página",
+      "O título de um elemento <figure>",
+      "Texto destacado"
+    ],
+    "answer": 1,
+    "explanation": "A tabela da aula associa <aside> a conteúdo além do conteúdo da página.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<aside> Define conteúdo além do conteúdo da página"
+  },
+  {
+    "id": "n05-q008",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "Qual elemento define um conteúdo auto-contido, como ilustração, diagramas e fotos?",
+    "options": ["<figcaption>", "<summary>", "<details>", "<figure>"],
+    "answer": 3,
+    "explanation": "A aula define <figure> como um elemento auto-contido para ilustrações, diagramas, fotos e listagens de código.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<figure> Define um elemento auto-contido como ilustração, diagramas, fotos, listagem de código, etc."
+  },
+  {
+    "id": "n05-q009",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "Qual é a função do elemento <summary>?",
+    "options": [
+      "Definir um artigo",
+      "Definir conteúdo de navegação",
+      "Definir uma seção do documento",
+      "Definir um resumo visível para um elemento <details>"
+    ],
+    "answer": 3,
+    "explanation": "O <summary> apresenta um resumo visível para o conteúdo de um <details>.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<summary> Define um resumo visível para um elemento <details>"
+  },
+  {
+    "id": "n05-q010",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "O que o ARIA muda no HTML, de acordo com a aula?",
+    "options": [
+      "Substitui o HTML por Flash e Silverlight",
+      "Troca o CSS usado na estilização",
+      "Muda a semântica do HTML por meio de atributos colocados nas tags",
+      "Cria uma nova linguagem de banco de dados"
+    ],
+    "answer": 2,
+    "explanation": "O ARIA altera a semântica do HTML usando atributos nas tags.",
+    "source": { "aula": 163, "slide": 8 },
+    "evidence": "Muda a semântica do HTML por meio de atributos colocados nas tags"
+  },
+  {
+    "id": "n05-q011",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "Quais atributos o ARIA utiliza, segundo a aula?",
+    "options": [
+      "role | state | property",
+      "class | id | style",
+      "href | src | alt",
+      "src | alt | title"
+    ],
+    "answer": 0,
+    "explanation": "A aula lista os atributos role, state e property como os usados pelo ARIA.",
+    "source": { "aula": 163, "slide": 8 },
+    "evidence": "São utilizados os atributos: role | state | property"
+  },
+  {
+    "id": "n05-q012",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "Qual tipo de role ARIA é um ponto de referência de navegação e substitui o antigo “pular para o conteúdo”?",
+    "options": ["Abstrato", "Landmark", "Widget", "Estrutura do documento"],
+    "answer": 1,
+    "explanation": "Os roles do tipo landmark mapeiam partes do site e substituem o antigo pular para o conteúdo.",
+    "source": { "aula": 163, "slide": 9 },
+    "evidence": "Landmark – ponto de referência de navegação."
+  },
+  {
+    "id": "n05-q013",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "Qual tipo de atributo ARIA permite ao usuário monitorar áreas que mudam dinamicamente na página?",
+    "options": [
+      "Atributos de widgets",
+      "Atributos de relationship",
+      "Atributos de drag and drop",
+      "Atributos de live region"
+    ],
+    "answer": 3,
+    "explanation": "Os atributos de live region permitem monitorar áreas alteradas dinamicamente na página.",
+    "source": { "aula": 163, "slide": 10 },
+    "evidence": "Permite ao usuário monitorar áreas que são alteradas dinamicamente na página"
+  },
+  {
+    "id": "n05-q014",
+    "nodeId": "n05",
+    "type": "mcq",
+    "prompt": "O que significa a sigla WCAG, conforme a aula?",
+    "options": [
+      "Web Content Accessibility Guide",
+      "Web Component Accessibility Group",
+      "Wide Content Application Gateway",
+      "Web Communication and Graphics"
+    ],
+    "answer": 0,
+    "explanation": "A aula apresenta WCAG como Web Content Accessibility Guide.",
+    "source": { "aula": 163, "slide": 8 },
+    "evidence": "WCAG - Web Content Accessibility Guide"
+  },
+  {
+    "id": "n05-q015",
+    "nodeId": "n05",
+    "type": "tf",
+    "prompt": "Um mesmo documento HTML pode conter mais de um elemento <main>.",
+    "answer": false,
+    "explanation": "A aula determina que não deve haver mais de um <main> no documento.",
+    "source": { "aula": 163, "slide": 4 },
+    "evidence": "There must not be more than one <main> element in a document."
+  },
+  {
+    "id": "n05-q016",
+    "nodeId": "n05",
+    "type": "tf",
+    "prompt": "Segundo a aula, o elemento <main> tem display inline.",
+    "answer": true,
+    "explanation": "A aula registra display inline entre as observações importantes sobre o <main>.",
+    "source": { "aula": 163, "slide": 4 },
+    "evidence": "Display: inline – Uso: estrutural | semântico"
+  },
+  {
+    "id": "n05-q017",
+    "nodeId": "n05",
+    "type": "tf",
+    "prompt": "O elemento <aside> define o conteúdo de navegação da página.",
+    "answer": false,
+    "explanation": "Na aula, <aside> define conteúdo além do conteúdo da página; a navegação fica a cargo do <nav>.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<aside> Define conteúdo além do conteúdo da página"
+  },
+  {
+    "id": "n05-q018",
+    "nodeId": "n05",
+    "type": "tf",
+    "prompt": "O ARIA muda a semântica do HTML por meio de atributos colocados nas tags.",
+    "answer": true,
+    "explanation": "Essa é exatamente a definição de ARIA apresentada na aula.",
+    "source": { "aula": 163, "slide": 8 },
+    "evidence": "Muda a semântica do HTML por meio de atributos colocados nas tags"
+  },
+  {
+    "id": "n05-q019",
+    "nodeId": "n05",
+    "type": "fill",
+    "prompt": "O elemento ____ especifica o cabeçalho para um documento ou seção.",
+    "answers": ["<header>", "header", "elemento header"],
+    "explanation": "A tabela da aula associa <header> ao cabeçalho de um documento ou seção.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<header> Especifica o cabeçalho para um document ou seção"
+  },
+  {
+    "id": "n05-q020",
+    "nodeId": "n05",
+    "type": "fill",
+    "prompt": "O elemento ____ define um rodapé para o documento ou seção.",
+    "answers": ["<footer>", "footer", "elemento footer"],
+    "explanation": "Na tabela, <footer> corresponde ao rodapé do documento ou de uma seção.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<footer> Define um rodapé para o documento ou seção"
+  },
+  {
+    "id": "n05-q021",
+    "nodeId": "n05",
+    "type": "fill",
+    "prompt": "O elemento ____ define texto destacado.",
+    "answers": ["<mark>", "mark", "elemento mark"],
+    "explanation": "A aula usa o elemento <mark> para definir texto destacado.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<mark> Define texto destacado"
+  },
+  {
+    "id": "n05-q022",
+    "nodeId": "n05",
+    "type": "fill",
+    "prompt": "O elemento ____ define uma data/hora.",
+    "answers": ["<time>", "time", "elemento time"],
+    "explanation": "Na tabela da aula, <time> é o elemento que define uma data/hora.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<time> Define uma data/hora"
+  }
+]
