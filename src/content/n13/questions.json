@@ -1,0 +1,381 @@
+[
+  {
+    "id": "n13-q001",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "Qual das alternativas abaixo é uma vantagem do JSON apresentada na aula?",
+    "options": [
+      "Permite estruturar dados diversos",
+      "Exige um servidor de banco de dados para funcionar",
+      "Só pode ser lido por navegadores modernos",
+      "Depende de uma linguagem de programação específica"
+    ],
+    "answer": 0,
+    "explanation": "A aula lista o JSON como capaz de estruturar dados diversos, além de ser simples de criar e ler.",
+    "source": {
+      "aula": 240,
+      "slide": 5
+    },
+    "evidence": "Permite estruturar dados diversos"
+  },
+  {
+    "id": "n13-q002",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "Quais tipos de dados numéricos são citados na aula sobre JSON?",
+    "options": [
+      "Apenas inteiros",
+      "Hexadecimal e binário",
+      "Inteiro e real",
+      "Decimal e booleano"
+    ],
+    "answer": 2,
+    "explanation": "O slide de tipos de dados cita dados numéricos do tipo inteiro e real.",
+    "source": {
+      "aula": 240,
+      "slide": 7
+    },
+    "evidence": "Dados numéricos: inteiro, real"
+  },
+  {
+    "id": "n13-q003",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "Na estrutura de escapes do JSON, qual letra representa uma sequência hexadecimal?",
+    "options": [
+      "n",
+      "u",
+      "t",
+      "b"
+    ],
+    "answer": 1,
+    "explanation": "O slide de estrutura do formato JSON lista u (hex) entre as sequências de escape.",
+    "source": {
+      "aula": 240,
+      "slide": 8
+    },
+    "evidence": "\" \\ / b f n r t u (hex)"
+  },
+  {
+    "id": "n13-q004",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "No exemplo de JSON da aula, qual campo aparece com o valor null?",
+    "options": [
+      "id",
+      "lazy",
+      "phones",
+      "married"
+    ],
+    "answer": 3,
+    "explanation": "O exemplo termina com \"lazy\": false e \"married\": null, mostrando um valor nulo.",
+    "source": {
+      "aula": 240,
+      "slide": 10
+    },
+    "evidence": "\"lazy\": false, \"married\": null"
+  },
+  {
+    "id": "n13-q005",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "No exemplo de JSON, o campo \"phones\" contém o quê?",
+    "options": [
+      "Um único número de telefone",
+      "Um objeto com nome e sobrenome",
+      "Um array com objetos de telefone",
+      "Uma string com dois números"
+    ],
+    "answer": 2,
+    "explanation": "O campo phones é um array com objetos que trazem type e number.",
+    "source": {
+      "aula": 240,
+      "slide": 10
+    },
+    "evidence": "\"phones\": [ { \"type\": \"home\", \"number\": \"555-3762\" }"
+  },
+  {
+    "id": "n13-q006",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "No exemplo completo de notícias, qual chave guarda o array de objetos?",
+    "options": [
+      "contatos",
+      "noticias",
+      "texto",
+      "autor"
+    ],
+    "answer": 1,
+    "explanation": "O JSON começa com a chave noticias, cujo valor é um array de objetos.",
+    "source": {
+      "aula": 240,
+      "slide": 6
+    },
+    "evidence": "\"noticias\": [ { \"titulo\": \"Órgão do Ministério Público"
+  },
+  {
+    "id": "n13-q007",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "Quais valores representam dados booleanos no JSON, segundo a aula?",
+    "options": [
+      "0 e 1",
+      "sim e não",
+      "null e undefined",
+      "true e false"
+    ],
+    "answer": 3,
+    "explanation": "A aula define dados booleanos como os valores true e false.",
+    "source": {
+      "aula": 240,
+      "slide": 7
+    },
+    "evidence": "Dados booleanos: true e false"
+  },
+  {
+    "id": "n13-q008",
+    "nodeId": "n13",
+    "type": "tf",
+    "prompt": "Na aula, o JSON é descrito como simples de ser criado e lido.",
+    "answer": true,
+    "explanation": "A lista de vantagens inclui que o JSON é simples de ser criado e lido.",
+    "source": {
+      "aula": 240,
+      "slide": 5
+    },
+    "evidence": "Simples de ser criado e lido"
+  },
+  {
+    "id": "n13-q009",
+    "nodeId": "n13",
+    "type": "tf",
+    "prompt": "No JSON, caracteres e strings são exemplos de dados textuais.",
+    "answer": true,
+    "explanation": "O slide classifica caracteres e strings como dados textuais.",
+    "source": {
+      "aula": 240,
+      "slide": 7
+    },
+    "evidence": "Dados textuais: caracteres, strings"
+  },
+  {
+    "id": "n13-q010",
+    "nodeId": "n13",
+    "type": "fill",
+    "prompt": "Segundo a aula, o JSON permite estruturar dados ____ de forma simples de criar e ler.",
+    "answers": [
+      "diversos"
+    ],
+    "explanation": "Entre as vantagens listadas, o JSON permite estruturar dados diversos.",
+    "source": {
+      "aula": 240,
+      "slide": 5
+    },
+    "evidence": "Permite estruturar dados diversos"
+  },
+  {
+    "id": "n13-q011",
+    "nodeId": "n13",
+    "type": "fill",
+    "prompt": "Na classificação de tipos de dados, inteiro e real são exemplos de dados ____.",
+    "answers": [
+      "numéricos",
+      "numericos"
+    ],
+    "explanation": "O slide de tipos de dados cita dados numéricos: inteiro, real.",
+    "source": {
+      "aula": 240,
+      "slide": 7
+    },
+    "evidence": "Dados numéricos: inteiro, real"
+  },
+  {
+    "id": "n13-q012",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "Como a aula define uma API?",
+    "options": [
+      "Um banco de dados que armazena dados de várias aplicações",
+      "Uma interface de uma aplicação voltada para outras aplicações",
+      "Uma linguagem de programação usada apenas no navegador",
+      "Um tipo de arquivo JSON usado em serviços Web"
+    ],
+    "answer": 1,
+    "explanation": "A definição apresentada diz que a API é uma interface de uma aplicação voltada para outras aplicações.",
+    "source": {
+      "aula": 250,
+      "slide": 3
+    },
+    "evidence": "API ou Application Programming Interface é uma interface de uma aplicação que é voltada para outras aplicações"
+  },
+  {
+    "id": "n13-q013",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "Qual destes é listado na aula como um padrão de APIs da Web?",
+    "options": [
+      "CORBA",
+      "DCOM",
+      "SOAP",
+      "Java RMI"
+    ],
+    "answer": 2,
+    "explanation": "Sob APIs da Web, a aula lista o padrão SOAP para Web Services.",
+    "source": {
+      "aula": 250,
+      "slide": 5
+    },
+    "evidence": "Padrão SOAP (Web Services)"
+  },
+  {
+    "id": "n13-q014",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "O que a sigla REST significa, segundo a aula?",
+    "options": [
+      "Remote Execution for Stateful Transfers",
+      "Representational Service Transfer",
+      "Resource State Transfer",
+      "Representational State Transfer"
+    ],
+    "answer": 3,
+    "explanation": "A aula traduz REST como Transferência de Estado Representacional e apresenta o nome em inglês.",
+    "source": {
+      "aula": 250,
+      "slide": 9
+    },
+    "evidence": "Transferência de Estado Representacional (Representational State Transfer)"
+  },
+  {
+    "id": "n13-q015",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "Qual método HTTP deve ser usado para criar um recurso no servidor?",
+    "options": [
+      "POST",
+      "GET",
+      "DELETE",
+      "OPTIONS"
+    ],
+    "answer": 0,
+    "explanation": "No mapeamento CRUD, o POST cria um recurso no servidor, como no INSERT.",
+    "source": {
+      "aula": 250,
+      "slide": 11
+    },
+    "evidence": "POST – Criar um recurso no servidor (INSERT)"
+  },
+  {
+    "id": "n13-q016",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "No mapeamento de URLs, qual requisição obtém um curso específico?",
+    "options": [
+      "GET /cursos",
+      "POST /cursos/",
+      "GET /cursos/:id",
+      "DELETE /cursos/:id"
+    ],
+    "answer": 2,
+    "explanation": "A tabela da aula associa obter um curso específico a GET /cursos/:id.",
+    "source": {
+      "aula": 250,
+      "slide": 12
+    },
+    "evidence": "Obter um curso específico RETRIEVE GET /cursos/:id"
+  },
+  {
+    "id": "n13-q017",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "Qual código de status indica que um recurso foi criado com sucesso?",
+    "options": [
+      "200",
+      "201",
+      "204",
+      "404"
+    ],
+    "answer": 1,
+    "explanation": "A tabela de status associa 201 – Recurso Criado à inclusão de recurso via POST.",
+    "source": {
+      "aula": 250,
+      "slide": 13
+    },
+    "evidence": "201 – Recurso Criado Inclusão de recurso (POST) com sucesso"
+  },
+  {
+    "id": "n13-q018",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "Qual código indica que o recurso solicitado não existe?",
+    "options": [
+      "400",
+      "401",
+      "403",
+      "404"
+    ],
+    "answer": 3,
+    "explanation": "Na tabela, 404 – Recurso não encontrado corresponde a um recurso solicitado que não existe.",
+    "source": {
+      "aula": 250,
+      "slide": 13
+    },
+    "evidence": "404 – Recurso não encontrado Recurso solicitado não existe"
+  },
+  {
+    "id": "n13-q019",
+    "nodeId": "n13",
+    "type": "tf",
+    "prompt": "Segundo a aula, métodos GET e parâmetros de query não devem alterar o estado de recursos.",
+    "answer": true,
+    "explanation": "O slide destaca em IMPORTANTE que GET e parâmetros de query não devem alterar estado de recursos.",
+    "source": {
+      "aula": 250,
+      "slide": 11
+    },
+    "evidence": "Métodos GET e parâmetros de query não devem alterar estado de recursos"
+  },
+  {
+    "id": "n13-q020",
+    "nodeId": "n13",
+    "type": "tf",
+    "prompt": "RESTlike são serviços Web que seguem integralmente as recomendações REST.",
+    "answer": false,
+    "explanation": "A aula usa RESTlike para os serviços que implementam apenas parcialmente as recomendações REST; RESTful é o termo dos que as seguem integralmente.",
+    "source": {
+      "aula": 250,
+      "slide": 9
+    },
+    "evidence": "diferentemente daqueles (RESTlike) que implementam parcialmente suas recomendações"
+  },
+  {
+    "id": "n13-q021",
+    "nodeId": "n13",
+    "type": "fill",
+    "prompt": "O método HTTP ____ remove um recurso no servidor, correspondendo à operação DELETE do CRUD.",
+    "answers": [
+      "DELETE"
+    ],
+    "explanation": "Na interface CRUD, o método DELETE é usado para remover um recurso.",
+    "source": {
+      "aula": 250,
+      "slide": 11
+    },
+    "evidence": "DELETE – Remover um recurso (DELETE)"
+  },
+  {
+    "id": "n13-q022",
+    "nodeId": "n13",
+    "type": "fill",
+    "prompt": "O código de status ____ indica que o recurso solicitado não foi encontrado.",
+    "answers": [
+      "404"
+    ],
+    "explanation": "A tabela associa 404 a Recurso não encontrado, quando o recurso solicitado não existe.",
+    "source": {
+      "aula": 250,
+      "slide": 13
+    },
+    "evidence": "404 – Recurso não encontrado"
+  }
+]
