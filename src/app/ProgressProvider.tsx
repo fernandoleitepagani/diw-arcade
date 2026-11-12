@@ -9,9 +9,12 @@ import {
 } from 'react';
 import type { ReactNode } from 'react';
 import { useToast } from '../components/ui';
+import { LevelUpTakeover } from '../components/rewards/LevelUpTakeover';
+import { UnitCelebration } from '../components/rewards/UnitCelebration';
 import {
   LAB_IDS,
   NODE_IDS,
+  UNITS,
   getChallenges,
   getFlashcards,
   getLab,
@@ -26,6 +29,7 @@ import type {
   ProgressEvent,
 } from '../lib/progress/events';
 import { applyEvent } from '../lib/progress/reducer';
+import { getCompletedUnitIds } from '../lib/progress/units';
 import {
   SAVE_KEY,
   loadSave,
@@ -130,6 +134,14 @@ export function ProgressProvider({
   const [save, setSave] = useState(initial.save);
   const [now, setNow] = useState(() => initialClock());
   const saveRef = useRef(initial.save);
+  const [levelUp, setLevelUp] = useState<{
+    level: number;
+    line: string;
+  } | null>(null);
+  const [unitCelebration, setUnitCelebration] = useState<{
+    title: string;
+    fire: number;
+  } | null>(null);
 
   const sfx = useRef(createSfx());
   const { showToast } = useToast();
@@ -167,6 +179,9 @@ export function ProgressProvider({
   const dispatch = useCallback(
     (event: ProgressEvent): Outcome => {
       const at = readNow();
+      const completedBefore = new Set(
+        getCompletedUnitIds(saveRef.current, content),
+      );
       const { save: next, outcome } = applyEvent(
         saveRef.current,
         event,
@@ -184,13 +199,23 @@ export function ProgressProvider({
       }
 
       if (outcome.levelUp !== null) {
-        showToast(
-          <>
-            <strong>Nível {outcome.levelUp}!</strong>{' '}
-            <span>{pickLine('levelUp', next.xpTotal)}</span>
-          </>,
-          { tone: 'reward' },
-        );
+        setLevelUp({
+          level: outcome.levelUp,
+          line: pickLine('levelUp', next.xpTotal),
+        });
+      }
+
+      const justCompleted = getCompletedUnitIds(next, content).find(
+        (unitId) => !completedBefore.has(unitId),
+      );
+      if (justCompleted !== undefined) {
+        const unit = UNITS.find((candidate) => candidate.id === justCompleted);
+        if (unit) {
+          setUnitCelebration((current) => ({
+            title: unit.title,
+            fire: (current?.fire ?? 0) + 1,
+          }));
+        }
       }
 
       for (const id of outcome.achievements) {
@@ -232,7 +257,22 @@ export function ProgressProvider({
   );
 
   return (
-    <ProgressContext.Provider value={value}>{children}</ProgressContext.Provider>
+    <ProgressContext.Provider value={value}>
+      {children}
+      {levelUp !== null ? (
+        <LevelUpTakeover
+          level={levelUp.level}
+          line={levelUp.line}
+          onClose={() => setLevelUp(null)}
+        />
+      ) : null}
+      {unitCelebration !== null ? (
+        <UnitCelebration
+          title={unitCelebration.title}
+          fire={unitCelebration.fire}
+        />
+      ) : null}
+    </ProgressContext.Provider>
   );
 }
 
