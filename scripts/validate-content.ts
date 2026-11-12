@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { NODE_IDS, type NodeId } from '../src/content/tree';
+import { runInJsdom } from '../src/features/runner/jsdomRunner';
 import {
   formatReport,
   validateContent,
@@ -93,7 +94,10 @@ async function main(): Promise<void> {
     return;
   }
 
-  const report = await validateContent(readContentFiles(process.cwd()), opts);
+  const report = await validateContent(readContentFiles(process.cwd()), {
+    ...opts,
+    runChallenge: ({ challenge, files }) => runInJsdom(challenge, files),
+  });
   for (const line of formatReport(report)) {
     console.log(line);
   }
