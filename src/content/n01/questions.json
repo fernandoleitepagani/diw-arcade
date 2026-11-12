@@ -1,0 +1,308 @@
+[
+  {
+    "id": "n01-q001",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "Em inglês, o que a palavra \"web\" significa?",
+    "options": ["Teia", "Rede", "Nuvem", "Portal"],
+    "answer": 0,
+    "explanation": "A aula traduz web como teia, imagem que descreve a Web como uma teia mundial de informações interligadas.",
+    "source": { "aula": 110, "slide": 3 },
+    "evidence": "Em inglês, web significa \"teia\"."
+  },
+  {
+    "id": "n01-q002",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "O que é a World Wide Web, segundo o conceito apresentado?",
+    "options": [
+      "Uma rede física de cabos que conecta computadores.",
+      "Um protocolo de transporte usado apenas para enviar e-mails.",
+      "Um sistema de informação interligado por hipertextos, acessado por navegadores.",
+      "Um programa instalado no servidor para compilar páginas HTML."
+    ],
+    "answer": 2,
+    "explanation": "A Web é descrita como um sistema de informação ligado por hipertextos, cujo acesso acontece por meio de navegadores.",
+    "source": { "aula": 110, "slide": 3 },
+    "evidence": "A World Wide Web é um sistema de informação interligado por hipertextos"
+  },
+  {
+    "id": "n01-q003",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "Qual organização é responsável pelos padrões vivos do HTML, do DOM e das APIs associadas?",
+    "options": ["W3C", "WHATWG", "IETF", "Ecma International"],
+    "answer": 1,
+    "explanation": "A tabela da aula atribui ao WHATWG os padrões vivos do HTML, do DOM e das APIs associadas.",
+    "source": { "aula": 110, "slide": 8 },
+    "evidence": "padrões vivos do HTML, HTML Living Standard, WHATWG DOM, e APIs associadas"
+  },
+  {
+    "id": "n01-q004",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "Qual instituição responde pelos protocolos de rede e de transporte, como HTTP/1.1, HTTP/2 e WebSockets?",
+    "options": ["W3C", "WHATWG", "Ecma (TC39)", "IETF"],
+    "answer": 3,
+    "explanation": "O slide associa ao IETF os protocolos de rede e transporte, citando HTTP/1.1, HTTP/2 e WebSockets.",
+    "source": { "aula": 110, "slide": 8 },
+    "evidence": "Protocolos de rede e HTTP/1.1, HTTP/2, IETF transporte WebSockets"
+  },
+  {
+    "id": "n01-q005",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "No processo de documentação de padrões do W3C, o que a sigla REC representa?",
+    "options": [
+      "Working Draft",
+      "Candidate Release",
+      "Recommendation",
+      "Proposed Recommendation"
+    ],
+    "answer": 2,
+    "explanation": "REC é a Recommendation, o estágio de recomendação indicado na legenda do processo do W3C.",
+    "source": { "aula": 110, "slide": 10 },
+    "evidence": "Proposed Recomendation REC Recomendation"
+  },
+  {
+    "id": "n01-q006",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "O que caracteriza o cliente web, também chamado de user-agent?",
+    "options": [
+      "Um programa que armazena os arquivos estáticos no servidor.",
+      "Um programa ou aplicação, geralmente o navegador, que envia requisições HTTP(S) ao servidor web.",
+      "Um protocolo que traduz nomes de domínio em endereços IP.",
+      "Um padrão do W3C para a estrutura da Web."
+    ],
+    "answer": 1,
+    "explanation": "O cliente web é o programa que pede recursos ao servidor; na maioria das vezes é o navegador, e envia requisições HTTP(S).",
+    "source": { "aula": 110, "slide": 12 },
+    "evidence": "agente de usuário (user-agent) que envia requisições via protocolo HTTP(S)"
+  },
+  {
+    "id": "n01-q007",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "Em que protocolo se baseia a Internet, segundo a aula?",
+    "options": ["SMTP", "FTP", "TCP/IP", "HTTP"],
+    "answer": 2,
+    "explanation": "A Internet é apresentada como uma rede mundial de computadores baseada no protocolo TCP/IP.",
+    "source": { "aula": 110, "slide": 14 },
+    "evidence": "A Internet é uma rede mundial de computadores baseada no protocolo TCP/IP"
+  },
+  {
+    "id": "n01-q008",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "O que é a URL, de acordo com a aula?",
+    "options": [
+      "O texto que indica, na parte superior do browser, qual recurso o usuário deseja acessar.",
+      "O endereço IP do computador que hospeda o site.",
+      "O protocolo usado para enviar a resposta ao cliente.",
+      "Um tipo de servidor web que interpreta a URL."
+    ],
+    "answer": 0,
+    "explanation": "A URL é um tipo de URI exibido no alto do navegador e serve para indicar o recurso desejado.",
+    "source": { "aula": 110, "slide": 15 },
+    "evidence": "browser e que indica qual recurso o usuário deseja acessar"
+  },
+  {
+    "id": "n01-q009",
+    "nodeId": "n01",
+    "type": "tf",
+    "prompt": "Segundo Tim O'Reilly, a Web 2.0 encerra o ciclo tradicional de liberação de software e adota o chamado \"Beta eterno\".",
+    "answer": true,
+    "explanation": "O slide lista o fim do ciclo de liberação e o \"Beta eterno\" entre as características da Web 2.0.",
+    "source": { "aula": 110, "slide": 6 },
+    "evidence": "Fim do ciclo de liberação de Software (Software Release Cycle)"
+  },
+  {
+    "id": "n01-q010",
+    "nodeId": "n01",
+    "type": "tf",
+    "prompt": "A Web 2.0 se apoia na inteligência coletiva por meio de links entre aplicações, blogs, wikis, tags e compartilhamento.",
+    "answer": true,
+    "explanation": "Entre as características apontadas está o aproveitamento da inteligência coletiva com links, blogs, wikis, tags e compartilhamento.",
+    "source": { "aula": 110, "slide": 6 },
+    "evidence": "Aproveitamento da inteligência coletiva (Links entre aplicações, Blogs, Wikis, Tags, Compartilhamento)"
+  },
+  {
+    "id": "n01-q011",
+    "nodeId": "n01",
+    "type": "fill",
+    "prompt": "A Internet é uma rede mundial de computadores baseada no protocolo ____.",
+    "answers": ["TCP/IP", "TCP IP", "tcp/ip"],
+    "explanation": "O protocolo que sustenta a Internet, conforme a aula, é o TCP/IP.",
+    "source": { "aula": 110, "slide": 14 },
+    "evidence": "A Internet é uma rede mundial de computadores baseada no protocolo TCP/IP"
+  },
+  {
+    "id": "n01-q012",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "O que significa a sigla HTML?",
+    "options": [
+      "HyperText Markup Language",
+      "High Text Machine Language",
+      "Hyperlink Markup Language",
+      "Home Tool Markup Language"
+    ],
+    "answer": 0,
+    "explanation": "HTML vem de HyperText Markup Language, a linguagem de marcação baseada em tags usada nas páginas Web.",
+    "source": { "aula": 120, "slide": 2 },
+    "evidence": "HTML ou HyperText Markup Language é a linguagem de marcação, baseada em tags"
+  },
+  {
+    "id": "n01-q013",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "O que são os hipertextos mencionados na definição de HTML?",
+    "options": [
+      "Arquivos de imagem usados para montar o layout.",
+      "Documentos que utilizam hiperlinks para outros documentos relacionados.",
+      "Programas que compilam HTML no servidor.",
+      "Folhas de estilo que definem cores e fontes."
+    ],
+    "answer": 1,
+    "explanation": "Hipertextos são documentos ligados por hiperlinks a outros documentos, o que dá origem à ideia de teia.",
+    "source": { "aula": 120, "slide": 2 },
+    "evidence": "Os hipertextos são documentos que utilizam hiperlinks para outros documentos relacionados"
+  },
+  {
+    "id": "n01-q014",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "Na estrutura apresentada para um documento HTML, o que a declaração <!DOCTYPE html> indica?",
+    "options": [
+      "O título exibido na aba do navegador.",
+      "A codificação de caracteres do arquivo.",
+      "O idioma principal do conteúdo.",
+      "A versão do HTML usada no documento."
+    ],
+    "answer": 3,
+    "explanation": "No exemplo, o DOCTYPE aparece anotado como a indicação da versão do HTML.",
+    "source": { "aula": 120, "slide": 4 },
+    "evidence": "<!DOCTYPE html> versão html"
+  },
+  {
+    "id": "n01-q015",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "Como o arquivo index.html do exemplo associa a folha de estilos style.css?",
+    "options": [
+      "Com a tag <style> dentro do <body>.",
+      "Com a tag <link rel=\"stylesheet\" href=\"style.css\"> dentro do <head>.",
+      "Com o atributo style em cada elemento.",
+      "Com a diretiva @import no início do <body>."
+    ],
+    "answer": 1,
+    "explanation": "O exemplo coloca no <head> uma tag link com rel=\"stylesheet\" e href apontando para style.css.",
+    "source": { "aula": 120, "slide": 6 },
+    "evidence": "<link rel=\"stylesheet\" href=\"style.css\">"
+  },
+  {
+    "id": "n01-q016",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "Em CSS, a regra que começa com #tit_1 associa o estilo a qual parte do HTML?",
+    "options": [
+      "Ao nome do elemento.",
+      "À classe do elemento.",
+      "Ao ID do elemento.",
+      "A um atributo qualquer."
+    ],
+    "answer": 2,
+    "explanation": "O seletor com # referencia o ID do elemento, como tit_1 no exemplo.",
+    "source": { "aula": 120, "slide": 7 },
+    "evidence": "#tit_1 { ... font-size: 20px; }"
+  },
+  {
+    "id": "n01-q017",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "A regra CSS .noticias associa o estilo a qual parte do elemento?",
+    "options": [
+      "Ao ID do elemento.",
+      "À classe do elemento.",
+      "Ao nome da tag.",
+      "Ao conteúdo textual."
+    ],
+    "answer": 1,
+    "explanation": "O ponto antes do nome indica um seletor de classe, como noticias no exemplo.",
+    "source": { "aula": 120, "slide": 8 },
+    "evidence": ".noticias { font-family: arial; ... }"
+  },
+  {
+    "id": "n01-q018",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "No exemplo de estrutura do documento, em qual seção fica a tag <meta name=\"author\" content=\"Rommel\">?",
+    "options": [
+      "No <head>, o cabeçalho do documento.",
+      "No <body>, o corpo do documento.",
+      "Logo após o fechamento do </html>.",
+      "Dentro do <h1>, junto ao título."
+    ],
+    "answer": 0,
+    "explanation": "O slide mostra a meta de autor dentro do <head>, anotado como cabeçalho.",
+    "source": { "aula": 120, "slide": 4 },
+    "evidence": "<html> <head> cabeçalho"
+  },
+  {
+    "id": "n01-q019",
+    "nodeId": "n01",
+    "type": "mcq",
+    "prompt": "Segundo a legenda do slide, como um elemento HTML é representado?",
+    "options": [
+      "nome=\"valor\"",
+      "<tag> [conteúdo] </tag>",
+      "#id { ... }",
+      "tag: valor;"
+    ],
+    "answer": 1,
+    "explanation": "A legenda apresenta o elemento como uma tag de abertura, o conteúdo e a tag de fechamento.",
+    "source": { "aula": 120, "slide": 4 },
+    "evidence": "elementos → <tag> [conteúdo] </tag>"
+  },
+  {
+    "id": "n01-q020",
+    "nodeId": "n01",
+    "type": "tf",
+    "prompt": "No fluxo mostrado na aula, o navegador envia uma requisição HTTP ao servidor e recebe uma resposta.",
+    "answer": true,
+    "explanation": "O diagrama mostra o navegador fazendo a requisição (GET, POST, HEAD e outros) e o servidor devolvendo a resposta.",
+    "source": { "aula": 120, "slide": 3 },
+    "evidence": "Requisição (GET | POST | HEAD | ... )"
+  },
+  {
+    "id": "n01-q021",
+    "nodeId": "n01",
+    "type": "tf",
+    "prompt": "Na sintaxe HTML, um atributo é escrito no formato nome=\"valor\".",
+    "answer": true,
+    "explanation": "A legenda do slide mostra os atributos como pares nome=\"valor\".",
+    "source": { "aula": 120, "slide": 4 },
+    "evidence": "atributos → nome=\"valor\""
+  },
+  {
+    "id": "n01-q022",
+    "nodeId": "n01",
+    "type": "fill",
+    "prompt": "A linguagem de marcação baseada em tags usada para produzir páginas Web é o ____.",
+    "answers": ["HTML", "html"],
+    "explanation": "HTML, HyperText Markup Language, é a linguagem de marcação baseada em tags apresentada na aula.",
+    "source": { "aula": 120, "slide": 2 },
+    "evidence": "HTML ou HyperText Markup Language é a linguagem de marcação, baseada em tags"
+  },
+  {
+    "id": "n01-q023",
+    "nodeId": "n01",
+    "type": "fill",
+    "prompt": "Em CSS, para associar uma regra ao ID de um elemento usamos o símbolo ____ antes do valor do id.",
+    "answers": ["#", "cerquilha", "sustenido", "hash"],
+    "explanation": "O seletor de ID é escrito com # seguido do valor, como em #tit_1.",
+    "source": { "aula": 120, "slide": 7 },
+    "evidence": "#tit_1 { ... font-size: 20px; }"
+  }
+]

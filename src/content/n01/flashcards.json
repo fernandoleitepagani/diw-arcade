@@ -1,0 +1,226 @@
+[
+  {
+    "id": "n01-f001",
+    "nodeId": "n01",
+    "front": "O que significa a palavra inglesa web?",
+    "back": "Teia — a World Wide Web é a teia mundial de informações.",
+    "source": { "aula": 110, "slide": 3 },
+    "evidence": "Em inglês, web significa \"teia\"."
+  },
+  {
+    "id": "n01-f002",
+    "nodeId": "n01",
+    "front": "O que é a World Wide Web?",
+    "back": "Sistema de informação interligado por hipertextos, acessível por meio de navegadores.",
+    "source": { "aula": 110, "slide": 3 },
+    "evidence": "A World Wide Web é um sistema de informação interligado por hipertextos"
+  },
+  {
+    "id": "n01-f003",
+    "nodeId": "n01",
+    "front": "O que é um navegador, segundo a aula?",
+    "back": "Software usado para acessar a Web, também chamado de browser.",
+    "source": { "aula": 110, "slide": 3 },
+    "evidence": "acesso se dá por meio de software denominados navegadores (browsers)"
+  },
+  {
+    "id": "n01-f004",
+    "nodeId": "n01",
+    "front": "Na comparação de Tim O'Reilly, qual serviço da Web 1.0 corresponde ao Google AdSense na Web 2.0?",
+    "back": "DoubleClick, que na Web 2.0 corresponde ao Google AdSense.",
+    "source": { "aula": 110, "slide": 5 },
+    "evidence": "DoubleClick → Google AdSense"
+  },
+  {
+    "id": "n01-f005",
+    "nodeId": "n01",
+    "front": "Na Web 2.0, o que substitui os sites pessoais (personal websites) da Web 1.0?",
+    "back": "O blogging (blogs), que na Web 1.0 era representado pelos sites pessoais.",
+    "source": { "aula": 110, "slide": 5 },
+    "evidence": "personal websites → blogging"
+  },
+  {
+    "id": "n01-f006",
+    "nodeId": "n01",
+    "front": "Na Web 2.0, qual plataforma substitui a Britannica Online?",
+    "back": "A Wikipedia, que na Web 1.0 correspondia à Britannica Online.",
+    "source": { "aula": 110, "slide": 5 },
+    "evidence": "Britannica Online → Wikipedia"
+  },
+  {
+    "id": "n01-f007",
+    "nodeId": "n01",
+    "front": "O que significa o \"Beta eterno\" citado por O'Reilly?",
+    "back": "É o fim do ciclo tradicional de liberação de software: o produto permanece em beta.",
+    "source": { "aula": 110, "slide": 6 },
+    "evidence": "Fim do ciclo de liberação de Software (Software Release Cycle)"
+  },
+  {
+    "id": "n01-f008",
+    "nodeId": "n01",
+    "front": "Quais tecnologias leves de programação a Web 2.0 usa, segundo o slide?",
+    "back": "RSS, REST e JSON, citados como modelos leves de programação.",
+    "source": { "aula": 110, "slide": 6 },
+    "evidence": "Uso de tecnologias como RSS, REST e JSON"
+  },
+  {
+    "id": "n01-f009",
+    "nodeId": "n01",
+    "front": "Qual organização é responsável pelos padrões vivos do HTML e do DOM?",
+    "back": "O WHATWG, responsável pelos padrões vivos do HTML, do DOM e das APIs associadas.",
+    "source": { "aula": 110, "slide": 8 },
+    "evidence": "padrões vivos do HTML, HTML Living Standard, WHATWG DOM, e APIs associadas"
+  },
+  {
+    "id": "n01-f010",
+    "nodeId": "n01",
+    "front": "Qual organização cuida dos protocolos de rede e transporte, como HTTP e WebSockets?",
+    "back": "O IETF, que cuida dos protocolos de rede e transporte.",
+    "source": { "aula": 110, "slide": 8 },
+    "evidence": "Protocolos de rede e HTTP/1.1, HTTP/2, IETF transporte WebSockets"
+  },
+  {
+    "id": "n01-f011",
+    "nodeId": "n01",
+    "front": "Qual grupo do W3C é responsável pelo padrão CSS?",
+    "back": "O CSS WG, que aparece como grupo de trabalho do W3C.",
+    "source": { "aula": 110, "slide": 9 },
+    "evidence": "Web Incubator CG WHATWG CSS WG"
+  },
+  {
+    "id": "n01-f012",
+    "nodeId": "n01",
+    "front": "No processo do W3C, o que significa a sigla WD?",
+    "back": "Working Draft, o rascunho de trabalho de um padrão.",
+    "source": { "aula": 110, "slide": 10 },
+    "evidence": "LEGENDA WD Working Draft"
+  },
+  {
+    "id": "n01-f013",
+    "nodeId": "n01",
+    "front": "O que significa a sigla CR no processo de padrões do W3C?",
+    "back": "Candidate Release, a versão candidata de um padrão.",
+    "source": { "aula": 110, "slide": 10 },
+    "evidence": "CR Candidate Release"
+  },
+  {
+    "id": "n01-f014",
+    "nodeId": "n01",
+    "front": "O que é o cliente web, também chamado de user-agent?",
+    "back": "É o programa ou aplicação, geralmente o navegador, que envia requisições HTTP(S) ao servidor web.",
+    "source": { "aula": 110, "slide": 12 },
+    "evidence": "agente de usuário (user-agent) que envia requisições via protocolo HTTP(S)"
+  },
+  {
+    "id": "n01-f015",
+    "nodeId": "n01",
+    "front": "O que faz o servidor web?",
+    "back": "Recebe requisições HTTP(S), interpreta a URL e envia ao cliente o recurso solicitado.",
+    "source": { "aula": 110, "slide": 13 },
+    "evidence": "interpreta a URL e em seguida envia resposta ao cliente web com o recurso solicitado"
+  },
+  {
+    "id": "n01-f016",
+    "nodeId": "n01",
+    "front": "O que é um host na Internet?",
+    "back": "É todo computador conectado à rede, identificado por um endereço IP.",
+    "source": { "aula": 110, "slide": 14 },
+    "evidence": "denominado host (hospedeiro) e possui um identificador endereço IP"
+  },
+  {
+    "id": "n01-f017",
+    "nodeId": "n01",
+    "front": "Qual é o padrão de endereço IP citado na aula?",
+    "back": "O padrão A.B.C.D, como no exemplo 200.20.15.22.",
+    "source": { "aula": 110, "slide": 14 },
+    "evidence": "endereço IP (Internet Protocol) no padrão A.B.C.D"
+  },
+  {
+    "id": "n01-f018",
+    "nodeId": "n01",
+    "front": "O que é a URL e qual é sua relação com a URI?",
+    "back": "A URL (Uniform Resource Locator) é um tipo de URI (Uniform Resource Identifier) exibido no browser.",
+    "source": { "aula": 110, "slide": 15 },
+    "evidence": "A URL (Uniform Resource Locator), um tipo de URI"
+  },
+  {
+    "id": "n01-f019",
+    "nodeId": "n01",
+    "front": "O que é uma requisição HTTP?",
+    "back": "É um pacote de dados enviado pelo cliente web ao servidor para identificar o recurso solicitado.",
+    "source": { "aula": 110, "slide": 16 },
+    "evidence": "A requisição HTTP é um pacote de dados enviado pela rede pelo Cliente Web para o Servidor Web e identifica o recurso solicitado"
+  },
+  {
+    "id": "n01-f020",
+    "nodeId": "n01",
+    "front": "O que compõe a resposta HTTP?",
+    "back": "Pacotes de dados enviados pelo servidor ao cliente com os recursos solicitados.",
+    "source": { "aula": 110, "slide": 16 },
+    "evidence": "A resposta HTTP é formada por pacotes de dados enviados pelo Servidor Web para o Cliente Web com os recursos solicitados"
+  },
+  {
+    "id": "n01-f021",
+    "nodeId": "n01",
+    "front": "O que significa a sigla HTML?",
+    "back": "HyperText Markup Language, a linguagem de marcação baseada em tags.",
+    "source": { "aula": 120, "slide": 2 },
+    "evidence": "HTML ou HyperText Markup Language é a linguagem de marcação, baseada em tags"
+  },
+  {
+    "id": "n01-f022",
+    "nodeId": "n01",
+    "front": "O que são hipertextos?",
+    "back": "Documentos que utilizam hiperlinks para outros documentos relacionados.",
+    "source": { "aula": 120, "slide": 2 },
+    "evidence": "Os hipertextos são documentos que utilizam hiperlinks para outros documentos relacionados"
+  },
+  {
+    "id": "n01-f023",
+    "nodeId": "n01",
+    "front": "Para que serve a declaração <!DOCTYPE html>?",
+    "back": "Ela indica a versão do HTML usada no documento.",
+    "source": { "aula": 120, "slide": 4 },
+    "evidence": "<!DOCTYPE html> versão html"
+  },
+  {
+    "id": "n01-f024",
+    "nodeId": "n01",
+    "front": "O que fica dentro do <head>?",
+    "back": "O cabeçalho do documento, com metadados como <meta name=\"author\">.",
+    "source": { "aula": 120, "slide": 4 },
+    "evidence": "<html> <head> cabeçalho"
+  },
+  {
+    "id": "n01-f025",
+    "nodeId": "n01",
+    "front": "Como se associa uma folha de estilos externa ao HTML?",
+    "back": "Com a tag <link rel=\"stylesheet\" href=\"style.css\"> dentro do <head>.",
+    "source": { "aula": 120, "slide": 6 },
+    "evidence": "<link rel=\"stylesheet\" href=\"style.css\">"
+  },
+  {
+    "id": "n01-f026",
+    "nodeId": "n01",
+    "front": "Como o CSS associa uma regra ao ID de um elemento?",
+    "back": "Usando # antes do valor do id, como em #tit_1.",
+    "source": { "aula": 120, "slide": 7 },
+    "evidence": "#tit_1 { ... font-size: 20px; }"
+  },
+  {
+    "id": "n01-f027",
+    "nodeId": "n01",
+    "front": "Como o CSS associa uma regra à classe de um elemento?",
+    "back": "Usando um ponto antes do nome da classe, como em .noticias.",
+    "source": { "aula": 120, "slide": 8 },
+    "evidence": ".noticias { font-family: arial; ... }"
+  },
+  {
+    "id": "n01-f028",
+    "nodeId": "n01",
+    "front": "O que é um atributo HTML e como ele é escrito?",
+    "back": "É uma informação extra do elemento, escrita no formato nome=\"valor\".",
+    "source": { "aula": 120, "slide": 4 },
+    "evidence": "atributos → nome=\"valor\""
+  }
+]
