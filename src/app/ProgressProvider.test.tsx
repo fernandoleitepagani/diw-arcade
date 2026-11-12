@@ -3,6 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { ToastProvider } from '../components/ui/Toast/Toast';
 import { BIT_LINES } from '../content/copy';
+import type { ProgressContent } from '../lib/progress/events';
+import { newCard } from '../lib/srs/fsrs';
 import {
   SAVE_KEY,
   createEmptySave,
@@ -30,10 +32,42 @@ class MemoryStorage implements StorageLike {
   }
 }
 
+const UNIT_CONTENT: ProgressContent = {
+  questions: { n01: [{ id: 'n01-q001' }], n02: [{ id: 'n02-q001' }] },
+  flashcards: { n01: [{ id: 'n01-f001' }], n02: [{ id: 'n02-f001' }] },
+  challenges: { n01: [{ id: 'n01-c01' }], n02: [{ id: 'n02-c01' }] },
+};
+
 function seededSave(xpTotal: number): SaveV1 {
   const save = createEmptySave(NOW);
   save.onboarded = true;
   save.xpTotal = xpTotal;
+  return save;
+}
+
+function completeNode(
+  save: SaveV1,
+  nodeId: 'n01' | 'n02',
+  cardId: string,
+  challengeId: string,
+): void {
+  save.quiz.rounds[nodeId] = { best: 100, count: 1, perfect: true };
+  save.cards[cardId] = { ...newCard(NOW), reps: 1, state: 2 };
+  save.challenges[challengeId] = {
+    passed: true,
+    failedRuns: 0,
+    hintsUsed: 0,
+    xpAwarded: 30,
+    code: null,
+  };
+}
+
+function seededUnitSave(): SaveV1 {
+  const save = seededSave(0);
+  completeNode(save, 'n01', 'n01-f001', 'n01-c01');
+  // n02 is one challenge short of its code star.
+  save.quiz.rounds['n02'] = { best: 100, count: 1, perfect: true };
+  save.cards['n02-f001'] = { ...newCard(NOW), reps: 1, state: 2 };
   return save;
 }
 
@@ -57,14 +91,31 @@ function Probe() {
       >
         Responder
       </button>
+      <button
+        type="button"
+        onClick={() =>
+          dispatch({
+            type: 'challenge/run',
+            nodeId: 'n02',
+            challengeId: 'n02-c01',
+            passed: true,
+          })
+        }
+      >
+        Concluir unidade
+      </button>
     </div>
   );
 }
 
-function renderProvider(storage: StorageLike) {
+function renderProvider(storage: StorageLike, contentIndex?: ProgressContent) {
   return render(
     <ToastProvider>
-      <ProgressProvider storage={storage} clock={() => NOW}>
+      <ProgressProvider
+        storage={storage}
+        clock={() => NOW}
+        contentIndex={contentIndex}
+      >
         <Probe />
       </ProgressProvider>
     </ToastProvider>,
@@ -98,7 +149,7 @@ describe('ProgressProvider', () => {
     expect(screen.getByText('+15 XP')).toBeInTheDocument();
   });
 
-  it('shows a level-up toast with a Bit line', async () => {
+  it('shows a level-up takeover with a Bit line and no duplicate toast', async () => {
     const user = userEvent.setup();
     const storage = new MemoryStorage();
     persistSave(storage, seededSave(90));
@@ -106,11 +157,32 @@ describe('ProgressProvider', () => {
 
     await user.click(screen.getByRole('button', { name: 'Responder' }));
 
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveAccessibleName('Nível 2!');
     expect(screen.getByText('Nível 2!')).toBeInTheDocument();
     const showsBitLine = BIT_LINES.levelUp.some(
       (line) => screen.queryByText(line) !== null,
     );
     expect(showsBitLine).toBe(true);
+    expect(screen.getAllByText('Nível 2!')).toHaveLength(1);
+    expect(document.querySelector('.ui-toasts')).not.toHaveTextContent('Nível 2!');
+
+    await user.click(screen.getByRole('button', { name: 'Continuar' }));
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('celebrates a completed unit', async () => {
+    const user = userEvent.setup();
+    const storage = new MemoryStorage();
+    persistSave(storage, seededUnitSave());
+    renderProvider(storage, UNIT_CONTENT);
+
+    await user.click(screen.getByRole('button', { name: 'Concluir unidade' }));
+
+    expect(
+      screen.getByText('Unidade concluída: Fundamentos da Web'),
+    ).toBeInTheDocument();
   });
 
   it('warns when the saved progress is corrupt', async () => {
