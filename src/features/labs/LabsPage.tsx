@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { usePageTitle } from '../../app/usePageTitle';
-import { Mascot } from '../../components/ui';
+import { Card, Mascot, PageHeader, ProgressRing } from '../../components/ui';
 import { getLabs, type LabGuide } from '../../content';
 import { pickLine } from '../../content/copy';
 import { getLabProgress } from '../../lib/progress';
@@ -19,7 +19,11 @@ export function LabsPage({ labs }: LabsPageProps = {}) {
 
   return (
     <section className="page labs-page">
-      <h1>Laboratórios</h1>
+      <PageHeader
+        eyebrow="Prática guiada"
+        title="Laboratórios"
+        description="Escolha um mini-projeto, siga os passos e marque cada etapa concluída."
+      />
 
       {guides.length === 0 ? (
         <div className="labs-empty">
@@ -32,18 +36,40 @@ export function LabsPage({ labs }: LabsPageProps = {}) {
             const { done, total } = progress
               ? getLabProgress(progress.save, lab.id, lab)
               : { done: 0, total: lab.steps.length };
+            const complete = total > 0 && done >= total;
+            const percent = total > 0 ? Math.round((done / total) * 100) : 0;
 
             return (
               <li key={lab.id}>
-                <article className="labs-card" aria-labelledby={`labs-${lab.id}`}>
-                  <h2 className="labs-card__title" id={`labs-${lab.id}`}>
-                    <Link to={`/laboratorios/${lab.id}`}>{lab.title}</Link>
-                  </h2>
+                <Card
+                  as="article"
+                  interactive
+                  className="labs-card"
+                  aria-labelledby={`labs-${lab.id}`}
+                >
+                  <div className="labs-card__head">
+                    <h2 className="labs-card__title" id={`labs-${lab.id}`}>
+                      <Link to={`/laboratorios/${lab.id}`}>{lab.title}</Link>
+                    </h2>
+                    <ProgressRing
+                      className="labs-card__ring"
+                      label={`Passos concluídos de ${lab.title}`}
+                      max={total}
+                      size={56}
+                      stroke={6}
+                      tone={complete ? 'success' : 'xp'}
+                      value={done}
+                    >
+                      <span aria-hidden="true">{percent}%</span>
+                    </ProgressRing>
+                  </div>
+
                   <p className="labs-card__summary">{lab.summary}</p>
+
                   <p className="labs-card__progress">
                     {done} de {total} passos
                   </p>
-                </article>
+                </Card>
               </li>
             );
           })}
