@@ -32,18 +32,27 @@
 .flashcard-session .flashcard-session__cap {
   margin: 0;
   padding: 0.6rem 0.8rem;
-  border: 1px solid rgb(255 194 61 / 0.45);
+  border: 1px solid var(--border);
   border-inline-start-width: 3px;
   border-radius: 0.4rem;
-  background: rgb(255 194 61 / 0.08);
+  background: var(--surface-2);
   color: var(--text);
   font-size: 0.9rem;
   line-height: 1.5;
 }
 
+.flashcard-session .flashcard-session__cap--reached {
+  border-color: rgb(255 194 61 / 0.45);
+  background: rgb(255 194 61 / 0.08);
+}
+
 .flashcard-session__cap a {
-  color: var(--xp);
+  color: var(--accent);
   font-weight: 600;
+}
+
+.flashcard-session .flashcard-session__cap--reached a {
+  color: var(--xp);
 }
 
 .flashcard-session__card {
