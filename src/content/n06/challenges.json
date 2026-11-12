@@ -1,0 +1,165 @@
+[
+  {
+    "id": "n06-c01",
+    "nodeId": "n06",
+    "title": "Classes e identificadores",
+    "kind": "css",
+    "goal": "Aplique estilos ao parágrafo de destaque pela classe e ao título pelo identificador.",
+    "starter": {
+      "html": "<h1 id=\"principal\">Portal de notícias</h1>\n<p class=\"destaque\">Notícia em destaque</p>\n<p>Notícia comum</p>",
+      "css": ".destaque {\n  font-weight: normal;\n}\n\n#principal {\n  font-style: normal;\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<h1 id=\"principal\">Portal de notícias</h1>\n<p class=\"destaque\">Notícia em destaque</p>\n<p>Notícia comum</p>",
+      "css": ".destaque {\n  font-weight: bold;\n  text-align: center;\n}\n\n#principal {\n  font-style: italic;\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "classe-negrito",
+        "label": "O parágrafo .destaque fica em negrito",
+        "check": {
+          "kind": "style",
+          "selector": ".destaque",
+          "prop": "font-weight",
+          "match": { "equals": "bold" }
+        }
+      },
+      {
+        "id": "classe-centralizado",
+        "label": "O parágrafo .destaque fica centralizado",
+        "check": {
+          "kind": "style",
+          "selector": ".destaque",
+          "prop": "text-align",
+          "match": { "equals": "center" }
+        }
+      },
+      {
+        "id": "id-italico",
+        "label": "O título #principal fica em itálico",
+        "check": {
+          "kind": "style",
+          "selector": "#principal",
+          "prop": "font-style",
+          "match": { "equals": "italic" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código não gera erros de JavaScript",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Selecione a classe com um ponto antes do nome: .destaque.",
+      "Selecione o identificador com #: #principal.",
+      "Aplique font-weight: bold e text-align: center em .destaque, e font-style: italic em #principal."
+    ],
+    "source": { "aula": 171, "slide": 5 },
+    "evidence": "O seletor indica os elementos HTML de determinada classe."
+  },
+  {
+    "id": "n06-c02",
+    "nodeId": "n06",
+    "title": "Seletor descendente",
+    "kind": "css",
+    "goal": "Estilize apenas os links dentro do menu usando um seletor descendente.",
+    "starter": {
+      "html": "<nav class=\"menu\">\n  <a href=\"#inicio\">Início</a>\n  <a href=\"#sobre\">Sobre</a>\n</nav>\n<p><a href=\"#fora\">Link fora do menu</a></p>",
+      "css": ".menu {\n  display: block;\n}\n\na {\n  text-align: left;\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<nav class=\"menu\">\n  <a href=\"#inicio\">Início</a>\n  <a href=\"#sobre\">Sobre</a>\n</nav>\n<p><a href=\"#fora\">Link fora do menu</a></p>",
+      "css": ".menu a {\n  display: block;\n  text-align: center;\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "menu-bloco",
+        "label": "Cada link do menu é exibido em bloco",
+        "check": {
+          "kind": "style",
+          "selector": ".menu a",
+          "prop": "display",
+          "match": { "equals": "block" }
+        }
+      },
+      {
+        "id": "menu-centralizado",
+        "label": "Os links do menu ficam centralizados",
+        "check": {
+          "kind": "style",
+          "selector": ".menu a",
+          "prop": "text-align",
+          "match": { "equals": "center" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código não gera erros de JavaScript",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Um seletor descendente justapõe dois seletores separados por espaço.",
+      "Use .menu a para atingir somente os links que estão dentro do menu.",
+      "Declare display: block e text-align: center na regra .menu a."
+    ],
+    "source": { "aula": 171, "slide": 11 },
+    "evidence": "Elementos associados a B, descendentes de elementos associados a A."
+  },
+  {
+    "id": "n06-c03",
+    "nodeId": "n06",
+    "title": "Ordem das regras",
+    "kind": "css",
+    "goal": "Faça a regra .alerta vencer a regra .texto para deixar só o aviso em negrito.",
+    "starter": {
+      "html": "<p class=\"texto alerta\">Atenção: prazo final!</p>\n<p id=\"comum\" class=\"texto\">Este parágrafo é comum.</p>",
+      "css": ".alerta {\n  font-weight: bold;\n}\n\n.texto {\n  font-weight: normal;\n}\n\n#comum {\n  font-style: italic;\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<p class=\"texto alerta\">Atenção: prazo final!</p>\n<p id=\"comum\" class=\"texto\">Este parágrafo é comum.</p>",
+      "css": ".texto {\n  font-weight: normal;\n}\n\n.alerta {\n  font-weight: bold;\n}\n\n#comum {\n  font-style: italic;\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "alerta-negrito",
+        "label": "O parágrafo de alerta fica em negrito",
+        "check": {
+          "kind": "style",
+          "selector": ".alerta",
+          "prop": "font-weight",
+          "match": { "equals": "bold" }
+        }
+      },
+      {
+        "id": "comum-normal",
+        "label": "O parágrafo comum continua com peso normal",
+        "check": {
+          "kind": "style",
+          "selector": "#comum",
+          "prop": "font-weight",
+          "match": { "equals": "normal" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código não gera erros de JavaScript",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Quando duas regras atingem o mesmo elemento, a que aparece depois no arquivo vence.",
+      "As classes texto e alerta estão no mesmo parágrafo, então a ordem entre .texto e .alerta importa.",
+      "Coloque .texto { font-weight: normal; } antes de .alerta { font-weight: bold; }."
+    ],
+    "source": { "aula": 171, "slide": 14 },
+    "evidence": "Para regras concorrentes de mesma especificidade a última irá prevalecer."
+  }
+]
