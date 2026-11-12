@@ -1,0 +1,202 @@
+[
+  {
+    "id": "n04-f001",
+    "nodeId": "n04",
+    "front": "O que acontece depois que o usuário preenche o formulário?",
+    "back": "O navegador envia uma requisição de processamento do formulário para a página 2.",
+    "source": { "aula": 162, "slide": 2 },
+    "evidence": "Requisição de processamento do form p/ página 2"
+  },
+  {
+    "id": "n04-f002",
+    "nodeId": "n04",
+    "front": "O que o navegador recebe após o processamento do formulário?",
+    "back": "O retorno da página 2 com o retorno do formulário.",
+    "source": { "aula": 162, "slide": 2 },
+    "evidence": "Retorno da página 2 com retorno do formulário"
+  },
+  {
+    "id": "n04-f003",
+    "nodeId": "n04",
+    "front": "O que a tag form delimita?",
+    "back": "O formulário a ser criado na página.",
+    "source": { "aula": 162, "slide": 4 },
+    "evidence": "A tag form delimita o formulário a ser criado."
+  },
+  {
+    "id": "n04-f004",
+    "nodeId": "n04",
+    "front": "O que o atributo action indica em um formulário?",
+    "back": "A URL que será disparada para o processamento do formulário.",
+    "source": { "aula": 162, "slide": 4 },
+    "evidence": "O atributo action indica qual a URL a ser disparada para"
+  },
+  {
+    "id": "n04-f005",
+    "nodeId": "n04",
+    "front": "O que o atributo method define?",
+    "back": "Como o formulário será submetido via requisição HTTP, com POST ou GET.",
+    "source": { "aula": 162, "slide": 4 },
+    "evidence": "O atributo method indica como o formulário será submetido via requisição HTTP (POST ou GET)."
+  },
+  {
+    "id": "n04-f006",
+    "nodeId": "n04",
+    "front": "Quais atributos identificam o formulário no contexto da página?",
+    "back": "Os atributos name e id identificam o formulário.",
+    "source": { "aula": 162, "slide": 4 },
+    "evidence": "e id identificam o formulário no"
+  },
+  {
+    "id": "n04-f007",
+    "nodeId": "n04",
+    "front": "O que as tags input definem?",
+    "back": "Campos que representam entradas de dados manipulados pelo formulário.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "As tags input definem os campos ou entradas de dados manipulados pelo formulário."
+  },
+  {
+    "id": "n04-f008",
+    "nodeId": "n04",
+    "front": "O que o atributo type identifica?",
+    "back": "O tipo do campo, como text, password ou submit.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "O atributo type identifica o tipo do campo: text, password, submit, etc."
+  },
+  {
+    "id": "n04-f009",
+    "nodeId": "n04",
+    "front": "O que o atributo value trata?",
+    "back": "O valor contido no campo do formulário.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "O atributo value trata o valor contido no campo"
+  },
+  {
+    "id": "n04-f010",
+    "nodeId": "n04",
+    "front": "No formulário de exemplo, qual atributo do campo Nome impede o envio com ele vazio?",
+    "back": "O atributo required impede o envio do campo vazio.",
+    "source": { "aula": 162, "slide": 6 },
+    "evidence": "<input type=\"text\" name=\"nome\" required>"
+  },
+  {
+    "id": "n04-f011",
+    "nodeId": "n04",
+    "front": "O que o atributo maxlength permite limitar?",
+    "back": "A quantidade de caracteres a serem digitados pelo usuário.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "O atributo maxlength permite limitar a quantidade de caracteres a serem digitados pelo usuário."
+  },
+  {
+    "id": "n04-f012",
+    "nodeId": "n04",
+    "front": "O que o campo do tipo email valida antes do envio?",
+    "back": "Se o endereço informado é correto, com o caracter @ e o nome do servidor.",
+    "source": { "aula": 162, "slide": 8 },
+    "evidence": "um endereço de e-mail correto (com o caracter @ e o nome"
+  },
+  {
+    "id": "n04-f013",
+    "nodeId": "n04",
+    "front": "O que o campo do tipo date oferece ao usuário?",
+    "back": "Um calendário para que ele escolha a data de maneira simplificada.",
+    "source": { "aula": 162, "slide": 9 },
+    "evidence": "usuário e fornece um calendário para que ele escolha a data de maneira simplificada."
+  },
+  {
+    "id": "n04-f014",
+    "nodeId": "n04",
+    "front": "O que os campos radio com o mesmo name permitem?",
+    "back": "Que o usuário escolha uma dentre as opções disponíveis.",
+    "source": { "aula": 162, "slide": 10 },
+    "evidence": "Os campos do tipo radio com o mesmo valor no"
+  },
+  {
+    "id": "n04-f015",
+    "nodeId": "n04",
+    "front": "O que os campos checkbox com o mesmo name permitem?",
+    "back": "Que o usuário escolha uma ou mais opções dentre as disponíveis.",
+    "source": { "aula": 162, "slide": 11 },
+    "evidence": "que o usuário escolha uma"
+  },
+  {
+    "id": "n04-f016",
+    "nodeId": "n04",
+    "front": "Para que serve o botão submit?",
+    "back": "Para que o usuário submeta o formulário para processamento.",
+    "source": { "aula": 162, "slide": 12 },
+    "evidence": "O botão submit é utilizado para que o"
+  },
+  {
+    "id": "n04-f017",
+    "nodeId": "n04",
+    "front": "O que um botão do tipo reset permite ao usuário?",
+    "back": "Limpar todo o formulário preenchido.",
+    "source": { "aula": 162, "slide": 12 },
+    "evidence": "permite ao usuário limpar todo o"
+  },
+  {
+    "id": "n04-f018",
+    "nodeId": "n04",
+    "front": "O que acontece quando um formulário tem mais de um botão submit?",
+    "back": "Todos os botões executam a mesma ação de envio.",
+    "source": { "aula": 162, "slide": 12 },
+    "evidence": "submit, porém todos executam a mesma"
+  },
+  {
+    "id": "n04-f019",
+    "nodeId": "n04",
+    "front": "Para que serve a tag fieldset?",
+    "back": "Para organizar os campos do formulário.",
+    "source": { "aula": 162, "slide": 13 },
+    "evidence": "Utilize as tags fieldset para organizar os campos do formulário."
+  },
+  {
+    "id": "n04-f020",
+    "nodeId": "n04",
+    "front": "O que a tag filha legend informa?",
+    "back": "O título do fieldset que a contém.",
+    "source": { "aula": 162, "slide": 13 },
+    "evidence": "A tag filha legend informa o título do fieldset."
+  },
+  {
+    "id": "n04-f021",
+    "nodeId": "n04",
+    "front": "O que a tag textarea permite?",
+    "back": "A entrada de texto livre em um campo do formulário.",
+    "source": { "aula": 162, "slide": 14 },
+    "evidence": "A tag textarea define um campo que permite a entrada de texto livre."
+  },
+  {
+    "id": "n04-f022",
+    "nodeId": "n04",
+    "front": "O que os atributos rows e cols definem em um textarea?",
+    "back": "O número de linhas e colunas para a apresentação do controle.",
+    "source": { "aula": 162, "slide": 14 },
+    "evidence": "O atributo rows e cols definem o número de linhas e colunas para a apresentação do controle."
+  },
+  {
+    "id": "n04-f023",
+    "nodeId": "n04",
+    "front": "O que o campo do tipo hidden permite repassar?",
+    "back": "Informações ocultas que não exigem interação do usuário.",
+    "source": { "aula": 162, "slide": 15 },
+    "evidence": "O campo do tipo hidden permite que sejam repassadas informações \"ocultas\" que não exigem interação do usuário."
+  },
+  {
+    "id": "n04-f024",
+    "nodeId": "n04",
+    "front": "Para que o campo hidden é utilizado na aula?",
+    "back": "Para passagem de informações de um formulário para outro em uma sequência de passos.",
+    "source": { "aula": 162, "slide": 15 },
+    "evidence": "Este tipo de campo é utilizado para passagem de informações de um formulário para outro em uma sequencia de passos, por exemplo."
+  },
+  {
+    "id": "n04-f025",
+    "nodeId": "n04",
+    "front": "O que a tag datalist define?",
+    "back": "Um conjunto de opções disponíveis para outro campo de input.",
+    "source": { "aula": 162, "slide": 16 },
+    "evidence": "A tag datalist permite definir um conjunto de opções que estarão disponíveis para um outro campo de input."
+  }
+]

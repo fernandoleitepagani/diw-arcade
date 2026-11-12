@@ -1,0 +1,244 @@
+[
+  {
+    "id": "n04-q001",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "Na dinâmica de funcionamento de um formulário, o que o navegador faz depois que o usuário preenche os campos?",
+    "options": [
+      "Envia uma requisição de processamento do formulário para a página 2.",
+      "Grava os dados apenas no armazenamento local do navegador.",
+      "Abre o cliente de e-mail do usuário com os dados do formulário.",
+      "Recarrega a página 1 sem enviar os dados preenchidos."
+    ],
+    "answer": 0,
+    "explanation": "Depois do preenchimento, o navegador faz uma requisição de processamento do formulário para a segunda página, como login.php.",
+    "source": { "aula": 162, "slide": 2 },
+    "evidence": "Requisição de processamento do form p/ página 2"
+  },
+  {
+    "id": "n04-q002",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "Qual atributo do elemento form indica a URL que será disparada para processar o formulário?",
+    "options": ["name", "method", "action", "value"],
+    "answer": 2,
+    "explanation": "O atributo action define a URL acionada para o processamento do formulário.",
+    "source": { "aula": 162, "slide": 4 },
+    "evidence": "O atributo action indica qual a URL a ser disparada para"
+  },
+  {
+    "id": "n04-q003",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "O que o atributo method de um formulário define?",
+    "options": [
+      "O endereço de e-mail que receberá os dados do formulário.",
+      "Como o formulário será submetido via requisição HTTP, usando POST ou GET.",
+      "A quantidade máxima de caracteres aceita em cada campo.",
+      "O título exibido pelo elemento legend dentro do fieldset."
+    ],
+    "answer": 1,
+    "explanation": "O method indica como o formulário é submetido via requisição HTTP, podendo ser POST ou GET.",
+    "source": { "aula": 162, "slide": 4 },
+    "evidence": "O atributo method indica como o formulário será submetido via requisição HTTP (POST ou GET)."
+  },
+  {
+    "id": "n04-q004",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "O que a tag form delimita em uma página HTML?",
+    "options": [
+      "Uma tabela de dados com linhas e colunas.",
+      "Um bloco de estilos aplicado à página inteira.",
+      "Um script executado no servidor antes da requisição.",
+      "O formulário a ser criado na página."
+    ],
+    "answer": 3,
+    "explanation": "A tag form delimita o formulário a ser criado, reunindo os campos que serão enviados.",
+    "source": { "aula": 162, "slide": 4 },
+    "evidence": "A tag form delimita o formulário a ser criado."
+  },
+  {
+    "id": "n04-q005",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "Segundo a aula, o que as tags input definem dentro de um formulário?",
+    "options": [
+      "Os campos ou entradas de dados manipulados pelo formulário.",
+      "As folhas de estilo usadas para formatar o formulário.",
+      "Os cabeçalhos HTTP enviados ao servidor.",
+      "As seções de título e subtítulo da página."
+    ],
+    "answer": 0,
+    "explanation": "As tags input representam os campos ou entradas de dados que o formulário manipula.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "As tags input definem os campos ou entradas de dados manipulados pelo formulário."
+  },
+  {
+    "id": "n04-q006",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "O que o atributo type de uma tag input identifica?",
+    "options": [
+      "O nome do formulário no contexto da página.",
+      "O valor já preenchido no campo.",
+      "O tipo do campo, como text, password ou submit.",
+      "A URL de processamento dos dados."
+    ],
+    "answer": 2,
+    "explanation": "O type identifica o tipo do campo, como text, password e submit.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "O atributo type identifica o tipo do campo: text, password, submit, etc."
+  },
+  {
+    "id": "n04-q007",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "Para que serve o atributo maxlength em um campo de texto?",
+    "options": [
+      "Para exigir que o campo seja preenchido antes do envio.",
+      "Para limitar a quantidade de caracteres que o usuário pode digitar.",
+      "Para definir o tipo de teclado exibido no dispositivo.",
+      "Para transformar o campo em uma lista de opções."
+    ],
+    "answer": 1,
+    "explanation": "O maxlength limita a quantidade de caracteres digitados pelo usuário, como em maxlength=\"14\".",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "O atributo maxlength permite limitar a quantidade de caracteres a serem digitados pelo usuário."
+  },
+  {
+    "id": "n04-q008",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "O que o campo do tipo email verifica antes de o formulário ser submetido?",
+    "options": [
+      "Se o usuário digitou apenas números no campo.",
+      "Se o endereço de e-mail está cadastrado no servidor.",
+      "Se o campo foi preenchido com uma senha forte.",
+      "Se o endereço informado é correto, com @ e o nome do servidor."
+    ],
+    "answer": 3,
+    "explanation": "O campo email valida se o usuário informou um endereço correto, com o caracter @ e o nome do servidor.",
+    "source": { "aula": 162, "slide": 8 },
+    "evidence": "um endereço de e-mail correto (com o caracter @ e o nome"
+  },
+  {
+    "id": "n04-q009",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "Qual é o comportamento do campo do tipo date?",
+    "options": [
+      "Controla a edição da data e oferece um calendário para escolhê-la.",
+      "Exibe apenas a data atual do sistema, sem permitir edição.",
+      "Aceita qualquer texto livre e converte a entrada em data.",
+      "Seleciona automaticamente o fuso horário do servidor."
+    ],
+    "answer": 0,
+    "explanation": "O date controla a edição pelo usuário e fornece um calendário para escolher a data de maneira simplificada.",
+    "source": { "aula": 162, "slide": 9 },
+    "evidence": "usuário e fornece um calendário para que ele escolha a data de maneira simplificada."
+  },
+  {
+    "id": "n04-q010",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "Em campos do tipo radio, o que o mesmo valor no atributo name permite?",
+    "options": [
+      "Que o usuário marque todas as opções ao mesmo tempo.",
+      "Que o usuário escolha uma dentre as opções disponíveis.",
+      "Que o navegador envie os dados sem interação do usuário.",
+      "Que o campo aceite texto livre além das opções."
+    ],
+    "answer": 1,
+    "explanation": "Os radios com o mesmo name formam um grupo em que o usuário escolhe uma das opções disponíveis.",
+    "source": { "aula": 162, "slide": 10 },
+    "evidence": "Os campos do tipo radio com o mesmo valor no"
+  },
+  {
+    "id": "n04-q011",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "No formulário de exemplo da aula, qual tipo de campo é usado nas opções \"Ver teste de velocidade\" e \"Verificar google analytics\"?",
+    "options": ["radio", "hidden", "checkbox", "date"],
+    "answer": 2,
+    "explanation": "Os dois campos usam type=\"checkbox\" com o mesmo name, permitindo marcar uma ou mais opções.",
+    "source": { "aula": 162, "slide": 6 },
+    "evidence": "<input type=\"checkbox\" name=\"acao\" value=\"vel\"> Ver teste de velocidade"
+  },
+  {
+    "id": "n04-q012",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "Um formulário com mais de um botão submit apresenta qual comportamento?",
+    "options": [
+      "Cada botão envia os dados para uma URL diferente.",
+      "Apenas o primeiro botão é considerado válido pelo navegador.",
+      "O formulário fica inválido e não pode ser enviado.",
+      "Todos os botões executam a mesma ação de envio."
+    ],
+    "answer": 3,
+    "explanation": "A aula explica que um formulário pode ter mais de um botão submit, porém todos executam a mesma ação.",
+    "source": { "aula": 162, "slide": 12 },
+    "evidence": "submit, porém todos executam a mesma"
+  },
+  {
+    "id": "n04-q013",
+    "nodeId": "n04",
+    "type": "tf",
+    "prompt": "A tag textarea define um campo que permite a entrada de texto livre.",
+    "answer": true,
+    "explanation": "O textarea cria um campo de texto livre; rows e cols definem a apresentação do controle.",
+    "source": { "aula": 162, "slide": 14 },
+    "evidence": "A tag textarea define um campo que permite a entrada de texto livre."
+  },
+  {
+    "id": "n04-q014",
+    "nodeId": "n04",
+    "type": "tf",
+    "prompt": "O campo do tipo hidden exige interação do usuário para que seus dados sejam enviados.",
+    "answer": false,
+    "explanation": "O hidden repassa informações ocultas que não exigem interação do usuário.",
+    "source": { "aula": 162, "slide": 15 },
+    "evidence": "O campo do tipo hidden permite que sejam repassadas informações \"ocultas\" que não exigem interação do usuário."
+  },
+  {
+    "id": "n04-q015",
+    "nodeId": "n04",
+    "type": "tf",
+    "prompt": "A tag datalist define um conjunto de opções disponíveis para outro campo de input.",
+    "answer": true,
+    "explanation": "O datalist oferece opções que podem ser usadas por outro campo de input.",
+    "source": { "aula": 162, "slide": 16 },
+    "evidence": "A tag datalist permite definir um conjunto de opções que estarão disponíveis para um outro campo de input."
+  },
+  {
+    "id": "n04-q016",
+    "nodeId": "n04",
+    "type": "fill",
+    "prompt": "O botão do tipo ____ permite ao usuário limpar todo o formulário.",
+    "answers": ["reset"],
+    "explanation": "Um botão do tipo reset permite limpar todo o formulário preenchido.",
+    "source": { "aula": 162, "slide": 12 },
+    "evidence": "permite ao usuário limpar todo o"
+  },
+  {
+    "id": "n04-q017",
+    "nodeId": "n04",
+    "type": "fill",
+    "prompt": "A tag filha ____ informa o título do fieldset.",
+    "answers": ["legend"],
+    "explanation": "O legend é a tag filha do fieldset que informa seu título.",
+    "source": { "aula": 162, "slide": 13 },
+    "evidence": "A tag filha legend informa o título do fieldset."
+  },
+  {
+    "id": "n04-q018",
+    "nodeId": "n04",
+    "type": "fill",
+    "prompt": "Os atributos rows e ____ definem o número de linhas e colunas para a apresentação do controle.",
+    "answers": ["cols"],
+    "explanation": "Em textarea, rows e cols definem o número de linhas e colunas do controle.",
+    "source": { "aula": 162, "slide": 14 },
+    "evidence": "O atributo rows e cols definem o número de linhas e colunas para a apresentação do controle."
+  }
+]
