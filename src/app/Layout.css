@@ -90,11 +90,6 @@
   outline: none;
 }
 
-.hud {
-  color: var(--text-muted);
-  font-size: 0.875rem;
-}
-
 .page {
   display: grid;
   gap: 1rem;
