@@ -1,0 +1,281 @@
+[
+  {
+    "id": "n06-q001",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "O que é o CSS?",
+    "options": [
+      "Uma linguagem de programação que adiciona lógica ao navegador.",
+      "Uma linguagem para definir regras de apresentação em documentos HTML e XML.",
+      "Um banco de dados que armazena os estilos do site.",
+      "Um editor de imagens usado para montar páginas web."
+    ],
+    "answer": 1,
+    "explanation": "CSS significa Cascading Style Sheet e descreve a apresentação de documentos HTML e XML, sem lógica de programação nem armazenamento de dados.",
+    "source": { "aula": 170, "slide": 4 },
+    "evidence": "O Cascading Style Sheet (CSS) é uma linguagem para definição de regras de apresentação em documentos HTML e XML."
+  },
+  {
+    "id": "n06-q002",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "Qual é o objetivo principal do CSS?",
+    "options": [
+      "Separar o formato do conteúdo em um documento.",
+      "Substituir o HTML na estruturação do documento.",
+      "Executar scripts no servidor.",
+      "Compactar as imagens da página."
+    ],
+    "answer": 0,
+    "explanation": "O CSS foi criado para promover a separação entre o formato e o conteúdo do documento.",
+    "source": { "aula": 170, "slide": 5 },
+    "evidence": "Seu objetivo é promover a separação entre o formato e o conteúdo em um documento."
+  },
+  {
+    "id": "n06-q003",
+    "nodeId": "n06",
+    "type": "tf",
+    "prompt": "Uma vantagem do CSS é o controle centralizado sobre a apresentação do site.",
+    "answer": true,
+    "explanation": "Com o CSS, a apresentação fica centralizada e pode ser alterada com agilidade.",
+    "source": { "aula": 170, "slide": 8 },
+    "evidence": "Controle centralizado sobre a apresentação do site"
+  },
+  {
+    "id": "n06-q004",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "Qual é a ordem de prioridade de aplicação do CSS, da maior para a menor?",
+    "options": [
+      "Browser default, arquivo CSS externo, bloco interno, inline.",
+      "Inline, bloco interno, arquivo CSS externo, browser default.",
+      "Arquivo CSS externo, inline, bloco interno, browser default.",
+      "Bloco interno, inline, browser default, arquivo CSS externo."
+    ],
+    "answer": 1,
+    "explanation": "Na prioridade de aplicação, o inline vem primeiro, seguido do bloco interno, do arquivo externo e do padrão do browser.",
+    "source": { "aula": 170, "slide": 9 },
+    "evidence": "Prioridade de Aplicação 2) Bloco 3) Arquivo CSS 4) Browser 1) Inline interno externo Default"
+  },
+  {
+    "id": "n06-q005",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "Qual forma de utilização do CSS é considerada a mais recomendada?",
+    "options": [
+      "Inline, aplicado direto no elemento.",
+      "Bloco interno com a tag style.",
+      "Arquivo CSS externo vinculado por link.",
+      "Browser default, sem CSS próprio."
+    ],
+    "answer": 2,
+    "explanation": "O arquivo CSS externo separa completamente formato e conteúdo e permite atualizar as definições em um único lugar.",
+    "source": { "aula": 170, "slide": 10 },
+    "evidence": "Considerada a forma mais recomendada de implementação"
+  },
+  {
+    "id": "n06-q006",
+    "nodeId": "n06",
+    "type": "fill",
+    "prompt": "As camadas de estilo são aplicadas na ordem Browser Style, User Style e ____ Style.",
+    "answers": ["author"],
+    "explanation": "A camada Author Style reúne as configurações feitas pelo desenvolvedor do site.",
+    "source": { "aula": 170, "slide": 4 },
+    "evidence": "Author Style: configurações feitas pelo desenvolvedor do site"
+  },
+  {
+    "id": "n06-q007",
+    "nodeId": "n06",
+    "type": "tf",
+    "prompt": "O padrão HTML mistura conteúdo e formato, o que motivou o surgimento do CSS.",
+    "answer": true,
+    "explanation": "A mistura entre conteúdo e formato no HTML dificultava a manutenção e a padronização estética das páginas.",
+    "source": { "aula": 170, "slide": 2 },
+    "evidence": "O padrão HTML mistura conteúdo e formato."
+  },
+  {
+    "id": "n06-q008",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "Qual item NÃO é apresentado como vantagem do CSS?",
+    "options": [
+      "Redução do tempo de carga dos documentos Web.",
+      "Controle centralizado sobre a apresentação do site.",
+      "Mistura entre conteúdo e formato no mesmo arquivo.",
+      "Aumento na portabilidade dos documentos Web."
+    ],
+    "answer": 2,
+    "explanation": "A mistura entre conteúdo e formato é o problema do HTML que o CSS busca resolver, não uma vantagem.",
+    "source": { "aula": 170, "slide": 8 },
+    "evidence": "Redução do tempo de carga dos documentos Web"
+  },
+  {
+    "id": "n06-q009",
+    "nodeId": "n06",
+    "type": "fill",
+    "prompt": "No uso inline, a regra CSS é escrita no atributo ____ da própria tag HTML.",
+    "answers": ["style"],
+    "explanation": "O atributo style aplica declarações diretamente ao elemento, como no exemplo do slide.",
+    "source": { "aula": 170, "slide": 9 },
+    "evidence": "<p style=\"margin-left: 0.5in; font-size: 8pt\">...</p>"
+  },
+  {
+    "id": "n06-q010",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "Por que o formato inline não é recomendado?",
+    "options": [
+      "Porque exigiria um servidor dedicado para funcionar.",
+      "Porque dificulta a legibilidade do HTML e mistura conteúdo e formatação.",
+      "Porque não permite aplicar cores aos elementos.",
+      "Porque só funciona em navegadores antigos."
+    ],
+    "answer": 1,
+    "explanation": "Além de misturar conteúdo e formatação, o inline exige atualização em diversos locais do mesmo arquivo.",
+    "source": { "aula": 170, "slide": 10 },
+    "evidence": "Dificulta a legibilidade do HTML e mistura conteúdo e formatação"
+  },
+  {
+    "id": "n06-q011",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "Como um arquivo CSS externo é vinculado a uma página HTML?",
+    "options": [
+      "Com a tag link e o atributo rel=\"stylesheet\".",
+      "Com a tag script e o atributo src.",
+      "Com a tag style e o atributo href.",
+      "Com o atributo style dentro do body."
+    ],
+    "answer": 0,
+    "explanation": "O vínculo é feito no head com a tag link, rel=\"stylesheet\" e href apontando para o arquivo.",
+    "source": { "aula": 170, "slide": 9 },
+    "evidence": "<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\">"
+  },
+  {
+    "id": "n06-q012",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "Na regra div { background-color: yellow; font-family: Arial; }, o que é background-color?",
+    "options": [
+      "O seletor da regra.",
+      "A propriedade da declaração.",
+      "O valor da declaração.",
+      "O separador entre declarações."
+    ],
+    "answer": 1,
+    "explanation": "Em background-color: yellow, a propriedade é background-color, o valor é yellow e o ponto e vírgula encerra a declaração.",
+    "source": { "aula": 171, "slide": 2 },
+    "evidence": "div { background-color: yellow; font-family: Arial; }"
+  },
+  {
+    "id": "n06-q013",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "Qual seletor aplica a regra a todos os elementos do tipo parágrafo?",
+    "options": ["p", "#p101", ".marked", "[lang]"],
+    "answer": 0,
+    "explanation": "O seletor de elemento usa o nome da tag, como p, para atingir todos os elementos daquele tipo.",
+    "source": { "aula": 171, "slide": 3 },
+    "evidence": "O seletor indica um elemento HTML."
+  },
+  {
+    "id": "n06-q014",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "Qual seletor atinge o elemento que tem id p101?",
+    "options": [".p101", "#p101", "p101", "*p101"],
+    "answer": 1,
+    "explanation": "O seletor de identificador começa com # e atinge o elemento cujo id é p101.",
+    "source": { "aula": 171, "slide": 4 },
+    "evidence": "#p101 { color: blue; }"
+  },
+  {
+    "id": "n06-q015",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "O que o seletor .marked atinge?",
+    "options": [
+      "O elemento cujo id é marked.",
+      "Os elementos HTML que pertencem à classe marked.",
+      "Os elementos que possuem o atributo marked.",
+      "Qualquer elemento da página."
+    ],
+    "answer": 1,
+    "explanation": "O ponto indica um seletor de classe, que atinge os elementos de determinada classe.",
+    "source": { "aula": 171, "slide": 5 },
+    "evidence": "O seletor indica os elementos HTML de determinada classe."
+  },
+  {
+    "id": "n06-q016",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "Qual seletor atinge elementos que possuem um atributo específico?",
+    "options": ["[lang]", "#lang", ".lang", "lang"],
+    "answer": 0,
+    "explanation": "Os colchetes delimitam um seletor de atributo, como [lang] ou [id=\"p101\"].",
+    "source": { "aula": 171, "slide": 6 },
+    "evidence": "O seletor indica os elementos HTML com atributos específicos."
+  },
+  {
+    "id": "n06-q017",
+    "nodeId": "n06",
+    "type": "tf",
+    "prompt": "A pseudo-classe :hover é aplicada quando o mouse passa sobre o elemento.",
+    "answer": true,
+    "explanation": "O slide lista :hover como o estado em que o mouse passa sobre o elemento.",
+    "source": { "aula": 171, "slide": 8 },
+    "evidence": "Acontece quando o mouse passa sobre"
+  },
+  {
+    "id": "n06-q018",
+    "nodeId": "n06",
+    "type": "tf",
+    "prompt": "A pseudo-classe :visited representa a condição original dos links.",
+    "answer": false,
+    "explanation": ":visited vale para links já visitados; a condição original dos links é representada por :link.",
+    "source": { "aula": 171, "slide": 8 },
+    "evidence": "Acontece com links já visitados"
+  },
+  {
+    "id": "n06-q019",
+    "nodeId": "n06",
+    "type": "fill",
+    "prompt": "O seletor ____, escrito com asterisco, atinge qualquer elemento da página.",
+    "answers": ["universal"],
+    "explanation": "O seletor universal é representado por * e aplica a regra a qualquer elemento.",
+    "source": { "aula": 171, "slide": 10 },
+    "evidence": "O seletor indica qualquer elemento."
+  },
+  {
+    "id": "n06-q020",
+    "nodeId": "n06",
+    "type": "fill",
+    "prompt": "Os comentários de CSS são ignorados pelo ____ durante o processamento.",
+    "answers": ["browser", "navegador"],
+    "explanation": "Comentários servem para documentar o código e são ignorados pelo browser durante o processamento.",
+    "source": { "aula": 171, "slide": 12 },
+    "evidence": "Utilizados para documentação do código CSS e são ignorados pelo browser durante o processamento."
+  },
+  {
+    "id": "n06-q021",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "Três regras p de mesma especificidade definem blue, depois green e por fim red. Qual cor prevalece?",
+    "options": ["blue", "green", "red", "Nenhuma cor é aplicada."],
+    "answer": 2,
+    "explanation": "Para regras concorrentes de mesma especificidade, a última declarada prevalece.",
+    "source": { "aula": 171, "slide": 14 },
+    "evidence": "Para regras concorrentes de mesma especificidade a última irá prevalecer."
+  },
+  {
+    "id": "n06-q022",
+    "nodeId": "n06",
+    "type": "mcq",
+    "prompt": "Qual é a especificidade do seletor #content p?",
+    "options": ["0,0,0,4", "0,0,1,1", "0,0,2,2", "0,1,0,1"],
+    "answer": 3,
+    "explanation": "Um id vale um ponto na segunda casa e o elemento p vale um ponto na quarta casa, resultando em 0,1,0,1.",
+    "source": { "aula": 171, "slide": 17 },
+    "evidence": "Um ID equivale a um ponto na segunda casa. Mais um elemento, #content p 0,1,0,1"
+  }
+]
