@@ -1,0 +1,190 @@
+[
+  {
+    "id": "n09-c01",
+    "nodeId": "n09",
+    "title": "Menu com Flexbox",
+    "kind": "css",
+    "goal": "Transforme o menu em um contêiner flexível e distribua os links nas extremidades usando justify-content.",
+    "starter": {
+      "html": "<nav class=\"menu\">\n  <a href=\"#inicio\">Início</a>\n  <a href=\"#cursos\">Cursos</a>\n  <a href=\"#contato\">Contato</a>\n</nav>",
+      "css": ".menu {\n  padding: 12px;\n}\n",
+      "js": ""
+    },
+    "solution": {
+      "html": "<nav class=\"menu\">\n  <a href=\"#inicio\">Início</a>\n  <a href=\"#cursos\">Cursos</a>\n  <a href=\"#contato\">Contato</a>\n</nav>",
+      "css": ".menu {\n  display: flex;\n  justify-content: space-between;\n  padding: 12px;\n}\n",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "menu-links",
+        "label": "O menu contém três links.",
+        "check": {
+          "kind": "count",
+          "selector": ".menu a",
+          "min": 3,
+          "max": 3
+        }
+      },
+      {
+        "id": "menu-flex",
+        "label": "O menu usa display: flex.",
+        "check": {
+          "kind": "style",
+          "selector": ".menu",
+          "prop": "display",
+          "match": { "equals": "flex" }
+        }
+      },
+      {
+        "id": "menu-distribuicao",
+        "label": "Os links são distribuídos com justify-content: space-between.",
+        "check": {
+          "kind": "style",
+          "selector": ".menu",
+          "prop": "justify-content",
+          "match": { "equals": "space-between" }
+        }
+      }
+    ],
+    "hints": [
+      "Comece transformando .menu em um contêiner flexível com display: flex.",
+      "Com os itens em linha, aplique justify-content no contêiner, não nos links.",
+      "O valor space-between empurra o primeiro e o último link para as bordas."
+    ],
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": ".container { display: flex; flex-wrap: wrap; }"
+  },
+  {
+    "id": "n09-c02",
+    "nodeId": "n09",
+    "title": "Lista em coluna com espaçamento",
+    "kind": "css",
+    "goal": "Empilhe os cartões em uma coluna com flex-direction e separe-os usando gap.",
+    "starter": {
+      "html": "<section class=\"pilha\">\n  <article class=\"cartao\">Primeiro cartão</article>\n  <article class=\"cartao\">Segundo cartão</article>\n  <article class=\"cartao\">Terceiro cartão</article>\n</section>",
+      "css": ".pilha {\n  padding: 8px;\n}\n",
+      "js": ""
+    },
+    "solution": {
+      "html": "<section class=\"pilha\">\n  <article class=\"cartao\">Primeiro cartão</article>\n  <article class=\"cartao\">Segundo cartão</article>\n  <article class=\"cartao\">Terceiro cartão</article>\n</section>",
+      "css": ".pilha {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  padding: 8px;\n}\n",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "pilha-cartoes",
+        "label": "A seção contém três cartões.",
+        "check": {
+          "kind": "count",
+          "selector": ".pilha .cartao",
+          "min": 3,
+          "max": 3
+        }
+      },
+      {
+        "id": "pilha-flex",
+        "label": "A seção usa display: flex.",
+        "check": {
+          "kind": "style",
+          "selector": ".pilha",
+          "prop": "display",
+          "match": { "equals": "flex" }
+        }
+      },
+      {
+        "id": "pilha-coluna",
+        "label": "Os cartões ficam empilhados com flex-direction: column.",
+        "check": {
+          "kind": "style",
+          "selector": ".pilha",
+          "prop": "flex-direction",
+          "match": { "equals": "column" }
+        }
+      },
+      {
+        "id": "pilha-espaco",
+        "label": "Os cartões são separados com gap: 16px.",
+        "check": {
+          "kind": "style",
+          "selector": ".pilha",
+          "prop": "gap",
+          "match": { "equals": "16px" }
+        }
+      }
+    ],
+    "hints": [
+      "display: flex cria o contêiner; sem flex-direction, os itens ficam em linha.",
+      "Use flex-direction: column para empilhar os cartões verticalmente.",
+      "gap: 16px cria o espaço entre os itens sem precisar de margens."
+    ],
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": ".container { display: flex; flex-wrap: wrap; }"
+  },
+  {
+    "id": "n09-c03",
+    "nodeId": "n09",
+    "title": "Galeria em grade",
+    "kind": "css",
+    "goal": "Organize os cartões em uma grade de três colunas iguais usando grid-template-columns.",
+    "starter": {
+      "html": "<section class=\"galeria\">\n  <article class=\"card\">1</article>\n  <article class=\"card\">2</article>\n  <article class=\"card\">3</article>\n  <article class=\"card\">4</article>\n  <article class=\"card\">5</article>\n  <article class=\"card\">6</article>\n</section>",
+      "css": ".galeria {\n  padding: 8px;\n}\n",
+      "js": ""
+    },
+    "solution": {
+      "html": "<section class=\"galeria\">\n  <article class=\"card\">1</article>\n  <article class=\"card\">2</article>\n  <article class=\"card\">3</article>\n  <article class=\"card\">4</article>\n  <article class=\"card\">5</article>\n  <article class=\"card\">6</article>\n</section>",
+      "css": ".galeria {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 12px;\n  padding: 8px;\n}\n",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "galeria-cartoes",
+        "label": "A galeria contém seis cartões.",
+        "check": {
+          "kind": "count",
+          "selector": ".galeria .card",
+          "min": 6,
+          "max": 6
+        }
+      },
+      {
+        "id": "galeria-grid",
+        "label": "A galeria usa display: grid.",
+        "check": {
+          "kind": "style",
+          "selector": ".galeria",
+          "prop": "display",
+          "match": { "equals": "grid" }
+        }
+      },
+      {
+        "id": "galeria-colunas",
+        "label": "A grade tem três colunas iguais com repeat(3, 1fr).",
+        "check": {
+          "kind": "style",
+          "selector": ".galeria",
+          "prop": "grid-template-columns",
+          "match": { "pattern": "repeat\\(3,\\s*1fr\\)|1fr 1fr 1fr" }
+        }
+      },
+      {
+        "id": "galeria-espaco",
+        "label": "As células são separadas com gap: 12px.",
+        "check": {
+          "kind": "style",
+          "selector": ".galeria",
+          "prop": "gap",
+          "match": { "equals": "12px" }
+        }
+      }
+    ],
+    "hints": [
+      "display: grid ativa o modelo de grade no contêiner.",
+      "grid-template-columns define as colunas; repeat(3, 1fr) cria três colunas iguais.",
+      "gap: 12px separa as células horizontal e verticalmente."
+    ],
+    "source": { "aula": 174, "slide": 8 },
+    "evidence": "grid-template-columns: 50px 50px 50px 50px;"
+  }
+]
