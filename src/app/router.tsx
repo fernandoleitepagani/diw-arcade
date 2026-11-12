@@ -12,6 +12,7 @@ import { TreePage } from '../features/tree/TreePage';
 import { Layout } from './Layout';
 import { NotFoundPage } from './NotFoundPage';
 import { RequireOnboarding } from './RequireOnboarding';
+import { SessionLayout } from './SessionLayout';
 
 export const routes: RouteObject[] = [
   { path: '/boas-vindas', element: <OnboardingPage /> },
@@ -24,15 +25,20 @@ export const routes: RouteObject[] = [
         children: [
           { index: true, element: <TreePage /> },
           { path: 'no/:nodeId', element: <NodePage /> },
-          { path: 'no/:nodeId/quiz', element: <QuizPage /> },
-          { path: 'no/:nodeId/cartas', element: <FlashcardsPage /> },
-          { path: 'revisao', element: <FlashcardsPage /> },
-          { path: 'desafio/:challengeId', element: <ChallengePage /> },
           { path: 'laboratorios', element: <LabsPage /> },
           { path: 'laboratorios/:labId', element: <LabGuidePage /> },
           { path: 'estatisticas', element: <StatsPage /> },
           { path: 'ajustes', element: <SettingsPage /> },
           { path: '*', element: <NotFoundPage /> },
+        ],
+      },
+      {
+        element: <SessionLayout />,
+        children: [
+          { path: 'no/:nodeId/quiz', element: <QuizPage /> },
+          { path: 'no/:nodeId/cartas', element: <FlashcardsPage /> },
+          { path: 'revisao', element: <FlashcardsPage /> },
+          { path: 'desafio/:challengeId', element: <ChallengePage /> },
         ],
       },
     ],
