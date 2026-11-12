@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Route, Routes } from 'react-router';
 import { describe, expect, it } from 'vitest';
@@ -29,13 +29,18 @@ function renderNode(
   );
 }
 
+function trilha() {
+  return within(screen.getByRole('region', { name: 'Trilha' }));
+}
+
 describe('árvore de habilidades', () => {
   it('renders five unit sections and fourteen enabled node links', () => {
     renderWithProgress(<TreePage />);
 
-    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(5);
+    const tree = trilha();
+    expect(tree.getAllByRole('heading', { level: 2 })).toHaveLength(5);
 
-    const links = screen.getAllByRole('link');
+    const links = tree.getAllByRole('link');
     expect(links).toHaveLength(14);
     for (const link of links) {
       expect(link).toHaveAttribute('href', expect.stringMatching(/^\/no\/n\d{2}$/));
@@ -43,10 +48,50 @@ describe('árvore de habilidades', () => {
     }
   });
 
+  it('mostra o herói Continuar', () => {
+    renderWithProgress(<TreePage />);
+
+    const hero = within(screen.getByRole('region', { name: 'Continuar' }));
+    expect(
+      hero.getByText('Introdução à Web e tecnologias'),
+    ).toBeInTheDocument();
+    expect(hero.getByRole('link', { name: 'Continuar' })).toHaveAttribute(
+      'href',
+      '/no/n01',
+    );
+    expect(
+      hero.getByRole('progressbar', { name: 'Meta diária' }),
+    ).toBeInTheDocument();
+    expect(hero.queryByRole('link', { name: /^Revisar/ })).not.toBeInTheDocument();
+  });
+
+  it('oferece revisar as cartas devidas pelo herói', () => {
+    const cards = dueCards(
+      Array.from({ length: 10 }, (_, index) =>
+        `n09-f${String(index + 1).padStart(3, '0')}`,
+      ),
+    );
+
+    renderWithProgress(<TreePage />, { save: { cards } });
+
+    const hero = within(screen.getByRole('region', { name: 'Continuar' }));
+    expect(
+      hero.getByRole('link', { name: 'Revisar 10 cartas' }),
+    ).toHaveAttribute('href', '/revisao');
+  });
+
+  it('mantém o título da página só para leitores de tela', () => {
+    renderWithProgress(<TreePage />);
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'DIW Arcade' }),
+    ).toHaveClass('sr-only');
+  });
+
   it('tags exactly n01 as recommended on a fresh save', () => {
     renderWithProgress(<TreePage />);
 
-    const tags = screen.getAllByText('Recomendado');
+    const tags = trilha().getAllByText('Recomendado');
     expect(tags).toHaveLength(1);
     expect(tags[0]!.closest('a')).toHaveAttribute('href', '/no/n01');
   });
@@ -67,7 +112,7 @@ describe('árvore de habilidades', () => {
 
     renderWithProgress(<TreePage />, { save: { cards } });
 
-    const tags = screen.getAllByText('Recomendado');
+    const tags = trilha().getAllByText('Recomendado');
     expect(tags).toHaveLength(1);
     expect(tags[0]!.closest('a')).toHaveAttribute('href', '/no/n09');
   });
