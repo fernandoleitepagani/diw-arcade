@@ -8,6 +8,9 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
     include: ['src/**/*.test.{ts,tsx}', 'scripts/**/*.test.ts'],
+    // Cap parallel jsdom workers: the default (one per core) exhausts memory on
+    // a loaded machine, which makes lazy chunk imports miss the findBy timeout.
+    maxWorkers: 3,
     // Must stay above Testing Library's asyncUtilTimeout (5s in setup.ts) so a
     // slow lazy chunk surfaces as a findBy failure, not a test timeout.
     testTimeout: 15000,
