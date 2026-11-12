@@ -1,0 +1,218 @@
+[
+  {
+    "id": "n07-f001",
+    "nodeId": "n07",
+    "front": "Quais são as medidas absolutas de comprimento apresentadas na aula?",
+    "back": "O conjunto inclui in (polegadas), cm (centímetros), mm (milímetros), pt (pontos) e pc (paicas).",
+    "source": { "aula": 172, "slide": 3 },
+    "evidence": "1in = 2,54cm = 25,4mm = 72pt = 6pc"
+  },
+  {
+    "id": "n07-f002",
+    "nodeId": "n07",
+    "front": "A que equivale uma paica (pc)?",
+    "back": "Uma paica equivale a 12 pontos.",
+    "source": { "aula": 172, "slide": 3 },
+    "evidence": "Equivalente a 12 pontos"
+  },
+  {
+    "id": "n07-f003",
+    "nodeId": "n07",
+    "front": "O que significa a unidade em?",
+    "back": "em é o tamanho da fonte; por exemplo, 1.2em é o mesmo que 120%.",
+    "source": { "aula": 172, "slide": 3 },
+    "evidence": "Por exemplo, 1.2em é o mesmo que 120%."
+  },
+  {
+    "id": "n07-f004",
+    "nodeId": "n07",
+    "front": "Quais são as formas de especificar cores apresentadas na aula?",
+    "back": "A aula apresenta hexadecimal #RRGGBB, forma curta #RGB, rgb(rrr, ggg, bbb) e palavras-chave.",
+    "source": { "aula": 172, "slide": 4 },
+    "evidence": "Formas de especificar cores"
+  },
+  {
+    "id": "n07-f005",
+    "nodeId": "n07",
+    "front": "O que a forma curta #F8C representa?",
+    "back": "#F8C é o mesmo que #FF88CC.",
+    "source": { "aula": 172, "slide": 4 },
+    "evidence": "Ex: #F8C é o mesmo que #FF88CC"
+  },
+  {
+    "id": "n07-f006",
+    "nodeId": "n07",
+    "front": "Qual é o intervalo de valores de cada par em #RRGGBB?",
+    "back": "Cada par varia de 0 (00) a 255 (FF).",
+    "source": { "aula": 172, "slide": 4 },
+    "evidence": "que permite valores que variam de 0 (00) a 255 (FF)"
+  },
+  {
+    "id": "n07-f007",
+    "nodeId": "n07",
+    "front": "Qual a diferença entre elementos inline e block-level?",
+    "back": "Inline ficam em linha no fluxo padrão; block-level iniciam uma nova linha.",
+    "source": { "aula": 172, "slide": 5 },
+    "evidence": "Elementos que são dispostos em linha seguindo o fluxo padrão"
+  },
+  {
+    "id": "n07-f008",
+    "nodeId": "n07",
+    "front": "Como transformar um elemento inline em block-level?",
+    "back": "Usando a propriedade display, como em span { display: block; }.",
+    "source": { "aula": 172, "slide": 5 },
+    "evidence": "O CSS pode transformar um elemento inline em um block-level com a propriedade display."
+  },
+  {
+    "id": "n07-f009",
+    "nodeId": "n07",
+    "front": "O que display: none faz?",
+    "back": "O elemento não será exibido.",
+    "source": { "aula": 172, "slide": 7 },
+    "evidence": "O elemento não será exibido."
+  },
+  {
+    "id": "n07-f010",
+    "nodeId": "n07",
+    "front": "O que display: inline-block faz?",
+    "back": "Renderiza o elemento como um bloco, porém em linha com os demais elementos.",
+    "source": { "aula": 172, "slide": 7 },
+    "evidence": "O elemento será renderizado como um bloco, porém em linha"
+  },
+  {
+    "id": "n07-f011",
+    "nodeId": "n07",
+    "front": "Quais propriedades compõem o Box Model?",
+    "back": "O Box Model tem height e width, margin, border, padding e background.",
+    "source": { "aula": 172, "slide": 9 },
+    "evidence": "height e width Tamanho básico do elemento"
+  },
+  {
+    "id": "n07-f012",
+    "nodeId": "n07",
+    "front": "Quais são as propriedades derivadas de margin?",
+    "back": "O grupo tem margin-top, margin-right, margin-left e margin-bottom.",
+    "source": { "aula": 172, "slide": 11 },
+    "evidence": "Margens (Espaçamento externo) margin-top, margin-right, margin-left, margin-bottom"
+  },
+  {
+    "id": "n07-f013",
+    "nodeId": "n07",
+    "front": "Como funciona a shorthand border com quatro valores?",
+    "back": "Os valores seguem a ordem horária: top, right, bottom e left.",
+    "source": { "aula": 172, "slide": 12 },
+    "evidence": "4 valores: Se aplicam na ordem do horário (top, right, bottom, left)"
+  },
+  {
+    "id": "n07-f014",
+    "nodeId": "n07",
+    "front": "Quais valores a propriedade font-style aceita?",
+    "back": "A propriedade aceita normal, italic e oblique.",
+    "source": { "aula": 172, "slide": 14 },
+    "evidence": "font-style: normal | italic | oblique"
+  },
+  {
+    "id": "n07-f015",
+    "nodeId": "n07",
+    "front": "O que line-height define?",
+    "back": "line-height define a altura da linha.",
+    "source": { "aula": 172, "slide": 14 },
+    "evidence": "line-height: define a altura da linha"
+  },
+  {
+    "id": "n07-f016",
+    "nodeId": "n07",
+    "front": "Quais valores a propriedade text-transform aceita?",
+    "back": "A propriedade aceita none, capitalize, uppercase e lowercase.",
+    "source": { "aula": 172, "slide": 16 },
+    "evidence": "text-transform: none | capitalize | uppercase | lowercase"
+  },
+  {
+    "id": "n07-f017",
+    "nodeId": "n07",
+    "front": "O que background-image permite usar?",
+    "back": "Uma imagem ou um gradiente de fundo do elemento.",
+    "source": { "aula": 172, "slide": 18 },
+    "evidence": "background-image: imagem ou gradiente de fundo do elemento."
+  },
+  {
+    "id": "n07-f018",
+    "nodeId": "n07",
+    "front": "Quais valores a propriedade background-position aceita?",
+    "back": "A propriedade aceita top, left, center, right e bottom.",
+    "source": { "aula": 172, "slide": 18 },
+    "evidence": "background-position: top | left | center | right | bottom"
+  },
+  {
+    "id": "n07-f019",
+    "nodeId": "n07",
+    "front": "O que caracteriza position: static?",
+    "back": "É o valor padrão; o elemento não é posicionado e segue o fluxo normal.",
+    "source": { "aula": 172, "slide": 21 },
+    "evidence": "O elemento segue o fluxo de renderização da página normalmente."
+  },
+  {
+    "id": "n07-f020",
+    "nodeId": "n07",
+    "front": "O que caracteriza position: fixed?",
+    "back": "Não segue o fluxo e mantém-se fixo na posição, sem refletir a rolagem da tela.",
+    "source": { "aula": 172, "slide": 23 },
+    "evidence": "O elemento se mantém fixo na posição estabelecida sem refletir à rolagem da tela"
+  },
+  {
+    "id": "n07-f021",
+    "nodeId": "n07",
+    "front": "Qual é o ponto zero de position: absolute?",
+    "back": "O canto superior esquerdo do objeto pai.",
+    "source": { "aula": 172, "slide": 24 },
+    "evidence": "Estabelece como ponto zero o canto superior esquerdo do objeto pai"
+  },
+  {
+    "id": "n07-f022",
+    "nodeId": "n07",
+    "front": "Em que situação o z-index funciona?",
+    "back": "Apenas em objetos posicionados, cujo position é diferente de static.",
+    "source": { "aula": 172, "slide": 26 },
+    "evidence": "funciona apenas em objetos posicionados,"
+  },
+  {
+    "id": "n07-f023",
+    "nodeId": "n07",
+    "front": "Quais são as funções de transform apresentadas na aula?",
+    "back": "A aula lista translate, translateX, translateY, scale, scaleX, scaleY, rotate e skew.",
+    "source": { "aula": 172, "slide": 28 },
+    "evidence": "O CSS permite realizar alterações de forma, tamanho e posicionamento dos elementos, tais como translação, rotação, escala e inclinação."
+  },
+  {
+    "id": "n07-f024",
+    "nodeId": "n07",
+    "front": "Quais são as propriedades de transição apresentadas na aula?",
+    "back": "transition-property, transition-duration e transition-delay, além da função de tempo.",
+    "source": { "aula": 172, "slide": 29 },
+    "evidence": "transition-property – Identifica a propriedade para a qual a transição se aplica"
+  },
+  {
+    "id": "n07-f025",
+    "nodeId": "n07",
+    "front": "O que a diretiva @keyframes controla?",
+    "back": "Controla a mudança de estado de um elemento em uma animação.",
+    "source": { "aula": 172, "slide": 30 },
+    "evidence": "@keyframes: controla a mudança de estado de um elemento."
+  },
+  {
+    "id": "n07-f026",
+    "nodeId": "n07",
+    "front": "Quais valores a propriedade animation-fill-mode aceita?",
+    "back": "A propriedade aceita none, forwards, backwards e both.",
+    "source": { "aula": 172, "slide": 31 },
+    "evidence": "animation-fill-mode: none | forwards | backwards | both"
+  },
+  {
+    "id": "n07-f027",
+    "nodeId": "n07",
+    "front": "Em que regra as transições são aplicadas?",
+    "back": "A aula diz que as transições são aplicadas na regra CSS inicial do elemento.",
+    "source": { "aula": 172, "slide": 29 },
+    "evidence": "As transições são aplicadas na regra CSS inicial do elemento."
+  }
+]
