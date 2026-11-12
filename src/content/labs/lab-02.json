@@ -1,0 +1,166 @@
+{
+  "id": "lab-02",
+  "title": "Laboratório 02 — Sistema de Aluguel de Carros",
+  "summary": "Desenvolva um sistema de aluguel de carros com cadastro de clientes, pedidos e contratos, usando HTML5, CSS3, JavaScript, Bootstrap 5 e JSON Server como API REST simulada.",
+  "repoUrl": "https://github.com/joaopauloaramuni/desenvolvimento-de-interfaces-web/tree/main/LABORATORIOS",
+  "repoPaths": [
+    "LABORATORIOS",
+    "LABORATORIOS/DIW_-_LABORATÓRIO_02_-_Sistema_de_Aluguel_de_Carros.pdf"
+  ],
+  "requirements": [
+    {
+      "text": "O sistema só pode ser usado após cadastro prévio do usuário.",
+      "source": { "lab": 2, "slide": 1 },
+      "evidence": "O sistema só pode ser utilizado após cadastro prévio."
+    },
+    {
+      "text": "Clientes podem introduzir, modificar, consultar e cancelar pedidos de aluguel.",
+      "source": { "lab": 2, "slide": 1 },
+      "evidence": "Os usuários individuais (clientes) podem introduzir, modificar, consultar e cancelar pedidos de aluguel."
+    },
+    {
+      "text": "Agentes, como empresas e bancos, podem modificar e avaliar pedidos.",
+      "source": { "lab": 2, "slide": 1 },
+      "evidence": "Por outro lado, os agentes (empresas e bancos) podem modificar e avaliar pedidos."
+    },
+    {
+      "text": "A interface deve usar Bootstrap 5, e a persistência deve usar JSON Server consumido pela Fetch API.",
+      "source": { "lab": 2, "slide": 1 },
+      "evidence": "API e persistência: JSON Server (API REST simulada a partir de um arquivo db.json), consumida via Fetch API."
+    },
+    {
+      "text": "O repositório GitHub deve estar atualizado com todas as versões dos modelos UML e com o código final.",
+      "source": { "lab": 2, "slide": 2 },
+      "evidence": "O repositório GitHub deve estar atualizado, com todas as versões produzidas dos modelos UML e o código final desenvolvido."
+    },
+    {
+      "text": "A qualidade do sistema é avaliada pela adequação aos requisitos apresentados.",
+      "source": { "lab": 2, "slide": 2 },
+      "evidence": "Qualidade do sistema produzido (adequação aos requisitos apresentados)"
+    },
+    {
+      "text": "A avaliação considera o alinhamento entre o modelo de classes e de arquitetura e o código.",
+      "source": { "lab": 2, "slide": 2 },
+      "evidence": "Alinhamento entre modelo (de classes e de arquitetura) e código"
+    },
+    {
+      "text": "Os modelos devem ser atualizados sempre que o projeto exigir.",
+      "source": { "lab": 2, "slide": 2 },
+      "evidence": "Atualizações dos modelos conforme necessidade do projeto"
+    }
+  ],
+  "tips": {
+    "html": [
+      "Separe as telas de cadastro, clientes, pedidos e contratos em páginas ou seções claras.",
+      "Use os componentes do Bootstrap 5 (navbar, forms, cards, modals) para manter a interface consistente.",
+      "Marque cada campo do formulário com label, required e o tipo de input correto."
+    ],
+    "css": [
+      "Carregue o Bootstrap pelo CDN antes do seu CSS para sobrescrever apenas o necessário.",
+      "Use as classes de grid (container, row, col) em vez de larguras fixas em pixels.",
+      "Reserve o CSS próprio para identidade visual e para estados de foco, erro e carregamento."
+    ],
+    "js": [
+      "Centralize as chamadas fetch em funções pequenas de listar, criar, atualizar e remover.",
+      "Trate a resposta com response.ok e mostre mensagens de erro em PT-BR.",
+      "Valide os dados no cliente e mantenha o db.json coerente com o modelo de classes."
+    ]
+  },
+  "steps": [
+    {
+      "id": "setup",
+      "title": "Modele o sistema e prepare o ambiente",
+      "body": "Produza o Diagrama de Casos de Uso, as Histórias do Usuário, o Diagrama de Classes e o Diagrama de Pacotes antes de codar. Crie também o Diagrama de Componentes do sistema.\n\nNo repositório, inicialize o projeto, crie o db.json com as coleções de clientes, pedidos, carros e contratos e suba o JSON Server.",
+      "checklist": [
+        "Casos de uso e histórias do usuário registrados",
+        "Diagramas de classes, pacotes e componentes no repositório",
+        "db.json criado com as coleções principais",
+        "JSON Server respondendo em http://localhost:3000"
+      ],
+      "code": {
+        "lang": "bash",
+        "text": "mkdir aluguel-carros && cd aluguel-carros\nnpm init -y\nnpm install -D json-server\nnpx json-server --watch db.json --port 3000"
+      },
+      "repoPath": "LABORATORIOS"
+    },
+    {
+      "id": "structure",
+      "title": "Monte as telas com Bootstrap",
+      "body": "Crie as telas de cadastro e login, a listagem e o formulário de clientes e a criação de pedidos de aluguel. Use a navbar, os formulários e os cards do Bootstrap 5.\n\nCada tela deve ter um objetivo claro e um caminho de volta para a listagem principal.",
+      "checklist": [
+        "Tela de cadastro e login",
+        "CRUD de clientes com formulário e listagem",
+        "Tela de pedidos com status visível",
+        "Navegação consistente entre as telas"
+      ],
+      "code": {
+        "lang": "html",
+        "text": "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n  <div class=\"container\">\n    <a class=\"navbar-brand\" href=\"#\">Aluguel de Carros</a>\n  </div>\n</nav>\n\n<main class=\"container py-4\">\n  <form id=\"form-cliente\" class=\"row g-3\">\n    <div class=\"col-12 col-md-6\">\n      <label class=\"form-label\" for=\"nome\">Nome</label>\n      <input class=\"form-control\" id=\"nome\" name=\"nome\" required>\n    </div>\n  </form>\n</main>"
+      },
+      "repoPath": "LABORATORIOS/DIW_-_LABORATÓRIO_02_-_Sistema_de_Aluguel_de_Carros.pdf"
+    },
+    {
+      "id": "data",
+      "title": "Conecte o front-end ao JSON Server",
+      "body": "Implemente funções de listar, criar, atualizar e remover clientes e pedidos com a Fetch API. Toda alteração deve refletir no db.json por meio do JSON Server.\n\nMantenha as rotas REST no centro do código: GET, POST, PUT/PATCH e DELETE.",
+      "checklist": [
+        "Clientes e pedidos carregados via fetch",
+        "Criação e atualização persistidas no db.json",
+        "Erros de rede e de validação tratados",
+        "Status do pedido exibido ao cliente"
+      ],
+      "code": {
+        "lang": "js",
+        "text": "const API = \"http://localhost:3000\";\n\nexport async function listarClientes() {\n  const resposta = await fetch(`${API}/clientes`);\n  if (!resposta.ok) throw new Error(\"Falha ao carregar clientes\");\n  return resposta.json();\n}\n\nexport async function criarCliente(cliente) {\n  const resposta = await fetch(`${API}/clientes`, {\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify(cliente),\n  });\n  if (!resposta.ok) throw new Error(\"Falha ao salvar cliente\");\n  return resposta.json();\n}"
+      },
+      "repoPath": "LABORATORIOS/DIW_-_LABORATÓRIO_02_-_Sistema_de_Aluguel_de_Carros.pdf"
+    },
+    {
+      "id": "styling",
+      "title": "Ajuste a identidade visual sobre o Bootstrap",
+      "body": "Use as variáveis do Bootstrap quando possível e um CSS pequeno para a identidade do sistema. Padronize cores de status, bordas e espaçamentos.\n\nMantenha os componentes do framework e evite reescrever estilos que o Bootstrap já resolve.",
+      "checklist": [
+        "Paleta própria documentada em custom properties",
+        "Estados de sucesso, alerta e erro diferenciados",
+        "Foco visível em botões, links e campos"
+      ],
+      "code": {
+        "lang": "css",
+        "text": ":root {\n  --cor-marca: #0d6efd;\n  --cor-fundo: #f8f9fa;\n}\n\nbody {\n  background: var(--cor-fundo);\n}\n\n.cartao-pedido {\n  border-left: 4px solid var(--cor-marca);\n}"
+      },
+      "repoPath": "LABORATORIOS/DIW_-_LABORATÓRIO_02_-_Sistema_de_Aluguel_de_Carros.pdf"
+    },
+    {
+      "id": "responsiveness",
+      "title": "Garanta o layout responsivo",
+      "body": "Use o grid do Bootstrap para reorganizar formulários e listagens em uma, duas e três colunas. Teste a navbar recolhível e as tabelas em telas pequenas.\n\nEm tabelas largas, permita rolagem horizontal controlada em vez de quebrar o layout.",
+      "checklist": [
+        "Navbar recolhível funcionando no celular",
+        "Formulários legíveis em uma coluna",
+        "Tabelas com rolagem horizontal quando necessário",
+        "Nenhum conteúdo cortado em 320 px"
+      ],
+      "code": {
+        "lang": "html",
+        "text": "<div class=\"row g-3\">\n  <div class=\"col-12 col-md-6 col-lg-4\">Cliente</div>\n  <div class=\"col-12 col-md-6 col-lg-4\">Pedido</div>\n  <div class=\"col-12 col-lg-4\">Contrato</div>\n</div>"
+      },
+      "repoPath": "LABORATORIOS/DIW_-_LABORATÓRIO_02_-_Sistema_de_Aluguel_de_Carros.pdf"
+    },
+    {
+      "id": "review-delivery",
+      "title": "Revise, documente e entregue",
+      "body": "Compare o protótipo com os modelos UML e atualize os diagramas conforme o feedback da aula. Confira o fluxo completo: cadastro, criação do pedido, análise do agente e execução do contrato.\n\nComplete o README com as tecnologias, o diagrama de execução e o link do repositório, e faça o commit final do código e dos modelos.",
+      "checklist": [
+        "Fluxo de cadastro, pedido e contrato testado",
+        "Modelos UML atualizados e versionados",
+        "README completo com instruções de execução",
+        "db.json e código final commitados"
+      ],
+      "code": {
+        "lang": "bash",
+        "text": "git add .\ngit commit -m \"feat: sistema de aluguel de carros\"\ngit push origin main"
+      },
+      "repoPath": "LABORATORIOS/DIW_-_LABORATÓRIO_02_-_Sistema_de_Aluguel_de_Carros.pdf"
+    }
+  ]
+}
