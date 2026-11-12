@@ -5,7 +5,7 @@ import {
   type ProgressContextValue,
 } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
-import { NODE_IDS, getQuestions, type NodeId } from '../../content';
+import { NODE_IDS, getNode, getQuestions, type NodeId } from '../../content';
 import { QuizRound } from './QuizRound';
 
 function isNodeId(value: string | undefined): value is NodeId {
@@ -34,11 +34,13 @@ export function QuizPage() {
   const progress = useOptionalProgress();
 
   const nodeId = isNodeId(params.nodeId) ? params.nodeId : null;
+  const node = nodeId ? getNode(nodeId) : undefined;
   const questions = nodeId ? getQuestions(nodeId) : [];
 
   return (
     <section className="page">
       <h1>Quiz</h1>
+      {node ? <p>{node.title}</p> : null}
       {nodeId && questions.length > 0 ? (
         <QuizRound
           key={round}

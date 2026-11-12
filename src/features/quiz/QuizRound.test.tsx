@@ -1,5 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
 import { BIT_LINES } from '../../content/copy';
 import type { McqQuestion } from '../../content/schema';
@@ -16,14 +17,16 @@ function renderRound(questions = mcqQuestions.slice(0, 2)) {
   const onExit = vi.fn();
 
   render(
-    <QuizRound
-      nodeId="n07"
-      questions={questions}
-      dispatch={dispatch}
-      rng={() => 0.999}
-      onRestart={onRestart}
-      onExit={onExit}
-    />,
+    <MemoryRouter>
+      <QuizRound
+        nodeId="n07"
+        questions={questions}
+        dispatch={dispatch}
+        rng={() => 0.999}
+        onRestart={onRestart}
+        onExit={onExit}
+      />
+    </MemoryRouter>,
   );
 
   return { dispatch, onRestart, onExit };
@@ -108,5 +111,44 @@ describe('QuizRound', () => {
     expect(
       BIT_LINES.wrong.some((line) => screen.queryByText(line) !== null),
     ).toBe(true);
+  });
+
+  it('mantém a pergunta e marca a resposta dada e a correta', async () => {
+    const user = userEvent.setup();
+    const question = mcqQuestions[0] as McqQuestion;
+    renderRound([question]);
+
+    await user.keyboard('2');
+    await user.keyboard('{Enter}');
+
+    expect(screen.getByText(question.prompt)).toBeInTheDocument();
+
+    const picked = screen.getByText('background-color').closest('label');
+    const correct = screen.getByText('color').closest('label');
+    expect(picked).not.toBeNull();
+    expect(correct).not.toBeNull();
+    expect(
+      within(picked as HTMLElement).getByText('Sua resposta'),
+    ).toBeInTheDocument();
+    expect(
+      within(correct as HTMLElement).getByText('Resposta correta'),
+    ).toBeInTheDocument();
+
+    for (const radio of screen.getAllByRole('radio')) {
+      expect(radio).toBeDisabled();
+    }
+  });
+
+  it('termina em um resumo com o próximo passo', async () => {
+    const user = userEvent.setup();
+    renderRound([mcqQuestions[0] as McqQuestion]);
+
+    await user.keyboard('1');
+    await user.keyboard('{Enter}');
+    await user.keyboard('{Enter}');
+
+    expect(
+      screen.getByRole('link', { name: 'Próximo passo' }),
+    ).toHaveAttribute('href', '/no/n07');
   });
 });
