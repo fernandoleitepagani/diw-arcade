@@ -1,0 +1,286 @@
+[
+  {
+    "id": "n11-q001",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "O que caracteriza uma aplicação nativa?",
+    "options": [
+      "Têm acesso total aos recursos do dispositivo",
+      "Executam apenas dentro do navegador web",
+      "Não precisam de instalação no aparelho",
+      "Dependem essencialmente da conexão à Internet"
+    ],
+    "answer": 0,
+    "explanation": "Aplicações nativas executam em um SO específico e têm acesso total aos recursos do dispositivo.",
+    "source": { "aula": 220, "slide": 5 },
+    "evidence": "Acesso total aos recursos dos dispositivos (Câmera, contatos, sensores, etc.)"
+  },
+  {
+    "id": "n11-q002",
+    "nodeId": "n11",
+    "type": "tf",
+    "prompt": "Uma aplicação nativa é adquirida nas lojas virtuais e instalada diretamente no dispositivo móvel.",
+    "answer": true,
+    "explanation": "A instalação é feita diretamente no dispositivo, após o download nas lojas virtuais.",
+    "source": { "aula": 220, "slide": 5 },
+    "evidence": "Adquirida via download a partir das lojas virtuais de aplicativos"
+  },
+  {
+    "id": "n11-q003",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "Qual linguagem de servidor é citada para aplicações web?",
+    "options": [
+      "HTML",
+      "CSS",
+      "PHP",
+      "Javascript"
+    ],
+    "answer": 2,
+    "explanation": "Entre as linguagens de servidor citadas estão Java, .NET, PHP, Phyton e Ruby.",
+    "source": { "aula": 220, "slide": 6 },
+    "evidence": "Servidor - Java, .NET, PHP, Phyton, Ruby."
+  },
+  {
+    "id": "n11-q004",
+    "nodeId": "n11",
+    "type": "fill",
+    "prompt": "Aplicações web executam em um navegador e dependem essencialmente da conexão à ____.",
+    "answers": ["Internet", "internet"],
+    "explanation": "Aplicações web executam em um navegador e dependem essencialmente da conexão à Internet.",
+    "source": { "aula": 220, "slide": 6 },
+    "evidence": "Dependem essencialmente da conexão a Internet"
+  },
+  {
+    "id": "n11-q005",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "De que forma uma aplicação híbrida acessa os recursos do dispositivo?",
+    "options": [
+      "Com acesso total, como nas aplicações nativas",
+      "Somente pelos recursos do navegador",
+      "De forma parcial, via framework utilizado",
+      "Sem qualquer acesso aos recursos"
+    ],
+    "answer": 2,
+    "explanation": "Nas aplicações híbridas, o acesso aos recursos é parcial e depende do framework utilizado.",
+    "source": { "aula": 220, "slide": 7 },
+    "evidence": "Acesso parcial aos recursos dos dispositivos, via framework utilizado"
+  },
+  {
+    "id": "n11-q006",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "O que o Responsive Web Design (RWD) define?",
+    "options": [
+      "Um layout que se adapta automaticamente ao tamanho do dispositivo",
+      "Um layout de largura fixa em pixels para todas as telas",
+      "Um conjunto de imagens otimizadas para desktop",
+      "Um servidor que redimensiona páginas antes de enviá-las"
+    ],
+    "answer": 0,
+    "explanation": "O RWD define um layout que se adapta de forma automática ao tamanho da tela, priorizando o essencial.",
+    "source": { "aula": 220, "slide": 8 },
+    "evidence": "define um layout de site Web que se adapta de forma automática às condições de tamanho do dispositivo do usuário"
+  },
+  {
+    "id": "n11-q007",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "Qual framework não é citado na aula como recurso de responsividade?",
+    "options": [
+      "Bootstrap",
+      "Materialize",
+      "Angular",
+      "TailwindCss"
+    ],
+    "answer": 2,
+    "explanation": "A aula cita Bootstrap, Materialize, Zurb Foundation e TailwindCss; Angular não está entre os frameworks apresentados.",
+    "source": { "aula": 220, "slide": 8 },
+    "evidence": "Frameworks (Bootstrap, Materialize, Zurb Foundation, TailwindCss)"
+  },
+  {
+    "id": "n11-q008",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "Qual tipo de layout usa larguras definidas em percentagens?",
+    "options": [
+      "Layout fixo",
+      "Layout fluído ou líquido",
+      "Layout adaptativo",
+      "Layout responsivo"
+    ],
+    "answer": 1,
+    "explanation": "O layout fluído ou líquido usa percentagens, então os elementos são comprimidos em telas menores.",
+    "source": { "aula": 220, "slide": 10 },
+    "evidence": "Estrutura flexível com larguras definidas em percentagens"
+  },
+  {
+    "id": "n11-q009",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "O layout responsivo é descrito como a mistura de quais abordagens?",
+    "options": [
+      "Layout fixo e layout adaptativo",
+      "Layout fluído e layout fixo",
+      "Layout adaptativo e layout fixo",
+      "Layout fluído e layout adaptativo"
+    ],
+    "answer": 3,
+    "explanation": "O layout responsivo mescla os fluidos com os adaptativos e usa breakpoints para disparar ajustes.",
+    "source": { "aula": 220, "slide": 10 },
+    "evidence": "Mescla os layouts fluidos com layouts adaptativos em um único site"
+  },
+  {
+    "id": "n11-q010",
+    "nodeId": "n11",
+    "type": "tf",
+    "prompt": "O layout adaptativo requer várias versões do site, uma para cada dispositivo.",
+    "answer": true,
+    "explanation": "O layout adaptativo exige uma versão do site para cada dispositivo.",
+    "source": { "aula": 220, "slide": 10 },
+    "evidence": "Requerem várias versões do site, uma para cada dispositivo"
+  },
+  {
+    "id": "n11-q011",
+    "nodeId": "n11",
+    "type": "fill",
+    "prompt": "No layout fixo, a largura é definida em pixels, normalmente com o padrão de ____.",
+    "answers": ["960px", "960 px", "960"],
+    "explanation": "No layout fixo, a largura é definida em pixels, normalmente com o padrão de 960px.",
+    "source": { "aula": 220, "slide": 10 },
+    "evidence": "Estrutura de largura fixa, definida em pixels, normalmente um padrão de largura (Ex: 960px)"
+  },
+  {
+    "id": "n11-q012",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "Qual padrão consiste em uma grade fluida com margens largas que se reajustam quando a largura diminui?",
+    "options": [
+      "Mostly fluid",
+      "Column Drop",
+      "Layout Shifter",
+      "Tiny Tweaks"
+    ],
+    "answer": 0,
+    "explanation": "O Mostly fluid usa uma grade fluida com margens largas que se reajustam quando a largura diminui.",
+    "source": { "aula": 220, "slide": 11 },
+    "evidence": "consiste em uma grade fluida com margens largas que se ajustam em diversas telas de computador"
+  },
+  {
+    "id": "n11-q013",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "Qual padrão faz apenas pequenos ajustes em um conteúdo de uma única coluna?",
+    "options": [
+      "Off Canvas",
+      "Tiny Tweaks",
+      "Column Drop",
+      "Mostly fluid"
+    ],
+    "answer": 1,
+    "explanation": "O Tiny Tweaks é o padrão mais simples e faz pequenos ajustes em um conteúdo de uma única coluna.",
+    "source": { "aula": 220, "slide": 11 },
+    "evidence": "o mais simples de todos que faz pequenos ajustes no conteúdo que se restringe a poucos elementos em uma única coluna"
+  },
+  {
+    "id": "n11-q014",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "Quem criou o termo Mobile First?",
+    "options": [
+      "Pete LePage",
+      "Luke Wroblewski",
+      "Naismith",
+      "Rommel Carneiro"
+    ],
+    "answer": 1,
+    "explanation": "Luke Wroblewski é o autor do termo Mobile First, segundo a aula.",
+    "source": { "aula": 220, "slide": 13 },
+    "evidence": "Mobile First é um termo criado por Luke Wroblewski"
+  },
+  {
+    "id": "n11-q015",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "No Mobile First, o crescimento da base de usuários móveis é associado a quê?",
+    "options": [
+      "Restrição",
+      "Oportunidade",
+      "Foco",
+      "Complexidade"
+    ],
+    "answer": 1,
+    "explanation": "A aula associa o crescimento da base móvel a uma oportunidade.",
+    "source": { "aula": 220, "slide": 13 },
+    "evidence": "Crescimento da base de usuários de dispositivos móveis → Oportunidade"
+  },
+  {
+    "id": "n11-q016",
+    "nodeId": "n11",
+    "type": "tf",
+    "prompt": "O Mobile First prioriza os desktops antes dos dispositivos móveis no projeto de um site.",
+    "answer": false,
+    "explanation": "É o contrário: o Mobile First prioriza os dispositivos móveis antes dos desktops.",
+    "source": { "aula": 220, "slide": 13 },
+    "evidence": "prioriza os dispositivos móveis no projeto de um site ou aplicação antes dos desktops"
+  },
+  {
+    "id": "n11-q017",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "Qual item não é citado como restrição dos dispositivos móveis?",
+    "options": [
+      "Baixa autonomia das baterias",
+      "Baixo poder de processamento",
+      "Tamanho e resolução das telas",
+      "Excesso de poder de processamento"
+    ],
+    "answer": 3,
+    "explanation": "A aula lista baixa autonomia, baixo processamento e telas pequenas; excesso de processamento não é uma restrição.",
+    "source": { "aula": 220, "slide": 14 },
+    "evidence": "Dificuldade na entrada e saída de informação • Tamanho e resolução das telas • Opções, custos e velocidade de conexões de rede • Baixa capacidade de armazenamento dos equipamentos • Baixa autonomia das baterias • Baixo poder de processamento"
+  },
+  {
+    "id": "n11-q018",
+    "nodeId": "n11",
+    "type": "fill",
+    "prompt": "O ____ detecta o posicionamento e o movimento do dispositivo.",
+    "answers": ["acelerômetro", "acelerometro"],
+    "explanation": "O acelerômetro é o sensor que detecta posicionamento e movimento do dispositivo.",
+    "source": { "aula": 220, "slide": 15 },
+    "evidence": "Acelerômetro - Posicionamento e movimento"
+  },
+  {
+    "id": "n11-q019",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "Qual tecnologia é descrita como comunicação com outros equipamentos por aproximação?",
+    "options": [
+      "Bluetooth",
+      "GPS",
+      "NFC (Near Field Communications)",
+      "Sensor de luz ambiente"
+    ],
+    "answer": 2,
+    "explanation": "A aula cita o NFC e os leitores RFID como formas de comunicação com outros equipamentos.",
+    "source": { "aula": 220, "slide": 15 },
+    "evidence": "NFC (Near Field Communications) e leitores RFID – Comunicação com outros equipamentos"
+  },
+  {
+    "id": "n11-q020",
+    "nodeId": "n11",
+    "type": "mcq",
+    "prompt": "Qual é uma vantagem de projetos Mobile First citada na aula?",
+    "options": [
+      "Maior custo de manutenção das lojas",
+      "Pior pontuação no ranking do Google",
+      "Melhor pontuação no ranking do Google (SEO)",
+      "Menor foco do usuário"
+    ],
+    "answer": 2,
+    "explanation": "A aula cita o melhor ranking no Google (SEO) entre as vantagens do Mobile First.",
+    "source": { "aula": 220, "slide": 17 },
+    "evidence": "Melhor pontuação no ranking do Google (SEO)"
+  }
+]

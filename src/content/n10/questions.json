@@ -1,0 +1,280 @@
+[
+  {
+    "id": "n10-q001",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "O que a Experiência do Usuário (UX) abrange?",
+    "options": [
+      "A análise e o projeto de produtos a partir da perspectiva do usuário",
+      "Apenas a escolha de cores e fontes da interface",
+      "O desenvolvimento do banco de dados e da infraestrutura",
+      "A gestão financeira do projeto de software"
+    ],
+    "answer": 0,
+    "explanation": "UX abrange a análise e o projeto de produtos a partir da perspectiva do usuário.",
+    "source": { "aula": 210, "slide": 3 },
+    "evidence": "Experiência do Usuário (UX) é um termo que abrange diversas áreas relacionadas com a análise e o projeto de produtos a partir da perspectiva do usuário."
+  },
+  {
+    "id": "n10-q002",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "Qual das áreas a seguir faz parte das áreas relacionadas a UX?",
+    "options": [
+      "Gestão de redes",
+      "Arquitetura da Informação",
+      "Engenharia de produção",
+      "Contabilidade"
+    ],
+    "answer": 1,
+    "explanation": "A Arquitetura da Informação é uma das áreas relacionadas a UX listadas na aula.",
+    "source": { "aula": 210, "slide": 3 },
+    "evidence": "Arquitetura da Informação"
+  },
+  {
+    "id": "n10-q003",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "Quais são as três fases de Design Thinking apresentadas na aula?",
+    "options": [
+      "Planejar, executar e revisar",
+      "Pesquisar, prototipar e vender",
+      "Entender, Explorar e Materializar",
+      "Analisar, codificar e implantar"
+    ],
+    "answer": 2,
+    "explanation": "O processo de Design Thinking é dividido em Entender, Explorar e Materializar.",
+    "source": { "aula": 210, "slide": 8 },
+    "evidence": "Entender Explorar Materializar"
+  },
+  {
+    "id": "n10-q004",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "Na fase Materializar, o que se faz?",
+    "options": [
+      "Entrevistar os principais stakeholders",
+      "Mapear o público-alvo",
+      "Gerar ideias de solução",
+      "Montar protótipos das ideias priorizadas"
+    ],
+    "answer": 3,
+    "explanation": "Na fase Materializar, montam-se protótipos das ideias priorizadas para serem testados com usuários.",
+    "source": { "aula": 210, "slide": 8 },
+    "evidence": "Montar protótipos das ideias"
+  },
+  {
+    "id": "n10-q005",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "O que é usabilidade segundo a aula?",
+    "options": [
+      "Característica que busca assegurar facilidade de adaptação e de uso, de forma eficaz e agradável",
+      "Quantidade de funcionalidades disponíveis em um produto",
+      "Velocidade de carregamento do servidor",
+      "Número de usuários cadastrados no sistema"
+    ],
+    "answer": 0,
+    "explanation": "Usabilidade busca assegurar facilidade de adaptação e de uso, de forma eficaz e agradável para o usuário.",
+    "source": { "aula": 210, "slide": 11 },
+    "evidence": "Característica de produtos interativos que busca assegurar a facilidade de adaptação e de uso por parte do usuários"
+  },
+  {
+    "id": "n10-q006",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "Na lista de metas de usabilidade, o que significa a capacidade de aprendizado?",
+    "options": [
+      "Ser seguro no uso",
+      "Ser fácil de aprender",
+      "Ter boa utilidade",
+      "Ser eficiente no uso"
+    ],
+    "answer": 1,
+    "explanation": "A capacidade de aprendizado significa ser fácil de aprender.",
+    "source": { "aula": 210, "slide": 12 },
+    "evidence": "Ser fácil de aprender"
+  },
+  {
+    "id": "n10-q007",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "O que significa a capacidade de memorizar nas metas de usabilidade?",
+    "options": [
+      "Atender aos objetivos especificados",
+      "Ser eficaz no uso",
+      "Ser fácil de lembrar como usar",
+      "Ausência de desconforto na utilização"
+    ],
+    "answer": 2,
+    "explanation": "Capacidade de memorizar significa ser fácil de lembrar como usar o sistema.",
+    "source": { "aula": 210, "slide": 12 },
+    "evidence": "Ser fácil de lembrar como usar"
+  },
+  {
+    "id": "n10-q008",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "Qual das opções a seguir NÃO é uma heurística de Nielsen apresentada na aula?",
+    "options": [
+      "Visibilidade do status do sistema",
+      "Prevenção de erros",
+      "Estética e design minimalista",
+      "Uso da proporção áurea"
+    ],
+    "answer": 3,
+    "explanation": "A proporção áurea é um recurso de layout citado em outro momento; não faz parte da lista de heurísticas de Nielsen.",
+    "source": { "aula": 210, "slide": 13 },
+    "evidence": "Visibilidade do status do sistema – Correspondência entre sistema e mundo real – Controle do usuário e liberdade"
+  },
+  {
+    "id": "n10-q009",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "Quantos princípios de acessibilidade o WCAG 2.1 define?",
+    "options": [
+      "4",
+      "7",
+      "13",
+      "78"
+    ],
+    "answer": 0,
+    "explanation": "O WCAG 2.1 define 4 princípios de acessibilidade, além de 13 recomendações e 78 critérios de sucesso.",
+    "source": { "aula": 210, "slide": 14 },
+    "evidence": "define 4 Princípios de acessibilidade, 13 recomendações e 78 critérios de sucesso."
+  },
+  {
+    "id": "n10-q010",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "Quais são os quatro princípios de acessibilidade do WCAG 2.1?",
+    "options": [
+      "Seguro, rápido, barato e bonito",
+      "Perceptível, operável, compreensível e robusto",
+      "Eficaz, eficiente, útil e seguro",
+      "Entender, explorar, materializar e testar"
+    ],
+    "answer": 1,
+    "explanation": "Os princípios de acessibilidade são ser perceptível, ser operável, ser compreensível e ser robusto.",
+    "source": { "aula": 210, "slide": 14 },
+    "evidence": "Ser perceptível • Ser operável • Ser compreensível • Ser robusto"
+  },
+  {
+    "id": "n10-q011",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "O que são personas?",
+    "options": [
+      "Usuários reais cadastrados no sistema",
+      "Mapas visuais da estrutura do site",
+      "Personagens fictícios criados a partir da pesquisa e observação de usuários reais",
+      "Protótipos de alta fidelidade próximos do produto final"
+    ],
+    "answer": 2,
+    "explanation": "Personas são personagens fictícios criados a partir da pesquisa e observação de usuários reais.",
+    "source": { "aula": 210, "slide": 22 },
+    "evidence": "Personas são personagens fictícios criados a partir da pesquisa e observação dos comportamentos de usuários reais."
+  },
+  {
+    "id": "n10-q012",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "Segundo a aula, o que o fluxo do usuário descreve?",
+    "options": [
+      "A paleta de cores e a tipografia do site",
+      "O orçamento e o cronograma do projeto",
+      "A lista de requisitos funcionais do sistema",
+      "O caminho que um usuário percorre em um site para realizar uma tarefa"
+    ],
+    "answer": 3,
+    "explanation": "O fluxo do usuário descreve o caminho que um usuário percorre em um site para realizar uma tarefa.",
+    "source": { "aula": 210, "slide": 29 },
+    "evidence": "O fluxo do usuário é um tipo de prototipagem do caminho que um usuário percorre em um site para realizar uma tarefa ou que descreve a experiência completa."
+  },
+  {
+    "id": "n10-q013",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "O que um site map permite verificar?",
+    "options": [
+      "Como o conteúdo do site está organizado e distribuído, além dos caminhos de acesso",
+      "Quais usuários compraram nos últimos 30 dias",
+      "Qual é o custo mensal de hospedagem",
+      "Quais bibliotecas JavaScript foram usadas"
+    ],
+    "answer": 0,
+    "explanation": "O site map mostra como o conteúdo do site está organizado e distribuído, além dos caminhos de acesso.",
+    "source": { "aula": 210, "slide": 32 },
+    "evidence": "Os site maps são mapas visuais que permitem verificar como o conteúdo do site está organizado e distribuído, além dos caminhos de acesso, ou fluxo de navegação."
+  },
+  {
+    "id": "n10-q014",
+    "nodeId": "n10",
+    "type": "tf",
+    "prompt": "O mapa da jornada do cliente ilustra visualmente o processo, as necessidades e as percepções de um cliente durante seu relacionamento com uma empresa.",
+    "answer": true,
+    "explanation": "O mapa da jornada ilustra visualmente o processo, as necessidades e as percepções do cliente durante o relacionamento com a empresa.",
+    "source": { "aula": 210, "slide": 24 },
+    "evidence": "Artefato que ilustra visualmente o processo, as necessidade e as percepções de um cliente durante seu relacionamento com uma empresa."
+  },
+  {
+    "id": "n10-q015",
+    "nodeId": "n10",
+    "type": "tf",
+    "prompt": "Storyboards são protótipos de alta fidelidade com design próximo do produto final.",
+    "answer": false,
+    "explanation": "Storyboards são esboços usados no início do projeto; os protótipos de alta fidelidade são os mockups.",
+    "source": { "aula": 210, "slide": 26 },
+    "evidence": "Esboços que mostram como o usuário progride na execução da tarefa durante a navegação no sistema ou utilização de dispositivo"
+  },
+  {
+    "id": "n10-q016",
+    "nodeId": "n10",
+    "type": "tf",
+    "prompt": "Wireframes são representações rascunhadas de telas que retratam o layout de uma página ou funcionalidade do sistema.",
+    "answer": true,
+    "explanation": "Wireframes são telas rascunhadas que retratam o layout de uma página ou funcionalidade do sistema.",
+    "source": { "aula": 210, "slide": 27 },
+    "evidence": "Representação de telas rascunhadas que retratam uma tela com o layout de uma página ou funcionalidade do sistema"
+  },
+  {
+    "id": "n10-q017",
+    "nodeId": "n10",
+    "type": "tf",
+    "prompt": "Mockups são protótipos de baixa fidelidade usados apenas no início do projeto.",
+    "answer": false,
+    "explanation": "Mockups são protótipos de alta fidelidade, com design próximo do produto final.",
+    "source": { "aula": 210, "slide": 31 },
+    "evidence": "Mockups são protótipos de alta fidelidade com design muito próximo do produto final"
+  },
+  {
+    "id": "n10-q018",
+    "nodeId": "n10",
+    "type": "fill",
+    "prompt": "No Design Thinking, a fase de ____ envolve gerar ideias de solução, priorizá-las e detalhar as principais.",
+    "answers": ["explorar", "Explorar"],
+    "explanation": "A fase de Explorar gera ideias de solução, prioriza as mais interessantes e detalha as principais.",
+    "source": { "aula": 210, "slide": 8 },
+    "evidence": "Gerar de ideias de solução"
+  },
+  {
+    "id": "n10-q019",
+    "nodeId": "n10",
+    "type": "fill",
+    "prompt": "Segundo a aula, uma heurística é uma regra, simplificação ou ____ que reduz ou limita a busca por soluções.",
+    "answers": ["aproximação", "Aproximação"],
+    "explanation": "A aula define heurística como uma regra, simplificação ou aproximação que limita a busca por soluções em domínios difíceis.",
+    "source": { "aula": 210, "slide": 13 },
+    "evidence": "Uma regra, simplificação, ou aproximação que reduz ou limita a busca por soluções em domínios que são difíceis e pouco compreendidos."
+  },
+  {
+    "id": "n10-q020",
+    "nodeId": "n10",
+    "type": "fill",
+    "prompt": "O WCAG 2.1 é o Guia de ____ de Conteúdo da Web, provido pelo W3C.",
+    "answers": ["acessibilidade", "Acessibilidade"],
+    "explanation": "O WCAG 2.1 é o Guia de Acessibilidade de Conteúdo da Web, mantido pelo W3C.",
+    "source": { "aula": 210, "slide": 14 },
+    "evidence": "O WCAG 2.1, o Guia de Acessibilidade de Conteúdo da Web, é provido pelo W3C"
+  }
+]

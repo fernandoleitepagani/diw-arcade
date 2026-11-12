@@ -1,0 +1,174 @@
+[
+  {
+    "id": "n14-c01",
+    "nodeId": "n14",
+    "title": "Contador de cliques",
+    "kind": "js",
+    "goal": "Faça o parágrafo #contador começar em 0 e aumentar em 1 a cada clique no botão #botao.",
+    "starter": {
+      "html": "<button id=\"botao\" type=\"button\">Clique</button>\n<p id=\"contador\">0</p>",
+      "css": "#contador { font-weight: bold; }",
+      "js": "// Selecione o botão e o contador e registre o evento de clique.\n"
+    },
+    "solution": {
+      "html": "<button id=\"botao\" type=\"button\">Clique</button>\n<p id=\"contador\">0</p>",
+      "css": "#contador { font-weight: bold; }",
+      "js": "const botao = document.querySelector('#botao');\nconst contador = document.querySelector('#contador');\nlet total = 0;\n\nbotao.addEventListener('click', () => {\n  total += 1;\n  contador.textContent = total;\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "botao-existe",
+        "label": "O botão #botao existe na página.",
+        "check": { "kind": "exists", "selector": "#botao" }
+      },
+      {
+        "id": "contador-inicial",
+        "label": "O contador #contador começa em 0.",
+        "check": {
+          "kind": "text",
+          "selector": "#contador",
+          "match": { "equals": "0" }
+        }
+      },
+      {
+        "id": "primeiro-clique",
+        "label": "Após um clique no botão, o contador mostra 1.",
+        "before": [{ "do": "click", "selector": "#botao" }],
+        "check": {
+          "kind": "text",
+          "selector": "#contador",
+          "match": { "equals": "1" }
+        }
+      },
+      {
+        "id": "segundo-clique",
+        "label": "Após outro clique, o contador mostra 2.",
+        "before": [{ "do": "click", "selector": "#botao" }],
+        "check": {
+          "kind": "text",
+          "selector": "#contador",
+          "match": { "equals": "2" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Comece com `const botao = document.querySelector('#botao');` e guarde também o contador em uma constante.",
+      "Declare `let total = 0;` fora do evento para que o valor não seja reiniciado a cada clique.",
+      "Dentro de `botao.addEventListener('click', () => { ... })`, some 1 a `total` e atribua o resultado a `contador.textContent`."
+    ],
+    "source": { "aula": 310, "slide": 4 },
+    "evidence": "Javascript adiciona a interatividade e permite a criação de aplicações ricas"
+  },
+  {
+    "id": "n14-c02",
+    "nodeId": "n14",
+    "title": "Espelho do nome",
+    "kind": "js",
+    "goal": "Copie para o parágrafo #saida o texto digitado no campo #nome, atualizando a cada alteração.",
+    "starter": {
+      "html": "<label for=\"nome\">Nome</label>\n<input id=\"nome\" type=\"text\">\n<p id=\"saida\"></p>",
+      "css": "#saida { font-weight: bold; }",
+      "js": "// Atualize #saida com o valor de #nome a cada evento de input.\n"
+    },
+    "solution": {
+      "html": "<label for=\"nome\">Nome</label>\n<input id=\"nome\" type=\"text\">\n<p id=\"saida\"></p>",
+      "css": "#saida { font-weight: bold; }",
+      "js": "const nome = document.querySelector('#nome');\nconst saida = document.querySelector('#saida');\n\nnome.addEventListener('input', () => {\n  saida.textContent = nome.value;\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "campo-existe",
+        "label": "O campo #nome existe na página.",
+        "check": { "kind": "exists", "selector": "#nome" }
+      },
+      {
+        "id": "saida-existe",
+        "label": "O parágrafo #saida existe na página.",
+        "check": { "kind": "exists", "selector": "#saida" }
+      },
+      {
+        "id": "primeiro-valor",
+        "label": "Ao digitar \"Ana\", #saida mostra \"Ana\".",
+        "before": [{ "do": "input", "selector": "#nome", "value": "Ana" }],
+        "check": {
+          "kind": "text",
+          "selector": "#saida",
+          "match": { "equals": "Ana" }
+        }
+      },
+      {
+        "id": "segundo-valor",
+        "label": "Ao trocar para \"Ana Clara\", #saida mostra \"Ana Clara\".",
+        "before": [{ "do": "input", "selector": "#nome", "value": "Ana Clara" }],
+        "check": {
+          "kind": "text",
+          "selector": "#saida",
+          "match": { "equals": "Ana Clara" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Use `document.querySelector('#nome')` e `document.querySelector('#saida')` para obter os dois elementos.",
+      "Escute o evento `input` no campo: ele dispara a cada alteração do valor.",
+      "Dentro do callback, copie `nome.value` para `saida.textContent`."
+    ],
+    "source": { "aula": 310, "slide": 10 },
+    "evidence": "tratamento de eventos (DOM Document Object Model)"
+  },
+  {
+    "id": "n14-c03",
+    "nodeId": "n14",
+    "title": "Destaques da lista",
+    "kind": "js",
+    "goal": "Adicione a classe destaque a todos os itens de #lista usando um laço com querySelectorAll.",
+    "starter": {
+      "html": "<ul id=\"lista\">\n  <li>HTML</li>\n  <li>CSS</li>\n  <li>JavaScript</li>\n</ul>",
+      "css": ".destaque { font-weight: bold; }",
+      "js": "// Percorra todos os itens de #lista e adicione a classe destaque.\n"
+    },
+    "solution": {
+      "html": "<ul id=\"lista\">\n  <li>HTML</li>\n  <li>CSS</li>\n  <li>JavaScript</li>\n</ul>",
+      "css": ".destaque { font-weight: bold; }",
+      "js": "const itens = document.querySelectorAll('#lista li');\n\nfor (let i = 0; i < itens.length; i += 1) {\n  itens[i].classList.add('destaque');\n}\n"
+    },
+    "requirements": [
+      {
+        "id": "lista-existe",
+        "label": "A lista #lista existe na página.",
+        "check": { "kind": "exists", "selector": "#lista" }
+      },
+      {
+        "id": "itens-suficientes",
+        "label": "A lista tem pelo menos 3 itens.",
+        "check": { "kind": "count", "selector": "#lista li", "min": 3 }
+      },
+      {
+        "id": "todos-destacados",
+        "label": "Todos os 3 itens têm a classe destaque.",
+        "check": { "kind": "count", "selector": ".destaque", "min": 3, "max": 3 }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Use `document.querySelectorAll('#lista li')` para obter todos os itens de uma vez.",
+      "Percorra a lista com um `for` de 0 até `itens.length`.",
+      "Em cada item, chame `classList.add('destaque')`."
+    ],
+    "source": { "aula": 310, "slide": 10 },
+    "evidence": "Manipulação de objetos da página HTML e tratamento de eventos (DOM Document Object Model)"
+  }
+]

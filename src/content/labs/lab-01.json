@@ -1,0 +1,168 @@
+{
+  "id": "lab-01",
+  "title": "Laboratório 01 — Portfólio Profissional",
+  "summary": "Construa um portfólio profissional responsivo com HTML5, CSS3 e JavaScript vanilla, com seções Sobre Mim, Projetos, Experiências e Contato, e publique o site gratuitamente em nuvem.",
+  "repoUrl": "https://github.com/joaopauloaramuni/desenvolvimento-de-interfaces-web/tree/main/LABORATORIOS",
+  "repoPaths": [
+    "LABORATORIOS",
+    "LABORATORIOS/DIW_-_LABORATÓRIO_01_-_Portfólio_Profissional.pdf"
+  ],
+  "requirements": [
+    {
+      "text": "O site deve ter as seções Sobre Mim, Projetos, Experiências e Contato, acessadas por um menu de navegação.",
+      "source": { "lab": 1, "slide": 1 },
+      "evidence": "O sistema deverá conter as seguintes seções acessadas por um menu de navegação:"
+    },
+    {
+      "text": "A entrega deve ter design responsivo, interface amigável e identidade visual coerente com o perfil profissional.",
+      "source": { "lab": 1, "slide": 2 },
+      "evidence": "O sistema deve ter um design responsivo, interface amigável e identidade visual coerente com seu perfil profissional."
+    },
+    {
+      "text": "A página de contato deve ter ícones clicáveis e um formulário com nome, e-mail e mensagem enviados por e-mail.",
+      "source": { "lab": 1, "slide": 2 },
+      "evidence": "Formulário com campos de nome, e-mail e mensagem, com funcionalidade de envio por e-mail."
+    },
+    {
+      "text": "Ao final, o site deve estar hospedado gratuitamente em nuvem.",
+      "source": { "lab": 1, "slide": 2 },
+      "evidence": "Ao final, o site deverá estar hospedado gratuitamente em nuvem (ex: Render, Vercel, Heroku, Fly.io)"
+    },
+    {
+      "text": "O repositório no GitHub deve ter um README completo, com tecnologias, dependências, estrutura, instruções de execução e link do site.",
+      "source": { "lab": 1, "slide": 2 },
+      "evidence": "GitHub deverá conter um README completo, incluindo:"
+    },
+    {
+      "text": "A apresentação final deve mostrar o sistema hospedado e funcional, explicando as escolhas de design, arquitetura e funcionalidades.",
+      "source": { "lab": 1, "slide": 2 },
+      "evidence": "Ao final do laboratório, você deverá apresentar o sistema final, hospedado e funcional, explicando as escolhas de design, arquitetura e as funcionalidades implementadas."
+    },
+    {
+      "text": "A qualidade do site é avaliada pelo visual, pela responsividade, pelo conteúdo e pelas funcionalidades.",
+      "source": { "lab": 1, "slide": 2 },
+      "evidence": "Qualidade do site (visual, responsividade, conteúdo e funcionalidades)"
+    },
+    {
+      "text": "A avaliação considera a organização do repositório e a clareza do README.",
+      "source": { "lab": 1, "slide": 2 },
+      "evidence": "Organização do repositório e clareza do README"
+    },
+    {
+      "text": "O alinhamento com os protótipos e as funcionalidades definidas é critério de avaliação.",
+      "source": { "lab": 1, "slide": 2 },
+      "evidence": "Alinhamento com os protótipos e funcionalidades definidas"
+    }
+  ],
+  "tips": {
+    "html": [
+      "Use header, nav, main, section e footer para dar estrutura semântica ao portfólio.",
+      "Dê um id único a cada seção e use esses ids nos links do menu para a navegação funcionar.",
+      "Em cada projeto, inclua nome, descrição, tecnologias, link do GitHub e uma imagem ou GIF."
+    ],
+    "css": [
+      "Defina cores e fontes em custom properties no :root para manter a identidade visual coerente.",
+      "Use Flexbox ou Grid na timeline de projetos e teste o layout em larguras diferentes.",
+      "Garanta contraste suficiente e um foco visível para quem navega por teclado."
+    ],
+    "js": [
+      "Valide nome, e-mail e mensagem antes de liberar o envio do formulário.",
+      "Use addEventListener e evite atributos onclick espalhados pelo HTML.",
+      "Se usar EmailJS, mantenha as chaves fora do repositório e em variáveis de ambiente."
+    ]
+  },
+  "steps": [
+    {
+      "id": "setup",
+      "title": "Crie o repositório e os wireframes",
+      "body": "Abra o Figma e desenhe wireframes de média fidelidade para as quatro seções: Sobre Mim, Projetos, Experiências e Contato.\n\nNo GitHub, crie o repositório com um README inicial e uma estrutura de pastas simples para HTML, CSS, JavaScript e imagens.",
+      "checklist": [
+        "Repositório GitHub criado com README inicial",
+        "Wireframes das quatro seções no Figma",
+        "Pastas css/, js/ e assets/ definidas"
+      ],
+      "code": {
+        "lang": "bash",
+        "text": "git init\nmkdir -p css js assets\ntouch index.html css/style.css js/main.js"
+      },
+      "repoPath": "LABORATORIOS"
+    },
+    {
+      "id": "structure",
+      "title": "Monte a navegação e as seções",
+      "body": "Use HTML semântico: header com nav, main com uma section por assunto e footer com os créditos. Cada link do menu deve apontar para o id da seção correspondente.\n\nComece pela seção Sobre Mim com um parágrafo em português e outro em inglês.",
+      "checklist": [
+        "Menu com links para #sobre, #projetos, #experiencias e #contato",
+        "Uma section por seção, cada uma com id",
+        "Texto de apresentação em português e inglês"
+      ],
+      "code": {
+        "lang": "html",
+        "text": "<header>\n  <nav aria-label=\"Navegação principal\">\n    <a href=\"#sobre\">Sobre Mim</a>\n    <a href=\"#projetos\">Projetos</a>\n    <a href=\"#experiencias\">Experiências</a>\n    <a href=\"#contato\">Contato</a>\n  </nav>\n</header>\n<main>\n  <section id=\"sobre\">\n    <h1>Olá, eu sou ...</h1>\n  </section>\n</main>"
+      },
+      "repoPath": "LABORATORIOS/DIW_-_LABORATÓRIO_01_-_Portfólio_Profissional.pdf"
+    },
+    {
+      "id": "styling",
+      "title": "Aplique a identidade visual",
+      "body": "Escolha uma paleta e uma tipografia que conversem com a sua área de atuação. Aplique os tokens no :root e reuse as variáveis em todo o CSS.\n\nA timeline de projetos pode ser construída com Grid: cada projeto vira um cartão com nome, descrição, tecnologias, link e imagem.",
+      "checklist": [
+        "Paleta e tipografia definidas em custom properties",
+        "Cartões de projeto com todos os dados pedidos",
+        "Estados de foco visíveis em links e botões"
+      ],
+      "code": {
+        "lang": "css",
+        "text": ":root {\n  --cor-fundo: #0b1020;\n  --cor-texto: #e8ecf8;\n  --cor-destaque: #5eead4;\n}\n\nbody {\n  background: var(--cor-fundo);\n  color: var(--cor-texto);\n  font-family: system-ui, sans-serif;\n}\n\n.timeline {\n  display: grid;\n  gap: 1.5rem;\n}"
+      },
+      "repoPath": "LABORATORIOS/DIW_-_LABORATÓRIO_01_-_Portfólio_Profissional.pdf"
+    },
+    {
+      "id": "interactivity",
+      "title": "Implemente o formulário de contato",
+      "body": "Leia os valores dos campos e valide o formulário antes do envio. Use a API de validação do navegador e feedback em texto para orientar quem preenche.\n\nPara o envio real por e-mail, conecte o formulário ao EmailJS ou a outro serviço equivalente.",
+      "checklist": [
+        "Campos de nome, e-mail e mensagem com label",
+        "Validação nativa e mensagem de retorno em PT-BR",
+        "Envio de e-mail integrado ou simulado de forma clara"
+      ],
+      "code": {
+        "lang": "js",
+        "text": "const form = document.querySelector(\"#contato form\");\n\nform?.addEventListener(\"submit\", (event) => {\n  event.preventDefault();\n  if (!form.checkValidity()) {\n    form.reportValidity();\n    return;\n  }\n  // Envie os dados com EmailJS ou outro serviço de e-mail.\n  form.reset();\n});"
+      },
+      "repoPath": "LABORATORIOS/DIW_-_LABORATÓRIO_01_-_Portfólio_Profissional.pdf"
+    },
+    {
+      "id": "responsiveness",
+      "title": "Adapte o layout para telas pequenas",
+      "body": "Comece pelo layout de uma coluna e amplie com media queries. Verifique o menu, a timeline e o formulário em larguras de celular, tablet e desktop.\n\nGaranta alvos de toque confortáveis e respeite prefers-reduced-motion em qualquer animação.",
+      "checklist": [
+        "Menu utilizável no celular",
+        "Timeline em uma coluna no celular e várias no desktop",
+        "Nenhuma rolagem horizontal em 320 px",
+        "Animações reduzidas quando prefers-reduced-motion está ativo"
+      ],
+      "code": {
+        "lang": "css",
+        "text": "@media (max-width: 640px) {\n  nav a {\n    display: block;\n    padding: 0.75rem 0;\n  }\n\n  .timeline {\n    grid-template-columns: 1fr;\n  }\n}"
+      },
+      "repoPath": "LABORATORIOS/DIW_-_LABORATÓRIO_01_-_Portfólio_Profissional.pdf"
+    },
+    {
+      "id": "review-delivery",
+      "title": "Revise, publique e entregue",
+      "body": "Revise a navegação por teclado, os textos em português e inglês e as imagens dos projetos. Complete o README com tecnologias, dependências, estrutura de diretórios, instruções de execução e o link do site.\n\nPublique em Vercel, Render ou GitHub Pages e confirme que o endereço público abre com o layout e as funcionalidades esperadas.",
+      "checklist": [
+        "README completo e commitado",
+        "Site publicado e acessível por URL",
+        "Links do menu e do formulário testados",
+        "Imagens ou GIFs dos projetos inseridos"
+      ],
+      "code": {
+        "lang": "bash",
+        "text": "git add .\ngit commit -m \"feat: portfólio profissional\"\ngit push origin main\n\n# Publique o diretório estático na Vercel\nnpx vercel --prod"
+      },
+      "repoPath": "LABORATORIOS/DIW_-_LABORATÓRIO_01_-_Portfólio_Profissional.pdf"
+    }
+  ]
+}

@@ -1,0 +1,356 @@
+[
+  {
+    "id": "n03-q001",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "Quais símbolos delimitam as tags de um elemento HTML?",
+    "options": [
+      "< e >",
+      "{ e }",
+      "[ e ]",
+      "( e )"
+    ],
+    "answer": 0,
+    "explanation": "As tags são delimitadas pelos símbolos < e >, que marcam os elementos no documento.",
+    "source": {
+      "aula": 160,
+      "slide": 2
+    },
+    "evidence": "marcados por meio de tags que são delimitadas pelos símbolos < e >"
+  },
+  {
+    "id": "n03-q002",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "Como os nomes dos elementos HTML tratam a diferença entre maiúsculas e minúsculas?",
+    "options": [
+      "São sensíveis ao case, com maiúsculas e minúsculas distintas",
+      "Não são sensíveis ao case",
+      "Apenas minúsculas são aceitas",
+      "Apenas maiúsculas são aceitas"
+    ],
+    "answer": 1,
+    "explanation": "Os nomes dos elementos nas tags não são sensíveis ao case: maiúsculo ou minúsculo é indiferente.",
+    "source": {
+      "aula": 160,
+      "slide": 2
+    },
+    "evidence": "Os nomes dos elementos nas tags NÃO são sensíveis ao case (maiúsculo ou minúsculo é indiferente)."
+  },
+  {
+    "id": "n03-q003",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "Qual das alternativas apresenta um elemento vazio?",
+    "options": [
+      "<title> PUC Minas Web Site </title>",
+      "<html> <head></head> <body></body> </html>",
+      "<p> Documento <span lang=\"en\">Web</span> </p>",
+      "<br>"
+    ],
+    "answer": 3,
+    "explanation": "Elementos vazios não têm tag de fechamento, como br e meta; os demais exemplos possuem conteúdo.",
+    "source": {
+      "aula": 160,
+      "slide": 3
+    },
+    "evidence": "Elementos vazios: <meta name=\"author\" content=\"Rommel\"> ou <br>"
+  },
+  {
+    "id": "n03-q004",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "Qual afirmação sobre atributos HTML está de acordo com o material?",
+    "options": [
+      "Um atributo pode se repetir no mesmo elemento.",
+      "Cada atributo é definido por um par nome/valor.",
+      "Aspas simples são sempre obrigatórias.",
+      "Todos os elementos compartilham o mesmo conjunto de atributos."
+    ],
+    "answer": 1,
+    "explanation": "Cada atributo é um par nome/valor e não se repete no mesmo elemento.",
+    "source": {
+      "aula": 160,
+      "slide": 4
+    },
+    "evidence": "São definidos pelo par nome/valor"
+  },
+  {
+    "id": "n03-q005",
+    "nodeId": "n03",
+    "type": "tf",
+    "prompt": "Os comentários HTML são exibidos pelo navegador quando a página é carregada.",
+    "answer": false,
+    "explanation": "Os comentários não são exibidos pelo navegador; eles servem para documentar o código.",
+    "source": {
+      "aula": 160,
+      "slide": 5
+    },
+    "evidence": "Os comentários não são exibidos pelo navegador"
+  },
+  {
+    "id": "n03-q006",
+    "nodeId": "n03",
+    "type": "fill",
+    "prompt": "A declaração ____ indica ao navegador qual versão do HTML está sendo usada no documento.",
+    "answers": [
+      "DOCTYPE",
+      "<!DOCTYPE html>",
+      "<!doctype html>"
+    ],
+    "explanation": "O DOCTYPE alterna entre quirks mode e strict mode conforme a versão declarada.",
+    "source": {
+      "aula": 160,
+      "slide": 6
+    },
+    "evidence": "O DOCTYPE indica ao browser qual o versão do HTML está"
+  },
+  {
+    "id": "n03-q007",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "O que a tag <head> reúne em um documento HTML?",
+    "options": [
+      "Todo o conteúdo visível da página",
+      "Informações sobre o documento, scripts e folhas de estilo",
+      "Apenas o título exibido na aba",
+      "Somente links para outras páginas"
+    ],
+    "answer": 1,
+    "explanation": "O cabeçalho contém metadados e referências a scripts e CSS que complementam o documento.",
+    "source": {
+      "aula": 160,
+      "slide": 7
+    },
+    "evidence": "representada pela tag <head>, que inclui informações sobre o documento (metadados), referências a scripts, folhas de estilo (CSS)"
+  },
+  {
+    "id": "n03-q008",
+    "nodeId": "n03",
+    "type": "tf",
+    "prompt": "O corpo do documento, delimitado pela tag <body>, contém o conteúdo exibido ao usuário.",
+    "answer": true,
+    "explanation": "O body reúne textos, links, imagens, vídeos, tabelas e formulários mostrados pelo navegador.",
+    "source": {
+      "aula": 160,
+      "slide": 8
+    },
+    "evidence": "representada pela tag <body>, que inclui todo o conteúdo da página exibido ao usuário pelo Navegador"
+  },
+  {
+    "id": "n03-q009",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "A qual categoria funcional pertencem recursos como imagens, áudio e vídeo?",
+    "options": [
+      "Textuais",
+      "Estrutura",
+      "Multimídia",
+      "Integração"
+    ],
+    "answer": 2,
+    "explanation": "O material classifica imagens, áudio e vídeo como elementos de multimídia.",
+    "source": {
+      "aula": 161,
+      "slide": 2
+    },
+    "evidence": "Recursos ocmo imagens, áudio e vídeo"
+  },
+  {
+    "id": "n03-q010",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "Qual elemento de metadados define o título do documento?",
+    "options": [
+      "title",
+      "meta",
+      "link",
+      "style"
+    ],
+    "answer": 0,
+    "explanation": "O title define o título do documento e aparece dentro do head.",
+    "source": {
+      "aula": 161,
+      "slide": 3
+    },
+    "evidence": "title: Define o título do documento"
+  },
+  {
+    "id": "n03-q011",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "Qual codificação de caracteres é citada como comum, ao lado das antigas Latin1 e Windows 1252?",
+    "options": [
+      "Latin1",
+      "Windows 1252",
+      "UTF-8",
+      "ISO 9959-1"
+    ],
+    "answer": 2,
+    "explanation": "O material cita UTF-8 (Unicode) como valor comum, enquanto Latin1 e Windows 1252 são antigos.",
+    "source": {
+      "aula": 161,
+      "slide": 4
+    },
+    "evidence": "Valores comuns incluem UTF-8 (Unicode) ou os antigos como Latin1 (Windows 1252 or ISO 9959-1)"
+  },
+  {
+    "id": "n03-q012",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "Qual meta tag http-equiv define um intervalo de tempo para atualização do documento?",
+    "options": [
+      "content-type",
+      "expires",
+      "cache-control",
+      "refresh"
+    ],
+    "answer": 3,
+    "explanation": "O refresh permite recarregar a página periodicamente ou redirecioná-la.",
+    "source": {
+      "aula": 161,
+      "slide": 5
+    },
+    "evidence": "refresh: Define um intervalo de tempo para atualização do documento."
+  },
+  {
+    "id": "n03-q013",
+    "nodeId": "n03",
+    "type": "tf",
+    "prompt": "Na diretiva cache-control, o valor no-cache indica que a página não é armazenada em cache.",
+    "answer": true,
+    "explanation": "O material define no-cache como a página que não é armazenada em Cache.",
+    "source": {
+      "aula": 161,
+      "slide": 6
+    },
+    "evidence": "no-cache: A página não é armazenada em Cache."
+  },
+  {
+    "id": "n03-q014",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "As meta tags name com palavras-chave servem principalmente para quê?",
+    "options": [
+      "Validar o formulário",
+      "Indexar o documento em máquinas de busca",
+      "Definir a codificação de caracteres",
+      "Carregar folhas de estilo"
+    ],
+    "answer": 1,
+    "explanation": "Palavras-chave associadas ao documento ajudam mecanismos como Google e Bing a indexá-lo.",
+    "source": {
+      "aula": 161,
+      "slide": 7
+    },
+    "evidence": "As meta tags name permitem definir palavras-chave associadas ao documento com o objetivo de indexá-lo."
+  },
+  {
+    "id": "n03-q015",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "No exemplo do protocolo Open Graph, qual meta tag informa o título do conteúdo?",
+    "options": [
+      "og:title",
+      "og:type",
+      "og:url",
+      "og:image"
+    ],
+    "answer": 0,
+    "explanation": "O exemplo usa a meta property og:title para declarar o título do conteúdo.",
+    "source": {
+      "aula": 161,
+      "slide": 8
+    },
+    "evidence": "<meta property=\"og:title\" content=\"The Rock\" />"
+  },
+  {
+    "id": "n03-q016",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "Qual destes elementos é classificado como inline no material?",
+    "options": [
+      "<div>",
+      "<p>",
+      "<span>",
+      "<section>"
+    ],
+    "answer": 2,
+    "explanation": "Span aparece na lista de elementos inline, que seguem o fluxo em linha.",
+    "source": {
+      "aula": 161,
+      "slide": 9
+    },
+    "evidence": "Exemplos: <img>, <span>, <a>,"
+  },
+  {
+    "id": "n03-q017",
+    "nodeId": "n03",
+    "type": "fill",
+    "prompt": "O HTML oferece três tipos de listas: ordenada, não ordenada e de ____.",
+    "answers": [
+      "definições",
+      "definição",
+      "definicoes"
+    ],
+    "explanation": "As listas de definições usam dl, com dt para o termo e dd para a definição.",
+    "source": {
+      "aula": 161,
+      "slide": 14
+    },
+    "evidence": "O HTML oferece 3 tipos de listas: ordenada | não ordenada | definições"
+  },
+  {
+    "id": "n03-q018",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "Qual valor de target abre o link na mesma janela e é o padrão?",
+    "options": [
+      "_blank",
+      "_parent",
+      "_self",
+      "_top"
+    ],
+    "answer": 2,
+    "explanation": "O valor _self abre o documento na mesma janela e é o padrão.",
+    "source": {
+      "aula": 161,
+      "slide": 15
+    },
+    "evidence": "_self – para a mesma janela – default"
+  },
+  {
+    "id": "n03-q019",
+    "nodeId": "n03",
+    "type": "mcq",
+    "prompt": "Qual é a função do atributo alt em uma imagem?",
+    "options": [
+      "Definir a largura da imagem",
+      "Informar o formato do arquivo",
+      "Substituir a imagem quando ela não estiver disponível",
+      "Criar um link para a imagem"
+    ],
+    "answer": 2,
+    "explanation": "O texto do alt aparece quando a imagem não está disponível e melhora a acessibilidade.",
+    "source": {
+      "aula": 161,
+      "slide": 16
+    },
+    "evidence": "O texto contido no atributo alt é utilizado quando a imagem não estiver disponível."
+  },
+  {
+    "id": "n03-q020",
+    "nodeId": "n03",
+    "type": "fill",
+    "prompt": "O atributo ____ indica qual a URL a ser disparada para processamento do formulário.",
+    "answers": [
+      "action"
+    ],
+    "explanation": "O action define a URL que recebe os dados quando o formulário é submetido.",
+    "source": {
+      "aula": 161,
+      "slide": 23
+    },
+    "evidence": "O atributo action indica qual a URL a ser disparada para"
+  }
+]

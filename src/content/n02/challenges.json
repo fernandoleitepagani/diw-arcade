@@ -1,0 +1,175 @@
+[
+  {
+    "id": "n02-c01",
+    "nodeId": "n02",
+    "title": "Links absolutos, relativos e âncora",
+    "kind": "html",
+    "goal": "Monte uma navegação com um link absoluto para outro site, um link relativo para uma página do mesmo projeto e uma âncora que leva a uma seção da própria página.",
+    "starter": {
+      "html": "<header>\n  <h1>Meu portfólio</h1>\n  <nav>\n    <a href=\"https://www.pucminas.br\">PUC Minas</a>\n    <a href=\"#\">Sobre</a>\n  </nav>\n</header>\n<main>\n  <section>\n    <h2>Sobre</h2>\n    <p>Esta página apresenta os projetos da disciplina.</p>\n  </section>\n</main>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<header>\n  <h1>Meu portfólio</h1>\n  <nav>\n    <a href=\"https://www.pucminas.br\">PUC Minas</a>\n    <a href=\"projetos.html\">Projetos</a>\n    <a href=\"#sobre\">Sobre</a>\n  </nav>\n</header>\n<main>\n  <section id=\"sobre\">\n    <h2>Sobre</h2>\n    <p>Esta página apresenta os projetos da disciplina.</p>\n  </section>\n</main>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "link-absoluto",
+        "label": "A navegação tem um link absoluto que começa com https://.",
+        "check": { "kind": "exists", "selector": "a[href^=\"https://\"]" }
+      },
+      {
+        "id": "link-relativo",
+        "label": "A navegação tem um link relativo para a página projetos.html.",
+        "check": {
+          "kind": "attr",
+          "selector": "a[href=\"projetos.html\"]",
+          "name": "href",
+          "match": { "equals": "projetos.html" }
+        }
+      },
+      {
+        "id": "link-ancora",
+        "label": "A navegação tem uma âncora que aponta para #sobre.",
+        "check": {
+          "kind": "attr",
+          "selector": "a[href=\"#sobre\"]",
+          "name": "href",
+          "match": { "equals": "#sobre" }
+        }
+      },
+      {
+        "id": "destino-ancora",
+        "label": "Existe um elemento com id=\"sobre\" que serve de destino da âncora.",
+        "check": { "kind": "exists", "selector": "#sobre" }
+      },
+      {
+        "id": "texto-ancora",
+        "label": "O link da âncora é identificado com o texto \"Sobre\".",
+        "check": {
+          "kind": "text",
+          "selector": "a[href=\"#sobre\"]",
+          "match": { "equals": "Sobre" }
+        }
+      }
+    ],
+    "hints": [
+      "Um link absoluto traz o protocolo e o domínio, como https://www.pucminas.br.",
+      "Um link relativo aponta para outro arquivo do mesmo site, como projetos.html.",
+      "Para criar uma âncora interna, use href=\"#sobre\" e dê id=\"sobre\" ao elemento de destino."
+    ],
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Fragmento – identifica uma seção no recurso"
+  },
+  {
+    "id": "n02-c02",
+    "nodeId": "n02",
+    "title": "Link de e-mail com mailto:",
+    "kind": "html",
+    "goal": "Adicione à página um link que abre o programa de e-mail do visitante já com o endereço de contato preenchido.",
+    "starter": {
+      "html": "<main>\n  <h1>Fale com a turma</h1>\n  <p>Dúvidas sobre a disciplina? Entre em contato.</p>\n  <a href=\"contato.html\">Enviar e-mail</a>\n</main>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<main>\n  <h1>Fale com a turma</h1>\n  <p>Dúvidas sobre a disciplina? Entre em contato.</p>\n  <p>Escreva para <a href=\"mailto:diw@pucminas.br\">diw@pucminas.br</a>.</p>\n</main>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "link-email",
+        "label": "A página tem um link que começa com mailto:.",
+        "check": { "kind": "exists", "selector": "a[href^=\"mailto:\"]" }
+      },
+      {
+        "id": "endereco-email",
+        "label": "O link de e-mail traz um endereço completo, com usuário, @ e domínio.",
+        "check": {
+          "kind": "attr",
+          "selector": "a[href^=\"mailto:\"]",
+          "name": "href",
+          "match": { "pattern": "^mailto:[^@\\s]+@[^@\\s]+\\.[a-z]{2,}$" }
+        }
+      },
+      {
+        "id": "texto-email",
+        "label": "O texto do link mostra o endereço de e-mail.",
+        "check": {
+          "kind": "text",
+          "selector": "a[href^=\"mailto:\"]",
+          "match": { "pattern": "@" }
+        }
+      }
+    ],
+    "hints": [
+      "O esquema mailto: inicia um link de e-mail em vez de abrir uma página.",
+      "Depois de mailto:, escreva o endereço completo, como diw@pucminas.br.",
+      "O texto entre <a> e </a> pode ser o próprio endereço ou uma frase como \"Envie um e-mail\"."
+    ],
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Esquema – identifica a forma de interação entre um cliente e um servidor"
+  },
+  {
+    "id": "n02-c03",
+    "nodeId": "n02",
+    "title": "Analisando uma URL com new URL()",
+    "kind": "js",
+    "goal": "Use o construtor new URL() para ler um endereço e mostrar no documento o protocolo, o host e o caminho obtidos.",
+    "starter": {
+      "html": "<main>\n  <h1>Analisador de URL</h1>\n  <p>Protocolo: <span id=\"protocolo\">?</span></p>\n  <p>Host: <span id=\"host\">?</span></p>\n  <p>Caminho: <span id=\"caminho\">?</span></p>\n</main>",
+      "css": "",
+      "js": "const endereco = 'https://www.pucminas.br/diw/curso?aba=desafios';\ndocument.getElementById('protocolo').textContent = endereco.split(':')[0];\ndocument.getElementById('host').textContent = '';\ndocument.getElementById('caminho').textContent = '';"
+    },
+    "solution": {
+      "html": "<main>\n  <h1>Analisador de URL</h1>\n  <p>Protocolo: <span id=\"protocolo\">?</span></p>\n  <p>Host: <span id=\"host\">?</span></p>\n  <p>Caminho: <span id=\"caminho\">?</span></p>\n</main>",
+      "css": "",
+      "js": "const endereco = new URL('https://www.pucminas.br/diw/curso?aba=desafios');\ndocument.getElementById('protocolo').textContent = endereco.protocol;\ndocument.getElementById('host').textContent = endereco.host;\ndocument.getElementById('caminho').textContent = endereco.pathname;"
+    },
+    "requirements": [
+      {
+        "id": "protocolo",
+        "label": "O protocolo exibido é https:.",
+        "check": {
+          "kind": "text",
+          "selector": "#protocolo",
+          "match": { "equals": "https:" }
+        }
+      },
+      {
+        "id": "host",
+        "label": "O host exibido é www.pucminas.br.",
+        "check": {
+          "kind": "text",
+          "selector": "#host",
+          "match": { "equals": "www.pucminas.br" }
+        }
+      },
+      {
+        "id": "caminho",
+        "label": "O caminho exibido é /diw/curso.",
+        "check": {
+          "kind": "text",
+          "selector": "#caminho",
+          "match": { "equals": "/diw/curso" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros no console.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "new URL('https://...') transforma o texto em um objeto com propriedades como protocol, host e pathname.",
+      "protocol inclui os dois-pontos (https:), host é o domínio e pathname é o caminho após o domínio.",
+      "Escreva cada valor no elemento certo usando document.getElementById(...).textContent."
+    ],
+    "source": { "aula": 131, "slide": 5 },
+    "evidence": "abc://user:pass@example.com:123/path/data?key=value&key2=value2#fragid1"
+  }
+]

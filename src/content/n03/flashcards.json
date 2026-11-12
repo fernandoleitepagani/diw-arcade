@@ -1,0 +1,431 @@
+[
+  {
+    "id": "n03-f001",
+    "nodeId": "n03",
+    "front": "Quais símbolos delimitam as tags de um elemento HTML?",
+    "back": "É o par de símbolos < e >.",
+    "source": {
+      "aula": 160,
+      "slide": 2
+    },
+    "evidence": "marcados por meio de tags que são delimitadas pelos símbolos < e >"
+  },
+  {
+    "id": "n03-f002",
+    "nodeId": "n03",
+    "front": "Toda página HTML deve estar contida em qual elemento?",
+    "back": "É o elemento html, delimitado por <html> e </html>.",
+    "source": {
+      "aula": 160,
+      "slide": 2
+    },
+    "evidence": "Toda página deve estar contida dentro de um elemento html."
+  },
+  {
+    "id": "n03-f003",
+    "nodeId": "n03",
+    "front": "Os nomes dos elementos HTML são sensíveis à diferença de maiúsculas e minúsculas?",
+    "back": "A diferença não existe: maiúsculas e minúsculas são indiferentes.",
+    "source": {
+      "aula": 160,
+      "slide": 2
+    },
+    "evidence": "Os nomes dos elementos nas tags NÃO são sensíveis ao case (maiúsculo ou minúsculo é indiferente)."
+  },
+  {
+    "id": "n03-f004",
+    "nodeId": "n03",
+    "front": "Quais são os quatro formatos de elementos HTML?",
+    "back": "Com elementos filhos, com texto, vazios e de conteúdo misto.",
+    "source": {
+      "aula": 160,
+      "slide": 3
+    },
+    "evidence": "Podem se apresentar em quatro formatos"
+  },
+  {
+    "id": "n03-f005",
+    "nodeId": "n03",
+    "front": "Quais exemplos de elementos vazios o material cita?",
+    "back": "O meta e o br.",
+    "source": {
+      "aula": 160,
+      "slide": 3
+    },
+    "evidence": "Elementos vazios: <meta name=\"author\" content=\"Rommel\"> ou <br>"
+  },
+  {
+    "id": "n03-f006",
+    "nodeId": "n03",
+    "front": "Um atributo pode se repetir no mesmo elemento?",
+    "back": "Não; um atributo não se repete em um elemento.",
+    "source": {
+      "aula": 160,
+      "slide": 4
+    },
+    "evidence": "Um atributo não se repete em um elemento."
+  },
+  {
+    "id": "n03-f007",
+    "nodeId": "n03",
+    "front": "Como um atributo HTML é definido?",
+    "back": "Por um par nome/valor.",
+    "source": {
+      "aula": 160,
+      "slide": 4
+    },
+    "evidence": "São definidos pelo par nome/valor"
+  },
+  {
+    "id": "n03-f008",
+    "nodeId": "n03",
+    "front": "Que tipo de aspas é recomendado para valores de atributos?",
+    "back": "Recomenda-se o uso de aspas duplas.",
+    "source": {
+      "aula": 160,
+      "slide": 4
+    },
+    "evidence": "Recomenda-se utilizar aspas duplas."
+  },
+  {
+    "id": "n03-f009",
+    "nodeId": "n03",
+    "front": "Que símbolos delimitam os comentários HTML?",
+    "back": "Por <!-- e -->; eles não são exibidos pelo navegador.",
+    "source": {
+      "aula": 160,
+      "slide": 5
+    },
+    "evidence": "São delimitados por <!-- e -->"
+  },
+  {
+    "id": "n03-f010",
+    "nodeId": "n03",
+    "front": "Para que serve o DOCTYPE?",
+    "back": "Indica ao navegador a versão do HTML usada no documento.",
+    "source": {
+      "aula": 160,
+      "slide": 6
+    },
+    "evidence": "O DOCTYPE indica ao browser qual o versão do HTML está"
+  },
+  {
+    "id": "n03-f011",
+    "nodeId": "n03",
+    "front": "O que a tag head reúne?",
+    "back": "Informações sobre o documento, referências a scripts e folhas de estilo.",
+    "source": {
+      "aula": 160,
+      "slide": 7
+    },
+    "evidence": "representada pela tag <head>, que inclui informações sobre o documento (metadados), referências a scripts, folhas de estilo (CSS)"
+  },
+  {
+    "id": "n03-f012",
+    "nodeId": "n03",
+    "front": "O que a tag body contém?",
+    "back": "Todo o conteúdo da página exibido ao usuário pelo navegador.",
+    "source": {
+      "aula": 160,
+      "slide": 8
+    },
+    "evidence": "representada pela tag <body>, que inclui todo o conteúdo da página exibido ao usuário pelo Navegador"
+  },
+  {
+    "id": "n03-f013",
+    "nodeId": "n03",
+    "front": "A qual categoria funcional pertencem imagens, áudio e vídeo?",
+    "back": "É a categoria de multimídia.",
+    "source": {
+      "aula": 161,
+      "slide": 2
+    },
+    "evidence": "Recursos ocmo imagens, áudio e vídeo"
+  },
+  {
+    "id": "n03-f014",
+    "nodeId": "n03",
+    "front": "O que o elemento title define?",
+    "back": "O título do documento.",
+    "source": {
+      "aula": 161,
+      "slide": 3
+    },
+    "evidence": "title: Define o título do documento"
+  },
+  {
+    "id": "n03-f015",
+    "nodeId": "n03",
+    "front": "O que a meta tag charset especifica?",
+    "back": "A codificação de caracteres utilizada no documento HTML.",
+    "source": {
+      "aula": 161,
+      "slide": 4
+    },
+    "evidence": "A meta tag charset especifica a codificação de caracteres utilizada no documento HTML."
+  },
+  {
+    "id": "n03-f016",
+    "nodeId": "n03",
+    "front": "Para que serve a meta tag http-equiv refresh?",
+    "back": "Define um intervalo de tempo para atualizar ou redirecionar o documento.",
+    "source": {
+      "aula": 161,
+      "slide": 5
+    },
+    "evidence": "refresh: Define um intervalo de tempo para atualização do documento."
+  },
+  {
+    "id": "n03-f017",
+    "nodeId": "n03",
+    "front": "O que o valor no-store faz no cache-control?",
+    "back": "Mantém um cache temporário e não arquiva a página.",
+    "source": {
+      "aula": 161,
+      "slide": 6
+    },
+    "evidence": "no-store: É feito um cache temporário, a página não é arquivada."
+  },
+  {
+    "id": "n03-f018",
+    "nodeId": "n03",
+    "front": "As meta tags name com palavras-chave são usadas por quem?",
+    "back": "Por máquinas de busca como Google e Bing, para indexar o documento.",
+    "source": {
+      "aula": 161,
+      "slide": 7
+    },
+    "evidence": "Esta informação é utilizada por máquinas de busca como o Google e o Bing."
+  },
+  {
+    "id": "n03-f019",
+    "nodeId": "n03",
+    "front": "No exemplo do Open Graph, qual meta tag declara o título?",
+    "back": "A meta tag é og:title.",
+    "source": {
+      "aula": 161,
+      "slide": 8
+    },
+    "evidence": "<meta property=\"og:title\" content=\"The Rock\" />"
+  },
+  {
+    "id": "n03-f020",
+    "nodeId": "n03",
+    "front": "O que caracteriza um elemento block?",
+    "back": "Ele inicia uma nova linha.",
+    "source": {
+      "aula": 161,
+      "slide": 9
+    },
+    "evidence": "São elementos que iniciam uma nova linha não"
+  },
+  {
+    "id": "n03-f021",
+    "nodeId": "n03",
+    "front": "Quais são os três tipos de listas HTML?",
+    "back": "Ordenada, não ordenada e de definições.",
+    "source": {
+      "aula": 161,
+      "slide": 14
+    },
+    "evidence": "O HTML oferece 3 tipos de listas: ordenada | não ordenada | definições"
+  },
+  {
+    "id": "n03-f022",
+    "nodeId": "n03",
+    "front": "Qual valor de target abre o link na mesma janela e é o padrão?",
+    "back": "O valor é _self.",
+    "source": {
+      "aula": 161,
+      "slide": 15
+    },
+    "evidence": "_self – para a mesma janela – default"
+  },
+  {
+    "id": "n03-f023",
+    "nodeId": "n03",
+    "front": "Quais formatos de imagem são os mais aceitos pelos navegadores, segundo o material?",
+    "back": "O material cita GIF, JPG e PNG.",
+    "source": {
+      "aula": 161,
+      "slide": 16
+    },
+    "evidence": "Na Web, os formatos de imagens mais aceitos nos diversos browsers são: GIF, JPG e PNG"
+  },
+  {
+    "id": "n03-f024",
+    "nodeId": "n03",
+    "front": "Quando o texto do atributo alt é utilizado?",
+    "back": "Quando a imagem não estiver disponível, o que melhora a acessibilidade.",
+    "source": {
+      "aula": 161,
+      "slide": 16
+    },
+    "evidence": "O texto contido no atributo alt é utilizado quando a imagem não estiver disponível."
+  },
+  {
+    "id": "n03-f025",
+    "nodeId": "n03",
+    "front": "Quais elementos de layout o material lista?",
+    "back": "O material lista div, header, nav, section, article, aside e footer.",
+    "source": {
+      "aula": 161,
+      "slide": 18
+    },
+    "evidence": "Elementos de Layout: div, header, nav, section, article, aside, footer"
+  },
+  {
+    "id": "n03-f026",
+    "nodeId": "n03",
+    "front": "Por que layouts com elementos semânticos são recomendados?",
+    "back": "Eles estabelecem o significado do conteúdo e podem ser processados por algoritmos.",
+    "source": {
+      "aula": 161,
+      "slide": 19
+    },
+    "evidence": "Páginas com layouts baseados em elementos semânticos estabelecem o significado de cada conteúdo e podem ser processadas por algoritmos além de seres humanos."
+  },
+  {
+    "id": "n03-f027",
+    "nodeId": "n03",
+    "front": "O que o atributo action de um formulário indica?",
+    "back": "A URL disparada para processamento do formulário.",
+    "source": {
+      "aula": 161,
+      "slide": 23
+    },
+    "evidence": "O atributo action indica qual a URL a ser disparada para"
+  },
+  {
+    "id": "n03-f028",
+    "nodeId": "n03",
+    "front": "O que o atributo type de um input identifica?",
+    "back": "O tipo do campo, como text, password ou submit.",
+    "source": {
+      "aula": 161,
+      "slide": 24
+    },
+    "evidence": "O atributo type identifica o tipo do campo: text, password, submit, etc."
+  },
+  {
+    "id": "n03-f029",
+    "nodeId": "n03",
+    "front": "O que o atributo required faz?",
+    "back": "Faz a validação automática, impedindo o envio com o campo vazio.",
+    "source": {
+      "aula": 161,
+      "slide": 26
+    },
+    "evidence": "O atributo required permite a validação automática de um campo"
+  },
+  {
+    "id": "n03-f030",
+    "nodeId": "n03",
+    "front": "O que o campo type=date fornece ao usuário?",
+    "back": "Um calendário para escolher a data de maneira simplificada.",
+    "source": {
+      "aula": 161,
+      "slide": 28
+    },
+    "evidence": "fornece um calendário para que ele"
+  },
+  {
+    "id": "n03-f031",
+    "nodeId": "n03",
+    "front": "O que os campos radio com o mesmo name permitem?",
+    "back": "Escolher uma única opção entre as disponíveis.",
+    "source": {
+      "aula": 161,
+      "slide": 29
+    },
+    "evidence": "Os campos do tipo radio com o mesmo valor"
+  },
+  {
+    "id": "n03-f032",
+    "nodeId": "n03",
+    "front": "O que os campos checkbox com o mesmo name permitem?",
+    "back": "Escolher uma ou mais opções entre as disponíveis.",
+    "source": {
+      "aula": 161,
+      "slide": 30
+    },
+    "evidence": "Os campos do tipo checkbox com o mesmo"
+  },
+  {
+    "id": "n03-f033",
+    "nodeId": "n03",
+    "front": "Qual tag informa o título de um fieldset?",
+    "back": "A tag filha legend.",
+    "source": {
+      "aula": 161,
+      "slide": 32
+    },
+    "evidence": "A tag filha legend informa o título do fieldset."
+  },
+  {
+    "id": "n03-f034",
+    "nodeId": "n03",
+    "front": "O que a tag textarea define?",
+    "back": "Um campo que permite a entrada de texto livre.",
+    "source": {
+      "aula": 161,
+      "slide": 33
+    },
+    "evidence": "A tag textarea define um campo que permite a entrada de texto livre."
+  },
+  {
+    "id": "n03-f035",
+    "nodeId": "n03",
+    "front": "O que os atributos rows e cols definem em um textarea?",
+    "back": "O número de linhas e colunas do controle.",
+    "source": {
+      "aula": 161,
+      "slide": 33
+    },
+    "evidence": "O atributo rows e cols definem o número de linhas e colunas para a apresentação do controle."
+  },
+  {
+    "id": "n03-f036",
+    "nodeId": "n03",
+    "front": "Para que serve o campo hidden?",
+    "back": "Para repassar informações ocultas que não exigem interação do usuário.",
+    "source": {
+      "aula": 161,
+      "slide": 34
+    },
+    "evidence": "O campo do tipo hidden permite que sejam repassadas informações \"ocultas\" que não exigem interação do usuário."
+  },
+  {
+    "id": "n03-f037",
+    "nodeId": "n03",
+    "front": "O que a tag datalist define?",
+    "back": "Um conjunto de opções disponíveis para outro campo de input.",
+    "source": {
+      "aula": 161,
+      "slide": 35
+    },
+    "evidence": "A tag datalist permite definir um conjunto de opções que estarão disponíveis para um outro campo de input."
+  },
+  {
+    "id": "n03-f038",
+    "nodeId": "n03",
+    "front": "Como os scripts podem ser incluídos em uma página HTML?",
+    "back": "Em arquivos externos ou na própria página, dentro de script.",
+    "source": {
+      "aula": 161,
+      "slide": 36
+    },
+    "evidence": "Os scripts podem estar em outros arquivos ou na própria página."
+  },
+  {
+    "id": "n03-f039",
+    "nodeId": "n03",
+    "front": "Como incorporar conteúdo de outros sites, como YouTube e Google Maps?",
+    "back": "Com o elemento iframe; embed e object também são usados.",
+    "source": {
+      "aula": 161,
+      "slide": 37
+    },
+    "evidence": "Conteúdo de outros sites como Youtube, Google Maps, entre outros podem ser anexados (<iframe>) em uma página."
+  }
+]

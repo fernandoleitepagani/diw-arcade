@@ -1,0 +1,209 @@
+[
+  {
+    "id": "n12-c01",
+    "nodeId": "n12",
+    "title": "Grade de 12 colunas",
+    "kind": "html",
+    "goal": "Monte um layout com um container, uma linha e duas colunas de mesmo tamanho usando as classes do sistema de grid do Bootstrap.",
+    "starter": {
+      "html": "<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col\">Primeira coluna</div>\n    <div class=\"col\">Segunda coluna</div>\n  </div>\n</div>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-md-6\">Primeira coluna</div>\n    <div class=\"col-md-6\">Segunda coluna</div>\n  </div>\n</div>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "grade-container",
+        "label": "O layout tem um container com a classe container.",
+        "check": {
+          "kind": "exists",
+          "selector": ".container"
+        }
+      },
+      {
+        "id": "grade-linha",
+        "label": "A linha fica dentro do container e usa a classe row.",
+        "check": {
+          "kind": "exists",
+          "selector": ".container > .row"
+        }
+      },
+      {
+        "id": "grade-colunas",
+        "label": "A linha contém duas colunas com uma classe col-md-*.",
+        "check": {
+          "kind": "count",
+          "selector": ".row > [class*=\"col-md-\"]",
+          "min": 2,
+          "max": 2
+        }
+      },
+      {
+        "id": "grade-classe",
+        "label": "Cada coluna declara sua classe col-md-* no atributo class.",
+        "check": {
+          "kind": "attr",
+          "selector": ".row > [class*=\"col-md-\"]",
+          "name": "class",
+          "match": { "pattern": "col-md-" }
+        }
+      },
+      {
+        "id": "grade-sem-erros",
+        "label": "O código executa sem erros.",
+        "check": {
+          "kind": "noErrors"
+        }
+      }
+    ],
+    "hints": [
+      "Comece pelo container: envolva todo o layout em uma div com a classe container.",
+      "Dentro do container, crie uma div com a classe row.",
+      "Dentro da row, adicione duas divs com classes como col-md-6; as colunas devem somar as 12 da grade."
+    ],
+    "libs": ["bootstrap"],
+    "source": { "aula": 230, "slide": 6 },
+    "evidence": "Linhas (.row) vêm em containers (.container)"
+  },
+  {
+    "id": "n12-c02",
+    "nodeId": "n12",
+    "title": "Barra de navegação",
+    "kind": "html",
+    "goal": "Crie uma barra de navegação com a classe navbar e exiba o nome do site em um elemento navbar-brand.",
+    "starter": {
+      "html": "<div class=\"navbar\">\n  <a href=\"#\" class=\"marca\">DIW Arcade</a>\n</div>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<nav class=\"navbar navbar-expand-md\">\n  <div class=\"container\">\n    <a href=\"#\" class=\"navbar-brand\">DIW Arcade</a>\n  </div>\n</nav>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "navbar-elemento",
+        "label": "A navegação usa um elemento nav com a classe navbar.",
+        "check": {
+          "kind": "exists",
+          "selector": "nav.navbar"
+        }
+      },
+      {
+        "id": "navbar-marca",
+        "label": "A marca fica dentro da navbar com a classe navbar-brand.",
+        "check": {
+          "kind": "exists",
+          "selector": ".navbar .navbar-brand"
+        }
+      },
+      {
+        "id": "navbar-classe",
+        "label": "O elemento da marca declara a classe navbar-brand.",
+        "check": {
+          "kind": "attr",
+          "selector": ".navbar .navbar-brand",
+          "name": "class",
+          "match": { "pattern": "navbar-brand" }
+        }
+      },
+      {
+        "id": "navbar-texto",
+        "label": "A marca mostra o nome DIW Arcade.",
+        "check": {
+          "kind": "text",
+          "selector": ".navbar .navbar-brand",
+          "match": { "equals": "DIW Arcade" }
+        }
+      },
+      {
+        "id": "navbar-sem-erros",
+        "label": "O código executa sem erros.",
+        "check": {
+          "kind": "noErrors"
+        }
+      }
+    ],
+    "hints": [
+      "Use um elemento nav e aplique a ele a classe navbar.",
+      "Dentro da navbar, adicione um link com a classe navbar-brand.",
+      "O nome da marca vai no texto do navbar-brand; no exemplo, use DIW Arcade."
+    ],
+    "libs": ["bootstrap"],
+    "source": { "aula": 230, "slide": 2 },
+    "evidence": "Inclui modelos de design em HTML e CSS para tipografia, formas, botões, tabelas, navegação,"
+  },
+  {
+    "id": "n12-c03",
+    "nodeId": "n12",
+    "title": "Cartão com botão primário",
+    "kind": "html",
+    "goal": "Monte um cartão com a classe card que tenha um corpo e um botão de ação com as classes btn e btn-primary.",
+    "starter": {
+      "html": "<div class=\"card\">\n  <div class=\"card-body\">\n    <h2 class=\"card-title\">Bootstrap</h2>\n    <p class=\"card-text\">Crie layouts responsivos com o Bootstrap.</p>\n    <button class=\"btn\">Saiba mais</button>\n  </div>\n</div>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<div class=\"card\">\n  <div class=\"card-body\">\n    <h2 class=\"card-title\">Bootstrap</h2>\n    <p class=\"card-text\">Crie layouts responsivos com o Bootstrap.</p>\n    <button class=\"btn btn-primary\">Saiba mais</button>\n  </div>\n</div>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "cartao-elemento",
+        "label": "O bloco principal usa a classe card.",
+        "check": {
+          "kind": "exists",
+          "selector": ".card"
+        }
+      },
+      {
+        "id": "cartao-corpo",
+        "label": "O conteúdo do cartão fica em um elemento com a classe card-body.",
+        "check": {
+          "kind": "exists",
+          "selector": ".card .card-body"
+        }
+      },
+      {
+        "id": "cartao-botao",
+        "label": "O cartão contém um botão com a classe btn.",
+        "check": {
+          "kind": "exists",
+          "selector": ".card .btn"
+        }
+      },
+      {
+        "id": "cartao-primario",
+        "label": "O botão também declara a classe btn-primary.",
+        "check": {
+          "kind": "attr",
+          "selector": ".card .btn",
+          "name": "class",
+          "match": { "pattern": "btn-primary" }
+        }
+      },
+      {
+        "id": "cartao-sem-erros",
+        "label": "O código executa sem erros.",
+        "check": {
+          "kind": "noErrors"
+        }
+      }
+    ],
+    "hints": [
+      "Crie uma div com a classe card e, dentro dela, uma div com card-body.",
+      "Dentro do corpo do cartão, adicione um botão com a classe btn.",
+      "Some btn-primary à classe do botão para aplicar o estilo primário do Bootstrap."
+    ],
+    "libs": ["bootstrap"],
+    "source": { "aula": 230, "slide": 2 },
+    "evidence": "modelos de design em HTML e CSS para tipografia, formas, botões, tabelas, navegação, modais, carrosséis de imagem e muitos outros"
+  }
+]

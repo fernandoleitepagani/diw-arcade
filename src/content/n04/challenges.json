@@ -1,0 +1,173 @@
+[
+  {
+    "id": "n04-c01",
+    "nodeId": "n04",
+    "title": "Rótulos ligados aos campos",
+    "kind": "html",
+    "goal": "Ligue cada rótulo ao seu campo usando o atributo for com o mesmo valor do id do input.",
+    "starter": {
+      "html": "<form>\n  <p>Nome:</p>\n  <input type=\"text\" name=\"nome\">\n\n  <p>E-mail:</p>\n  <input type=\"email\" name=\"email\">\n\n  <button type=\"submit\">Cadastrar</button>\n</form>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<form>\n  <label for=\"nome\">Nome</label>\n  <input type=\"text\" id=\"nome\" name=\"nome\">\n\n  <label for=\"email\">E-mail</label>\n  <input type=\"email\" id=\"email\" name=\"email\">\n\n  <button type=\"submit\">Cadastrar</button>\n</form>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "formulario",
+        "label": "Existe um elemento form no código",
+        "check": { "kind": "exists", "selector": "form" }
+      },
+      {
+        "id": "rotulo-nome",
+        "label": "O rótulo do nome usa for=\"nome\"",
+        "check": { "kind": "exists", "selector": "label[for=\"nome\"]" }
+      },
+      {
+        "id": "campo-nome",
+        "label": "O campo do nome tem id=\"nome\"",
+        "check": { "kind": "exists", "selector": "input#nome" }
+      },
+      {
+        "id": "rotulo-email",
+        "label": "O rótulo do e-mail usa for=\"email\"",
+        "check": { "kind": "exists", "selector": "label[for=\"email\"]" }
+      },
+      {
+        "id": "campo-email",
+        "label": "O campo de e-mail tem id=\"email\"",
+        "check": { "kind": "exists", "selector": "input#email" }
+      }
+    ],
+    "hints": [
+      "Troque o texto solto de cada campo por um elemento label.",
+      "O valor do atributo for do label precisa ser igual ao id do input correspondente.",
+      "Repita a ligação para o nome e para o e-mail e confira cada par rótulo/campo."
+    ],
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "As tags input definem os campos ou entradas de dados manipulados pelo formulário."
+  },
+  {
+    "id": "n04-c02",
+    "nodeId": "n04",
+    "title": "Tipos de campo e validação",
+    "kind": "html",
+    "goal": "Use os tipos email, number e date nos campos e marque os três como obrigatórios com required.",
+    "starter": {
+      "html": "<form>\n  <label for=\"email\">E-mail</label>\n  <input type=\"text\" id=\"email\" name=\"email\">\n\n  <label for=\"idade\">Idade</label>\n  <input type=\"text\" id=\"idade\" name=\"idade\">\n\n  <label for=\"nascimento\">Data de nascimento</label>\n  <input type=\"text\" id=\"nascimento\" name=\"nascimento\">\n\n  <button type=\"submit\">Enviar</button>\n</form>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<form>\n  <label for=\"email\">E-mail</label>\n  <input type=\"email\" id=\"email\" name=\"email\" required>\n\n  <label for=\"idade\">Idade</label>\n  <input type=\"number\" id=\"idade\" name=\"idade\" required>\n\n  <label for=\"nascimento\">Data de nascimento</label>\n  <input type=\"date\" id=\"nascimento\" name=\"nascimento\" required>\n\n  <button type=\"submit\">Enviar</button>\n</form>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "email-type",
+        "label": "O campo de e-mail usa type=\"email\"",
+        "check": {
+          "kind": "attr",
+          "selector": "#email",
+          "name": "type",
+          "match": { "equals": "email" }
+        }
+      },
+      {
+        "id": "idade-type",
+        "label": "O campo de idade usa type=\"number\"",
+        "check": {
+          "kind": "attr",
+          "selector": "#idade",
+          "name": "type",
+          "match": { "equals": "number" }
+        }
+      },
+      {
+        "id": "nascimento-type",
+        "label": "O campo de nascimento usa type=\"date\"",
+        "check": {
+          "kind": "attr",
+          "selector": "#nascimento",
+          "name": "type",
+          "match": { "equals": "date" }
+        }
+      },
+      {
+        "id": "campos-obrigatorios",
+        "label": "Os três campos têm o atributo required",
+        "check": { "kind": "count", "selector": "input[required]", "min": 3 }
+      }
+    ],
+    "hints": [
+      "Troque o type do campo de e-mail de text para email.",
+      "No campo de idade use type=\"number\" e no de nascimento use type=\"date\".",
+      "Adicione required aos três inputs para o navegador impedir o envio com campos vazios."
+    ],
+    "source": { "aula": 162, "slide": 6 },
+    "evidence": "Nome: <input type=\"text\" name=\"nome\" required><br>"
+  },
+  {
+    "id": "n04-c03",
+    "nodeId": "n04",
+    "title": "Agrupando campos com fieldset",
+    "kind": "html",
+    "goal": "Coloque um select com pelo menos três opções dentro de um fieldset com legend.",
+    "starter": {
+      "html": "<form>\n  <p>Curso</p>\n  <select id=\"curso\" name=\"curso\">\n    <option value=\"es\">Engenharia de Software</option>\n    <option value=\"cc\">Ciência da Computação</option>\n    <option value=\"si\">Sistemas de Informação</option>\n  </select>\n\n  <button type=\"submit\">Enviar</button>\n</form>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<form>\n  <fieldset>\n    <legend>Curso</legend>\n    <label for=\"curso\">Qual curso você faz?</label>\n    <select id=\"curso\" name=\"curso\">\n      <option value=\"es\">Engenharia de Software</option>\n      <option value=\"cc\">Ciência da Computação</option>\n      <option value=\"si\">Sistemas de Informação</option>\n    </select>\n  </fieldset>\n\n  <button type=\"submit\">Enviar</button>\n</form>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "grupo",
+        "label": "Existe um fieldset no formulário",
+        "check": { "kind": "exists", "selector": "fieldset" }
+      },
+      {
+        "id": "titulo-grupo",
+        "label": "O fieldset tem um legend como título",
+        "check": { "kind": "exists", "selector": "fieldset > legend" }
+      },
+      {
+        "id": "titulo-curso",
+        "label": "O legend do grupo menciona o curso",
+        "check": {
+          "kind": "text",
+          "selector": "fieldset > legend",
+          "match": { "pattern": "curso" }
+        }
+      },
+      {
+        "id": "select-no-grupo",
+        "label": "O select do curso está dentro do fieldset",
+        "check": { "kind": "exists", "selector": "fieldset select#curso" }
+      },
+      {
+        "id": "opcoes-curso",
+        "label": "O select tem pelo menos três opções",
+        "check": {
+          "kind": "count",
+          "selector": "fieldset select#curso option",
+          "min": 3
+        }
+      }
+    ],
+    "hints": [
+      "Envolva o select e seu rótulo em um elemento fieldset.",
+      "Coloque um legend como primeiro filho do fieldset, com o título do grupo.",
+      "Mantenha o select com as três opções dentro do fieldset para concluir o agrupamento."
+    ],
+    "source": { "aula": 162, "slide": 13 },
+    "evidence": "A tag filha legend informa o título do fieldset."
+  }
+]

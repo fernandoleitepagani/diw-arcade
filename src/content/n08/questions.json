@@ -1,0 +1,212 @@
+[
+  {
+    "id": "n08-q001",
+    "nodeId": "n08",
+    "type": "mcq",
+    "prompt": "O que é o viewport de uma página?",
+    "options": [
+      "O espaço reservado pelo navegador para os favoritos.",
+      "A largura total da resolução física da tela.",
+      "A área visível do navegador, que varia com o tamanho das telas.",
+      "A quantidade de pixels por polegada do dispositivo."
+    ],
+    "answer": 2,
+    "explanation": "O viewport é a área visível do navegador. Seu tamanho varia de acordo com as dimensões da tela do dispositivo.",
+    "source": { "aula": 173, "slide": 2 },
+    "evidence": "Viewport é a área visível do navegador e variam de acordo com o tamanho das telas"
+  },
+  {
+    "id": "n08-q002",
+    "nodeId": "n08",
+    "type": "mcq",
+    "prompt": "Por que páginas feitas para computadores apareciam reduzidas em dispositivos móveis?",
+    "options": [
+      "Porque os navegadores móveis reduziam a visualização de páginas com larguras fixas.",
+      "Porque o CSS não era compatível com telas pequenas.",
+      "Porque as imagens tinham resolução maior que a tela.",
+      "Porque os celulares aplicavam a media query print por padrão."
+    ],
+    "answer": 0,
+    "explanation": "Os sites eram feitos para computadores com larguras fixas. Por isso, os navegadores reduziam a visualização da página em dispositivos móveis.",
+    "source": { "aula": 173, "slide": 2 },
+    "evidence": "Como os sites eram feitos para computadores com larguras fixas, os navegadores reduziam a visualização da páginas em dispositivos móveis"
+  },
+  {
+    "id": "n08-q003",
+    "nodeId": "n08",
+    "type": "mcq",
+    "prompt": "Como o viewport é calculado em relação à resolução e ao pixel-ratio?",
+    "options": [
+      "Viewport = resolução × pixel-ratio",
+      "Viewport = pixel-ratio / resolução",
+      "Viewport = resolução + pixel-ratio",
+      "Viewport = resolução / pixel-ratio"
+    ],
+    "answer": 3,
+    "explanation": "O viewport corresponde à resolução dividida pelo pixel-ratio do dispositivo. O tamanho do pixel CSS é calculado em função desse fator.",
+    "source": { "aula": 173, "slide": 3 },
+    "evidence": "O tamanho do pixel para o CSS e calculado em função do pixel-ratio do dispositivo e o viewport pode ser ajustado em função disso"
+  },
+  {
+    "id": "n08-q004",
+    "nodeId": "n08",
+    "type": "mcq",
+    "prompt": "Uma tela tem resolução 1920 e pixel-ratio 3. Qual é o viewport resultante?",
+    "options": [
+      "320 pixels",
+      "640 pixels",
+      "1920 pixels",
+      "5760 pixels"
+    ],
+    "answer": 1,
+    "explanation": "Aplicando a fórmula Viewport = Resolução / Pixel-ratio, temos 1920 / 3 = 640.",
+    "source": { "aula": 173, "slide": 3 },
+    "evidence": "Viewport = 1920 / 3 = 640"
+  },
+  {
+    "id": "n08-q005",
+    "nodeId": "n08",
+    "type": "mcq",
+    "prompt": "Qual meta tag é usada para ajustar o viewport em dispositivos móveis?",
+    "options": [
+      "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">",
+      "<meta name=\"viewport\" content=\"width=1920, initial-scale=0\">",
+      "<meta name=\"screen\" content=\"width=device-width, pixel-ratio=1\">",
+      "<meta name=\"media\" content=\"screen and (min-width: 600px)\">"
+    ],
+    "answer": 0,
+    "explanation": "A meta tag de viewport define width=device-width e initial-scale=1. Ela aparece no exemplo de viewport ajustado.",
+    "source": { "aula": 173, "slide": 5 },
+    "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+  },
+  {
+    "id": "n08-q006",
+    "nodeId": "n08",
+    "type": "mcq",
+    "prompt": "O que são media queries?",
+    "options": [
+      "Filtros aplicados ao HTML para escolher a fonte das imagens.",
+      "Filtros de CSS aplicados com base em características do dispositivo.",
+      "Regras de JavaScript executadas quando a janela é redimensionada.",
+      "Arquivos CSS separados que substituem toda a folha de estilos."
+    ],
+    "answer": 1,
+    "explanation": "Media queries são filtros aplicados aos estilos CSS. Eles consideram características do dispositivo onde a página é apresentada.",
+    "source": { "aula": 173, "slide": 6 },
+    "evidence": "As media queries são filtros que podem ser aplicados aos estilos CSS com base em alguma característica do dispositivo onde a página é apresentada."
+  },
+  {
+    "id": "n08-q007",
+    "nodeId": "n08",
+    "type": "mcq",
+    "prompt": "No exemplo, qual folha de estilo é aplicada para telas acima de 900px?",
+    "options": [
+      "tela_p.css",
+      "tela_g.css",
+      "tela_m.css",
+      "Nenhuma folha é aplicada."
+    ],
+    "answer": 1,
+    "explanation": "O link com min-width: 900px aponta para tela_g.css. Ele é aplicado às telas acima de 900px.",
+    "source": { "aula": 173, "slide": 6 },
+    "evidence": "Para telas acima de 900px, aplica-se tela_g.css"
+  },
+  {
+    "id": "n08-q008",
+    "nodeId": "n08",
+    "type": "mcq",
+    "prompt": "Qual media type deve ser usado para estilos destinados a impressoras?",
+    "options": ["all", "print", "screen", "handheld"],
+    "answer": 1,
+    "explanation": "O media type print indica impressoras. Já screen atende telas de computadores, smartphones e tablets.",
+    "source": { "aula": 173, "slide": 8 },
+    "evidence": "print – Indica impressoras"
+  },
+  {
+    "id": "n08-q009",
+    "nodeId": "n08",
+    "type": "mcq",
+    "prompt": "A media feature orientation indica qual característica do viewport?",
+    "options": [
+      "A profundidade de cores em bits.",
+      "O número de cores indexadas.",
+      "A proporção do viewport, podendo ser portrait ou landscape.",
+      "A resolução de saída em dpi."
+    ],
+    "answer": 2,
+    "explanation": "A feature orientation descreve a proporção do viewport. Seus valores são portrait e landscape.",
+    "source": { "aula": 173, "slide": 9 },
+    "evidence": "Indica a proporção do viewport, podendo ser portrait ou landscape."
+  },
+  {
+    "id": "n08-q010",
+    "nodeId": "n08",
+    "type": "mcq",
+    "prompt": "No exemplo de media queries em cascata, qual é a cor de fundo do body em uma tela de 700px de largura?",
+    "options": ["red", "orange", "yellow", "white"],
+    "answer": 2,
+    "explanation": "As regras de min-width 400px e 600px são verdadeiras em 700px. A última regra, de 600px, define fundo yellow.",
+    "source": { "aula": 173, "slide": 10 },
+    "evidence": "@media screen and (min-width: 600px) { body { background-color: yellow; } }"
+  },
+  {
+    "id": "n08-q011",
+    "nodeId": "n08",
+    "type": "tf",
+    "prompt": "O viewport é a área visível do navegador e varia de acordo com o tamanho das telas.",
+    "answer": true,
+    "explanation": "Essa é a definição apresentada na aula. O viewport acompanha o tamanho da tela do dispositivo.",
+    "source": { "aula": 173, "slide": 2 },
+    "evidence": "Viewport é a área visível do navegador e variam de acordo com o tamanho das telas"
+  },
+  {
+    "id": "n08-q012",
+    "nodeId": "n08",
+    "type": "tf",
+    "prompt": "O media type print indica telas de computadores, smartphones e tablets.",
+    "answer": false,
+    "explanation": "Print indica impressoras. O media type que indica telas é screen.",
+    "source": { "aula": 173, "slide": 8 },
+    "evidence": "screen – Indica telas de computadores, smartphones e tablets"
+  },
+  {
+    "id": "n08-q013",
+    "nodeId": "n08",
+    "type": "tf",
+    "prompt": "No exemplo com max-width: 600px, o fundo do body fica yellow quando a largura da página fica abaixo de 600 pixels.",
+    "answer": true,
+    "explanation": "A media query max-width: 600px aplica o fundo yellow abaixo desse limite.",
+    "source": { "aula": 173, "slide": 7 },
+    "evidence": "No exemplo, a página terá fundo yellow, quando a largura página largura ficar abaixo dos 600 pixels."
+  },
+  {
+    "id": "n08-q014",
+    "nodeId": "n08",
+    "type": "fill",
+    "prompt": "Na meta tag de viewport do exemplo, complete o valor de initial-scale: <meta name=\"viewport\" content=\"width=device-width, initial-scale=____\">",
+    "answers": ["1", "1.0"],
+    "explanation": "O valor recomendado no exemplo é initial-scale=1, que mantém a escala inicial sem zoom.",
+    "source": { "aula": 173, "slide": 5 },
+    "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+  },
+  {
+    "id": "n08-q015",
+    "nodeId": "n08",
+    "type": "fill",
+    "prompt": "Na sintaxe de media query, o media type que indica qualquer tipo de mídia é ____.",
+    "answers": ["all"],
+    "explanation": "O tipo all indica qualquer tipo de mídia. Print e screen indicam impressoras e telas, respectivamente.",
+    "source": { "aula": 173, "slide": 8 },
+    "evidence": "all – Indica qualquer tipo de mídias"
+  },
+  {
+    "id": "n08-q016",
+    "nodeId": "n08",
+    "type": "fill",
+    "prompt": "No breakpoint de 599px, a media query usada é @media (____: 599px) { -- conteúdo CSS -- }",
+    "answers": ["max-width"],
+    "explanation": "A query de 599px usa max-width para atender larguras até esse valor. Os demais breakpoints usam min-width.",
+    "source": { "aula": 173, "slide": 12 },
+    "evidence": "@media (max-width: 599px) { -- conteúdo CSS -- }"
+  }
+]

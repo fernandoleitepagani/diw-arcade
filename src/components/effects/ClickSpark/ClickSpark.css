@@ -1,0 +1,43 @@
+.click-spark {
+  display: contents;
+}
+
+.click-spark__layer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.click-spark__spark {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--spark-color, var(--accent, #2de2e6));
+  box-shadow: 0 0 8px var(--spark-color, var(--accent, #2de2e6));
+  translate: -50% -50%;
+  animation: click-spark-fly 400ms ease-out forwards;
+}
+
+@keyframes click-spark-fly {
+  from {
+    opacity: 1;
+    transform: rotate(var(--spark-angle, 0deg)) translateX(2px) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: rotate(var(--spark-angle, 0deg)) translateX(34px) scale(0.3);
+  }
+}
+
+.click-spark[data-motion='off'] .click-spark__layer {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .click-spark__layer {
+    display: none;
+  }
+}

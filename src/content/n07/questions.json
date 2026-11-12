@@ -1,0 +1,256 @@
+[
+  {
+    "id": "n07-q001",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "Qual é a relação correta entre as medidas absolutas apresentadas na aula?",
+    "options": [
+      "1in = 2,54cm = 25,4mm = 72pt = 6pc",
+      "1in = 10cm = 100mm = 12pt = 6pc",
+      "1in = 2,54cm = 25,4mm = 12pt = 12pc",
+      "1in = 2,54mm = 25,4cm = 72pt = 6pc"
+    ],
+    "answer": 0,
+    "explanation": "A aula apresenta a relação 1in = 2,54cm = 25,4mm = 72pt = 6pc entre as medidas absolutas.",
+    "source": { "aula": 172, "slide": 3 },
+    "evidence": "1in = 2,54cm = 25,4mm = 72pt = 6pc"
+  },
+  {
+    "id": "n07-q002",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "Uma paica (pc) equivale a quantos pontos?",
+    "options": ["6 pontos", "12 pontos", "72 pontos", "25,4 pontos"],
+    "answer": 1,
+    "explanation": "Paica (pc) é uma medida absoluta equivalente a 12 pontos.",
+    "source": { "aula": 172, "slide": 3 },
+    "evidence": "Equivalente a 12 pontos"
+  },
+  {
+    "id": "n07-q003",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "A forma curta de cor #F8C é equivalente a qual valor hexadecimal?",
+    "options": ["#F800CC", "#F8C000", "#FF88CC", "#FF8CC0"],
+    "answer": 2,
+    "explanation": "A forma curta #RGB repete cada dígito; assim, #F8C é o mesmo que #FF88CC.",
+    "source": { "aula": 172, "slide": 4 },
+    "evidence": "Ex: #F8C é o mesmo que #FF88CC"
+  },
+  {
+    "id": "n07-q004",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "Na notação #RRGGBB, qual é o intervalo de valores que cada par pode assumir?",
+    "options": ["De 0 a 100", "De 1 a 16", "De 0 a 360", "De 0 a 255, de 00 a FF"],
+    "answer": 3,
+    "explanation": "Cada par hexadecimal do #RRGGBB varia de 0 (00) a 255 (FF).",
+    "source": { "aula": 172, "slide": 4 },
+    "evidence": "Hexadecimal p/ vermelho (R), verde(G) e azul (B) que permite valores que variam de 0 (00) a 255 (FF)."
+  },
+  {
+    "id": "n07-q005",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "Qual destes é um exemplo de elemento block-level?",
+    "options": ["<span>", "<a>", "<section>", "<label>"],
+    "answer": 2,
+    "explanation": "Elementos block-level iniciam uma nova linha; <section> é um exemplo, enquanto <span> e <a> são inline.",
+    "source": { "aula": 172, "slide": 5 },
+    "evidence": "Ex: <div>, <h1> .. <h6>, <p>, <form>, <canvas>, <table>, <section>"
+  },
+  {
+    "id": "n07-q006",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "O que a declaração display: none faz com o elemento?",
+    "options": [
+      "O elemento não será exibido.",
+      "O elemento é renderizado como bloco.",
+      "O elemento é renderizado em linha.",
+      "O elemento vira um bloco em linha."
+    ],
+    "answer": 0,
+    "explanation": "display: none oculta o elemento, que não será exibido na página.",
+    "source": { "aula": 172, "slide": 7 },
+    "evidence": "O elemento não será exibido."
+  },
+  {
+    "id": "n07-q007",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "Qual valor de display renderiza o elemento como um bloco, porém em linha com os demais elementos?",
+    "options": ["none", "block", "inline", "inline-block"],
+    "answer": 3,
+    "explanation": "inline-block renderiza o elemento como um bloco, porém em linha com os demais elementos.",
+    "source": { "aula": 172, "slide": 7 },
+    "evidence": "O elemento será renderizado como um bloco, porém em linha"
+  },
+  {
+    "id": "n07-q008",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "No Box Model, qual propriedade define o espaçamento entre a borda e o conteúdo?",
+    "options": ["margin", "border", "padding", "height"],
+    "answer": 2,
+    "explanation": "Padding é o espaçamento entre a borda e o conteúdo, enquanto margin fica ao redor do elemento.",
+    "source": { "aula": 172, "slide": 9 },
+    "evidence": "Espaçamento entre a borda e o conteúdo"
+  },
+  {
+    "id": "n07-q009",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "Como a shorthand border: 5px 20px; aplica os valores?",
+    "options": [
+      "5px em top e 20px em right, bottom e left.",
+      "5px em top e bottom, e 20px em right e left.",
+      "5px em top, 20px em right e bottom, e 5px em left.",
+      "5px em top, 20px em right, 5px em bottom e 20px em left."
+    ],
+    "answer": 1,
+    "explanation": "Com dois valores na shorthand, o primeiro vale para top e bottom e o segundo para right e left.",
+    "source": { "aula": 172, "slide": 12 },
+    "evidence": "2 valores: o primeiro se aplica a top e bottom e o segundo se aplica a right e left"
+  },
+  {
+    "id": "n07-q010",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "O que font-variant: small-caps faz?",
+    "options": [
+      "Aplica itálico ao texto.",
+      "Define a altura da linha.",
+      "Define o tipo da letra.",
+      "Mostra os caracteres minúsculos como maiúsculas."
+    ],
+    "answer": 3,
+    "explanation": "font-variant: small-caps indica que os caracteres minúsculos devem ser mostrados como maiúsculas.",
+    "source": { "aula": 172, "slide": 14 },
+    "evidence": "font-variant: indica se os caracteres minúsculos devem ser mostrado como maiúsculas"
+  },
+  {
+    "id": "n07-q011",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "Quais são os valores previstos para text-align na aula?",
+    "options": [
+      "left, right, center e justify",
+      "start, end, middle e full",
+      "normal, italic, oblique e bold",
+      "none, underline, overline e line-through"
+    ],
+    "answer": 0,
+    "explanation": "A aula lista text-align com os valores left, right, center e justify.",
+    "source": { "aula": 172, "slide": 16 },
+    "evidence": "text-align: left | right | center | justify"
+  },
+  {
+    "id": "n07-q012",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "Quais valores a propriedade background-repeat aceita?",
+    "options": [
+      "repeat, no-repeat, stretch e cover",
+      "no-repeat, repeat, repeat-x, repeat-y, space e round",
+      "top, left, center, right e bottom",
+      "auto, contain, cover e fixed"
+    ],
+    "answer": 1,
+    "explanation": "A aula lista no-repeat, repeat, repeat-x, repeat-y, space e round como valores de background-repeat.",
+    "source": { "aula": 172, "slide": 18 },
+    "evidence": "background-repeat: no-repeat | repeat | repeat-x | repeat-y | space | round"
+  },
+  {
+    "id": "n07-q013",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "Qual é a afirmação correta sobre position: static?",
+    "options": [
+      "Não é afetado pelas propriedades top, bottom, left, right e z-index.",
+      "É afetado por todas as propriedades de deslocamento.",
+      "Não segue o fluxo de renderização da página.",
+      "Mantém-se fixo na tela durante a rolagem."
+    ],
+    "answer": 0,
+    "explanation": "position: static é o valor padrão e o elemento não é posicionado, portanto não é afetado por top, bottom, left, right nem z-index.",
+    "source": { "aula": 172, "slide": 21 },
+    "evidence": "Não é afetado pelas propriedades: top, bottom, left, right e z-index"
+  },
+  {
+    "id": "n07-q014",
+    "nodeId": "n07",
+    "type": "mcq",
+    "prompt": "Qual é uma característica de position: fixed?",
+    "options": [
+      "Segue o fluxo normal da página.",
+      "Tem como ponto zero o canto superior esquerdo do pai.",
+      "É o valor padrão dos elementos.",
+      "Mantém-se fixo na posição, sem refletir a rolagem da tela."
+    ],
+    "answer": 3,
+    "explanation": "position: fixed não segue o fluxo e permanece fixo na posição estabelecida, sem refletir a rolagem da tela.",
+    "source": { "aula": 172, "slide": 23 },
+    "evidence": "O elemento se mantém fixo na posição estabelecida sem refletir à rolagem da tela"
+  },
+  {
+    "id": "n07-q015",
+    "nodeId": "n07",
+    "type": "tf",
+    "prompt": "A função scale (x, y) aumenta a largura (x) e a altura (y) do elemento.",
+    "answer": true,
+    "explanation": "A função scale (x, y) altera a largura em x e a altura em y do elemento.",
+    "source": { "aula": 172, "slide": 28 },
+    "evidence": "scale (x, y) – aumenta a largura (x) e altura (y) do elemento"
+  },
+  {
+    "id": "n07-q016",
+    "nodeId": "n07",
+    "type": "tf",
+    "prompt": "É correto afirmar que as transições são aplicadas na regra CSS inicial do elemento?",
+    "answer": true,
+    "explanation": "A aula afirma que as transições são aplicadas na regra CSS inicial do elemento.",
+    "source": { "aula": 172, "slide": 29 },
+    "evidence": "As transições são aplicadas na regra CSS inicial do elemento."
+  },
+  {
+    "id": "n07-q017",
+    "nodeId": "n07",
+    "type": "tf",
+    "prompt": "A propriedade z-index funciona em qualquer elemento, inclusive quando position é static.",
+    "answer": false,
+    "explanation": "O z-index só funciona em objetos posicionados, ou seja, cujo position seja diferente de static.",
+    "source": { "aula": 172, "slide": 26 },
+    "evidence": "funciona apenas em objetos posicionados,"
+  },
+  {
+    "id": "n07-q018",
+    "nodeId": "n07",
+    "type": "fill",
+    "prompt": "Com position: relative, o elemento estabelece como ponto zero o ____ superior esquerdo.",
+    "answers": ["canto"],
+    "explanation": "Em position: relative, o canto superior esquerdo do elemento é o ponto zero.",
+    "source": { "aula": 172, "slide": 22 },
+    "evidence": "Estabelece como ponto zero o canto superior esquerdo"
+  },
+  {
+    "id": "n07-q019",
+    "nodeId": "n07",
+    "type": "fill",
+    "prompt": "A diretiva ____ controla a mudança de estado de um elemento em uma animação.",
+    "answers": ["@keyframes", "keyframes"],
+    "explanation": "A diretiva @keyframes controla a mudança de estado de um elemento em uma animação.",
+    "source": { "aula": 172, "slide": 30 },
+    "evidence": "@keyframes: controla a mudança de estado de um elemento."
+  },
+  {
+    "id": "n07-q020",
+    "nodeId": "n07",
+    "type": "fill",
+    "prompt": "A propriedade ____ define quantas vezes a animação deve ser executada.",
+    "answers": ["animation-iteration-count"],
+    "explanation": "animation-iteration-count define quantas vezes a animação deve ser executada.",
+    "source": { "aula": 172, "slide": 31 },
+    "evidence": "animation-iteration-count – Define quantas vezes a animação deve ser executada"
+  }
+]

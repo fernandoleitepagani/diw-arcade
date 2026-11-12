@@ -1,0 +1,197 @@
+{
+  "id": "jsonserver",
+  "title": "JSON Server — API REST local para protótipos",
+  "summary": "Guia passo a passo para instalar o Node.js, subir uma API REST falsa com npx json-server db.json, consumi-la com fetch e estudar os exemplos Pokédex, Mapa PUC Minas e AraCoffee.",
+  "repoUrl": "https://github.com/joaopauloaramuni/desenvolvimento-de-interfaces-web/tree/main/PROJETOS/JSONServer",
+  "repoPaths": [
+    "PROJETOS/JSONServer",
+    "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos",
+    "PROJETOS/JSONServer/Projeto JSON Server - Pokedex",
+    "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas",
+    "PROJETOS/JSONServer/Projeto JSON Server - Pokemon",
+    "PROJETOS/Bootstrap/AraCoffee"
+  ],
+  "requirements": [
+    {
+      "text": "Confira os pré-requisitos de Node.js de cada projeto: Node.js 18 ou superior na Pokédex e 22.12 ou superior nos projetos com JSON Server 1.x."
+    },
+    {
+      "text": "Crie um db.json com uma chave por coleção; cada chave vira uma rota REST automaticamente."
+    },
+    {
+      "text": "Suba a API com npx json-server db.json e, quando necessário, sirva o front-end estático com --static ou pela pasta public/."
+    },
+    {
+      "text": "Consuma as rotas com fetch, usando GET, POST, PATCH e DELETE e verificando response.ok antes de ler o JSON."
+    },
+    {
+      "text": "Trate os efeitos do JSON Server no arquivo: ele reescreve o db.json, transforma ids em texto e adiciona a chave $schema."
+    },
+    {
+      "text": "Rode os exemplos Pokédex, Mapa PUC Minas e AraCoffee para comparar API, persistência de favoritos e interface Bootstrap."
+    }
+  ],
+  "tips": {
+    "html": [
+      "Use data attributes como data-action e delegação de eventos para ligar botões às ações da API.",
+      "Nos projetos com Bootstrap, carregue o CSS do framework antes do CSS próprio.",
+      "Mantenha label, id e required nos formulários; o mesmo formulário pode criar e editar."
+    ],
+    "css": [
+      "Aproveite o grid do Bootstrap (container, row, col-*) em vez de larguras fixas em pixels.",
+      "Reserve o CSS próprio para identidade visual e estados de carregamento e erro.",
+      "No Mapa PUC Minas, o painel vai para a parte de baixo no celular; teste em 320 px."
+    ],
+    "js": [
+      "Centralize a URL da API em uma constante (API_URL) e troque a porta em um lugar só.",
+      "Trate response.ok e mostre uma mensagem em PT-BR quando o JSON Server estiver parado.",
+      "Para favoritos, consulte o estado antes de fazer POST ou DELETE e mantenha o db.json como fonte da verdade."
+    ]
+  },
+  "steps": [
+    {
+      "id": "install-node",
+      "title": "Instale o Node.js e confira a versão",
+      "body": "Instale o Node.js 22.12 ou superior para os projetos que usam JSON Server 1.x; a Pokédex roda com Node 18 ou mais novo e fixa a versão 0.17.4 do pacote.\n\nConfira as versões no terminal antes de continuar. O npm vem junto com o Node.",
+      "checklist": [
+        "node -v retorna uma versão compatível",
+        "npm -v responde sem erro",
+        "Terminal aberto na pasta do projeto"
+      ],
+      "code": {
+        "lang": "bash",
+        "text": "node -v\nnpm -v"
+      },
+      "repoPath": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/README.md"
+    },
+    {
+      "id": "create-db",
+      "title": "Crie o db.json",
+      "body": "Crie um arquivo db.json na raiz do projeto. Cada chave de primeiro nível vira uma rota da API, e cada item da lista ganha um id.\n\nComece com uma coleção alunos. O JSON Server gera o id automaticamente no POST, mas você também pode informar ids nos dados iniciais.",
+      "checklist": [
+        "db.json criado na raiz do projeto",
+        "Uma chave para cada coleção",
+        "Itens com id quando necessário",
+        "Cópia do arquivo guardada antes dos testes"
+      ],
+      "code": {
+        "lang": "json",
+        "text": "{\n  \"alunos\": [\n    { \"id\": \"1\", \"nome\": \"Ana Souza\", \"curso\": \"Engenharia de Software\" },\n    { \"id\": \"2\", \"nome\": \"Bruno Lima\", \"curso\": \"Sistemas de Informação\" }\n  ]\n}"
+      },
+      "repoPath": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/db.json"
+    },
+    {
+      "id": "start-server",
+      "title": "Suba o JSON Server",
+      "body": "Na pasta onde está o db.json, rode npx json-server db.json. Na primeira vez o npx baixa o pacote; não é preciso instalar nada globalmente.\n\nSe o projeto tiver uma pasta public, o JSON Server serve o site e a API no mesmo endereço. Use --port para trocar a porta e Ctrl+C para parar.",
+      "checklist": [
+        "Servidor sobe sem erro",
+        "http://localhost:3001/alunos responde JSON",
+        "Pasta public servida na mesma origem",
+        "Ctrl+C encerra o processo"
+      ],
+      "code": {
+        "lang": "bash",
+        "text": "# porta padrão (3000)\nnpx json-server db.json\n\n# outra porta\nnpx json-server db.json --port 3001"
+      },
+      "repoPath": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/README.md"
+    },
+    {
+      "id": "rest-routes",
+      "title": "Explore as rotas REST",
+      "body": "O JSON Server cria as rotas a partir das chaves do db.json. Para a chave alunos: GET /alunos lista, GET /alunos/:id busca um, POST /alunos cria, PATCH /alunos/:id altera campos e DELETE /alunos/:id remove.\n\nUse o mesmo padrão para locais, pokemon, types, trainers e favorites. O id é gerado pelo servidor no POST.",
+      "checklist": [
+        "GET lista todos os registros",
+        "GET por id devolve 200 ou 404",
+        "POST cria e devolve o registro",
+        "PATCH altera só os campos enviados",
+        "DELETE remove o registro"
+      ],
+      "code": {
+        "lang": "bash",
+        "text": "curl http://localhost:3001/alunos\n\ncurl -X POST http://localhost:3001/alunos \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"nome\":\"Carla Mendes\",\"curso\":\"Mobile\"}'\n\ncurl -X PATCH http://localhost:3001/alunos/3 \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"curso\":\"Web\"}'\n\ncurl -X DELETE http://localhost:3001/alunos/3"
+      },
+      "repoPath": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/README.md"
+    },
+    {
+      "id": "fetch-frontend",
+      "title": "Consuma a API com fetch",
+      "body": "No front-end, centralize a URL da API em uma constante e escreva funções pequenas para listar, criar, atualizar e excluir. Sempre confira response.ok antes de ler o JSON e mostre uma mensagem em PT-BR quando o servidor estiver parado.\n\nDepois de qualquer alteração, recarregue a lista para refletir o que foi gravado no db.json.",
+      "checklist": [
+        "API_URL definida em um único lugar",
+        "Erros de rede tratados com mensagem",
+        "Lista recarregada após cada operação",
+        "Formulário envia apenas os campos esperados"
+      ],
+      "code": {
+        "lang": "js",
+        "text": "const API_URL = \"http://localhost:3001\";\n\nexport async function listarAlunos() {\n  const resposta = await fetch(`${API_URL}/alunos`);\n  if (!resposta.ok) throw new Error(\"Falha ao carregar alunos\");\n  return resposta.json();\n}\n\nexport async function criarAluno(aluno) {\n  const resposta = await fetch(`${API_URL}/alunos`, {\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify(aluno),\n  });\n  if (!resposta.ok) throw new Error(\"Falha ao salvar aluno\");\n  return resposta.json();\n}"
+      },
+      "repoPath": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js"
+    },
+    {
+      "id": "pokedex",
+      "title": "Estude a Pokédex",
+      "body": "A Pokédex é uma SPA em JavaScript puro que usa o JSON Server para os dados e para os favoritos. Rode npm install e npm start; o script start sobe json-server --watch db.json --port 3000 e serve a pasta public na mesma origem.\n\nAs rotas usadas são GET /types, GET /pokemon, GET /trainers e GET/POST/DELETE /favorites. O favorito é decidido pelo que está no db.json, não pela tela.",
+      "checklist": [
+        "npm install e npm start executados",
+        "Site em http://localhost:3000",
+        "Dados carregados das rotas /pokemon e /types",
+        "Favorito criado e removido no db.json"
+      ],
+      "code": {
+        "lang": "bash",
+        "text": "cd \"PROJETOS/JSONServer/Projeto JSON Server - Pokedex\"\nnpm install\nnpm start\n\n# http://localhost:3000"
+      },
+      "repoPath": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex"
+    },
+    {
+      "id": "mapa-puc",
+      "title": "Estude o Mapa PUC Minas",
+      "body": "O Mapa PUC Minas usa Mapbox GL JS para o mapa e JSON Server para as unidades e favoritos. O db.json fica dentro da pasta db/, e o package.json aponta para db/db.json.\n\nRode npm start ou npx json-server db/db.json --static . para servir o site e a API. A estrela envia PATCH /locais/:id com { favorito: true } ou { favorito: false }.",
+      "checklist": [
+        "Token público do Mapbox em js/config.js",
+        "db/db.json no lugar correto",
+        "Site e API em http://localhost:3000",
+        "Favorito persiste após F5"
+      ],
+      "code": {
+        "lang": "bash",
+        "text": "cd \"PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas\"\nnpm install\nnpm start\n\n# ou, sem instalar nada:\nnpx json-server db/db.json --static ."
+      },
+      "repoPath": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas"
+    },
+    {
+      "id": "aracoffee",
+      "title": "Use o AraCoffee como base de interface",
+      "body": "O AraCoffee é uma página de cafeteria feita só com HTML e Bootstrap 5, montada em 6 passos. Ele não usa Node, npm nem API: abra o index.html no navegador ou use o Live Server.\n\nUse-o como base de interface para um projeto com JSON Server: copie a estrutura, o grid e os componentes e depois conecte formulários e listas às rotas da API.",
+      "checklist": [
+        "Página aberta no navegador",
+        "Bootstrap e Bootstrap Icons carregados por CDN",
+        "Grid responsivo conferido no celular",
+        "CSS próprio carregado depois do Bootstrap"
+      ],
+      "code": {
+        "lang": "html",
+        "text": "<!doctype html>\n<html lang=\"pt-BR\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\" rel=\"stylesheet\">\n  <link href=\"css/style.css\" rel=\"stylesheet\">\n</head>\n<body>\n  <main class=\"container py-4\">\n    <div class=\"row g-4\">\n      <div class=\"col-12 col-md-4\">\n        <div class=\"card h-100\">\n          <div class=\"card-body\">\n            <h5 class=\"card-title\">Café expresso</h5>\n            <p class=\"card-text\">Curto, forte e cremoso.</p>\n            <span class=\"badge text-bg-primary\">R$ 6,00</span>\n          </div>\n        </div>\n      </div>\n    </div>\n  </main>\n  <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js\"></script>\n</body>\n</html>"
+      },
+      "repoPath": "PROJETOS/Bootstrap/AraCoffee"
+    },
+    {
+      "id": "troubleshoot",
+      "title": "Resolva os problemas comuns",
+      "body": "Os erros mais comuns vêm de porta ocupada, caminho do db.json e servidor parado. Se aparecer EADDRINUSE, suba em outra porta e atualize a API_URL. Se o db.json estiver em db/, o comando precisa apontar para db/db.json.\n\nO JSON Server reescreve o arquivo a cada alteração, transforma ids em texto e adiciona $schema. Ele é uma API falsa de estudo: não use em produção nem exponha dados reais.",
+      "checklist": [
+        "Porta livre ou API_URL atualizada",
+        "Caminho correto do db.json",
+        "Servidor rodando ao abrir a página",
+        "Backup do db.json guardado"
+      ],
+      "code": {
+        "lang": "bash",
+        "text": "npx json-server db.json --port 3001\n# atualize API_URL para http://localhost:3001"
+      },
+      "repoPath": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/README.md"
+    }
+  ]
+}

@@ -1,0 +1,258 @@
+[
+  {
+    "id": "n05-f001",
+    "nodeId": "n05",
+    "front": "Qual é a função do elemento <main>?",
+    "back": "Identificar o conteúdo principal do documento, que não se repete em outras páginas.",
+    "source": { "aula": 163, "slide": 4 },
+    "evidence": "Identifica o conteúdo principal do document que não se repete em outras páginas"
+  },
+  {
+    "id": "n05-f002",
+    "nodeId": "n05",
+    "front": "Quantos elementos <main> um documento pode ter?",
+    "back": "No máximo um; a aula afirma que não deve haver mais de um <main> no documento.",
+    "source": { "aula": 163, "slide": 4 },
+    "evidence": "There must not be more than one <main> element in a document."
+  },
+  {
+    "id": "n05-f003",
+    "nodeId": "n05",
+    "front": "De quais elementos o <main> não pode ser descendente?",
+    "back": "De <article>, <aside>, <footer>, <header> ou <nav>.",
+    "source": { "aula": 163, "slide": 4 },
+    "evidence": "The <main> element must NOT be a descendant of an <article>, <aside>, <footer>, <header>, or <nav> element."
+  },
+  {
+    "id": "n05-f004",
+    "nodeId": "n05",
+    "front": "Qual é o display do elemento <main> segundo a aula?",
+    "back": "Display inline, conforme a aula registra.",
+    "source": { "aula": 163, "slide": 4 },
+    "evidence": "Display: inline – Uso: estrutural | semântico"
+  },
+  {
+    "id": "n05-f005",
+    "nodeId": "n05",
+    "front": "Qual é o uso do elemento <main>?",
+    "back": "O uso é estrutural e semântico.",
+    "source": { "aula": 163, "slide": 4 },
+    "evidence": "Uso: estrutural | semântico"
+  },
+  {
+    "id": "n05-f006",
+    "nodeId": "n05",
+    "front": "Quais elementos compõem o esqueleto de layout HTML5 da aula?",
+    "back": "A aula mostra o body com header, nav, section, article, aside e footer.",
+    "source": { "aula": 163, "slide": 5 },
+    "evidence": "<header></header> <nav></nav> <section></section> <article></article> <aside></aside> <footer></footer>"
+  },
+  {
+    "id": "n05-f007",
+    "nodeId": "n05",
+    "front": "O que o elemento <article> define?",
+    "back": "Um artigo.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<article> Define um artigo"
+  },
+  {
+    "id": "n05-f008",
+    "nodeId": "n05",
+    "front": "O que o elemento <aside> define?",
+    "back": "O <aside> define conteúdo além do conteúdo da página.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<aside> Define conteúdo além do conteúdo da página"
+  },
+  {
+    "id": "n05-f009",
+    "nodeId": "n05",
+    "front": "O que o elemento <details> permite ao usuário?",
+    "back": "Permite ao usuário visualizar detalhes adicionais que podem ser ocultados.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<details> Define detalhes adicionais que o usuário pode visualizar ou ocultar"
+  },
+  {
+    "id": "n05-f010",
+    "nodeId": "n05",
+    "front": "Qual elemento define o título de um <figure>?",
+    "back": "O <figcaption>.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<figcaption> Define o título para um elemento <figure>"
+  },
+  {
+    "id": "n05-f011",
+    "nodeId": "n05",
+    "front": "O que o elemento <figure> representa?",
+    "back": "Um elemento auto-contido, como ilustração, diagramas ou fotos.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<figure> Define um elemento auto-contido como ilustração, diagramas, fotos, listagem de código, etc."
+  },
+  {
+    "id": "n05-f012",
+    "nodeId": "n05",
+    "front": "O que o elemento <footer> define?",
+    "back": "Um rodapé para o documento ou seção.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<footer> Define um rodapé para o documento ou seção"
+  },
+  {
+    "id": "n05-f013",
+    "nodeId": "n05",
+    "front": "O que o elemento <header> especifica?",
+    "back": "O cabeçalho para um documento ou seção.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<header> Especifica o cabeçalho para um document ou seção"
+  },
+  {
+    "id": "n05-f014",
+    "nodeId": "n05",
+    "front": "O que o elemento <mark> define?",
+    "back": "O <mark> define texto destacado.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<mark> Define texto destacado"
+  },
+  {
+    "id": "n05-f015",
+    "nodeId": "n05",
+    "front": "O que o elemento <nav> define?",
+    "back": "Conteúdo de navegação.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<nav> Define conteúdo de navegação"
+  },
+  {
+    "id": "n05-f016",
+    "nodeId": "n05",
+    "front": "O que o elemento <section> define?",
+    "back": "Uma seção em um documento.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<section> Define uma seção em um documento"
+  },
+  {
+    "id": "n05-f017",
+    "nodeId": "n05",
+    "front": "Para que serve o elemento <summary>?",
+    "back": "Define um resumo visível para um elemento <details>.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<summary> Define um resumo visível para um elemento <details>"
+  },
+  {
+    "id": "n05-f018",
+    "nodeId": "n05",
+    "front": "O que o elemento <time> define?",
+    "back": "Uma data/hora.",
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<time> Define uma data/hora"
+  },
+  {
+    "id": "n05-f019",
+    "nodeId": "n05",
+    "front": "O que é uma Rich Internet Application (RIA)?",
+    "back": "Uma aplicação que manipula dados além de simplesmente apresentá-los, usando tecnologias como Flash, Silverlight e JavaScript.",
+    "source": { "aula": 163, "slide": 8 },
+    "evidence": "As Rich Internet Appilcations são aplicações que manipulam dados além de simplesmente apresentá-los"
+  },
+  {
+    "id": "n05-f020",
+    "nodeId": "n05",
+    "front": "O que significa WAI?",
+    "back": "WAI é a Web Accessibility Initiative.",
+    "source": { "aula": 163, "slide": 8 },
+    "evidence": "WAI – Web Accessibility Initiative"
+  },
+  {
+    "id": "n05-f021",
+    "nodeId": "n05",
+    "front": "O que significa WCAG?",
+    "back": "WCAG é o Web Content Accessibility Guide.",
+    "source": { "aula": 163, "slide": 8 },
+    "evidence": "WCAG - Web Content Accessibility Guide"
+  },
+  {
+    "id": "n05-f022",
+    "nodeId": "n05",
+    "front": "Como o ARIA altera a semântica do HTML?",
+    "back": "Por meio de atributos colocados nas tags.",
+    "source": { "aula": 163, "slide": 8 },
+    "evidence": "Muda a semântica do HTML por meio de atributos colocados nas tags"
+  },
+  {
+    "id": "n05-f023",
+    "nodeId": "n05",
+    "front": "Quais atributos o ARIA usa?",
+    "back": "O ARIA usa os atributos role, state e property.",
+    "source": { "aula": 163, "slide": 8 },
+    "evidence": "São utilizados os atributos: role | state | property"
+  },
+  {
+    "id": "n05-f024",
+    "nodeId": "n05",
+    "front": "O que o atributo role define?",
+    "back": "O papel semântico do elemento, independente das tags utilizadas.",
+    "source": { "aula": 163, "slide": 9 },
+    "evidence": "Define o papel semântico do elemento, independente das tags utilizadas"
+  },
+  {
+    "id": "n05-f025",
+    "nodeId": "n05",
+    "front": "O que são roles abstratos?",
+    "back": "A categoria abstrata reúne elementos taxonômicos.",
+    "source": { "aula": 163, "slide": 9 },
+    "evidence": "Abstratos – elementos taxonômicos"
+  },
+  {
+    "id": "n05-f026",
+    "nodeId": "n05",
+    "front": "O que são roles do tipo widget?",
+    "back": "Componentes de interface, como combobox, listbox, grid e menu.",
+    "source": { "aula": 163, "slide": 9 },
+    "evidence": "Componentes de interface (Ex. compostos: combobox, listbox, grid, menu"
+  },
+  {
+    "id": "n05-f027",
+    "nodeId": "n05",
+    "front": "O que descrevem os roles de estrutura do documento?",
+    "back": "As estruturas de organização do conteúdo da página.",
+    "source": { "aula": 163, "slide": 9 },
+    "evidence": "Estrutura do documento – Descrevem as estruturas de organização do conteúdo da página."
+  },
+  {
+    "id": "n05-f028",
+    "nodeId": "n05",
+    "front": "O que são roles do tipo landmark?",
+    "back": "Pontos de referência de navegação que mapeiam partes do site ou da aplicação.",
+    "source": { "aula": 163, "slide": 9 },
+    "evidence": "Landmark – ponto de referência de navegação."
+  },
+  {
+    "id": "n05-f029",
+    "nodeId": "n05",
+    "front": "O que os landmarks substituem na navegação?",
+    "back": "Substituem o antigo pular para o conteúdo.",
+    "source": { "aula": 163, "slide": 9 },
+    "evidence": "Subistitui o antigo pular para o conteúdo"
+  },
+  {
+    "id": "n05-f030",
+    "nodeId": "n05",
+    "front": "Para que servem os atributos de live region?",
+    "back": "Permitem que o usuário monitore áreas alteradas dinamicamente na página.",
+    "source": { "aula": 163, "slide": 10 },
+    "evidence": "Permite ao usuário monitorar áreas que são alteradas dinamicamente na página"
+  },
+  {
+    "id": "n05-f031",
+    "nodeId": "n05",
+    "front": "Qual é a função dos atributos de relationship?",
+    "back": "Indicar o relacionamento entre elementos das páginas, como um campo obrigatório.",
+    "source": { "aula": 163, "slide": 10 },
+    "evidence": "Relacionamento entre elementos das páginas. Ex: campo obrigatório"
+  },
+  {
+    "id": "n05-f032",
+    "nodeId": "n05",
+    "front": "Quais atributos ARIA tratam de arrastar e soltar?",
+    "back": "Os atributos de drag and drop.",
+    "source": { "aula": 163, "slide": 10 },
+    "evidence": "Atributos de drag and drop"
+  }
+]

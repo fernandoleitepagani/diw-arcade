@@ -1,0 +1,178 @@
+[
+  {
+    "id": "n08-c01",
+    "nodeId": "n08",
+    "title": "Página pronta para o celular",
+    "kind": "html",
+    "goal": "Declare a meta viewport com width=device-width e acrescente o título do diário ao conteúdo principal.",
+    "starter": {
+      "html": "<main class=\"pagina\">\n  <p>Bem-vindo ao diário.</p>\n</main>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n<main class=\"pagina\">\n  <h1>Diário de Bordo</h1>\n  <p>Bem-vindo ao diário.</p>\n</main>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "viewport",
+        "label": "A página declara a meta viewport com width=device-width.",
+        "check": {
+          "kind": "attr",
+          "selector": "meta[name=\"viewport\"]",
+          "name": "content",
+          "match": { "pattern": "width=device-width" }
+        }
+      },
+      {
+        "id": "conteudo-principal",
+        "label": "A página tem um conteúdo principal com a classe pagina.",
+        "check": { "kind": "exists", "selector": "main.pagina" }
+      },
+      {
+        "id": "titulo",
+        "label": "O título principal é Diário de Bordo.",
+        "check": {
+          "kind": "text",
+          "selector": "h1",
+          "match": { "equals": "Diário de Bordo" }
+        }
+      }
+    ],
+    "hints": [
+      "A meta viewport fica no início do documento e ajusta a largura da página à tela.",
+      "Use a tag meta com name=\"viewport\" e o atributo content.",
+      "O content precisa conter width=device-width, como no slide da aula."
+    ],
+    "source": { "aula": 173, "slide": 5 },
+    "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+  },
+  {
+    "id": "n08-c02",
+    "nodeId": "n08",
+    "title": "Cartão mobile-first",
+    "kind": "css",
+    "goal": "Escreva os estilos base para o celular e, a partir de 600px, aumente a fonte e o espaçamento do cartão.",
+    "starter": {
+      "html": "<article class=\"cartao\">\n  <h2>Plano Leve</h2>\n  <p>20 XP por dia.</p>\n</article>",
+      "css": ".cartao {\n  font-size: 1rem;\n  padding: 16px;\n}\n\n@media (max-width: 599px) {\n  .cartao {\n    font-size: 0.875rem;\n  }\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<article class=\"cartao\">\n  <h2>Plano Leve</h2>\n  <p>20 XP por dia.</p>\n</article>",
+      "css": ".cartao {\n  font-size: 1rem;\n  padding: 16px;\n}\n\n@media (min-width: 600px) {\n  .cartao {\n    font-size: 1.25rem;\n    padding: 24px;\n  }\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "fonte-base",
+        "label": "O cartão usa 1rem de fonte no estilo base.",
+        "check": {
+          "kind": "style",
+          "selector": ".cartao",
+          "prop": "font-size",
+          "match": { "equals": "1rem" }
+        }
+      },
+      {
+        "id": "fonte-ampla",
+        "label": "A partir de 600px, o cartão usa 1.25rem de fonte.",
+        "check": {
+          "kind": "media",
+          "condition": "min-width:\\s*600px",
+          "selector": ".cartao",
+          "prop": "font-size",
+          "match": { "equals": "1.25rem" }
+        }
+      },
+      {
+        "id": "espaco-amplo",
+        "label": "A partir de 600px, o cartão usa 24px de padding.",
+        "check": {
+          "kind": "media",
+          "condition": "min-width:\\s*600px",
+          "selector": ".cartao",
+          "prop": "padding",
+          "match": { "equals": "24px" }
+        }
+      }
+    ],
+    "hints": [
+      "No mobile-first, o estilo base vale para telas pequenas e a media query só amplia.",
+      "Escreva uma regra @media com a condição (min-width: 600px).",
+      "Dentro da media query, ajuste font-size para 1.25rem e padding para 24px."
+    ],
+    "source": { "aula": 173, "slide": 12 },
+    "evidence": "@media (min-width: 600px) { -- conteúdo CSS -- }"
+  },
+  {
+    "id": "n08-c03",
+    "nodeId": "n08",
+    "title": "Menu que muda no breakpoint",
+    "kind": "css",
+    "goal": "No celular, mostre o botão de menu e esconda os links. A partir de 900px, esconda o botão e mostre os links.",
+    "starter": {
+      "html": "<header class=\"barra\">\n  <a class=\"marca\" href=\"#inicio\">DIW Arcade</a>\n  <button class=\"menu-botao\" type=\"button\">Menu</button>\n  <nav class=\"links\">\n    <a href=\"#jogar\">Jogar</a>\n    <a href=\"#revisar\">Revisar</a>\n  </nav>\n</header>",
+      "css": ".barra {\n  padding: 12px;\n}\n\n.menu-botao {\n  display: none;\n}\n\n.links {\n  display: flex;\n  gap: 12px;\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<header class=\"barra\">\n  <a class=\"marca\" href=\"#inicio\">DIW Arcade</a>\n  <button class=\"menu-botao\" type=\"button\">Menu</button>\n  <nav class=\"links\">\n    <a href=\"#jogar\">Jogar</a>\n    <a href=\"#revisar\">Revisar</a>\n  </nav>\n</header>",
+      "css": ".barra {\n  padding: 12px;\n}\n\n.menu-botao {\n  display: inline-block;\n}\n\n.links {\n  display: none;\n}\n\n@media (min-width: 900px) {\n  .menu-botao {\n    display: none;\n  }\n\n  .links {\n    display: flex;\n    gap: 12px;\n  }\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "botao-base",
+        "label": "No celular, o botão de menu aparece.",
+        "check": {
+          "kind": "style",
+          "selector": ".menu-botao",
+          "prop": "display",
+          "match": { "equals": "inline-block" }
+        }
+      },
+      {
+        "id": "links-base",
+        "label": "No celular, os links ficam escondidos.",
+        "check": {
+          "kind": "style",
+          "selector": ".links",
+          "prop": "display",
+          "match": { "equals": "none" }
+        }
+      },
+      {
+        "id": "botao-amplo",
+        "label": "A partir de 900px, o botão de menu fica escondido.",
+        "check": {
+          "kind": "media",
+          "condition": "min-width:\\s*900px",
+          "selector": ".menu-botao",
+          "prop": "display",
+          "match": { "equals": "none" }
+        }
+      },
+      {
+        "id": "links-amplos",
+        "label": "A partir de 900px, os links aparecem.",
+        "check": {
+          "kind": "media",
+          "condition": "min-width:\\s*900px",
+          "selector": ".links",
+          "prop": "display",
+          "match": { "equals": "flex" }
+        }
+      }
+    ],
+    "hints": [
+      "Comece pelo celular: os links não aparecem e o botão de menu fica visível.",
+      "Use display: none e display: inline-block nas regras base.",
+      "Crie @media (min-width: 900px) e troque o display do botão e dos links."
+    ],
+    "source": { "aula": 173, "slide": 12 },
+    "evidence": "@media (min-width: 900px) { -- conteúdo CSS -- }"
+  }
+]

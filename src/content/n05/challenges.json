@@ -1,0 +1,180 @@
+[
+  {
+    "id": "n05-c01",
+    "nodeId": "n05",
+    "title": "Esqueleto com header, nav, main e footer",
+    "kind": "html",
+    "goal": "Monte uma página com cabeçalho, navegação, conteúdo principal e rodapé usando os elementos semânticos do HTML5.",
+    "starter": {
+      "html": "<div class=\"topo\">\n  <h1>DIW Arcade</h1>\n</div>\n<div class=\"menu\">\n  <a href=\"#inicio\">Início</a>\n  <a href=\"#sobre\">Sobre</a>\n</div>\n<div class=\"conteudo\">\n  <p>Bem-vindo ao DIW Arcade.</p>\n</div>\n<div class=\"rodape\">\n  <p>DIW Arcade — prática de interfaces web.</p>\n</div>",
+      "css": "body {\n  font-family: sans-serif;\n  margin: 2rem;\n}\n\n.topo,\n.menu,\n.conteudo,\n.rodape {\n  margin-bottom: 1rem;\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<header>\n  <h1>DIW Arcade</h1>\n</header>\n<nav aria-label=\"Principal\">\n  <a href=\"#inicio\">Início</a>\n  <a href=\"#sobre\">Sobre</a>\n</nav>\n<main>\n  <h2>Conteúdo principal</h2>\n  <p>Bem-vindo ao DIW Arcade.</p>\n</main>\n<footer>\n  <p>DIW Arcade — prática de interfaces web.</p>\n</footer>",
+      "css": "body {\n  font-family: sans-serif;\n  margin: 2rem;\n}\n\nheader,\nnav,\nmain,\nfooter {\n  margin-bottom: 1rem;\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "header-existe",
+        "label": "A página tem um cabeçalho (<header>).",
+        "check": { "kind": "exists", "selector": "header" }
+      },
+      {
+        "id": "header-titulo",
+        "label": "O cabeçalho mostra o nome do site em um <h1>.",
+        "check": {
+          "kind": "text",
+          "selector": "header h1",
+          "match": { "pattern": "diw arcade" }
+        }
+      },
+      {
+        "id": "nav-links",
+        "label": "A navegação reúne pelo menos dois links.",
+        "check": { "kind": "count", "selector": "nav a", "min": 2 }
+      },
+      {
+        "id": "main-existe",
+        "label": "O conteúdo principal fica dentro de um <main>.",
+        "check": { "kind": "exists", "selector": "main" }
+      },
+      {
+        "id": "footer-texto",
+        "label": "O rodapé identifica o site com o nome DIW Arcade.",
+        "check": {
+          "kind": "text",
+          "selector": "footer",
+          "match": { "pattern": "diw arcade" }
+        }
+      }
+    ],
+    "hints": [
+      "Os elementos de layout do HTML5 indicam o papel de cada bloco: <header>, <nav>, <main> e <footer>.",
+      "Troque as divs do código inicial pelas tags semânticas correspondentes, mantendo os links dentro do <nav> e o texto principal dentro do <main>.",
+      "O <header> deve conter o <h1>, o <nav> deve ter os dois links, o <main> guarda o conteúdo e o <footer> fecha a página."
+    ],
+    "source": { "aula": 163, "slide": 5 },
+    "evidence": "<header></header> <nav></nav> <section></section>"
+  },
+  {
+    "id": "n05-c02",
+    "nodeId": "n05",
+    "title": "Artigo dividido em seções com conteúdo complementar",
+    "kind": "html",
+    "goal": "Organize uma notícia em um <article>, divida o texto em duas <section> e coloque os links relacionados em um <aside>.",
+    "starter": {
+      "html": "<main>\n  <div class=\"artigo\">\n    <h1>Primeiros passos em HTML semântico</h1>\n    <div class=\"secao\">\n      <h2>Por que semântica importa</h2>\n      <p>Elementos semânticos descrevem o papel de cada parte da página.</p>\n    </div>\n    <div class=\"secao\">\n      <h2>Como começar</h2>\n      <p>Comece pelo esqueleto da página e escolha a tag que representa cada bloco.</p>\n    </div>\n    <div class=\"relacionados\">\n      <h2>Leia também</h2>\n      <p><a href=\"#semantica\">Guia de semântica do MDN</a></p>\n    </div>\n  </div>\n</main>",
+      "css": "body {\n  font-family: sans-serif;\n  margin: 2rem;\n}\n\n.artigo {\n  max-width: 40rem;\n}\n\n.secao,\n.relacionados {\n  margin-top: 1rem;\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<main>\n  <article>\n    <header>\n      <h1>Primeiros passos em HTML semântico</h1>\n    </header>\n    <section>\n      <h2>Por que semântica importa</h2>\n      <p>Elementos semânticos descrevem o papel de cada parte da página.</p>\n    </section>\n    <section>\n      <h2>Como começar</h2>\n      <p>Comece pelo esqueleto da página e escolha a tag que representa cada bloco.</p>\n    </section>\n    <aside>\n      <h2>Leia também</h2>\n      <p><a href=\"#semantica\">Guia de semântica do MDN</a></p>\n    </aside>\n  </article>\n</main>",
+      "css": "body {\n  font-family: sans-serif;\n  margin: 2rem;\n}\n\narticle {\n  max-width: 40rem;\n}\n\nsection,\naside {\n  margin-top: 1rem;\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "article-existe",
+        "label": "A notícia está dentro de um <article>.",
+        "check": { "kind": "exists", "selector": "article" }
+      },
+      {
+        "id": "article-titulo",
+        "label": "O <article> tem um título principal sobre HTML semântico.",
+        "check": {
+          "kind": "text",
+          "selector": "article h1",
+          "match": { "pattern": "html semântico" }
+        }
+      },
+      {
+        "id": "secoes",
+        "label": "O artigo é dividido em pelo menos duas <section>.",
+        "check": { "kind": "count", "selector": "article section", "min": 2 }
+      },
+      {
+        "id": "aside-existe",
+        "label": "O conteúdo complementar fica em um <aside> dentro do artigo.",
+        "check": { "kind": "exists", "selector": "article aside" }
+      },
+      {
+        "id": "aside-texto",
+        "label": "O <aside> apresenta o bloco \"Leia também\".",
+        "check": {
+          "kind": "text",
+          "selector": "article aside",
+          "match": { "pattern": "leia também" }
+        }
+      }
+    ],
+    "hints": [
+      "Um <article> representa um conteúdo independente; dentro dele, <section> agrupa partes do texto e <aside> traz conteúdo complementar.",
+      "Troque as divs de artigo, seção e relacionados por <article>, <section> e <aside>, mantendo os títulos e parágrafos.",
+      "O <article> deve conter o <h1>, duas <section> com seus <h2> e um <aside> com o bloco \"Leia também\"."
+    ],
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<article> Define um artigo"
+  },
+  {
+    "id": "n05-c03",
+    "nodeId": "n05",
+    "title": "Figura com legenda",
+    "kind": "html",
+    "goal": "Coloque um diagrama dentro de um <figure> e descreva a imagem com um <figcaption>.",
+    "starter": {
+      "html": "<div class=\"figura\">\n  <svg viewBox=\"0 0 160 90\" role=\"img\" aria-label=\"Diagrama de uma árvore de arquivos\">\n    <rect width=\"160\" height=\"90\" fill=\"#1f2937\"></rect>\n    <circle cx=\"50\" cy=\"45\" r=\"22\" fill=\"#38bdf8\"></circle>\n    <rect x=\"95\" y=\"30\" width=\"40\" height=\"30\" fill=\"#f472b6\"></rect>\n  </svg>\n  <p>Diagrama de uma árvore de arquivos.</p>\n</div>",
+      "css": "body {\n  font-family: sans-serif;\n  margin: 2rem;\n}\n\n.figura {\n  max-width: 20rem;\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<figure>\n  <svg viewBox=\"0 0 160 90\" role=\"img\" aria-label=\"Diagrama de uma árvore de arquivos\">\n    <rect width=\"160\" height=\"90\" fill=\"#1f2937\"></rect>\n    <circle cx=\"50\" cy=\"45\" r=\"22\" fill=\"#38bdf8\"></circle>\n    <rect x=\"95\" y=\"30\" width=\"40\" height=\"30\" fill=\"#f472b6\"></rect>\n  </svg>\n  <figcaption>Diagrama de uma árvore de arquivos.</figcaption>\n</figure>",
+      "css": "body {\n  font-family: sans-serif;\n  margin: 2rem;\n}\n\nfigure {\n  max-width: 20rem;\n}\n\nfigure svg {\n  width: 100%;\n  height: auto;\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "figure-existe",
+        "label": "O diagrama está dentro de um <figure>.",
+        "check": { "kind": "exists", "selector": "figure" }
+      },
+      {
+        "id": "figcaption-existe",
+        "label": "O <figure> tem uma legenda com <figcaption>.",
+        "check": { "kind": "exists", "selector": "figure figcaption" }
+      },
+      {
+        "id": "figure-imagem",
+        "label": "O <figure> contém exatamente um SVG.",
+        "check": { "kind": "count", "selector": "figure svg", "min": 1, "max": 1 }
+      },
+      {
+        "id": "figcaption-texto",
+        "label": "A legenda descreve o diagrama.",
+        "check": {
+          "kind": "text",
+          "selector": "figure figcaption",
+          "match": { "pattern": "diagrama" }
+        }
+      },
+      {
+        "id": "figura-rotulo",
+        "label": "O SVG tem um aria-label que descreve o diagrama.",
+        "check": {
+          "kind": "attr",
+          "selector": "figure svg",
+          "name": "aria-label",
+          "match": { "pattern": "diagrama" }
+        }
+      }
+    ],
+    "hints": [
+      "O <figure> agrupa uma imagem e a sua legenda; o <figcaption> descreve essa imagem.",
+      "Envolva o SVG em um <figure> e troque o parágrafo de descrição por um <figcaption> dentro da mesma figura.",
+      "O <figure> deve conter o SVG com aria-label e um <figcaption> com o texto \"Diagrama de uma árvore de arquivos\"."
+    ],
+    "source": { "aula": 163, "slide": 7 },
+    "evidence": "<figcaption> Define o título para um elemento <figure>"
+  }
+]
