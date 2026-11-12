@@ -7,9 +7,22 @@ export interface RequirementListProps {
   running?: boolean;
 }
 
+const STATUS_LABELS = {
+  pending: 'pendente',
+  passed: 'passou',
+  failed: 'falhou',
+} as const;
+
+const STATUS_MARKERS = {
+  pending: '○',
+  passed: '✓',
+  failed: '✗',
+} as const;
+
 /**
  * Checklist of the challenge requirements plus a polite live summary such as
- * "2 de 3 requisitos".
+ * "2 de 3 requisitos". Every item carries a status icon and word from the
+ * first render, so pending work is visible before the first run.
  */
 export function RequirementList({
   requirements,
@@ -45,14 +58,6 @@ export function RequirementList({
           );
           const status =
             result === undefined ? 'pending' : result.passed ? 'passed' : 'failed';
-          const marker =
-            status === 'passed' ? '✓' : status === 'failed' ? '✗' : '•';
-          const statusLabel =
-            status === 'passed'
-              ? 'Requisito cumprido'
-              : status === 'failed'
-                ? 'Requisito não cumprido'
-                : 'Requisito ainda não verificado';
 
           return (
             <li
@@ -60,10 +65,12 @@ export function RequirementList({
               key={requirement.id}
             >
               <span className="requirement-list__marker" aria-hidden="true">
-                {marker}
+                {STATUS_MARKERS[status]}
               </span>
               <span className="requirement-list__label">{requirement.label}</span>
-              <span className="requirement-list__status">{statusLabel}</span>
+              <span className="requirement-list__status">
+                {STATUS_LABELS[status]}
+              </span>
               {result?.message ? (
                 <span className="requirement-list__message">{result.message}</span>
               ) : null}
