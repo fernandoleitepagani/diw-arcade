@@ -1,0 +1,194 @@
+[
+  {
+    "id": "n08-f001",
+    "nodeId": "n08",
+    "front": "O que é viewport?",
+    "back": "É a área visível do navegador, que varia de acordo com o tamanho das telas.",
+    "source": { "aula": 173, "slide": 2 },
+    "evidence": "Viewport é a área visível do navegador e variam de acordo com o tamanho das telas"
+  },
+  {
+    "id": "n08-f002",
+    "nodeId": "n08",
+    "front": "Por que sites feitos para computadores eram reduzidos em dispositivos móveis?",
+    "back": "Porque tinham larguras fixas e os navegadores reduziam a visualização da página.",
+    "source": { "aula": 173, "slide": 2 },
+    "evidence": "Como os sites eram feitos para computadores com larguras fixas, os navegadores reduziam a visualização da páginas em dispositivos móveis"
+  },
+  {
+    "id": "n08-f003",
+    "nodeId": "n08",
+    "front": "Qual é a fórmula do viewport?",
+    "back": "A fórmula é Viewport = Resolução / Pixel-ratio.",
+    "source": { "aula": 173, "slide": 3 },
+    "evidence": "O tamanho do pixel para o CSS e calculado em função do pixel-ratio do dispositivo e o viewport pode ser ajustado em função disso"
+  },
+  {
+    "id": "n08-f004",
+    "nodeId": "n08",
+    "front": "Qual é o viewport de uma tela com resolução 1920 e pixel-ratio 3?",
+    "back": "O viewport é de 640 pixels, pois 1920 / 3 = 640.",
+    "source": { "aula": 173, "slide": 3 },
+    "evidence": "Viewport = 1920 / 3 = 640"
+  },
+  {
+    "id": "n08-f005",
+    "nodeId": "n08",
+    "front": "Qual meta tag ajusta o viewport para a largura do dispositivo?",
+    "back": "A meta tag é <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">.",
+    "source": { "aula": 173, "slide": 5 },
+    "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+  },
+  {
+    "id": "n08-f006",
+    "nodeId": "n08",
+    "front": "Qual valor de initial-scale aparece na meta tag de viewport do exemplo?",
+    "back": "O valor de initial-scale é 1.",
+    "source": { "aula": 173, "slide": 5 },
+    "evidence": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
+  },
+  {
+    "id": "n08-f007",
+    "nodeId": "n08",
+    "front": "O que são media queries?",
+    "back": "São filtros aplicados aos estilos CSS com base em características do dispositivo.",
+    "source": { "aula": 173, "slide": 6 },
+    "evidence": "As media queries são filtros que podem ser aplicados aos estilos CSS com base em alguma característica do dispositivo onde a página é apresentada."
+  },
+  {
+    "id": "n08-f008",
+    "nodeId": "n08",
+    "front": "Como aplicar a folha tela_g.css apenas a telas acima de 900px?",
+    "back": "A marcação é <link rel=\"stylesheet\" media=\"screen and (min-width: 900px)\" href=\"tela_g.css\">.",
+    "source": { "aula": 173, "slide": 6 },
+    "evidence": "<link rel=\"stylesheet\" media=\"screen and (min-width: 900px)\" href=\"tela_g.css\">"
+  },
+  {
+    "id": "n08-f009",
+    "nodeId": "n08",
+    "front": "Como aplicar a folha tela_p.css apenas a telas abaixo de 600px?",
+    "back": "A marcação é <link rel=\"stylesheet\" media=\"screen and (max-width: 600px)\" href=\"tela_p.css\">.",
+    "source": { "aula": 173, "slide": 6 },
+    "evidence": "<link rel=\"stylesheet\" media=\"screen and (max-width: 600px)\" href=\"tela_p.css\">"
+  },
+  {
+    "id": "n08-f010",
+    "nodeId": "n08",
+    "front": "No exemplo de media query no CSS, o que muda abaixo de 600px?",
+    "back": "O fundo do body passa de white para yellow.",
+    "source": { "aula": 173, "slide": 7 },
+    "evidence": "No exemplo, a página terá fundo yellow, quando a largura página largura ficar abaixo dos 600 pixels."
+  },
+  {
+    "id": "n08-f011",
+    "nodeId": "n08",
+    "front": "Qual é a sintaxe básica de uma media query?",
+    "back": "A sintaxe é @media [not|only] mediatype and (mediafeature) { -- CÓDIGO CSS -- }.",
+    "source": { "aula": 173, "slide": 8 },
+    "evidence": "@media [not|only] mediatype and (mediafeature) { -- CÓDIGO CSS -- }"
+  },
+  {
+    "id": "n08-f012",
+    "nodeId": "n08",
+    "front": "Quais media types de dispositivo são apresentados na aula?",
+    "back": "A lista de media types é all, print e screen.",
+    "source": { "aula": 173, "slide": 8 },
+    "evidence": "• all – Indica qualquer tipo de mídias • print – Indica impressoras"
+  },
+  {
+    "id": "n08-f013",
+    "nodeId": "n08",
+    "front": "O que o media type all indica?",
+    "back": "Indica qualquer tipo de mídia.",
+    "source": { "aula": 173, "slide": 8 },
+    "evidence": "all – Indica qualquer tipo de mídias"
+  },
+  {
+    "id": "n08-f014",
+    "nodeId": "n08",
+    "front": "O que o media type print indica?",
+    "back": "É usado para impressoras.",
+    "source": { "aula": 173, "slide": 8 },
+    "evidence": "print – Indica impressoras"
+  },
+  {
+    "id": "n08-f015",
+    "nodeId": "n08",
+    "front": "O que o media type screen indica?",
+    "back": "Indica telas de computadores, smartphones e tablets.",
+    "source": { "aula": 173, "slide": 8 },
+    "evidence": "screen – Indica telas de computadores, smartphones e tablets"
+  },
+  {
+    "id": "n08-f016",
+    "nodeId": "n08",
+    "front": "Quais media features de dispositivo são citadas na aula?",
+    "back": "A aula cita color, width/height, orientation e resolução.",
+    "source": { "aula": 173, "slide": 8 },
+    "evidence": "color (profundidade de cores), width/height (largura e altura), orientation, resolução"
+  },
+  {
+    "id": "n08-f017",
+    "nodeId": "n08",
+    "front": "O que a media feature color indica?",
+    "back": "Indica a profundidade de cores do dispositivo em bits e aceita min/max.",
+    "source": { "aula": 173, "slide": 9 },
+    "evidence": "Indica a profundidade de cores do dispositivo em bits. Aceita min/max."
+  },
+  {
+    "id": "n08-f018",
+    "nodeId": "n08",
+    "front": "Quais valores a media feature orientation pode assumir?",
+    "back": "A proporção pode ser portrait ou landscape.",
+    "source": { "aula": 173, "slide": 9 },
+    "evidence": "Indica a proporção do viewport, podendo ser portrait ou landscape."
+  },
+  {
+    "id": "n08-f019",
+    "nodeId": "n08",
+    "front": "Em que unidade a media feature resolution indica a resolução de saída?",
+    "back": "Em dpi.",
+    "source": { "aula": 173, "slide": 9 },
+    "evidence": "Indica a resolução de saída do dispositivo em dpi. Aceita min/max."
+  },
+  {
+    "id": "n08-f020",
+    "nodeId": "n08",
+    "front": "No exemplo em cascata, quais cores o body assume conforme a largura aumenta?",
+    "back": "O body fica red por padrão, orange a partir de 400px e yellow a partir de 600px.",
+    "source": { "aula": 173, "slide": 10 },
+    "evidence": "body { background-color: red; } @media screen and (min-width: 400px) { body { background-color: orange; } } @media screen and (min-width: 600px) { body { background-color: yellow; } }"
+  },
+  {
+    "id": "n08-f021",
+    "nodeId": "n08",
+    "front": "Quais breakpoints de largura são mostrados na aula?",
+    "back": "A lista de breakpoints é 600, 900, 1200 e 1800 pixels.",
+    "source": { "aula": 173, "slide": 11 },
+    "evidence": "Breakpoints 600 900 1200 1800"
+  },
+  {
+    "id": "n08-f022",
+    "nodeId": "n08",
+    "front": "Como é a media query para larguras de até 599px?",
+    "back": "A media query é @media (max-width: 599px) { -- conteúdo CSS -- }.",
+    "source": { "aula": 173, "slide": 12 },
+    "evidence": "@media (max-width: 599px) { -- conteúdo CSS -- }"
+  },
+  {
+    "id": "n08-f023",
+    "nodeId": "n08",
+    "front": "Quais min-width são usados nos breakpoints de 600px a 1800px?",
+    "back": "Os valores de min-width são 600px, 900px, 1200px e 1800px.",
+    "source": { "aula": 173, "slide": 12 },
+    "evidence": "@media (min-width: 600px) { -- conteúdo CSS -- } @media (min-width: 900px) { -- conteúdo CSS -- }"
+  },
+  {
+    "id": "n08-f024",
+    "nodeId": "n08",
+    "front": "Segundo o slide de resolução x viewport, de onde vem a fórmula usada?",
+    "back": "A fórmula Viewport = Resolução / Pixel-ratio é creditada à fonte mydevice.io.",
+    "source": { "aula": 173, "slide": 4 },
+    "evidence": "Resolução x Viewport Viewport = Resolução / Pixel-ratio Fonte: https://mydevice.io"
+  }
+]
