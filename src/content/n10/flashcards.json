@@ -1,0 +1,194 @@
+[
+  {
+    "id": "n10-f001",
+    "nodeId": "n10",
+    "front": "O que significa UX?",
+    "back": "Experiência do Usuário: termo que abrange áreas relacionadas com a análise e o projeto de produtos a partir da perspectiva do usuário.",
+    "source": { "aula": 210, "slide": 3 },
+    "evidence": "Experiência do Usuário (UX) é um termo que abrange diversas áreas relacionadas com a análise e o projeto de produtos a partir da perspectiva do usuário."
+  },
+  {
+    "id": "n10-f002",
+    "nodeId": "n10",
+    "front": "Cite áreas que compõem UX segundo a aula.",
+    "back": "Arquitetura da Informação, Design de Interação, Interação Humano-Computador, Visual Design e Usabilidade.",
+    "source": { "aula": 210, "slide": 3 },
+    "evidence": "Arquitetura da Informação • Design de Interação • Interação Humano-Computador • Visual Design • Usabilidade"
+  },
+  {
+    "id": "n10-f003",
+    "nodeId": "n10",
+    "front": "Quais são as três fases de Design Thinking?",
+    "back": "As três fases de Design Thinking são: Entender, Explorar e Materializar.",
+    "source": { "aula": 210, "slide": 8 },
+    "evidence": "Entender Explorar Materializar"
+  },
+  {
+    "id": "n10-f004",
+    "nodeId": "n10",
+    "front": "O que acontece na fase Entender?",
+    "back": "Relacionar dúvidas, certezas e suposições sobre o problema, mapear o público-alvo, entrevistar stakeholders, identificar personas e compreender melhor as personas no processo de empatia.",
+    "source": { "aula": 210, "slide": 8 },
+    "evidence": "Relacionar dúvidas, certezas e"
+  },
+  {
+    "id": "n10-f005",
+    "nodeId": "n10",
+    "front": "O que acontece na fase Materializar?",
+    "back": "Montar protótipos das ideias priorizadas, testar com usuários, ajustar e implementar as ideias aprovadas.",
+    "source": { "aula": 210, "slide": 8 },
+    "evidence": "Montar protótipos das ideias"
+  },
+  {
+    "id": "n10-f006",
+    "nodeId": "n10",
+    "front": "Como a aula define usabilidade?",
+    "back": "Característica de produtos interativos que busca assegurar facilidade de adaptação e de uso, de forma eficaz e agradável.",
+    "source": { "aula": 210, "slide": 11 },
+    "evidence": "Característica de produtos interativos que busca assegurar a facilidade de adaptação e de uso por parte do usuários, ao mesmo tempo que se apresentam de maneira eficaz e agradáveis para o usuário."
+  },
+  {
+    "id": "n10-f007",
+    "nodeId": "n10",
+    "front": "Quais são as metas de usabilidade listadas?",
+    "back": "Eficácia, eficiência, segurança, utilidade, capacidade de aprendizado e capacidade de memorizar.",
+    "source": { "aula": 210, "slide": 12 },
+    "evidence": "Metas de usabilidade"
+  },
+  {
+    "id": "n10-f008",
+    "nodeId": "n10",
+    "front": "O que significa a meta de eficácia?",
+    "back": "Ser eficaz no uso e atender aos objetivos especificados para o produto.",
+    "source": { "aula": 210, "slide": 12 },
+    "evidence": "Atender aos objetivos especificados"
+  },
+  {
+    "id": "n10-f009",
+    "nodeId": "n10",
+    "front": "O que significa a meta de segurança?",
+    "back": "Ser seguro no uso, com ausência de desconforto na utilização.",
+    "source": { "aula": 210, "slide": 12 },
+    "evidence": "Ausência de desconforto na utilização"
+  },
+  {
+    "id": "n10-f010",
+    "nodeId": "n10",
+    "front": "O que é uma heurística?",
+    "back": "Uma regra, simplificação ou aproximação que reduz ou limita a busca por soluções em domínios difíceis e pouco compreendidos.",
+    "source": { "aula": 210, "slide": 13 },
+    "evidence": "Uma regra, simplificação, ou aproximação que reduz ou limita a busca por soluções em domínios que são difíceis e pouco compreendidos."
+  },
+  {
+    "id": "n10-f011",
+    "nodeId": "n10",
+    "front": "Cite três heurísticas de Nielsen.",
+    "back": "Entre as heurísticas estão a visibilidade do status do sistema, a correspondência entre sistema e mundo real e o controle do usuário com liberdade.",
+    "source": { "aula": 210, "slide": 13 },
+    "evidence": "Visibilidade do status do sistema – Correspondência entre sistema e mundo real – Controle do usuário e liberdade"
+  },
+  {
+    "id": "n10-f012",
+    "nodeId": "n10",
+    "front": "O que é acessibilidade?",
+    "back": "Característica relacionada à noção de acesso a um produto ou serviço, aplicável a contextos como transporte público, mobilidade urbana e tecnologia da informação.",
+    "source": { "aula": 210, "slide": 14 },
+    "evidence": "Característica que está relacionada à noção de acesso a um produto ou serviço"
+  },
+  {
+    "id": "n10-f013",
+    "nodeId": "n10",
+    "front": "Quais são os quatro princípios de acessibilidade do WCAG 2.1?",
+    "back": "Os princípios de acessibilidade são: perceptível, operável, compreensível e robusto.",
+    "source": { "aula": 210, "slide": 14 },
+    "evidence": "Ser perceptível • Ser operável • Ser compreensível • Ser robusto"
+  },
+  {
+    "id": "n10-f014",
+    "nodeId": "n10",
+    "front": "Quantos princípios, recomendações e critérios de sucesso o WCAG 2.1 define?",
+    "back": "4 princípios, 13 recomendações e 78 critérios de sucesso.",
+    "source": { "aula": 210, "slide": 14 },
+    "evidence": "define 4 Princípios de acessibilidade, 13 recomendações e 78 critérios de sucesso."
+  },
+  {
+    "id": "n10-f015",
+    "nodeId": "n10",
+    "front": "Que proporção é sugerida para o layout e design do site?",
+    "back": "A proporção áurea.",
+    "source": { "aula": 210, "slide": 16 },
+    "evidence": "Usando a proporção áurea"
+  },
+  {
+    "id": "n10-f016",
+    "nodeId": "n10",
+    "front": "O que deve ter prioridade no layout do site?",
+    "back": "O conteúdo.",
+    "source": { "aula": 210, "slide": 17 },
+    "evidence": "O conteúdo deve ter prioridade"
+  },
+  {
+    "id": "n10-f017",
+    "nodeId": "n10",
+    "front": "O que são personas?",
+    "back": "Personagens fictícios criados a partir da pesquisa e observação dos comportamentos de usuários reais.",
+    "source": { "aula": 210, "slide": 22 },
+    "evidence": "Personas são personagens fictícios criados a partir da pesquisa e observação dos comportamentos de usuários reais."
+  },
+  {
+    "id": "n10-f018",
+    "nodeId": "n10",
+    "front": "O que as personas representam?",
+    "back": "Motivações, desejos, expectativas e necessidades de um determinado grupo.",
+    "source": { "aula": 210, "slide": 22 },
+    "evidence": "Representam motivações, desejos, expectativas e necessidades de um determinado grupo."
+  },
+  {
+    "id": "n10-f019",
+    "nodeId": "n10",
+    "front": "O que é o mapa da jornada do cliente?",
+    "back": "Artefato que ilustra visualmente o processo, as necessidades e as percepções de um cliente durante seu relacionamento com uma empresa.",
+    "source": { "aula": 210, "slide": 24 },
+    "evidence": "Artefato que ilustra visualmente o processo, as necessidade e as percepções de um cliente durante seu relacionamento com uma empresa."
+  },
+  {
+    "id": "n10-f020",
+    "nodeId": "n10",
+    "front": "Para que servem os storyboards?",
+    "back": "São utilizados no início para descrever cenários com mais detalhes e representar tarefas no papel, mostrando como o usuário progride na execução da tarefa.",
+    "source": { "aula": 210, "slide": 26 },
+    "evidence": "Utilizados no início para descrever cenários, trazendo mais detalhes"
+  },
+  {
+    "id": "n10-f021",
+    "nodeId": "n10",
+    "front": "O que são wireframes?",
+    "back": "Representação de telas rascunhadas que retratam o layout de uma página ou funcionalidade do sistema.",
+    "source": { "aula": 210, "slide": 27 },
+    "evidence": "Representação de telas rascunhadas que retratam uma tela com o layout de uma página ou funcionalidade do sistema"
+  },
+  {
+    "id": "n10-f022",
+    "nodeId": "n10",
+    "front": "O que é o fluxo do usuário (user flow)?",
+    "back": "Tipo de prototipagem do caminho que um usuário percorre em um site para realizar uma tarefa ou que descreve a experiência completa.",
+    "source": { "aula": 210, "slide": 29 },
+    "evidence": "O fluxo do usuário é um tipo de prototipagem do caminho que um usuário percorre em um site para realizar uma tarefa ou que descreve a experiência completa."
+  },
+  {
+    "id": "n10-f023",
+    "nodeId": "n10",
+    "front": "O que são mockups?",
+    "back": "Protótipos de alta fidelidade com design muito próximo do produto final, úteis para vender uma ideia ou validar uma proposta visual.",
+    "source": { "aula": 210, "slide": 31 },
+    "evidence": "Mockups são protótipos de alta fidelidade com design muito próximo do produto final, úteis para vender uma ideia ou validar uma proposta visual."
+  },
+  {
+    "id": "n10-f024",
+    "nodeId": "n10",
+    "front": "O que os site maps permitem verificar?",
+    "back": "Como o conteúdo do site está organizado e distribuído, além dos caminhos de acesso ou fluxo de navegação.",
+    "source": { "aula": 210, "slide": 32 },
+    "evidence": "Os site maps são mapas visuais que permitem verificar como o conteúdo do site está organizado e distribuído, além dos caminhos de acesso, ou fluxo de navegação."
+  }
+]
