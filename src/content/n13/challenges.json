@@ -1,0 +1,198 @@
+[
+  {
+    "id": "n13-c01",
+    "nodeId": "n13",
+    "title": "Ler uma string JSON e montar uma lista",
+    "kind": "js",
+    "goal": "Converta a string JSON de notícias com JSON.parse e crie um item de lista para cada notícia.",
+    "starter": {
+      "html": "<h2>Notícias</h2>\n<ul id=\"lista\"></ul>",
+      "css": "",
+      "js": "const dados = '[{\"titulo\":\"HTML\"},{\"titulo\":\"CSS\"},{\"titulo\":\"JavaScript\"}]';\nconst lista = document.querySelector('#lista');\n\n// Converta a string com JSON.parse e crie um <li> para cada item.\n"
+    },
+    "solution": {
+      "html": "<h2>Notícias</h2>\n<ul id=\"lista\"></ul>",
+      "css": "",
+      "js": "const dados = '[{\"titulo\":\"HTML\"},{\"titulo\":\"CSS\"},{\"titulo\":\"JavaScript\"}]';\nconst lista = document.querySelector('#lista');\n\nfor (const item of JSON.parse(dados)) {\n  const li = document.createElement('li');\n  li.textContent = item.titulo;\n  lista.appendChild(li);\n}\n"
+    },
+    "requirements": [
+      {
+        "id": "lista-existe",
+        "label": "A página tem uma lista com o id lista.",
+        "check": {
+          "kind": "exists",
+          "selector": "#lista"
+        }
+      },
+      {
+        "id": "lista-itens",
+        "label": "A lista mostra exatamente três itens.",
+        "check": {
+          "kind": "count",
+          "selector": "#lista li",
+          "min": 3,
+          "max": 3
+        }
+      },
+      {
+        "id": "lista-primeiro",
+        "label": "O primeiro item mostra HTML.",
+        "check": {
+          "kind": "text",
+          "selector": "#lista li:first-child",
+          "match": { "equals": "HTML" }
+        }
+      },
+      {
+        "id": "lista-ultimo",
+        "label": "O último item mostra JavaScript.",
+        "check": {
+          "kind": "text",
+          "selector": "#lista li:last-child",
+          "match": { "equals": "JavaScript" }
+        }
+      },
+      {
+        "id": "lista-sem-erros",
+        "label": "O código executa sem erros.",
+        "check": {
+          "kind": "noErrors"
+        }
+      }
+    ],
+    "hints": [
+      "Use JSON.parse(dados) para transformar a string em um array de objetos.",
+      "Percorra o array com for...of e crie um elemento li para cada objeto.",
+      "Defina li.textContent com o título e adicione o li à lista com appendChild."
+    ],
+    "source": { "aula": 240, "slide": 5 },
+    "evidence": "Permite estruturar dados diversos"
+  },
+  {
+    "id": "n13-c02",
+    "nodeId": "n13",
+    "title": "Buscar produtos em uma API",
+    "kind": "js",
+    "goal": "Use fetch para buscar a lista de produtos na URL mockada e mostre um item por produto.",
+    "starter": {
+      "html": "<h2>Produtos</h2>\n<ul id=\"produtos\"></ul>",
+      "css": "",
+      "js": "const lista = document.querySelector('#produtos');\nconst url = 'https://api.exemplo.com/produtos';\n\n// Busque os produtos com fetch e crie um <li> para cada nome.\n"
+    },
+    "solution": {
+      "html": "<h2>Produtos</h2>\n<ul id=\"produtos\"></ul>",
+      "css": "",
+      "js": "const lista = document.querySelector('#produtos');\nconst url = 'https://api.exemplo.com/produtos';\n\nfetch(url)\n  .then((resposta) => resposta.json())\n  .then((produtos) => {\n    for (const produto of produtos) {\n      const li = document.createElement('li');\n      li.textContent = produto.nome;\n      lista.appendChild(li);\n    }\n  });\n"
+    },
+    "requirements": [
+      {
+        "id": "produtos-lista",
+        "label": "A página tem uma lista com o id produtos.",
+        "check": {
+          "kind": "exists",
+          "selector": "#produtos"
+        }
+      },
+      {
+        "id": "produtos-quantidade",
+        "label": "A lista mostra exatamente três produtos.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": {
+          "kind": "count",
+          "selector": "#produtos li",
+          "min": 3,
+          "max": 3
+        }
+      },
+      {
+        "id": "produtos-primeiro",
+        "label": "O primeiro item mostra Teclado.",
+        "check": {
+          "kind": "text",
+          "selector": "#produtos li:first-child",
+          "match": { "equals": "Teclado" }
+        }
+      },
+      {
+        "id": "produtos-ultimo",
+        "label": "O último item mostra Monitor.",
+        "check": {
+          "kind": "text",
+          "selector": "#produtos li:last-child",
+          "match": { "equals": "Monitor" }
+        }
+      },
+      {
+        "id": "produtos-sem-erros",
+        "label": "O código executa sem erros.",
+        "check": {
+          "kind": "noErrors"
+        }
+      }
+    ],
+    "hints": [
+      "Chame fetch(url) e trate a resposta com .then((resposta) => resposta.json()).",
+      "No segundo .then você recebe um array de produtos; percorra-o com for...of.",
+      "Crie um li com o nome de cada produto e use appendChild para adicioná-lo à lista."
+    ],
+    "mocks": {
+      "https://api.exemplo.com/produtos": [
+        { "nome": "Teclado" },
+        { "nome": "Mouse" },
+        { "nome": "Monitor" }
+      ]
+    },
+    "source": { "aula": 250, "slide": 11 },
+    "evidence": "GET – Recuperar um recurso (SELECT)"
+  },
+  {
+    "id": "n13-c03",
+    "nodeId": "n13",
+    "title": "Serializar um objeto para JSON",
+    "kind": "js",
+    "goal": "Converta um objeto em texto JSON com JSON.stringify e escreva o resultado dentro do elemento pre.",
+    "starter": {
+      "html": "<h2>Usuário</h2>\n<pre id=\"saida\"></pre>",
+      "css": "",
+      "js": "const usuario = { nome: 'Ana', idade: 28 };\nconst saida = document.querySelector('#saida');\n\n// Escreva o objeto convertido em JSON dentro de #saida.\n"
+    },
+    "solution": {
+      "html": "<h2>Usuário</h2>\n<pre id=\"saida\"></pre>",
+      "css": "",
+      "js": "const usuario = { nome: 'Ana', idade: 28 };\nconst saida = document.querySelector('#saida');\n\nsaida.textContent = JSON.stringify(usuario);\n"
+    },
+    "requirements": [
+      {
+        "id": "saida-pre",
+        "label": "A página tem um elemento pre com o id saida.",
+        "check": {
+          "kind": "exists",
+          "selector": "pre#saida"
+        }
+      },
+      {
+        "id": "saida-texto",
+        "label": "O pre mostra o objeto serializado como JSON.",
+        "check": {
+          "kind": "text",
+          "selector": "#saida",
+          "match": { "equals": "{\"nome\":\"Ana\",\"idade\":28}" }
+        }
+      },
+      {
+        "id": "saida-sem-erros",
+        "label": "O código executa sem erros.",
+        "check": {
+          "kind": "noErrors"
+        }
+      }
+    ],
+    "hints": [
+      "Use JSON.stringify(usuario) para transformar o objeto em uma string.",
+      "Atribua o resultado a saida.textContent, e não ao innerHTML.",
+      "O texto final deve ficar no formato {\"nome\":\"Ana\",\"idade\":28}."
+    ],
+    "source": { "aula": 240, "slide": 10 },
+    "evidence": "\"first\": \"John\", \"middle\": \"K\", \"last\": \"Doe\""
+  }
+]
