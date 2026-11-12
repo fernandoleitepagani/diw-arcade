@@ -3,7 +3,7 @@ import {
   type ProgressContextValue,
 } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
-import { Mascot } from '../../components/ui';
+import { Card, Mascot, PageHeader } from '../../components/ui';
 import {
   NODES,
   NODE_IDS,
@@ -12,6 +12,7 @@ import {
   getQuestions,
 } from '../../content';
 import { pickLine } from '../../content/copy';
+import { ACHIEVEMENTS } from '../../lib/game/achievements';
 import {
   getCardRetention,
   getChallengeCompletion,
@@ -74,6 +75,35 @@ function percent(value: number | null): string {
   return value === null ? '—' : `${value}%`;
 }
 
+function AccuracyBar({
+  title,
+  value,
+}: {
+  title: string;
+  value: number | null;
+}) {
+  const rounded = value === null ? 0 : Math.round(value);
+  const valueText = value === null ? 'Sem dados' : `${rounded}%`;
+
+  return (
+    <span
+      aria-label={title}
+      aria-valuemax={100}
+      aria-valuemin={0}
+      aria-valuenow={rounded}
+      aria-valuetext={valueText}
+      className="stats__accuracy-meter"
+      role="meter"
+    >
+      <span
+        className="stats__accuracy-fill"
+        data-empty={value === null ? 'true' : 'false'}
+        style={{ width: `${rounded}%` }}
+      />
+    </span>
+  );
+}
+
 export function StatsPage({ content = DEFAULT_CONTENT }: StatsPageProps = {}) {
   usePageTitle('Estatísticas');
 
@@ -97,87 +127,137 @@ export function StatsPage({ content = DEFAULT_CONTENT }: StatsPageProps = {}) {
   }));
 
   const forecast = getForecast(save, now);
+  const forecastTotal = forecast.reduce((sum, count) => sum + count, 0);
+  const forecastWeek = forecast
+    .slice(0, 7)
+    .reduce((sum, count) => sum + count, 0);
+  const unlockedAchievements = ACHIEVEMENTS.filter((achievement) =>
+    Boolean(save.achievements[achievement.id]),
+  ).length;
   const fresh = isFreshSave(save, totals.xpTotal);
+
+  const tiles = [
+    { label: 'XP', value: totals.xpTotal, tone: 'xp' },
+    { label: 'Nível', value: totals.level, tone: 'level' },
+    { label: 'Sequência atual', value: totals.streak, tone: 'streak' },
+    { label: 'Maior sequência', value: totals.longestStreak, tone: 'streak' },
+    { label: 'Revisões', value: totals.reviews, tone: 'review' },
+    {
+      label: 'Desafios concluídos',
+      value: totals.challengesPassed,
+      tone: 'code',
+    },
+    {
+      label: 'Passos de laboratório',
+      value: totals.labStepsDone,
+      tone: 'lab',
+    },
+  ];
 
   return (
     <section className="page stats-page">
-      <h1>Estatísticas</h1>
+      <PageHeader
+        className="stats__header"
+        description="Seu avanço no DIW Arcade, nó a nó: precisão, retenção e a previsão das próximas revisões."
+        eyebrow="Painel de progresso"
+        title="Estatísticas"
+      />
 
       {fresh ? (
-        <section className="stats__empty" aria-label="Sem atividade ainda">
+        <Card
+          as="section"
+          aria-label="Sem atividade ainda"
+          className="stats__empty"
+        >
           <Mascot mood="idle" line={pickLine('empty', totals.xpTotal)} />
           <p>Seu painel aparece aqui depois da primeira atividade.</p>
-        </section>
+        </Card>
       ) : null}
 
       <section className="stats__section" aria-labelledby="stats-totals">
-        <h2 id="stats-totals">Seus números</h2>
-        <dl className="stats__totals">
-          <div className="stats__total">
-            <dt>XP</dt>
-            <dd>{totals.xpTotal}</dd>
-          </div>
-          <div className="stats__total">
-            <dt>Nível</dt>
-            <dd>{totals.level}</dd>
-          </div>
-          <div className="stats__total">
-            <dt>Sequência atual</dt>
-            <dd>{totals.streak}</dd>
-          </div>
-          <div className="stats__total">
-            <dt>Maior sequência</dt>
-            <dd>{totals.longestStreak}</dd>
-          </div>
-          <div className="stats__total">
-            <dt>Revisões</dt>
-            <dd>{totals.reviews}</dd>
-          </div>
-          <div className="stats__total">
-            <dt>Desafios concluídos</dt>
-            <dd>{totals.challengesPassed}</dd>
-          </div>
-          <div className="stats__total">
-            <dt>Passos de laboratório</dt>
-            <dd>{totals.labStepsDone}</dd>
-          </div>
+        <div className="stats__section-head">
+          <h2 id="stats-totals">Seus números</h2>
+          <p className="stats__hint">Acumulado desde o início.</p>
+        </div>
+        <dl className="stats__totals l-grid">
+          {tiles.map((tile) => (
+            <div className="stats__total" data-tone={tile.tone} key={tile.label}>
+              <dt>{tile.label}</dt>
+              <dd>{tile.value}</dd>
+            </div>
+          ))}
         </dl>
       </section>
 
-      <section className="stats__section" aria-labelledby="stats-accuracy">
-        <h2 id="stats-accuracy">Precisão por nó</h2>
-        <ul className="stats__accuracy" aria-label="Precisão por nó">
-          {accuracy.map((entry) => (
-            <li key={entry.nodeId}>
-              <span>{entry.title}</span>
-              <span className="stats__accuracy-value">
-                {percent(entry.value)}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <div className="stats__columns">
+        <section
+          className="stats__panel"
+          aria-labelledby="stats-accuracy"
+        >
+          <div className="stats__section-head">
+            <h2 id="stats-accuracy">Precisão por nó</h2>
+            <p className="stats__hint">Acertos de primeira no quiz.</p>
+          </div>
+          <ul className="stats__accuracy" aria-label="Precisão por nó">
+            {accuracy.map((entry) => (
+              <li className="stats__accuracy-row" key={entry.nodeId}>
+                <span className="stats__accuracy-title">{entry.title}</span>
+                <span className="stats__accuracy-value">
+                  {percent(entry.value)}
+                </span>
+                <AccuracyBar title={entry.title} value={entry.value} />
+              </li>
+            ))}
+          </ul>
+        </section>
 
-      <section className="stats__section" aria-labelledby="stats-heatmap">
-        <h2 id="stats-heatmap">Mapa de pontos fracos</h2>
-        <p className="stats__hint">
-          Acertos no quiz, retenção das cartas e desafios concluídos por nó.
-        </p>
+        <section
+          className="stats__panel stats__forecast"
+          aria-labelledby="stats-forecast"
+        >
+          <div className="stats__section-head">
+            <h2 id="stats-forecast">Previsão de 14 dias</h2>
+            <p className="stats__hint">Cartas que vencem em cada dia.</p>
+          </div>
+          <div className="stats__scroll">
+            <Forecast counts={forecast} now={now} />
+          </div>
+          <dl className="stats__forecast-summary">
+            <div>
+              <dt>Hoje</dt>
+              <dd>{forecast[0] ?? 0}</dd>
+            </div>
+            <div>
+              <dt>Próximos 7 dias</dt>
+              <dd>{forecastWeek}</dd>
+            </div>
+            <div>
+              <dt>Em 14 dias</dt>
+              <dd>{forecastTotal}</dd>
+            </div>
+          </dl>
+        </section>
+      </div>
+
+      <section className="stats__panel" aria-labelledby="stats-heatmap">
+        <div className="stats__section-head">
+          <h2 id="stats-heatmap">Mapa de pontos fracos</h2>
+          <p className="stats__hint">
+            Acertos no quiz, retenção das cartas e desafios concluídos por nó.
+          </p>
+        </div>
         <div className="stats__scroll">
           <Heatmap rows={rows} />
         </div>
       </section>
 
-      <section className="stats__section" aria-labelledby="stats-forecast">
-        <h2 id="stats-forecast">Previsão de 14 dias</h2>
-        <p className="stats__hint">Cartas que vencem em cada dia.</p>
-        <div className="stats__scroll">
-          <Forecast counts={forecast} now={now} />
+      <section className="stats__panel" aria-labelledby="stats-achievements">
+        <div className="stats__section-head">
+          <h2 id="stats-achievements">Conquistas</h2>
+          <p className="stats__hint">
+            {unlockedAchievements} de {ACHIEVEMENTS.length} desbloqueadas.
+          </p>
         </div>
-      </section>
-
-      <section className="stats__section" aria-labelledby="stats-achievements">
-        <h2 id="stats-achievements">Conquistas</h2>
         <AchievementGrid unlocked={save.achievements} />
       </section>
     </section>
