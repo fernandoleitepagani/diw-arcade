@@ -1,0 +1,226 @@
+[
+  {
+    "id": "n06-f001",
+    "nodeId": "n06",
+    "front": "O que significa a sigla CSS?",
+    "back": "Cascading Style Sheet, uma linguagem para definir regras de apresentação em HTML e XML.",
+    "source": { "aula": 170, "slide": 4 },
+    "evidence": "O Cascading Style Sheet (CSS) é uma linguagem para definição de regras de apresentação em documentos HTML e XML."
+  },
+  {
+    "id": "n06-f002",
+    "nodeId": "n06",
+    "front": "Em que ordem as camadas de estilo do CSS são aplicadas?",
+    "back": "A ordem é Browser Style, depois User Style e por fim Author Style.",
+    "source": { "aula": 170, "slide": 4 },
+    "evidence": "Browser Style (default): configurações padrão do browser (user agent) • User Style: configurações do próprio usuário • Author Style: configurações feitas pelo desenvolvedor do site"
+  },
+  {
+    "id": "n06-f003",
+    "nodeId": "n06",
+    "front": "Qual é o objetivo do CSS?",
+    "back": "Promover a separação entre o formato e o conteúdo do documento.",
+    "source": { "aula": 170, "slide": 5 },
+    "evidence": "Seu objetivo é promover a separação entre o formato e o conteúdo em um documento."
+  },
+  {
+    "id": "n06-f004",
+    "nodeId": "n06",
+    "front": "Como uma página HTML referencia um arquivo CSS externo?",
+    "back": "Com a tag link e o atributo rel=\"stylesheet\" apontando para o arquivo.",
+    "source": { "aula": 170, "slide": 5 },
+    "evidence": "<link rel=\"stylesheet\" href=\"style.css\">"
+  },
+  {
+    "id": "n06-f005",
+    "nodeId": "n06",
+    "front": "Qual vantagem do CSS facilita a manutenção do site?",
+    "back": "O controle centralizado sobre a apresentação do site.",
+    "source": { "aula": 170, "slide": 8 },
+    "evidence": "Controle centralizado sobre a apresentação do site"
+  },
+  {
+    "id": "n06-f006",
+    "nodeId": "n06",
+    "front": "O CSS permite saídas diferentes para cada tipo de mídia usando quantos arquivos HTML?",
+    "back": "Um único HTML, conforme o slide de vantagens.",
+    "source": { "aula": 170, "slide": 8 },
+    "evidence": "Saída diferentes para cada tipos de mídia com um único HTML"
+  },
+  {
+    "id": "n06-f007",
+    "nodeId": "n06",
+    "front": "Qual forma de uso do CSS é considerada a mais recomendada?",
+    "back": "O arquivo CSS externo, que separa completamente formato e conteúdo.",
+    "source": { "aula": 170, "slide": 10 },
+    "evidence": "Considerada a forma mais recomendada de implementação"
+  },
+  {
+    "id": "n06-f008",
+    "nodeId": "n06",
+    "front": "Qual é a prioridade de aplicação entre inline, bloco interno, arquivo externo e padrão do browser?",
+    "back": "A ordem é: 1) Inline, 2) Bloco interno, 3) Arquivo CSS externo, 4) Browser default.",
+    "source": { "aula": 170, "slide": 9 },
+    "evidence": "Prioridade de Aplicação 2) Bloco 3) Arquivo CSS 4) Browser 1) Inline interno externo Default"
+  },
+  {
+    "id": "n06-f009",
+    "nodeId": "n06",
+    "front": "Quando o bloco interno de CSS é útil?",
+    "back": "Para regras locais de um conteúdo específico.",
+    "source": { "aula": 170, "slide": 10 },
+    "evidence": "Útil em algumas circunstâncias, com regras locais para"
+  },
+  {
+    "id": "n06-f010",
+    "nodeId": "n06",
+    "front": "Por que evitar o formato inline?",
+    "back": "Porque dificulta a legibilidade do HTML e mistura conteúdo e formatação.",
+    "source": { "aula": 170, "slide": 10 },
+    "evidence": "Dificulta a legibilidade do HTML e mistura conteúdo e formatação"
+  },
+  {
+    "id": "n06-f011",
+    "nodeId": "n06",
+    "front": "Que problema do HTML motivou o surgimento do CSS?",
+    "back": "O padrão HTML mistura conteúdo e formato.",
+    "source": { "aula": 170, "slide": 2 },
+    "evidence": "O padrão HTML mistura conteúdo e formato."
+  },
+  {
+    "id": "n06-f012",
+    "nodeId": "n06",
+    "front": "Quais são as partes de uma regra CSS?",
+    "back": "Um seletor e um bloco de declarações no formato propriedade: valor.",
+    "source": { "aula": 171, "slide": 2 },
+    "evidence": "div { background-color: yellow; font-family: Arial; }"
+  },
+  {
+    "id": "n06-f013",
+    "nodeId": "n06",
+    "front": "O que separa duas declarações dentro de um bloco CSS?",
+    "back": "O ponto e vírgula (;).",
+    "source": { "aula": 171, "slide": 2 },
+    "evidence": "div { background-color: yellow; font-family: Arial; }"
+  },
+  {
+    "id": "n06-f014",
+    "nodeId": "n06",
+    "front": "O que um seletor de elemento indica?",
+    "back": "Indica um elemento HTML, como p, aplicando a regra a todos os elementos desse tipo.",
+    "source": { "aula": 171, "slide": 3 },
+    "evidence": "O seletor indica um elemento HTML."
+  },
+  {
+    "id": "n06-f015",
+    "nodeId": "n06",
+    "front": "Como se escreve um seletor de id?",
+    "back": "Com o sinal # seguido do id do elemento, por exemplo #p101.",
+    "source": { "aula": 171, "slide": 4 },
+    "evidence": "#p101 { color: blue; }"
+  },
+  {
+    "id": "n06-f016",
+    "nodeId": "n06",
+    "front": "Como se escreve um seletor de classe?",
+    "back": "Com um ponto antes do nome da classe, por exemplo .marked.",
+    "source": { "aula": 171, "slide": 5 },
+    "evidence": ".marked { color: blue; }"
+  },
+  {
+    "id": "n06-f017",
+    "nodeId": "n06",
+    "front": "O que um seletor de atributo indica?",
+    "back": "Os elementos HTML que possuem atributos específicos.",
+    "source": { "aula": 171, "slide": 6 },
+    "evidence": "O seletor indica os elementos HTML com atributos específicos."
+  },
+  {
+    "id": "n06-f018",
+    "nodeId": "n06",
+    "front": "O que a pseudo-classe :focus representa?",
+    "back": "O estado de um elemento que está em foco.",
+    "source": { "aula": 171, "slide": 8 },
+    "evidence": ":focus Acontece quando elemento está em foco"
+  },
+  {
+    "id": "n06-f019",
+    "nodeId": "n06",
+    "front": "Qual é a diferença entre :link e :visited?",
+    "back": ":link é a condição original do link; :visited vale para links já visitados.",
+    "source": { "aula": 171, "slide": 8 },
+    "evidence": ":visited Acontece com links já visitados :link Condição original dos links"
+  },
+  {
+    "id": "n06-f020",
+    "nodeId": "n06",
+    "front": "O que um pseudo-elemento permite estilizar?",
+    "back": "Partes de um elemento HTML, como ::first-letter e ::first-line.",
+    "source": { "aula": 171, "slide": 9 },
+    "evidence": "O seletor indica partes de elementos HTML que"
+  },
+  {
+    "id": "n06-f021",
+    "nodeId": "n06",
+    "front": "O que o seletor universal (*) indica?",
+    "back": "O seletor atinge qualquer elemento da página.",
+    "source": { "aula": 171, "slide": 10 },
+    "evidence": "O seletor indica qualquer elemento."
+  },
+  {
+    "id": "n06-f022",
+    "nodeId": "n06",
+    "front": "O que significa o seletor A, B { ... }?",
+    "back": "Equivale a duas regras distintas, A { } e B { }.",
+    "source": { "aula": 171, "slide": 11 },
+    "evidence": "Equivale a duas regras distintas A { } e B { }"
+  },
+  {
+    "id": "n06-f023",
+    "nodeId": "n06",
+    "front": "Qual combinador de CSS seleciona apenas os filhos diretos?",
+    "back": "O sinal de maior (A > B) seleciona os filhos diretos de A.",
+    "source": { "aula": 171, "slide": 11 },
+    "evidence": "Elementos associados a B, filhos de elementos associados a A"
+  },
+  {
+    "id": "n06-f024",
+    "nodeId": "n06",
+    "front": "Como se escreve um comentário em CSS?",
+    "back": "Entre /* e */, servindo para documentar o código.",
+    "source": { "aula": 171, "slide": 12 },
+    "evidence": "Utilizados para documentação do código CSS e são ignorados pelo browser durante o processamento."
+  },
+  {
+    "id": "n06-f025",
+    "nodeId": "n06",
+    "front": "Quais fatores decidem qual declaração CSS prevalece em um conflito?",
+    "back": "A ordem de leitura, a especificidade e a importância.",
+    "source": { "aula": 171, "slide": 13 },
+    "evidence": "A escolha da declaração CSS a ser aplicada, no caso de conflitos, obedece as seguintes regras: • Ordem de leitura • Especificidade • Importância"
+  },
+  {
+    "id": "n06-f026",
+    "nodeId": "n06",
+    "front": "Como se calcula a especificidade de #content p?",
+    "back": "0,1,0,1: um id e um elemento.",
+    "source": { "aula": 171, "slide": 17 },
+    "evidence": "Um ID equivale a um ponto na segunda casa. Mais um elemento, #content p 0,1,0,1"
+  },
+  {
+    "id": "n06-f027",
+    "nodeId": "n06",
+    "front": "O que a declaração !important faz?",
+    "back": "Faz a declaração prevalecer sobre as demais.",
+    "source": { "aula": 171, "slide": 18 },
+    "evidence": "A palavra-chave !important faz a declaração prevalecer sobre as demais"
+  },
+  {
+    "id": "n06-f028",
+    "nodeId": "n06",
+    "front": "O que significa herança em CSS?",
+    "back": "As tags herdam as propriedades não especificadas da tag pai.",
+    "source": { "aula": 171, "slide": 19 },
+    "evidence": "Classes de tags herdam as propriedades não especificadas da tag \"pai\""
+  }
+]
