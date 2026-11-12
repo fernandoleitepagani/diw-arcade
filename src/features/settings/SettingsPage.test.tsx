@@ -25,6 +25,14 @@ function importFile(save: SaveV1): File {
 }
 
 describe('SettingsPage', () => {
+  it('groups the settings into named regions', () => {
+    renderWithProgress(<SettingsPage />);
+
+    for (const name of ['Meta diária', 'Cartas', 'Som', 'Dados']) {
+      expect(screen.getByRole('region', { name })).toBeInTheDocument();
+    }
+  });
+
   it('keeps sound off by default', () => {
     renderWithProgress(<SettingsPage />);
 

@@ -2,7 +2,7 @@ import { Component, useState } from 'react';
 import type { ChangeEvent, ReactNode } from 'react';
 import { useProgress } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
-import { Button, Panel } from '../../components/ui';
+import { Button, Card, PageHeader } from '../../components/ui';
 import { toDayKey } from '../../lib/game/days';
 import { createSfx } from '../../lib/sound/sfx';
 import { exportSave, parseImport, type SaveV1 } from '../../lib/storage';
@@ -63,8 +63,10 @@ class SettingsBoundary extends Component<
     if (this.state.unavailable) {
       return (
         <section className="page settings">
-          <h1>Ajustes</h1>
-          <p>O progresso não está disponível neste momento.</p>
+          <PageHeader title="Ajustes" />
+          <Card as="section" className="settings__group">
+            <p>O progresso não está disponível neste momento.</p>
+          </Card>
         </section>
       );
     }
@@ -153,194 +155,215 @@ function SettingsContent() {
 
   return (
     <section className="page settings">
-      <header className="settings__header">
-        <h1>Ajustes</h1>
-        <p className="settings__intro">
-          Defina seu ritmo de estudo, escolha os limites do dia e guarde uma
-          cópia do progresso.
-        </p>
-      </header>
+      <PageHeader
+        title="Ajustes"
+        description="Defina seu ritmo de estudo, escolha os limites do dia e guarde uma cópia do progresso."
+      />
 
-      <Panel as="section" tone="accent" aria-labelledby="settings-goal">
-        <h2 id="settings-goal">Meta diária</h2>
-        <p className="settings__hint">
-          Quanto de XP você quer conquistar por dia? A meta orienta o ritmo das
-          atividades.
-        </p>
-        <fieldset className="settings__goals">
-          <legend className="settings__sr-only">Meta diária</legend>
-          {GOALS.map(({ value, label }) => (
-            <label className="settings__goal" key={value}>
-              <input
-                type="radio"
-                name="daily-goal"
-                value={value}
-                checked={save.settings.dailyGoal === value}
-                onChange={() => updateSettings({ dailyGoal: value })}
-              />
-              <span>{label}</span>
-            </label>
-          ))}
-        </fieldset>
-      </Panel>
-
-      <Panel as="section" aria-labelledby="settings-sound">
-        <h2 id="settings-sound">Som</h2>
-        <div className="settings__row">
-          <div>
-            <label className="settings__switch">
-              <input
-                type="checkbox"
-                checked={save.settings.sound}
-                aria-describedby="settings-sound-hint"
-                onChange={(event) =>
-                  updateSettings({ sound: event.target.checked })
-                }
-              />
-              <span>Som</span>
-            </label>
-            <p className="settings__hint" id="settings-sound-hint">
-              Efeitos sonoros ao acertar, subir de nível e concluir conquistas.
-            </p>
-          </div>
-          <Button variant="secondary" onClick={handleTestSound}>
-            Testar som
-          </Button>
-        </div>
-      </Panel>
-
-      <Panel as="section" aria-labelledby="settings-limits">
-        <h2 id="settings-limits">Limites diários</h2>
-        <p className="settings__hint">
-          Novas cartas e revisões têm limites separados. Ajuste conforme o tempo
-          que você tem para estudar.
-        </p>
-        <div className="settings__fields">
-          <div className="settings__field">
-            <label htmlFor="settings-new-cards">Novas cartas por dia</label>
-            <select
-              id="settings-new-cards"
-              value={save.settings.newCardsPerDay}
-              onChange={(event) =>
-                updateSettings({ newCardsPerDay: Number(event.target.value) })
-              }
-            >
-              {NEW_CARD_CAPS.map((cap) => (
-                <option key={cap} value={cap}>
-                  {cap}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="settings__field">
-            <label htmlFor="settings-reviews">Revisões por dia</label>
-            <select
-              id="settings-reviews"
-              value={save.settings.reviewsPerDay}
-              onChange={(event) =>
-                updateSettings({ reviewsPerDay: Number(event.target.value) })
-              }
-            >
-              {REVIEW_CAPS.map((cap) => (
-                <option key={cap} value={cap}>
-                  {cap}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </Panel>
-
-      <Panel as="section" aria-labelledby="settings-data">
-        <h2 id="settings-data">Seus dados</h2>
-        <div className="settings__row">
-          <div>
-            <p className="settings__label">Exportar progresso</p>
-            <p className="settings__hint">
-              Baixa um arquivo JSON com todo o seu progresso e configurações.
-            </p>
-          </div>
-          <Button onClick={handleExport}>Exportar progresso</Button>
-        </div>
-
-        <hr className="settings__divider" />
-
-        <div className="settings__field">
-          <label htmlFor="settings-import">Importar progresso</label>
-          <input
-            id="settings-import"
-            className="settings__file"
-            type="file"
-            accept=".json,application/json"
-            onChange={handleImport}
-          />
+      <div className="settings__groups">
+        <Card
+          as="section"
+          tone="accent"
+          className="settings__group"
+          aria-labelledby="settings-goal"
+        >
+          <h2 id="settings-goal">Meta diária</h2>
           <p className="settings__hint">
-            Escolha um arquivo exportado do DIW Arcade. O progresso atual só é
-            substituído depois da confirmação.
+            Quanto de XP você quer conquistar por dia? A meta orienta o ritmo
+            das atividades.
           </p>
-        </div>
+          <fieldset className="settings__goals">
+            <legend className="settings__sr-only">Meta diária</legend>
+            {GOALS.map(({ value, label }) => (
+              <label className="settings__goal" key={value}>
+                <input
+                  type="radio"
+                  name="daily-goal"
+                  value={value}
+                  checked={save.settings.dailyGoal === value}
+                  onChange={() => updateSettings({ dailyGoal: value })}
+                />
+                <span>{label}</span>
+              </label>
+            ))}
+          </fieldset>
+        </Card>
 
-        {importError !== null ? (
-          <p className="settings__error" role="alert">
-            {importError}
+        <Card
+          as="section"
+          className="settings__group"
+          aria-labelledby="settings-cards"
+        >
+          <h2 id="settings-cards">Cartas</h2>
+          <p className="settings__hint">
+            Novas cartas e revisões têm limites separados. Ajuste conforme o
+            tempo que você tem para estudar.
           </p>
-        ) : null}
+          <div className="settings__fields">
+            <div className="settings__field">
+              <label htmlFor="settings-new-cards">Novas cartas por dia</label>
+              <select
+                id="settings-new-cards"
+                value={save.settings.newCardsPerDay}
+                onChange={(event) =>
+                  updateSettings({ newCardsPerDay: Number(event.target.value) })
+                }
+              >
+                {NEW_CARD_CAPS.map((cap) => (
+                  <option key={cap} value={cap}>
+                    {cap}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="settings__field">
+              <label htmlFor="settings-reviews">Revisões por dia</label>
+              <select
+                id="settings-reviews"
+                value={save.settings.reviewsPerDay}
+                onChange={(event) =>
+                  updateSettings({ reviewsPerDay: Number(event.target.value) })
+                }
+              >
+                {REVIEW_CAPS.map((cap) => (
+                  <option key={cap} value={cap}>
+                    {cap}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </Card>
 
-        {pendingImport !== null ? (
-          <div className="settings__confirm">
-            <p className="settings__question" role="status">
-              Substituir progresso atual?
+        <Card
+          as="section"
+          className="settings__group"
+          aria-labelledby="settings-sound"
+        >
+          <h2 id="settings-sound">Som</h2>
+          <div className="settings__row">
+            <div>
+              <label className="settings__switch">
+                <input
+                  type="checkbox"
+                  checked={save.settings.sound}
+                  aria-describedby="settings-sound-hint"
+                  onChange={(event) =>
+                    updateSettings({ sound: event.target.checked })
+                  }
+                />
+                <span>Som</span>
+              </label>
+              <p className="settings__hint" id="settings-sound-hint">
+                Efeitos sonoros ao acertar, subir de nível e concluir
+                conquistas.
+              </p>
+            </div>
+            <Button variant="secondary" onClick={handleTestSound}>
+              Testar som
+            </Button>
+          </div>
+        </Card>
+
+        <Card
+          as="section"
+          className="settings__group"
+          aria-labelledby="settings-data"
+        >
+          <h2 id="settings-data">Dados</h2>
+
+          <div className="settings__row">
+            <div>
+              <p className="settings__label">Exportar progresso</p>
+              <p className="settings__hint">
+                Baixa um arquivo JSON com todo o seu progresso e configurações.
+              </p>
+            </div>
+            <Button onClick={handleExport}>Exportar progresso</Button>
+          </div>
+
+          <hr className="settings__divider" />
+
+          <div className="settings__field">
+            <label htmlFor="settings-import">Importar progresso</label>
+            <input
+              id="settings-import"
+              className="settings__file"
+              type="file"
+              accept=".json,application/json"
+              onChange={handleImport}
+            />
+            <p className="settings__hint">
+              Escolha um arquivo exportado do DIW Arcade. O progresso atual só
+              é substituído depois da confirmação.
             </p>
+          </div>
+
+          {importError !== null ? (
+            <p className="settings__error" role="alert">
+              {importError}
+            </p>
+          ) : null}
+
+          {pendingImport !== null ? (
+            <div className="settings__confirm">
+              <p className="settings__question" role="status">
+                Substituir progresso atual?
+              </p>
+              <div className="settings__actions">
+                <Button onClick={handleConfirmImport}>Confirmar</Button>
+                <Button variant="ghost" onClick={handleCancelImport}>
+                  Cancelar
+                </Button>
+              </div>
+            </div>
+          ) : null}
+
+          <div className="settings__privacy">
+            <h3>Privacidade</h3>
+            <p className="settings__hint">
+              Seu progresso fica guardado apenas neste navegador. O DIW Arcade
+              não tem conta nem servidor: nada sai do seu dispositivo. Limpar
+              os dados do site apaga o progresso, então exporte um backup
+              antes.
+            </p>
+          </div>
+
+          <hr className="settings__divider" />
+
+          <div className="settings__danger">
+            <h3>Apagar progresso</h3>
+            <p className="settings__hint">
+              Remove todo o XP, as cartas, as respostas e as configurações
+              salvas neste navegador. A ação não pode ser desfeita.
+            </p>
+            <div className="settings__field">
+              <label htmlFor="settings-reset-word">
+                Digite APAGAR para confirmar
+              </label>
+              <input
+                id="settings-reset-word"
+                className="settings__text"
+                type="text"
+                value={resetWord}
+                placeholder="APAGAR"
+                autoComplete="off"
+                spellCheck={false}
+                onChange={(event) => setResetWord(event.target.value)}
+              />
+            </div>
             <div className="settings__actions">
-              <Button onClick={handleConfirmImport}>Confirmar</Button>
-              <Button variant="ghost" onClick={handleCancelImport}>
-                Cancelar
+              <Button
+                variant="danger"
+                disabled={resetWord !== 'APAGAR'}
+                onClick={handleReset}
+              >
+                Confirmar
               </Button>
             </div>
           </div>
-        ) : null}
-      </Panel>
-
-      <Panel as="section" className="settings__panel--danger" aria-labelledby="settings-reset">
-        <h2 id="settings-reset">Apagar progresso</h2>
-        <p className="settings__hint">
-          Remove todo o XP, as cartas, as respostas e as configurações salvas
-          neste navegador. A ação não pode ser desfeita.
-        </p>
-        <div className="settings__field">
-          <label htmlFor="settings-reset-word">
-            Digite APAGAR para confirmar
-          </label>
-          <input
-            id="settings-reset-word"
-            className="settings__text"
-            type="text"
-            value={resetWord}
-            placeholder="APAGAR"
-            autoComplete="off"
-            spellCheck={false}
-            onChange={(event) => setResetWord(event.target.value)}
-          />
-        </div>
-        <div className="settings__actions">
-          <Button
-            variant="danger"
-            disabled={resetWord !== 'APAGAR'}
-            onClick={handleReset}
-          >
-            Confirmar
-          </Button>
-        </div>
-      </Panel>
-
-      <aside className="settings__privacy" aria-labelledby="settings-privacy">
-        <h2 id="settings-privacy">Privacidade</h2>
-        <p>
-          Seu progresso fica guardado apenas neste navegador. O DIW Arcade não
-          tem conta nem servidor: nada sai do seu dispositivo. Limpar os dados
-          do site apaga o progresso, então exporte um backup antes.
-        </p>
-      </aside>
+        </Card>
+      </div>
 
       <p className="settings__notice" role="status">
         {notice}

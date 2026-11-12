@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { Navigate, useNavigate } from 'react-router';
 import { useProgress } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
-import { Button, Mascot } from '../../components/ui';
+import { Button, Card, Mascot } from '../../components/ui';
 import { pickLine } from '../../content/copy';
 import type { DailyGoal } from '../../lib/progress/events';
 import './OnboardingPage.css';
@@ -57,11 +57,17 @@ export function OnboardingPage() {
 
   return (
     <main className="onboarding">
-      <section className="onboarding__card" aria-labelledby="onboarding-question">
+      <Card
+        as="section"
+        className="onboarding__card"
+        aria-labelledby="onboarding-title"
+      >
         <Mascot mood="happy" line={pickLine('welcome', 0)} size={128} />
 
         <div className="onboarding__intro">
-          <h1 className="onboarding__brand">DIW Arcade</h1>
+          <h1 className="onboarding__brand" id="onboarding-title">
+            DIW Arcade
+          </h1>
           <p className="onboarding__welcome">Bem-vindo ao DIW Arcade</p>
           <h2 className="onboarding__question" id="onboarding-question">
             Quanto quer treinar por dia?
@@ -90,7 +96,7 @@ export function OnboardingPage() {
         >
           Pular
         </Button>
-      </section>
+      </Card>
     </main>
   );
 }
