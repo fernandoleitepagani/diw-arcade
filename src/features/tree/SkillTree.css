@@ -1,0 +1,217 @@
+.tree-page {
+  justify-items: stretch;
+  gap: 1.5rem;
+}
+
+.tree-page__header {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.tree-page__header p {
+  max-width: 46rem;
+}
+
+.tree-page__bit {
+  display: flex;
+  align-items: flex-start;
+}
+
+.skill-tree {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+.skill-tree__unit {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 0.85rem 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background:
+    radial-gradient(circle at 50% 0%, rgb(45 226 230 / 0.08), transparent 55%),
+    var(--surface);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.03);
+}
+
+.skill-tree__unit-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.4em;
+  color: var(--accent);
+  font-family: var(--font-display), monospace;
+  font-size: 0.68rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.skill-tree__nodes {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.skill-tree__connector {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.skill-tree__connector path {
+  fill: none;
+  stroke: rgb(45 226 230 / 0.28);
+  stroke-width: 2;
+  stroke-dasharray: 4 6;
+  vector-effect: non-scaling-stroke;
+}
+
+.skill-tree__item {
+  position: relative;
+  z-index: 1;
+}
+
+.skill-node {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: start;
+  min-height: 5rem;
+  padding: 0.65rem 0.65rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 0.55rem;
+  background: var(--surface-2);
+  color: var(--text);
+  text-decoration: none;
+  transition:
+    transform 150ms ease,
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+@media (hover: hover) {
+  .skill-node:hover {
+    transform: translateY(-2px);
+    border-color: rgb(45 226 230 / 0.7);
+    background: #1e2a52;
+    box-shadow: 0 0 20px rgb(45 226 230 / 0.14);
+  }
+}
+
+.skill-node__index {
+  padding-top: 0.15rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  line-height: 1;
+}
+
+.skill-node__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.skill-node__title {
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.skill-node__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.55rem;
+}
+
+.skill-node__due {
+  color: var(--text-muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.68rem;
+  white-space: nowrap;
+}
+
+.skill-node__due--hot {
+  color: var(--reward);
+  text-shadow: 0 0 8px rgb(255 79 216 / 0.45);
+}
+
+.skill-node__tag {
+  align-self: flex-start;
+  padding: 0.12rem 0.4rem;
+  border-radius: 0.2rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-display), monospace;
+  font-size: 0.52rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+.skill-node--recommended {
+  border-color: rgb(45 226 230 / 0.85);
+  box-shadow:
+    0 0 0 1px rgb(45 226 230 / 0.35),
+    0 0 24px rgb(45 226 230 / 0.22);
+  animation: skill-node-glow 2.8s ease-in-out infinite;
+}
+
+@keyframes skill-node-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px rgb(45 226 230 / 0.35),
+      0 0 18px rgb(45 226 230 / 0.16);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 1px rgb(45 226 230 / 0.55),
+      0 0 28px rgb(45 226 230 / 0.3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skill-node {
+    transition: none;
+  }
+
+  .skill-node--recommended {
+    animation: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .skill-tree {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-tree__unit-title {
+    justify-content: flex-start;
+    min-height: 0;
+    font-size: 0.78rem;
+    text-align: left;
+  }
+
+  .skill-tree__nodes {
+    gap: 0.6rem;
+  }
+}
