@@ -54,7 +54,9 @@ export const BIT_LINES: Record<BitContext, readonly string[]> = {
 
 export function pickLine(context: BitContext, n: number): string {
   const lines = BIT_LINES[context];
-  const index = Math.abs(Math.trunc(n)) % lines.length;
+  const index = Number.isFinite(n)
+    ? Math.abs(Math.trunc(n)) % lines.length
+    : 0;
   const line = lines[index];
 
   if (line === undefined) {

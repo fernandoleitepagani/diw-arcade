@@ -55,6 +55,18 @@ describe('buildSrcdoc', () => {
     expect(srcdoc).toContain('<style></style>');
   });
 
+  it('escapes user CSS closers so they cannot end the style element early', () => {
+    const srcdoc = buildSrcdoc(
+      { html: '', css: 'body{}</style><b>', js: '' },
+      config,
+      'h',
+    );
+
+    expect(srcdoc).not.toContain('</style><b>');
+    expect(srcdoc).toContain('<\\/style><b>');
+    expect(srcdoc.match(/<\/style>/g)).toHaveLength(2);
+  });
+
   it('escapes config markup and user script closers', () => {
     const srcdoc = buildSrcdoc(
       { html: '', css: '', js: 'console.log("</script><b>")' },

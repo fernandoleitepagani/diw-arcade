@@ -62,4 +62,14 @@ describe('pickLine', () => {
       expect(pickLine(context, -lines.length - 2)).toBe(lines[2]);
     }
   });
+
+  it('falls back to the first line when n is not finite', () => {
+    for (const context of CONTEXTS) {
+      const lines = BIT_LINES[context];
+
+      expect(pickLine(context, Number.NaN)).toBe(lines[0]);
+      expect(pickLine(context, Number.POSITIVE_INFINITY)).toBe(lines[0]);
+      expect(pickLine(context, Number.NEGATIVE_INFINITY)).toBe(lines[0]);
+    }
+  });
 });
