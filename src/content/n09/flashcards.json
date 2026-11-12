@@ -1,0 +1,186 @@
+[
+  {
+    "id": "n09-f001",
+    "nodeId": "n09",
+    "front": "Quais modelos de layout são apresentados na aula 174?",
+    "back": "Os modelos Flexbox e Grid, usados para construir layouts de página.",
+    "source": { "aula": 174, "slide": 1 },
+    "evidence": "Layouts Flex e Grid Prof. Rommel Carneiro"
+  },
+  {
+    "id": "n09-f002",
+    "nodeId": "n09",
+    "front": "Como o contêiner Flexbox é declarado no exemplo?",
+    "back": "Com `display: flex;` na regra `.container`.",
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": ".container { display: flex; flex-wrap: wrap; }"
+  },
+  {
+    "id": "n09-f003",
+    "nodeId": "n09",
+    "front": "O que a propriedade `flex-wrap: wrap` permite?",
+    "back": "Permitir que os itens quebrem para a próxima linha quando não houver espaço.",
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": ".container { display: flex; flex-wrap: wrap; }"
+  },
+  {
+    "id": "n09-f004",
+    "nodeId": "n09",
+    "front": "Qual é a ordem definida por `order` para `.orange`, `.green` e `.yellow`?",
+    "back": "Com os valores 1, 2 e 3, nessa ordem.",
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": ".orange { background-color: orange; order: 1; }"
+  },
+  {
+    "id": "n09-f005",
+    "nodeId": "n09",
+    "front": "Quais larguras `.green` e `.yellow` recebem a partir de 400px?",
+    "back": "As larguras são 70% para `.green` e 30% para `.yellow`.",
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": "@media screen and (min-width: 400px) { .orange { width: 100%; } .green { width: 70%; } .yellow { width: 30%; } }"
+  },
+  {
+    "id": "n09-f006",
+    "nodeId": "n09",
+    "front": "Quais larguras `.orange` e `.green` recebem a partir de 550px?",
+    "back": "Ambas ficam com 40%, enquanto `.yellow` fica com 20%.",
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": "@media screen and (min-width: 550px) { .orange { width: 40%; } .green { width: 40%; } .yellow { width: 20%; } }"
+  },
+  {
+    "id": "n09-f007",
+    "nodeId": "n09",
+    "front": "Qual é o tamanho base das `div` no exemplo de Flexbox?",
+    "back": "A altura de cada div é 80px e a largura é 100%.",
+    "source": { "aula": 174, "slide": 2 },
+    "evidence": "div { height: 80px; width: 100% }"
+  },
+  {
+    "id": "n09-f008",
+    "nodeId": "n09",
+    "front": "Quais são os conceitos de base do CSS Grid?",
+    "back": "Os conceitos de Grid são lines, tracks, cells e areas.",
+    "source": { "aula": 174, "slide": 4 },
+    "evidence": "Conceitos fundamentais • Lines (verticais e horizontais) • Tracks (linhas ou colunas) • Cells • Areas"
+  },
+  {
+    "id": "n09-f009",
+    "nodeId": "n09",
+    "front": "O que são as lines no CSS Grid?",
+    "back": "São as linhas verticais e horizontais que formam a grade.",
+    "source": { "aula": 174, "slide": 4 },
+    "evidence": "• Lines (verticais e horizontais)"
+  },
+  {
+    "id": "n09-f010",
+    "nodeId": "n09",
+    "front": "O que são as tracks no CSS Grid?",
+    "back": "São as linhas ou colunas que formam a grade.",
+    "source": { "aula": 174, "slide": 4 },
+    "evidence": "• Tracks (linhas ou colunas)"
+  },
+  {
+    "id": "n09-f011",
+    "nodeId": "n09",
+    "front": "No diagrama de Grid, o que uma track representa?",
+    "back": "Uma linha ou coluna da grade.",
+    "source": { "aula": 174, "slide": 6 },
+    "evidence": "Track (linha ou coluna)"
+  },
+  {
+    "id": "n09-f012",
+    "nodeId": "n09",
+    "front": "Quais valores `display` criam um contêiner Grid?",
+    "back": "Um contêiner Grid pode usar `grid`, `inline-grid` ou `subgrid`.",
+    "source": { "aula": 174, "slide": 7 },
+    "evidence": "display: grid | inline-grid | subgrid"
+  },
+  {
+    "id": "n09-f013",
+    "nodeId": "n09",
+    "front": "Quais propriedades de contêiner controlam o espaçamento no Grid?",
+    "back": "As propriedades `column-gap`, `row-gap` e `gap` controlam o espaçamento.",
+    "source": { "aula": 174, "slide": 7 },
+    "evidence": "Espaçamento – column-gap – row-gap – gap"
+  },
+  {
+    "id": "n09-f014",
+    "nodeId": "n09",
+    "front": "Quais valores a propriedade `justify-items` aceita?",
+    "back": "Os valores de `justify-items` são `start`, `end`, `center` e `stretch`.",
+    "source": { "aula": 174, "slide": 7 },
+    "evidence": "justify-items: start | end | center | stretch"
+  },
+  {
+    "id": "n09-f015",
+    "nodeId": "n09",
+    "front": "Como `place-items` combina os alinhamentos de itens?",
+    "back": "Ele usa `[justify-items] / [align-items]` para o alinhamento.",
+    "source": { "aula": 174, "slide": 7 },
+    "evidence": "place-items: [justify-items] / [align-items]"
+  },
+  {
+    "id": "n09-f016",
+    "nodeId": "n09",
+    "front": "Quantas colunas o exemplo cria com `50px 50px 50px 50px`?",
+    "back": "Quatro colunas de 50px cada.",
+    "source": { "aula": 174, "slide": 8 },
+    "evidence": "grid-template-columns: 50px 50px 50px 50px"
+  },
+  {
+    "id": "n09-f017",
+    "nodeId": "n09",
+    "front": "O que o ponto `.` representa em `grid-template-areas`?",
+    "back": "Representa uma célula vazia na grade.",
+    "source": { "aula": 174, "slide": 8 },
+    "evidence": "\"header header header header\" \"main main . sidebar\" \"footer footer footer footer\""
+  },
+  {
+    "id": "n09-f018",
+    "nodeId": "n09",
+    "front": "Qual é a sintaxe do atalho `grid-area`?",
+    "back": "Aceita um `<name>` ou `<row-start> / <column-start> / <row-end> / <column-end>`.",
+    "source": { "aula": 174, "slide": 9 },
+    "evidence": "grid-area: <name> | <row-start> / <column-start> / <row-end> / <column-end>"
+  },
+  {
+    "id": "n09-f019",
+    "nodeId": "n09",
+    "front": "Quais propriedades alinham um item dentro da própria célula?",
+    "back": "As propriedades de alinhamento do item são `justify-self`, `align-self` e `place-self`.",
+    "source": { "aula": 174, "slide": 9 },
+    "evidence": "justify-self: start | end | center | stretch – align-self: start | end | center | stretch – place-self: [justify-self] / [align-self]"
+  },
+  {
+    "id": "n09-f020",
+    "nodeId": "n09",
+    "front": "Onde o `.item-b` começa e quantas linhas ocupa?",
+    "back": "O item começa na coluna 1 e na linha 2, ocupando duas linhas.",
+    "source": { "aula": 174, "slide": 10 },
+    "evidence": ".item-b { grid-column-start: 1; grid-column-end: span col4-start; grid-row-start: 2; grid-row-end: span 2 }"
+  },
+  {
+    "id": "n09-f021",
+    "nodeId": "n09",
+    "front": "Quais colunas o `#wrapper` usa no layout desktop?",
+    "back": "`1fr` e `200px`, ou seja, uma coluna flexível e uma fixa.",
+    "source": { "aula": 174, "slide": 12 },
+    "evidence": "grid-template-columns: 1fr 200px;"
+  },
+  {
+    "id": "n09-f022",
+    "nodeId": "n09",
+    "front": "O que a media query de 600px muda no Grid do exemplo?",
+    "back": "Reduz para uma coluna e reorganiza as áreas em header, content, aside e footer.",
+    "source": { "aula": 174, "slide": 12 },
+    "evidence": "grid-template-columns: 1fr; grid-template-areas: \"header \" \"content\" \"aside \" \"footer \";"
+  },
+  {
+    "id": "n09-f023",
+    "nodeId": "n09",
+    "front": "Qual é o valor de `grid-gap` no layout desktop do exemplo?",
+    "back": "O valor é `10px 20px`, com espaçamento entre linhas e colunas.",
+    "source": { "aula": 174, "slide": 12 },
+    "evidence": "grid-gap: 10px 20px;"
+  }
+]
