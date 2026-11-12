@@ -205,8 +205,9 @@
   background: transparent;
 }
 
+/* Wide data shrinks to the panel instead of scrolling: no keyboard trap
+   around an unfocusable scroll region. */
 .stats__scroll {
-  overflow-x: auto;
   padding-block-end: var(--space-1);
 }
 
@@ -243,7 +244,7 @@
 /* Weak-spot heatmap: 14 node rows x 3 skill columns, five intensity levels. */
 .heatmap {
   width: 100%;
-  min-width: 38rem;
+  min-width: 0;
   border-collapse: collapse;
   background: var(--surface);
 }
@@ -321,7 +322,7 @@
   display: grid;
   grid-template-columns: repeat(14, minmax(0, 1fr));
   gap: 0.125rem;
-  min-width: 30rem;
+  min-width: 0;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -395,8 +396,11 @@
   background: var(--surface-2);
 }
 
+/* Locked is signaled by the dashed frame and muted icon, not by lowering
+   the whole card's opacity (which dragged the state text below 4.5:1). */
 .achievement--locked {
-  opacity: 0.6;
+  border-style: dashed;
+  background: var(--surface);
 }
 
 .achievement--unlocked {
@@ -454,11 +458,27 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .heatmap {
-    min-width: 34rem;
+  .heatmap th,
+  .heatmap td {
+    padding: var(--space-1);
+  }
+
+  .heatmap thead th {
+    font-size: 0.625rem;
+    letter-spacing: 0.02em;
   }
 
   .stats__forecast-summary {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Phones: 14 columns no longer fit a horizontal date; stack the label
+   vertically so the chart shrinks without scrolling. */
+@media (max-width: 640px) {
+  .forecast__label {
+    font-size: 0.5625rem;
+    letter-spacing: 0;
+    writing-mode: vertical-rl;
   }
 }
