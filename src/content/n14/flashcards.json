@@ -1,0 +1,266 @@
+[
+  {
+    "id": "n14-f001",
+    "nodeId": "n14",
+    "front": "O que o JavaScript adiciona a uma página web?",
+    "back": "Interatividade e a criação de aplicações ricas.",
+    "source": { "aula": 310, "slide": 4 },
+    "evidence": "Javascript adiciona a interatividade e permite a criação de aplicações ricas"
+  },
+  {
+    "id": "n14-f002",
+    "nodeId": "n14",
+    "front": "Quem criou o JavaScript, quando e onde?",
+    "back": "Brendan Eich criou o JavaScript em 1995, na Netscape.",
+    "source": { "aula": 310, "slide": 5 },
+    "evidence": "O JavaScript foi criado em 1995 por Brendan Eich na Netscape"
+  },
+  {
+    "id": "n14-f003",
+    "nodeId": "n14",
+    "front": "Para qual organização o JavaScript foi transferido em 1996?",
+    "back": "Para a ECMA International, com o objetivo de padronização.",
+    "source": { "aula": 310, "slide": 5 },
+    "evidence": "Em 1996, foi transferido para o ECMA International para padronização, sendo a primeira versão do ES lançada em 1997."
+  },
+  {
+    "id": "n14-f004",
+    "nodeId": "n14",
+    "front": "Em que ano foi lançada a primeira versão do ECMAScript?",
+    "back": "A primeira versão do ES foi lançada em 1997.",
+    "source": { "aula": 310, "slide": 5 },
+    "evidence": "Em 1996, foi transferido para o ECMA International para padronização, sendo a primeira versão do ES lançada em 1997."
+  },
+  {
+    "id": "n14-f005",
+    "nodeId": "n14",
+    "front": "Como a linguagem foi batizada após a aprovação como ISO/IEC 16262?",
+    "back": "A linguagem foi batizada como ECMA-262.",
+    "source": { "aula": 310, "slide": 5 },
+    "evidence": "Em 1998, a linguagem é aprovada como a ISO/IEC 16262 e batizada então como ECMA-262"
+  },
+  {
+    "id": "n14-f006",
+    "nodeId": "n14",
+    "front": "O que o advento do AJAX provocou em 2005?",
+    "back": "O AJAX alavancou o uso do JavaScript.",
+    "source": { "aula": 310, "slide": 5 },
+    "evidence": "Em 2005, o advento do A JAX alavancou o uso do Javascript"
+  },
+  {
+    "id": "n14-f007",
+    "nodeId": "n14",
+    "front": "O que caracteriza o ECMA Script 5 (ES 5), de 2009?",
+    "back": "É a versão com maior compatibilidade nos browsers.",
+    "source": { "aula": 310, "slide": 5 },
+    "evidence": "Em 2009 foi lançado o ECMA Script 5 (ES 5), versão com maior compatibilidade nos browsers atualmente"
+  },
+  {
+    "id": "n14-f008",
+    "nodeId": "n14",
+    "front": "Qual foi o objetivo do projeto CommonJS, criado em 2009?",
+    "back": "Levar o JavaScript para além do Browser.",
+    "source": { "aula": 310, "slide": 5 },
+    "evidence": "Em 2009 foi criado o projeto CommonJS com o objetivo de levar o"
+  },
+  {
+    "id": "n14-f009",
+    "nodeId": "n14",
+    "front": "Em que estágio de adoção estava o ECMA Script 6 (ES6)?",
+    "back": "Em estágio avançado de adoção pelos browsers.",
+    "source": { "aula": 310, "slide": 5 },
+    "evidence": "avançado de adoção pelos browsers"
+  },
+  {
+    "id": "n14-f010",
+    "nodeId": "n14",
+    "front": "Qual comitê é responsável pela evolução do ECMAScript?",
+    "back": "O TC39 é o Comitê Técnico responsável por essa evolução.",
+    "source": { "aula": 310, "slide": 5 },
+    "evidence": "O TC39 (https://github.com/tc39) é o Comitê Técnico responsável pela"
+  },
+  {
+    "id": "n14-f011",
+    "nodeId": "n14",
+    "front": "Quais recursos marcam o ECMA Script 9 (2018)?",
+    "back": "O ES9 traz Regex Changes, Promise Finally e Async Iteration.",
+    "source": { "aula": 310, "slide": 6 },
+    "evidence": "Regex Changes, Promise Finally, Async Iteration"
+  },
+  {
+    "id": "n14-f012",
+    "nodeId": "n14",
+    "front": "Quais recursos marcam o ECMA Script 8 (2017)?",
+    "back": "O ES8 traz Async functions, Shared Memory e Atomics.",
+    "source": { "aula": 310, "slide": 6 },
+    "evidence": "Async functions, Shared Memory, Atomics"
+  },
+  {
+    "id": "n14-f013",
+    "nodeId": "n14",
+    "front": "Quais recursos marcam o ECMA Script 7 (2016)?",
+    "back": "O ES7 traz Array Includes e o operador exponencial (**).",
+    "source": { "aula": 310, "slide": 6 },
+    "evidence": "Array Includes, Exponential operator (**)"
+  },
+  {
+    "id": "n14-f014",
+    "nodeId": "n14",
+    "front": "Quais recursos marcam o ECMA Script 6 (2015)?",
+    "back": "O ES6 traz Classes, Modules, Arrow Functions, Const e Let, Template Literals e Promises.",
+    "source": { "aula": 310, "slide": 6 },
+    "evidence": "Classes, Modules, Arrow Functions, Const e Let, Template Literals, Promises"
+  },
+  {
+    "id": "n14-f015",
+    "nodeId": "n14",
+    "front": "O que o ECMA Script 5 acrescentou?",
+    "back": "O ES5 trouxe Strict mode e suporte ao JSON.",
+    "source": { "aula": 310, "slide": 6 },
+    "evidence": "Strict mode, Suporte ao JSON"
+  },
+  {
+    "id": "n14-f016",
+    "nodeId": "n14",
+    "front": "O que o ECMA Script 3 trouxe?",
+    "back": "O ES3 trouxe expressões regulares (RegExp), métodos da classe String e tratamento de exceção (try/catch).",
+    "source": { "aula": 310, "slide": 6 },
+    "evidence": "Expressões regulares (RegExp), Métodos da"
+  },
+  {
+    "id": "n14-f017",
+    "nodeId": "n14",
+    "front": "Que engines o Mozilla Firefox utiliza?",
+    "back": "A web engine é Gecko e a ECMAScript engine é Spider Monkey.",
+    "source": { "aula": 310, "slide": 7 },
+    "evidence": "Mozilla Firefox            Gecko            Spider Monkey"
+  },
+  {
+    "id": "n14-f018",
+    "nodeId": "n14",
+    "front": "Que engines o Google Chrome utiliza?",
+    "back": "A web engine é Blink e a ECMAScript engine é Google V8.",
+    "source": { "aula": 310, "slide": 7 },
+    "evidence": "Google Chrome              Blink            Google V8"
+  },
+  {
+    "id": "n14-f019",
+    "nodeId": "n14",
+    "front": "Que engines o Apple Safari utiliza?",
+    "back": "A web engine é WebKit e a ECMAScript engine é JavaScriptCore.",
+    "source": { "aula": 310, "slide": 7 },
+    "evidence": "Apple Safari               WebKit           JavaScriptCore"
+  },
+  {
+    "id": "n14-f020",
+    "nodeId": "n14",
+    "front": "Que engines o Internet Explorer utiliza?",
+    "back": "A web engine é Trident e a ECMAScript engine é Chakra Core.",
+    "source": { "aula": 310, "slide": 7 },
+    "evidence": "Internet Explorer          Trident          Chakra Core"
+  },
+  {
+    "id": "n14-f021",
+    "nodeId": "n14",
+    "front": "JavaScript e Java são baseados em quê?",
+    "back": "JavaScript é baseada em objetos, enquanto Java é baseada em classes.",
+    "source": { "aula": 310, "slide": 8 },
+    "evidence": "Javascript é baseada em objetos enquanto Java é baseada em classes"
+  },
+  {
+    "id": "n14-f022",
+    "nodeId": "n14",
+    "front": "Como funciona a tipagem em JavaScript?",
+    "back": "A linguagem oferece tipagem dinâmica, com tipos não definidos previamente.",
+    "source": { "aula": 310, "slide": 8 },
+    "evidence": "Oferece tipagem dinâmica, tipos de variáveis não são definidos previamente"
+  },
+  {
+    "id": "n14-f023",
+    "nodeId": "n14",
+    "front": "JavaScript é interpretada ou compilada?",
+    "back": "JavaScript é interpretada; Java é compilada.",
+    "source": { "aula": 310, "slide": 8 },
+    "evidence": "Javascript é uma linguagem interpretada, Java é compilada"
+  },
+  {
+    "id": "n14-f024",
+    "nodeId": "n14",
+    "front": "Onde o código JavaScript e o código Java são executados?",
+    "back": "O JavaScript roda no Navegador e o Java na JVM (Java Virtual Machine).",
+    "source": { "aula": 310, "slide": 8 },
+    "evidence": "O código Javascript é executado no Navegador, enquanto o código Java é executado na JVM (Java Virtual Machine)"
+  },
+  {
+    "id": "n14-f025",
+    "nodeId": "n14",
+    "front": "Como se inclui um arquivo JavaScript externo?",
+    "back": "Com a tag script usando o atributo src, como em script.js.",
+    "source": { "aula": 310, "slide": 9 },
+    "evidence": "<script type=\"text/javascript\" src=\"script.js\"></script>"
+  },
+  {
+    "id": "n14-f026",
+    "nodeId": "n14",
+    "front": "Como é feito o bloco interno de JavaScript?",
+    "back": "O código fica dentro de um bloco interno delimitado pela tag script.",
+    "source": { "aula": 310, "slide": 9 },
+    "evidence": "<script type=\"text/javascript\">"
+  },
+  {
+    "id": "n14-f027",
+    "nodeId": "n14",
+    "front": "Como é escrito o JavaScript inline no exemplo da aula?",
+    "back": "No atributo onClick de um parágrafo, chamando alert.",
+    "source": { "aula": 310, "slide": 9 },
+    "evidence": "<p onClick=\"alert('Voce clicou no parágrafo');\">...</p>"
+  },
+  {
+    "id": "n14-f028",
+    "nodeId": "n14",
+    "front": "O que a capacidade 1 do JavaScript permite?",
+    "back": "É a capacidade de manipular objetos da página HTML e tratar eventos (DOM).",
+    "source": { "aula": 310, "slide": 10 },
+    "evidence": "Manipulação de objetos da página HTML e tratamento de eventos (DOM Document Object Model)"
+  },
+  {
+    "id": "n14-f029",
+    "nodeId": "n14",
+    "front": "Como o JavaScript se comunica com o servidor?",
+    "back": "Por meio de APIs via AJAX, usando XMLHttpRequest.",
+    "source": { "aula": 310, "slide": 10 },
+    "evidence": "Comunicação com o servidor e uso de Application Programming Interface (API) via AJAX (XMLHttpRequest)"
+  },
+  {
+    "id": "n14-f030",
+    "nodeId": "n14",
+    "front": "Onde o JavaScript pode persistir dados no browser?",
+    "back": "Em estruturas como Indexed DB e LocalStorage.",
+    "source": { "aula": 310, "slide": 10 },
+    "evidence": "estruturas providas pelo Browser 3 4 (Indexed DB e LocalStorage)"
+  },
+  {
+    "id": "n14-f031",
+    "nodeId": "n14",
+    "front": "Quais APIs do HTML 5 a aula cita?",
+    "back": "A aula cita Canvas, Media, File, Drag and Drop, Geolocation, Web Workers e History.",
+    "source": { "aula": 310, "slide": 10 },
+    "evidence": "APIs do HTML 5 (Canvas, Media, File, Drag and Drop, Geolocation,"
+  },
+  {
+    "id": "n14-f032",
+    "nodeId": "n14",
+    "front": "Como ativar o console no Chrome e no Firefox?",
+    "back": "Use as Ferramentas do Desenvolvedor (Chrome) ou o Web Console (Firefox).",
+    "source": { "aula": 310, "slide": 11 },
+    "evidence": "Para ativar, selecione a opção Ferramentas do Desenvolvedor (Google Chrome) ou Web Console (Mozilla Firefox)"
+  },
+  {
+    "id": "n14-f033",
+    "nodeId": "n14",
+    "front": "O que o console mostra?",
+    "back": "Informações sobre a página corrente e uma linha de comando para testes de expressões JavaScript.",
+    "source": { "aula": 310, "slide": 11 },
+    "evidence": "Mostra informações sobre a página corrente Inclui uma linha de comando para testes de expressões Javascript"
+  }
+]
