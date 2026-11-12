@@ -1,0 +1,310 @@
+[
+  {
+    "id": "n13-f001",
+    "nodeId": "n13",
+    "front": "O que o JSON permite fazer com dados diversos?",
+    "back": "O JSON permite estruturar dados diversos, sendo simples de criar e ler.",
+    "source": {
+      "aula": 240,
+      "slide": 5
+    },
+    "evidence": "Permite estruturar dados diversos"
+  },
+  {
+    "id": "n13-f002",
+    "nodeId": "n13",
+    "front": "Quanto à compatibilidade, o que a aula afirma sobre o JSON?",
+    "back": "Que ele é compatível com diversas plataformas e oferece bom desempenho na leitura.",
+    "source": {
+      "aula": 240,
+      "slide": 5
+    },
+    "evidence": "Compatível com diversas plataformas"
+  },
+  {
+    "id": "n13-f003",
+    "nodeId": "n13",
+    "front": "Quais valores são exemplos de dados numéricos no JSON?",
+    "back": "É um conjunto de inteiros e reais.",
+    "source": {
+      "aula": 240,
+      "slide": 7
+    },
+    "evidence": "Dados numéricos: inteiro, real"
+  },
+  {
+    "id": "n13-f004",
+    "nodeId": "n13",
+    "front": "Como o slide de tipos de dados chama os dados textuais?",
+    "back": "São chamados de caracteres ou strings.",
+    "source": {
+      "aula": 240,
+      "slide": 7
+    },
+    "evidence": "Dados textuais: caracteres, strings"
+  },
+  {
+    "id": "n13-f005",
+    "nodeId": "n13",
+    "front": "Quais valores o JSON usa para dados booleanos?",
+    "back": "É true e false.",
+    "source": {
+      "aula": 240,
+      "slide": 7
+    },
+    "evidence": "Dados booleanos: true e false"
+  },
+  {
+    "id": "n13-f006",
+    "nodeId": "n13",
+    "front": "Datas, arrays e objetos pertencem a qual categoria de dados no JSON?",
+    "back": "À categoria de dados compostos.",
+    "source": {
+      "aula": 240,
+      "slide": 7
+    },
+    "evidence": "dados compostos { – datas"
+  },
+  {
+    "id": "n13-f007",
+    "nodeId": "n13",
+    "front": "Quais sequências de escape a estrutura do formato JSON admite?",
+    "back": "Sequências de escape com b, f, n, r, t e u (hex).",
+    "source": {
+      "aula": 240,
+      "slide": 8
+    },
+    "evidence": "\" \\ / b f n r t u (hex)"
+  },
+  {
+    "id": "n13-f008",
+    "nodeId": "n13",
+    "front": "No exemplo de JSON com id 901, qual campo tem valor null?",
+    "back": "O campo married, que aparece como null.",
+    "source": {
+      "aula": 240,
+      "slide": 10
+    },
+    "evidence": "\"lazy\": false, \"married\": null"
+  },
+  {
+    "id": "n13-f009",
+    "nodeId": "n13",
+    "front": "O que o campo phones contém no exemplo de JSON?",
+    "back": "Um array com dois objetos de telefone, dos tipos home e work.",
+    "source": {
+      "aula": 240,
+      "slide": 10
+    },
+    "evidence": "\"phones\": [ { \"type\": \"home\", \"number\": \"555-3762\" }"
+  },
+  {
+    "id": "n13-f010",
+    "nodeId": "n13",
+    "front": "Como o nome é estruturado no exemplo de JSON?",
+    "back": "Como um objeto com first, middle e last.",
+    "source": {
+      "aula": 240,
+      "slide": 10
+    },
+    "evidence": "\"name\": { \"first\": \"John\", \"middle\": \"K\", \"last\": \"Doe\""
+  },
+  {
+    "id": "n13-f011",
+    "nodeId": "n13",
+    "front": "O que a chave noticias guarda no exemplo completo?",
+    "back": "Um array de objetos com titulo, resumo, data, autor, fonte e texto.",
+    "source": {
+      "aula": 240,
+      "slide": 6
+    },
+    "evidence": "\"noticias\": [ { \"titulo\": \"Órgão do Ministério Público"
+  },
+  {
+    "id": "n13-f012",
+    "nodeId": "n13",
+    "front": "Quais tópicos a aula de JSON apresenta?",
+    "back": "Introdução sobre estruturas de dados, estrutura do formato JSON e JSON Schema.",
+    "source": {
+      "aula": 240,
+      "slide": 2
+    },
+    "evidence": "Estrutura do Formato JSON • JSON Schema"
+  },
+  {
+    "id": "n13-f013",
+    "nodeId": "n13",
+    "front": "No exemplo de contatos, qual é a categoria do contato de id 1?",
+    "back": "A categoria é amigos.",
+    "source": {
+      "aula": 240,
+      "slide": 9
+    },
+    "evidence": "\"categoria\": \"amigos\""
+  },
+  {
+    "id": "n13-f014",
+    "nodeId": "n13",
+    "front": "Em qual estrutura os contatos são organizados no exemplo?",
+    "back": "Em um array chamado contatos, com um objeto por contato.",
+    "source": {
+      "aula": 240,
+      "slide": 9
+    },
+    "evidence": "\"contatos\": [{ \"id\": 1,"
+  },
+  {
+    "id": "n13-f015",
+    "nodeId": "n13",
+    "front": "O que é uma API, segundo a aula?",
+    "back": "Uma interface de uma aplicação voltada para outras aplicações, que proporciona integração entre sistemas.",
+    "source": {
+      "aula": 250,
+      "slide": 3
+    },
+    "evidence": "API ou Application Programming Interface é uma interface de uma aplicação que é voltada para outras aplicações"
+  },
+  {
+    "id": "n13-f016",
+    "nodeId": "n13",
+    "front": "Quais formatos de dados aparecem entre a aplicação Web e a API no diagrama?",
+    "back": "A comunicação usa XML e JSON.",
+    "source": {
+      "aula": 250,
+      "slide": 3
+    },
+    "evidence": "Internet API XML | JSON"
+  },
+  {
+    "id": "n13-f017",
+    "nodeId": "n13",
+    "front": "Para quem a interface de uma API é voltada?",
+    "back": "Para outras aplicações, proporcionando integração entre sistemas.",
+    "source": {
+      "aula": 250,
+      "slide": 4
+    },
+    "evidence": "voltada para outras aplicações, proporcionando integração entre sistemas."
+  },
+  {
+    "id": "n13-f018",
+    "nodeId": "n13",
+    "front": "Quais exemplos de APIs de Bibliotecas e Frameworks são citados?",
+    "back": "JavaScript (Express e React) e a Android API.",
+    "source": {
+      "aula": 250,
+      "slide": 5
+    },
+    "evidence": "APIs de Bibliotecas e Frameworks"
+  },
+  {
+    "id": "n13-f019",
+    "nodeId": "n13",
+    "front": "Quais padrões de APIs da Web aparecem na aula?",
+    "back": "A aula cita o padrão SOAP (Web Services), REST, XML-RPC e JSON-RPC, Websockets APIs e Webhooks.",
+    "source": {
+      "aula": 250,
+      "slide": 5
+    },
+    "evidence": "Padrão SOAP (Web Services)"
+  },
+  {
+    "id": "n13-f020",
+    "nodeId": "n13",
+    "front": "Que exemplo de API de sistema operacional é citado?",
+    "back": "O acesso ao sistema de arquivos.",
+    "source": {
+      "aula": 250,
+      "slide": 5
+    },
+    "evidence": "Acesso ao sistema de arquivos"
+  },
+  {
+    "id": "n13-f021",
+    "nodeId": "n13",
+    "front": "Que exemplo de API de hardware é citado?",
+    "back": "O processamento paralelo, ao lado da aceleração de vídeo.",
+    "source": {
+      "aula": 250,
+      "slide": 5
+    },
+    "evidence": "Processamento paralelo"
+  },
+  {
+    "id": "n13-f022",
+    "nodeId": "n13",
+    "front": "O que significa REST?",
+    "back": "Transferência de Estado Representacional (Representational State Transfer).",
+    "source": {
+      "aula": 250,
+      "slide": 9
+    },
+    "evidence": "Transferência de Estado Representacional (Representational State Transfer)"
+  },
+  {
+    "id": "n13-f023",
+    "nodeId": "n13",
+    "front": "Qual é a diferença entre RESTful e RESTlike?",
+    "back": "RESTful segue integralmente as recomendações REST, diferentemente do RESTlike, que as implementa parcialmente.",
+    "source": {
+      "aula": 250,
+      "slide": 9
+    },
+    "evidence": "que implementam parcialmente suas recomendações"
+  },
+  {
+    "id": "n13-f024",
+    "nodeId": "n13",
+    "front": "No padrão REST, de que o cliente se preocupa?",
+    "back": "Da apresentação para o cliente e do estado da aplicação.",
+    "source": {
+      "aula": 250,
+      "slide": 10
+    },
+    "evidence": "O cliente se preocupa com a apresentação para o cliente e o estado da aplicação"
+  },
+  {
+    "id": "n13-f025",
+    "nodeId": "n13",
+    "front": "No padrão REST, de que o servidor se preocupa?",
+    "back": "É o armazenamento de dados e a lógica de negócio.",
+    "source": {
+      "aula": 250,
+      "slide": 10
+    },
+    "evidence": "O servidor se preocupa com o armazenamento dos dados e a lógica do negócio"
+  },
+  {
+    "id": "n13-f026",
+    "nodeId": "n13",
+    "front": "Qual método HTTP recupera um recurso?",
+    "back": "GET, que corresponde ao SELECT.",
+    "source": {
+      "aula": 250,
+      "slide": 11
+    },
+    "evidence": "GET – Recuperar um recurso (SELECT)"
+  },
+  {
+    "id": "n13-f027",
+    "nodeId": "n13",
+    "front": "Quais métodos HTTP alteram ou atualizam um recurso?",
+    "back": "São os métodos PUT e PATCH, que correspondem ao UPDATE.",
+    "source": {
+      "aula": 250,
+      "slide": 11
+    },
+    "evidence": "PUT | PATCH – Alterar um estado de um recurso ou atualizá-lo (UPDATE)"
+  },
+  {
+    "id": "n13-f028",
+    "nodeId": "n13",
+    "front": "Como excluir um curso no mapeamento CRUD da aula?",
+    "back": "Com DELETE /cursos/:id.",
+    "source": {
+      "aula": 250,
+      "slide": 12
+    },
+    "evidence": "Excluir um curso DELETE DELETE /cursos/:id"
+  }
+]
