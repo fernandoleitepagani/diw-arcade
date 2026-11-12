@@ -16,7 +16,6 @@ import {
   GRADES,
   GRADE_LABELS,
   buildQueue,
-  isDue,
   newCard,
   previewIntervals,
   reviewCard,
@@ -24,6 +23,7 @@ import {
   type SrsCard,
 } from '../../lib/srs/fsrs';
 import { createEmptySave } from '../../lib/storage';
+import { getLimitNotice } from './limitNotice';
 import './FlashcardSession.css';
 
 const REQUEUE_WINDOW_MS = 15 * 60_000;
@@ -63,28 +63,6 @@ function mergeCard(
   if (update === undefined) return saved;
   if (saved === undefined) return update;
   return update.reps > saved.reps ? update : saved;
-}
-
-function capStopped(
-  flashcards: readonly Flashcard[],
-  cards: Record<string, SrsCard>,
-  now: Date,
-  newSlots: number,
-  reviewSlots: number,
-): boolean {
-  let unseen = 0;
-  let due = 0;
-
-  for (const flashcard of flashcards) {
-    const card = cards[flashcard.id];
-    if (card === undefined) {
-      unseen += 1;
-    } else if (card.reps > 0 && isDue(card, now)) {
-      due += 1;
-    }
-  }
-
-  return unseen > newSlots || due > reviewSlots;
 }
 
 function nextDueAt(
@@ -185,7 +163,7 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
 
   const newSlots = Math.max(0, newLimit - newIntroducedToday);
   const reviewSlots = Math.max(0, reviewLimit - reviewsDoneToday);
-  const blocked = capStopped(
+  const limitNotice = getLimitNotice(
     flashcards,
     effectiveCards,
     now,
@@ -290,9 +268,17 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
         ) : null}
       </header>
 
-      {blocked ? (
-        <p className="flashcard-session__cap">
-          <Link to="/ajustes">Limite diário atingido — ajuste em Ajustes</Link>
+      {limitNotice ? (
+        <p
+          className={`flashcard-session__cap${
+            limitNotice.reached ? ' flashcard-session__cap--reached' : ''
+          }`}
+        >
+          <Link to="/ajustes">
+            {limitNotice.reached
+              ? 'Limite diário atingido — ajuste em Ajustes'
+              : `Limite diário: ${limitNotice.shown} de ${limitNotice.total} cartas hoje — ajuste em Ajustes`}
+          </Link>
         </p>
       ) : null}
 
