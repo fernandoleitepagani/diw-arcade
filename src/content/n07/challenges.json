@@ -1,0 +1,200 @@
+[
+  {
+    "id": "n07-c01",
+    "nodeId": "n07",
+    "title": "Caixa com margem, borda e preenchimento",
+    "kind": "css",
+    "goal": "Aplique o box model em .caixa: margem externa, borda visível e preenchimento interno, usando propriedades longhand.",
+    "starter": {
+      "html": "<div class=\"caixa\">Linguagem CSS</div>",
+      "css": ".caixa {\n  width: 240px;\n}\n",
+      "js": ""
+    },
+    "solution": {
+      "html": "<div class=\"caixa\">Linguagem CSS</div>",
+      "css": ".caixa {\n  width: 240px;\n  margin-top: 16px;\n  margin-left: 24px;\n  padding-top: 12px;\n  padding-left: 20px;\n  border-top-width: 4px;\n  border-top-style: solid;\n}\n",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "margem-superior",
+        "label": "A margem superior de .caixa é 16px.",
+        "check": {
+          "kind": "style",
+          "selector": ".caixa",
+          "prop": "margin-top",
+          "match": { "equals": "16px" }
+        }
+      },
+      {
+        "id": "margem-esquerda",
+        "label": "A margem esquerda de .caixa é 24px.",
+        "check": {
+          "kind": "style",
+          "selector": ".caixa",
+          "prop": "margin-left",
+          "match": { "equals": "24px" }
+        }
+      },
+      {
+        "id": "preenchimento-superior",
+        "label": "O preenchimento superior de .caixa é 12px.",
+        "check": {
+          "kind": "style",
+          "selector": ".caixa",
+          "prop": "padding-top",
+          "match": { "equals": "12px" }
+        }
+      },
+      {
+        "id": "preenchimento-esquerdo",
+        "label": "O preenchimento esquerdo de .caixa é 20px.",
+        "check": {
+          "kind": "style",
+          "selector": ".caixa",
+          "prop": "padding-left",
+          "match": { "equals": "20px" }
+        }
+      },
+      {
+        "id": "borda-superior",
+        "label": "A borda superior de .caixa tem 4px de largura.",
+        "check": {
+          "kind": "style",
+          "selector": ".caixa",
+          "prop": "border-top-width",
+          "match": { "equals": "4px" }
+        }
+      },
+      {
+        "id": "borda-visivel",
+        "label": "A borda superior de .caixa é sólida.",
+        "check": {
+          "kind": "style",
+          "selector": ".caixa",
+          "prop": "border-top-style",
+          "match": { "equals": "solid" }
+        }
+      }
+    ],
+    "hints": [
+      "Comece pela margem: margin-top e margin-left controlam o espaço externo da caixa.",
+      "Use padding-top e padding-left para afastar o conteúdo da borda.",
+      "A borda precisa de largura e estilo: border-top-width: 4px e border-top-style: solid."
+    ],
+    "source": { "aula": 172, "slide": 9 },
+    "evidence": "Espaçamento entre a borda e o conteúdo"
+  },
+  {
+    "id": "n07-c02",
+    "nodeId": "n07",
+    "title": "Tipografia de um destaque",
+    "kind": "css",
+    "goal": "Defina a fonte, o tamanho e o peso do texto de .destaque com as propriedades de tipografia.",
+    "starter": {
+      "html": "<p class=\"destaque\">Aprendendo CSS</p>",
+      "css": ".destaque {\n  font-size: 14px;\n}\n",
+      "js": ""
+    },
+    "solution": {
+      "html": "<p class=\"destaque\">Aprendendo CSS</p>",
+      "css": ".destaque {\n  font-family: Arial, Helvetica, sans-serif;\n  font-size: 20px;\n  font-weight: bold;\n}\n",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "familia-da-fonte",
+        "label": "A família de fontes de .destaque começa com Arial e termina em sans-serif.",
+        "check": {
+          "kind": "style",
+          "selector": ".destaque",
+          "prop": "font-family",
+          "match": { "pattern": "arial,\\s*helvetica,\\s*sans-serif" }
+        }
+      },
+      {
+        "id": "tamanho-da-fonte",
+        "label": "O tamanho da fonte de .destaque é 20px.",
+        "check": {
+          "kind": "style",
+          "selector": ".destaque",
+          "prop": "font-size",
+          "match": { "equals": "20px" }
+        }
+      },
+      {
+        "id": "peso-da-fonte",
+        "label": "O peso da fonte de .destaque é negrito.",
+        "check": {
+          "kind": "style",
+          "selector": ".destaque",
+          "prop": "font-weight",
+          "match": { "pattern": "^(bold|700)$" }
+        }
+      }
+    ],
+    "hints": [
+      "font-family recebe uma lista de fontes, da preferida para a alternativa genérica.",
+      "font-size define o tamanho da letra; aqui o valor é 20px.",
+      "font-weight aceita bold (ou 700) para deixar o texto em negrito."
+    ],
+    "source": { "aula": 172, "slide": 14 },
+    "evidence": "font-family: define o tipo da letra (fonte) empregada no texto"
+  },
+  {
+    "id": "n07-c03",
+    "nodeId": "n07",
+    "title": "Itens em linha e um item oculto",
+    "kind": "css",
+    "goal": "Coloque os itens do menu em linha com inline-block e esconda o item .oculto com display: none.",
+    "starter": {
+      "html": "<nav class=\"menu\">\n  <a class=\"item\" href=\"#\">Início</a>\n  <a class=\"item\" href=\"#\">Cursos</a>\n  <a class=\"item oculto\" href=\"#\">Extra</a>\n</nav>",
+      "css": ".item {\n  display: block;\n}\n\n.oculto {\n  display: inline-block;\n}\n",
+      "js": ""
+    },
+    "solution": {
+      "html": "<nav class=\"menu\">\n  <a class=\"item\" href=\"#\">Início</a>\n  <a class=\"item\" href=\"#\">Cursos</a>\n  <a class=\"item oculto\" href=\"#\">Extra</a>\n</nav>",
+      "css": ".item {\n  display: inline-block;\n}\n\n.oculto {\n  display: none;\n}\n",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "itens-em-linha",
+        "label": "Os itens do menu usam display: inline-block.",
+        "check": {
+          "kind": "style",
+          "selector": ".item",
+          "prop": "display",
+          "match": { "equals": "inline-block" }
+        }
+      },
+      {
+        "id": "item-oculto",
+        "label": "O item com a classe .oculto usa display: none.",
+        "check": {
+          "kind": "style",
+          "selector": ".item.oculto",
+          "prop": "display",
+          "match": { "equals": "none" }
+        }
+      },
+      {
+        "id": "tres-itens",
+        "label": "O menu mantém os três itens no HTML.",
+        "check": {
+          "kind": "count",
+          "selector": ".item",
+          "min": 3,
+          "max": 3
+        }
+      }
+    ],
+    "hints": [
+      "display: inline-block mantém o elemento em linha, mas permite definir largura e altura.",
+      "Para esconder um item sem removê-lo do HTML, use display: none.",
+      "A regra .oculto precisa vir depois de .item para sobrescrever o display do item oculto."
+    ],
+    "source": { "aula": 172, "slide": 7 },
+    "evidence": "O elemento será renderizado como um bloco, porém em linha"
+  }
+]
