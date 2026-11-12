@@ -1,0 +1,10 @@
+[
+  { "route": "/no/n01/quiz", "rule": "color-contrast" },
+  { "route": "/no/n01/cartas", "rule": "color-contrast" },
+  { "route": "/revisao", "rule": "color-contrast" },
+  { "route": "/desafio/n01-c01", "rule": "color-contrast" },
+  { "route": "/laboratorios/lab-01", "rule": "scrollable-region-focusable" },
+  { "route": "/estatisticas", "rule": "color-contrast" },
+  { "route": "/estatisticas", "rule": "scrollable-region-focusable" },
+  { "route": "/caminho-inexistente", "rule": "color-contrast" }
+]
