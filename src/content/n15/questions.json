@@ -3,7 +3,7 @@
     "id": "n15-q001",
     "nodeId": "n15",
     "type": "mcq",
-    "prompt": "Considere o trecho:\n\n```js\nfunction teste() {\n  if (true) {\n    var a = \"var\";\n    let b = \"let\";\n  }\n  console.log(a);\n  console.log(typeof b);\n}\n\nteste();\n```\n\nO que é impresso?",
+    "prompt": "O que o código abaixo imprime?",
     "options": [
       "var\nundefined",
       "var\nReferenceError",
@@ -26,7 +26,7 @@
     "id": "n15-q002",
     "nodeId": "n15",
     "type": "mcq",
-    "prompt": "Considere o trecho:\n\n```js\nconsole.log(valor);\nvar valor = 10;\nconsole.log(valor);\n```\n\nO que é impresso?",
+    "prompt": "O que o código abaixo imprime?",
     "options": [
       "ReferenceError\n10",
       "undefined\n10",
@@ -49,7 +49,7 @@
     "id": "n15-q003",
     "nodeId": "n15",
     "type": "mcq",
-    "prompt": "Considere o trecho:\n\n```js\nconsole.log(versao());\n\nfunction versao() {\n  return \"v1\";\n}\n```\n\nO que é impresso?",
+    "prompt": "O que o código abaixo imprime?",
     "options": [
       "undefined",
       "TypeError",
@@ -75,7 +75,7 @@
     "id": "n15-q004",
     "nodeId": "n15",
     "type": "mcq",
-    "prompt": "Considere o trecho:\n\n```js\ntry {\n  console.log(nome);\n  let nome = \"Ana\";\n} catch (erro) {\n  console.log(erro.name);\n}\n```\n\nO que é impresso?",
+    "prompt": "O que o código abaixo imprime?",
     "options": [
       "undefined",
       "SyntaxError",
@@ -99,7 +99,7 @@
     "id": "n15-q005",
     "nodeId": "n15",
     "type": "mcq",
-    "prompt": "Considere o trecho:\n\n```js\nlet cor = \"azul\";\n\nfunction pintar() {\n  let cor = \"verde\";\n  console.log(cor);\n}\n\npintar();\nconsole.log(cor);\n```\n\nO que é impresso?",
+    "prompt": "O que o código abaixo imprime?",
     "options": [
       "verde\nazul",
       "azul\nazul",
@@ -125,7 +125,7 @@
     "id": "n15-q006",
     "nodeId": "n15",
     "type": "mcq",
-    "prompt": "Considere o trecho:\n\n```js\nfunction criarContador() {\n  let total = 0;\n  return function () {\n    total += 1;\n    return total;\n  };\n}\n\nconst contar = criarContador();\nconsole.log(contar());\nconsole.log(contar());\nconsole.log(contar());\n```\n\nO que é impresso?",
+    "prompt": "O que o código abaixo imprime?",
     "options": [
       "0\n1\n2",
       "1\n2\n3",
@@ -151,7 +151,7 @@
     "id": "n15-q007",
     "nodeId": "n15",
     "type": "mcq",
-    "prompt": "Considere o trecho:\n\n```js\nfor (var i = 0; i < 3; i += 1) {\n  setTimeout(function () {\n    console.log(i);\n  }, 0);\n}\n```\n\nO que é impresso?",
+    "prompt": "O que o código abaixo imprime?",
     "options": [
       "0\n1\n2",
       "1\n2\n3",
@@ -174,7 +174,7 @@
     "id": "n15-q008",
     "nodeId": "n15",
     "type": "mcq",
-    "prompt": "Considere o trecho:\n\n```js\nfor (let i = 0; i < 3; i += 1) {\n  setTimeout(function () {\n    console.log(i);\n  }, 0);\n}\n```\n\nO que é impresso?",
+    "prompt": "O que o código abaixo imprime?",
     "options": [
       "3\n3\n3",
       "1\n2\n3",
@@ -200,7 +200,7 @@
     "id": "n15-q009",
     "nodeId": "n15",
     "type": "mcq",
-    "prompt": "Considere o trecho:\n\n```js\nconst pessoa = { nome: \"Ana\" };\npessoa.nome = \"Bia\";\nconsole.log(pessoa.nome);\n\ntry {\n  pessoa = { nome: \"Caio\" };\n} catch (erro) {\n  console.log(erro.name);\n}\n```\n\nO que é impresso?",
+    "prompt": "O que o código abaixo imprime?",
     "options": [
       "Bia\nTypeError",
       "Ana\nTypeError",
@@ -224,7 +224,7 @@
     "id": "n15-q010",
     "nodeId": "n15",
     "type": "mcq",
-    "prompt": "Considere o trecho:\n\n```js\nfunction a() {\n  console.log(\"a\");\n  b();\n}\n\nfunction b() {\n  console.log(\"b\");\n  c();\n}\n\nfunction c() {\n  console.log(\"c\");\n}\n\na();\nconsole.log(\"depois\");\n```\n\nEm que ordem as linhas são impressas?",
+    "prompt": "Em que ordem o código abaixo imprime as linhas?",
     "options": [
       "a\nc\nb\ndepois",
       "a\nb\nc\ndepois",
@@ -248,7 +248,7 @@
     "id": "n15-q011",
     "nodeId": "n15",
     "type": "mcq",
-    "prompt": "Uma função curta deveria somar os preços, mas sempre devolve `0`:\n\n```js\nfunction calcularTotal(precos) {\n  let total = 0;\n  precos.forEach(function (preco) {\n    total + preco;\n  });\n  return total;\n}\n```\n\nQual é o problema?",
+    "prompt": "Uma função curta deveria somar os preços, mas sempre devolve `0`. No callback de `forEach` há apenas `total + preco;`. Qual é o problema?",
     "options": [
       "A função sempre retorna 0, porque o resultado de `total + preco` não é atribuído a `total`.",
       "`forEach` não percorre arrays, então o callback nunca executa.",
@@ -266,7 +266,7 @@
     "id": "n15-q012",
     "nodeId": "n15",
     "type": "mcq",
-    "prompt": "Considere a função:\n\n```js\nfunction saudar(nome = \"visitante\") {\n  return \"Olá, \" + nome;\n}\n```\n\nO que `saudar()` retorna?",
+    "prompt": "Considere a função `function saudar(nome = \"visitante\") { return \"Olá, \" + nome; }`. O que `saudar()` retorna?",
     "options": [
       "A string `Olá, undefined`",
       "Um `TypeError` por falta de argumento",
@@ -341,7 +341,7 @@
     "id": "n15-q017",
     "nodeId": "n15",
     "type": "fill",
-    "prompt": "Considere o trecho:\n\n```js\nconst numeros = [1, 2, 3, 4];\nconst dobros = numeros.map((n) => n * 2);\nconsole.log(dobros);\n```\n\nA primeira linha impressa é ____.",
+    "prompt": "A primeira linha impressa é ____.",
     "answers": [
       "[2,4,6,8]"
     ],
@@ -363,7 +363,7 @@
     "id": "n15-q018",
     "nodeId": "n15",
     "type": "fill",
-    "prompt": "Considere o trecho:\n\n```js\nconst idades = [12, 18, 21, 15, 30];\nconst maiores = idades.filter((idade) => idade >= 18);\nconsole.log(maiores);\n```\n\nO array impresso é ____.",
+    "prompt": "O array impresso é ____.",
     "answers": [
       "[18,21,30]"
     ],
@@ -385,7 +385,7 @@
     "id": "n15-q019",
     "nodeId": "n15",
     "type": "fill",
-    "prompt": "Considere o trecho:\n\n```js\nconst valores = [10, 20, 30];\nconst total = valores.reduce((soma, valor) => soma + valor, 0);\nconsole.log(total);\n```\n\nO valor impresso é ____.",
+    "prompt": "O valor impresso é ____.",
     "answers": [
       "60"
     ],

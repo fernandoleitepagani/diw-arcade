@@ -304,9 +304,9 @@
     "id": "n20-q020",
     "nodeId": "n20",
     "type": "fill",
-    "prompt": "O método que exibe a mensagem de validação e leva o foco ao primeiro campo inválido é `campo.____()`.",
+    "prompt": "O método que valida esse campo e exibe ao usuário a mensagem de validação dele é `campo.____()`.",
     "answers": ["reportValidity"],
-    "explanation": "`reportValidity()` mostra ao usuário a mensagem de validação do campo e move o foco para ele; `setCustomValidity` apenas define a mensagem.",
+    "explanation": "`campo.reportValidity()` valida apenas esse campo e, se houver um problema, exibe a mensagem de validação dele e leva o foco até ele. Quem percorre o formulário e reporta o primeiro campo inválido é `form.reportValidity()`; já `setCustomValidity` apenas define a mensagem.",
     "source": { "kind": "orientacao" },
     "evidence": "tratamento de formulários e validações."
   },
