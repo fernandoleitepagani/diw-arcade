@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
+import { NODES } from '../../content';
 import { newCard } from '../../lib/srs/fsrs';
 import {
   SaveV1Schema,
@@ -30,8 +31,17 @@ describe('SkillTree', () => {
   it('shows every fresh node as Nova and never as Em dia', () => {
     renderTree();
 
-    expect(screen.getAllByText('Nova')).toHaveLength(14);
+    expect(screen.getAllByText('Nova')).toHaveLength(NODES.length);
     expect(screen.queryByText('Em dia')).not.toBeInTheDocument();
+  });
+
+  it('shows the Prova 2 unit with its six nodes', () => {
+    renderTree();
+
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Prova 2' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('6 nós')).toBeInTheDocument();
   });
 
   it('shows how many cards are due only on the node that has them', () => {
@@ -53,7 +63,7 @@ describe('SkillTree', () => {
     renderTree();
 
     for (const label of ['quiz', 'cartas', 'código']) {
-      expect(screen.getAllByText(label)).toHaveLength(14);
+      expect(screen.getAllByText(label)).toHaveLength(NODES.length);
     }
   });
 });

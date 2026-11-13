@@ -234,8 +234,15 @@ describe('lab schema', () => {
 });
 
 describe('tree', () => {
-  it('has five units covering the fourteen nodes', () => {
-    expect(UNITS.map((unit) => unit.id)).toEqual(['u1', 'u2', 'u3', 'u4', 'u5']);
+  it('has six units covering every node', () => {
+    expect(UNITS.map((unit) => unit.id)).toEqual([
+      'u1',
+      'u2',
+      'u3',
+      'u4',
+      'u5',
+      'u6',
+    ]);
     expect(
       UNITS.map((unit) => ({
         id: unit.id,
@@ -248,40 +255,188 @@ describe('tree', () => {
       { id: 'u3', title: 'CSS', nodes: ['n06', 'n07', 'n08', 'n09'] },
       { id: 'u4', title: 'Design e Mobile', nodes: ['n10', 'n11', 'n12'] },
       { id: 'u5', title: 'Dados e JavaScript', nodes: ['n13', 'n14'] },
+      {
+        id: 'u6',
+        title: 'Prova 2',
+        nodes: ['n15', 'n16', 'n17', 'n18', 'n19', 'n20'],
+      },
     ]);
     expect(UNITS.flatMap((unit) => unit.nodes)).toEqual([...NODE_IDS]);
   });
 
-  it('matches the node table exactly', () => {
+  it('matches the 20-row node table exactly', () => {
     expect(
       NODES.map((node) => ({
         id: node.id,
         title: node.title,
         aulas: [...node.aulas],
         unitId: node.unitId,
+        docs: node.docs ? [...node.docs] : [],
+        minimums: node.minimums ? { ...node.minimums } : null,
       })),
     ).toEqual([
-      { id: 'n01', title: 'Introdução à Web e tecnologias', aulas: [110, 120], unitId: 'u1' },
+      {
+        id: 'n01',
+        title: 'Introdução à Web e tecnologias',
+        aulas: [110, 120],
+        unitId: 'u1',
+        docs: [],
+        minimums: null,
+      },
       {
         id: 'n02',
         title: 'Arquitetura, URI/URL/URN e dinâmica da Web',
         aulas: [130, 131, 150],
         unitId: 'u1',
+        docs: [],
+        minimums: null,
       },
-      { id: 'n03', title: 'Sintaxe e elementos HTML', aulas: [160, 161], unitId: 'u2' },
-      { id: 'n04', title: 'Formulários', aulas: [162], unitId: 'u2' },
-      { id: 'n05', title: 'Semântica', aulas: [163], unitId: 'u2' },
-      { id: 'n06', title: 'CSS: introdução e sintaxe', aulas: [170, 171], unitId: 'u3' },
-      { id: 'n07', title: 'Propriedades CSS', aulas: [172], unitId: 'u3' },
-      { id: 'n08', title: 'Viewport e Media Queries', aulas: [173], unitId: 'u3' },
-      { id: 'n09', title: 'Flexbox e Grid', aulas: [174], unitId: 'u3' },
-      { id: 'n10', title: 'UX Design e projeto web', aulas: [210], unitId: 'u4' },
-      { id: 'n11', title: 'Web e computação móvel', aulas: [220], unitId: 'u4' },
-      { id: 'n12', title: 'Bootstrap', aulas: [230], unitId: 'u4' },
-      { id: 'n13', title: 'JSON e APIs', aulas: [240, 250], unitId: 'u5' },
-      { id: 'n14', title: 'Introdução ao JavaScript', aulas: [310], unitId: 'u5' },
+      {
+        id: 'n03',
+        title: 'Sintaxe e elementos HTML',
+        aulas: [160, 161],
+        unitId: 'u2',
+        docs: [],
+        minimums: null,
+      },
+      {
+        id: 'n04',
+        title: 'Formulários',
+        aulas: [162],
+        unitId: 'u2',
+        docs: [],
+        minimums: { questions: 28, flashcards: 37, challenges: 5 },
+      },
+      {
+        id: 'n05',
+        title: 'Semântica',
+        aulas: [163],
+        unitId: 'u2',
+        docs: [],
+        minimums: null,
+      },
+      {
+        id: 'n06',
+        title: 'CSS: introdução e sintaxe',
+        aulas: [170, 171],
+        unitId: 'u3',
+        docs: [],
+        minimums: null,
+      },
+      {
+        id: 'n07',
+        title: 'Propriedades CSS',
+        aulas: [172],
+        unitId: 'u3',
+        docs: [],
+        minimums: null,
+      },
+      {
+        id: 'n08',
+        title: 'Viewport e Media Queries',
+        aulas: [173],
+        unitId: 'u3',
+        docs: [],
+        minimums: null,
+      },
+      {
+        id: 'n09',
+        title: 'Flexbox e Grid',
+        aulas: [174],
+        unitId: 'u3',
+        docs: [],
+        minimums: null,
+      },
+      {
+        id: 'n10',
+        title: 'UX Design e projeto web',
+        aulas: [210],
+        unitId: 'u4',
+        docs: ['tiaw-design-thinking', 'tiaw-dtg', 'tiaw-requisitos'],
+        minimums: { questions: 30, flashcards: 36, challenges: 5 },
+      },
+      {
+        id: 'n11',
+        title: 'Web e computação móvel',
+        aulas: [220],
+        unitId: 'u4',
+        docs: [],
+        minimums: null,
+      },
+      {
+        id: 'n12',
+        title: 'Bootstrap',
+        aulas: [230],
+        unitId: 'u4',
+        docs: [],
+        minimums: null,
+      },
+      {
+        id: 'n13',
+        title: 'JSON e APIs',
+        aulas: [240, 250],
+        unitId: 'u5',
+        docs: ['tiaw-json'],
+        minimums: { questions: 32, flashcards: 40, challenges: 5, executed: 3 },
+      },
+      {
+        id: 'n14',
+        title: 'Introdução ao JavaScript',
+        aulas: [310],
+        unitId: 'u5',
+        docs: ['orientacao-prova2'],
+        minimums: { questions: 29, flashcards: 45, challenges: 5, executed: 5 },
+      },
+      {
+        id: 'n15',
+        title: 'Leitura de código: escopo, hoisting e execução',
+        aulas: [310],
+        unitId: 'u6',
+        docs: ['orientacao-prova2'],
+        minimums: { questions: 20, flashcards: 25, challenges: 3, executed: 12 },
+      },
+      {
+        id: 'n16',
+        title: 'Tipos, igualdade e coerção',
+        aulas: [240, 310],
+        unitId: 'u6',
+        docs: ['orientacao-prova2'],
+        minimums: { questions: 20, flashcards: 25, challenges: 3, executed: 12 },
+      },
+      {
+        id: 'n17',
+        title: 'DOM e eventos',
+        aulas: [310],
+        unitId: 'u6',
+        docs: ['orientacao-prova2'],
+        minimums: { questions: 20, flashcards: 25, challenges: 5, executed: 8 },
+      },
+      {
+        id: 'n18',
+        title: 'URLs e parâmetros de consulta',
+        aulas: [131, 250],
+        unitId: 'u6',
+        docs: ['orientacao-prova2'],
+        minimums: { questions: 20, flashcards: 25, challenges: 3, executed: 10 },
+      },
+      {
+        id: 'n19',
+        title: 'Assíncrono: promises, async/await e fetch',
+        aulas: [240, 250],
+        unitId: 'u6',
+        docs: ['orientacao-prova2', 'tiaw-json'],
+        minimums: { questions: 20, flashcards: 25, challenges: 5, executed: 10 },
+      },
+      {
+        id: 'n20',
+        title: 'Formulários e validação com JavaScript',
+        aulas: [162, 310],
+        unitId: 'u6',
+        docs: ['orientacao-prova2'],
+        minimums: { questions: 20, flashcards: 25, challenges: 5, executed: 6 },
+      },
     ]);
-    expect(NODES).toHaveLength(14);
+    expect(NODES).toHaveLength(20);
   });
 
   it('lists the four lab ids', () => {
