@@ -180,5 +180,180 @@
     ],
     "source": { "aula": 210, "slide": 32 },
     "evidence": "Os site maps são mapas visuais que permitem verificar como o conteúdo do site está organizado e distribuído, além dos caminhos de acesso, ou fluxo de navegação."
+  },
+  {
+    "id": "n10-c04",
+    "nodeId": "n10",
+    "title": "Cartão de persona com marcação semântica",
+    "kind": "html",
+    "goal": "Transforme o cartão de persona em uma marcação semântica: use article para o cartão, h2 para o nome, img com texto alternativo descritivo e uma lista de definição (dl) para objetivos e frustrações.",
+    "starter": {
+      "html": "<section class=\"persona\">\n  <img src=\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='%23c7d2fe'/%3E%3C/svg%3E\" alt=\"foto\">\n  <div class=\"nome\">Marina, 29 anos</div>\n  <div class=\"perfil\">Analista de suporte</div>\n  <p class=\"bio\">Trabalha em turnos e precisa resolver chamados com rapidez.</p>\n  <div class=\"bloco\">\n    <span class=\"rotulo\">Objetivos</span>\n    <span>Abrir chamados sem fila</span>\n  </div>\n</section>",
+      "css": ".persona {\n  max-width: 34rem;\n  margin: 2rem auto;\n  padding: 1.5rem;\n  border: 1px solid #cbd5e1;\n  border-radius: 0.75rem;\n  font-family: system-ui, sans-serif;\n}\n.persona img {\n  display: block;\n  width: 100%;\n  height: auto;\n  border-radius: 0.5rem;\n}\n.nome {\n  margin-top: 1rem;\n  font-size: 1.25rem;\n  font-weight: 700;\n}\n.perfil {\n  color: #475569;\n}\n.bloco {\n  display: grid;\n  gap: 0.25rem;\n  margin-top: 1rem;\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<article class=\"persona\">\n  <img src=\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='%23c7d2fe'/%3E%3C/svg%3E\" alt=\"Retrato ilustrado de Marina, analista de suporte\">\n  <h2>Marina, 29 anos</h2>\n  <p class=\"perfil\">Analista de suporte</p>\n  <p class=\"bio\">Trabalha em turnos e precisa resolver chamados com rapidez.</p>\n  <dl>\n    <dt>Objetivos</dt>\n    <dd>Abrir chamados sem fila</dd>\n    <dt>Frustrações</dt>\n    <dd>Esperar por respostas em vários canais</dd>\n  </dl>\n</article>",
+      "css": ".persona {\n  max-width: 34rem;\n  margin: 2rem auto;\n  padding: 1.5rem;\n  border: 1px solid #cbd5e1;\n  border-radius: 0.75rem;\n  font-family: system-ui, sans-serif;\n}\n.persona img {\n  display: block;\n  width: 100%;\n  height: auto;\n  border-radius: 0.5rem;\n}\n.persona h2 {\n  margin: 1rem 0 0.25rem;\n  font-size: 1.25rem;\n}\n.perfil {\n  color: #475569;\n}\n.persona dl {\n  display: grid;\n  gap: 0.25rem;\n  margin-top: 1rem;\n}\n.persona dt {\n  font-weight: 700;\n}\n.persona dd {\n  margin: 0 0 0.5rem;\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "r1",
+        "label": "O cartão usa o elemento article",
+        "check": {
+          "kind": "exists",
+          "selector": "article"
+        }
+      },
+      {
+        "id": "r2",
+        "label": "O nome da persona está em um título h2 dentro do article",
+        "check": {
+          "kind": "exists",
+          "selector": "article h2"
+        }
+      },
+      {
+        "id": "r3",
+        "label": "A foto tem texto alternativo descritivo",
+        "check": {
+          "kind": "attr",
+          "selector": "article img",
+          "name": "alt",
+          "match": {
+            "pattern": ".{10,}"
+          }
+        }
+      },
+      {
+        "id": "r4",
+        "label": "O cartão tem uma lista de definição",
+        "check": {
+          "kind": "count",
+          "selector": "article dl",
+          "min": 1,
+          "max": 1
+        }
+      },
+      {
+        "id": "r5",
+        "label": "A lista de definição tem pelo menos dois termos",
+        "check": {
+          "kind": "count",
+          "selector": "article dl dt",
+          "min": 2
+        }
+      },
+      {
+        "id": "r6",
+        "label": "A lista de definição tem pelo menos duas descrições",
+        "check": {
+          "kind": "count",
+          "selector": "article dl dd",
+          "min": 2
+        }
+      }
+    ],
+    "hints": [
+      "O cartão inteiro é uma unidade de conteúdo: use <article> no lugar da <section>.",
+      "O nome da persona deve ser um título, não um <div>; use <h2> dentro do article.",
+      "Para os pares rótulo/valor de objetivos e frustrações, use <dl> com <dt> e <dd>."
+    ],
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-design-thinking",
+      "slide": 16
+    },
+    "evidence": "Personas são personagens fictícios criados a partir da pesquisa e observação dos comportamentos de usuários reais."
+  },
+  {
+    "id": "n10-c05",
+    "nodeId": "n10",
+    "title": "Tabela de requisitos com RF, RNF e prioridade",
+    "kind": "html",
+    "goal": "Organize os requisitos em uma tabela com cabeçalho e corpo separados, uma coluna Tipo para RF ou RNF e uma coluna Prioridade com Alta, Média ou Baixa.",
+    "starter": {
+      "html": "<section class=\"requisitos\">\n  <h1>Requisitos do portal de monitoria</h1>\n  <p>Lista inicial de requisitos levantados com as personas.</p>\n  <table>\n    <thead>\n      <tr><th>Requisito</th><th>Tipo</th></tr>\n    </thead>\n    <tbody>\n      <tr><td>O sistema deve mostrar os horários das monitorias</td><td>RF</td></tr>\n      <tr><td>A interface deve ser responsiva</td><td>RNF</td></tr>\n    </tbody>\n  </table>\n</section>",
+      "css": ".requisitos {\n  max-width: 48rem;\n  margin: 2rem auto;\n  padding: 0 1.5rem;\n  font-family: system-ui, sans-serif;\n}\ntable {\n  width: 100%;\n  border-collapse: collapse;\n}\nth,\ntd {\n  padding: 0.6rem 0.75rem;\n  border-bottom: 1px solid #cbd5e1;\n  text-align: left;\n}",
+      "js": ""
+    },
+    "solution": {
+      "html": "<section class=\"requisitos\">\n  <h1>Requisitos do portal de monitoria</h1>\n  <p>Tabela com requisitos funcionais (RF) e não funcionais (RNF), separados por prioridade.</p>\n  <table>\n    <caption>Requisitos do portal de monitoria</caption>\n    <thead>\n      <tr><th>Requisito</th><th>Tipo</th><th>Prioridade</th></tr>\n    </thead>\n    <tbody>\n      <tr><td>O sistema deve mostrar os horários das monitorias</td><td>RF</td><td>Alta</td></tr>\n      <tr><td>O sistema deve permitir cancelar um agendamento</td><td>RF</td><td>Média</td></tr>\n      <tr><td>A interface deve ser responsiva</td><td>RNF</td><td>Alta</td></tr>\n      <tr><td>O sistema deve responder em até 2 segundos</td><td>RNF</td><td>Baixa</td></tr>\n    </tbody>\n  </table>\n</section>",
+      "css": ".requisitos {\n  max-width: 48rem;\n  margin: 2rem auto;\n  padding: 0 1.5rem;\n  font-family: system-ui, sans-serif;\n}\ntable {\n  width: 100%;\n  border-collapse: collapse;\n}\ncaption {\n  margin-bottom: 0.75rem;\n  font-weight: 700;\n  text-align: left;\n}\nth,\ntd {\n  padding: 0.6rem 0.75rem;\n  border-bottom: 1px solid #cbd5e1;\n  text-align: left;\n}\nth {\n  background: #e2e8f0;\n}",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "r1",
+        "label": "A página tem uma tabela",
+        "check": {
+          "kind": "exists",
+          "selector": "table"
+        }
+      },
+      {
+        "id": "r2",
+        "label": "O cabeçalho da tabela tem três colunas",
+        "check": {
+          "kind": "count",
+          "selector": "thead th",
+          "min": 3
+        }
+      },
+      {
+        "id": "r3",
+        "label": "O corpo da tabela tem pelo menos quatro linhas",
+        "check": {
+          "kind": "count",
+          "selector": "tbody tr",
+          "min": 4
+        }
+      },
+      {
+        "id": "r4",
+        "label": "A tabela identifica requisitos funcionais (RF)",
+        "check": {
+          "kind": "text",
+          "selector": "tbody",
+          "match": {
+            "pattern": "RF"
+          }
+        }
+      },
+      {
+        "id": "r5",
+        "label": "A tabela identifica requisitos não funcionais (RNF)",
+        "check": {
+          "kind": "text",
+          "selector": "tbody",
+          "match": {
+            "pattern": "RNF"
+          }
+        }
+      },
+      {
+        "id": "r6",
+        "label": "A tabela mostra prioridades Alta, Média ou Baixa",
+        "check": {
+          "kind": "text",
+          "selector": "tbody",
+          "match": {
+            "pattern": "(Alta|Média|Baixa)"
+          }
+        }
+      }
+    ],
+    "hints": [
+      "Separe o cabeçalho no <thead> e as linhas de dados no <tbody>.",
+      "A coluna Tipo deve distinguir requisitos funcionais (RF) dos não funcionais (RNF).",
+      "Acrescente uma coluna Prioridade e preencha as linhas com Alta, Média ou Baixa."
+    ],
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-requisitos",
+      "slide": 16
+    },
+    "evidence": "Podem ser classificados em: • Funcionais • Não funcionais"
   }
 ]
