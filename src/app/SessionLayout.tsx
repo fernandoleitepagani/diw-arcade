@@ -5,7 +5,10 @@ import {
   SessionBarProvider,
   useSessionBarState,
 } from '../components/session/sessionBar';
-import { Button, PageSkeleton, ProgressBar } from '../components/ui';
+import { PageSkeleton } from '../components/ui';
+import { Button } from '../components/pixel/Button/Button';
+import { PixelIcon } from '../components/pixel/PixelIcon/PixelIcon';
+import { SegBar } from '../components/pixel/SegBar/SegBar';
 import './SessionLayout.css';
 
 const DEFAULT_EXIT = '/';
@@ -42,15 +45,21 @@ function SessionChrome() {
       </a>
 
       <header className="session-layout__bar">
-        <ProgressBar
-          className="session-layout__progress"
-          value={value}
-          max={max}
-          label="Progresso da sessão"
-        />
-        <Button variant="secondary" onClick={leave}>
-          Sair da sessão
+        <Button
+          variant="quiet"
+          className="session-layout__close"
+          aria-label="Sair da sessão"
+          onClick={leave}
+        >
+          <PixelIcon name="x" scale={2} />
         </Button>
+        <div className="session-layout__progress">
+          <SegBar
+            on={Math.min(value, max)}
+            total={max}
+            label="Progresso da sessão"
+          />
+        </div>
       </header>
 
       <main

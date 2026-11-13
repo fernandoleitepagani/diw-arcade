@@ -139,4 +139,19 @@ describe('SessionLayout', () => {
       ).toBeInTheDocument(),
     );
   });
+
+  it('uses a segmented progress bar and keeps the main focus target', async () => {
+    const { container } = renderConfirmingSession();
+
+    expect(container.querySelectorAll('.seg i')).toHaveLength(4);
+    expect(
+      screen.getByRole('progressbar', { name: 'Progresso da sessão' }),
+    ).toHaveAttribute('aria-valuenow', '1');
+    expect(
+      screen.getByRole('link', { name: 'Pular para o conteúdo' }),
+    ).toHaveAttribute('href', '#conteudo');
+    await waitFor(() =>
+      expect(container.querySelector('#conteudo')).toHaveFocus(),
+    );
+  });
 });

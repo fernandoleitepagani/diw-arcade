@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { SessionSummary, useSessionBar } from '../../components/session';
-import { Button, Mascot } from '../../components/ui';
+import {
+  FeedbackBar,
+  SessionSummary,
+  useSessionBar,
+} from '../../components/session';
+import { PixelSprite } from '../../components/pixel/PixelSprite/PixelSprite';
+import { SPRITES } from '../../components/pixel/sprites';
+import { Button } from '../../components/ui';
 import { pickLine } from '../../content/copy';
 import { formatSource } from '../../content/source';
 import type { NodeId } from '../../content/tree';
@@ -18,6 +24,7 @@ import {
   startSession,
   type QuizAnswers,
 } from './session';
+import { QuizOption } from './QuizOption';
 import './QuizRound.css';
 
 export interface QuizRoundProps {
@@ -222,10 +229,22 @@ export function QuizRound({
       const current = currentQuestion(session);
       if (!current) return;
 
-      if (current.type === 'mcq' && /^[1-4]$/.test(event.key)) {
-        setSelected(Number(event.key) - 1);
-        event.preventDefault();
-        return;
+      const target = event.target;
+      const typing =
+        target instanceof HTMLTextAreaElement ||
+        (target instanceof HTMLInputElement && target.type !== 'radio');
+
+      if (!typing && current.type !== 'fill') {
+        const count = current.type === 'mcq' ? 4 : 2;
+        const key = event.key.toLowerCase();
+        const index = /^[1-4]$/.test(key)
+          ? Number(key) - 1
+          : 'abcd'.indexOf(key);
+        if (key.length === 1 && index >= 0 && index < count) {
+          setSelected(index);
+          event.preventDefault();
+          return;
+        }
       }
 
       if (event.key === 'Enter' && canSubmit) {
@@ -308,99 +327,32 @@ export function QuizRound({
                   code={active.code}
                 />
               )}
-              {active.options.map((option, index) => {
-                const picked = locked && selected === index;
-                const correct = locked && index === correctOptionIndex(active);
-                const classes = [
-                  'quiz-round__option',
-                  !locked && selected === index
-                    ? 'quiz-round__option--selected'
-                    : '',
-                  picked ? 'quiz-round__option--picked' : '',
-                  correct ? 'quiz-round__option--correct' : '',
-                  locked ? 'quiz-round__option--readonly' : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ');
-
-                return (
-                  <label key={option} className={classes}>
-                    <input
-                      type="radio"
-                      name="quiz-option"
-                      value={index}
-                      checked={selected === index}
-                      disabled={locked}
-                      onChange={() => setSelected(index)}
-                    />
-                    <span className="quiz-round__key" aria-hidden="true">
-                      {index + 1}
-                    </span>
-                    <span className="quiz-round__option-text">{option}</span>
-                    {locked ? (
-                      <span className="quiz-round__tags">
-                        {picked ? (
-                          <span className="quiz-round__tag quiz-round__tag--picked">
-                            Sua resposta
-                          </span>
-                        ) : null}
-                        {correct ? (
-                          <span className="quiz-round__tag quiz-round__tag--correct">
-                            Resposta correta
-                          </span>
-                        ) : null}
-                      </span>
-                    ) : null}
-                  </label>
-                );
-              })}
+              {active.options.map((option, index) => (
+                <QuizOption
+                  key={option}
+                  label={option}
+                  index={index}
+                  selected={selected === index}
+                  locked={locked}
+                  correct={locked && index === correctOptionIndex(active)}
+                  onSelect={setSelected}
+                />
+              ))}
             </fieldset>
           ) : active.type === 'tf' ? (
             <fieldset className="quiz-round__options">
               <legend className="quiz-round__prompt">{active.prompt}</legend>
-              {['Verdadeiro', 'Falso'].map((option, index) => {
-                const picked = locked && selected === index;
-                const correct = locked && index === correctOptionIndex(active);
-                const classes = [
-                  'quiz-round__option',
-                  !locked && selected === index
-                    ? 'quiz-round__option--selected'
-                    : '',
-                  picked ? 'quiz-round__option--picked' : '',
-                  correct ? 'quiz-round__option--correct' : '',
-                  locked ? 'quiz-round__option--readonly' : '',
-                ]
-                  .filter(Boolean)
-                  .join(' ');
-
-                return (
-                  <label key={option} className={classes}>
-                    <input
-                      type="radio"
-                      name="quiz-option"
-                      value={index}
-                      checked={selected === index}
-                      disabled={locked}
-                      onChange={() => setSelected(index)}
-                    />
-                    <span className="quiz-round__option-text">{option}</span>
-                    {locked ? (
-                      <span className="quiz-round__tags">
-                        {picked ? (
-                          <span className="quiz-round__tag quiz-round__tag--picked">
-                            Sua resposta
-                          </span>
-                        ) : null}
-                        {correct ? (
-                          <span className="quiz-round__tag quiz-round__tag--correct">
-                            Resposta correta
-                          </span>
-                        ) : null}
-                      </span>
-                    ) : null}
-                  </label>
-                );
-              })}
+              {['Verdadeiro', 'Falso'].map((option, index) => (
+                <QuizOption
+                  key={option}
+                  label={option}
+                  index={index}
+                  selected={selected === index}
+                  locked={locked}
+                  correct={locked && index === correctOptionIndex(active)}
+                  onSelect={setSelected}
+                />
+              ))}
             </fieldset>
           ) : (
             <div className="quiz-round__fill">
@@ -442,9 +394,9 @@ export function QuizRound({
                 Responder
               </Button>
               <span className="quiz-round__hint">
-                {active.type === 'mcq'
-                  ? 'Teclas 1–4 escolhem; Enter responde.'
-                  : 'Enter responde.'}
+                {active.type === 'fill'
+                  ? 'Enter responde.'
+                  : 'Teclas A a D escolhem; Enter responde.'}
               </span>
             </div>
           )}
@@ -454,16 +406,12 @@ export function QuizRound({
       )}
 
       {feedback ? (
-        <div
-          className={`quiz-round__feedback quiz-round__feedback--${
-            feedback.correct ? 'correct' : 'wrong'
-          }`}
-          role="status"
-          aria-live="polite"
+        <FeedbackBar
+          ref={continueRef}
+          className="quiz-round__feedback"
+          verdict={feedback.correct ? 'correct' : 'wrong'}
+          onContinue={continueRound}
         >
-          <p className="quiz-round__verdict">
-            {feedback.correct ? 'Correto!' : 'Incorreto'}
-          </p>
           {feedback.question.type === 'fill' ? (
             <p className="quiz-round__answer">
               Resposta correta:{' '}
@@ -476,20 +424,22 @@ export function QuizRound({
           <p className="quiz-round__source">
             {formatSource(feedback.question.source)}
           </p>
-          <Mascot
-            mood={feedback.correct ? 'happy' : 'sad'}
-            line={pickLine(
-              feedback.correct ? 'correct' : 'wrong',
-              feedback.number,
-            )}
-            size={72}
-          />
-          <div className="quiz-round__actions">
-            <Button ref={continueRef} onClick={continueRound}>
-              Continuar
-            </Button>
-          </div>
-        </div>
+          <p className="quiz-round__bit">
+            <span className="quiz-round__sprite">
+              <PixelSprite
+                rows={SPRITES.bit.rows}
+                palette={SPRITES.bit.palette}
+                scale={4}
+              />
+            </span>
+            <span>
+              {pickLine(
+                feedback.correct ? 'correct' : 'wrong',
+                feedback.number,
+              )}
+            </span>
+          </p>
+        </FeedbackBar>
       ) : null}
     </section>
   );
