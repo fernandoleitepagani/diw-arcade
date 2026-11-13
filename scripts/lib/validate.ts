@@ -59,6 +59,10 @@ const BOOTSTRAP_CHECKS = new Set([
 
 const EVIDENCE_LABS: readonly LabId[] = ['lab-01', 'lab-02', 'lab-03'];
 
+/** Constructs an executed question may not use, even in a string literal. */
+const QUESTION_DENYLIST =
+  /\b(require|process|import|module|globalThis|Function|eval|WebAssembly|Deno|Bun)\b/;
+
 export interface ContentFile {
   path: string;
   data?: unknown;
@@ -283,6 +287,8 @@ export async function validateContent(
   let evidenceTotal = 0;
   let repoVerified = 0;
   let repoTotal = 0;
+  let codeVerified = 0;
+  let codeTotal = 0;
   const slideCache = new Map<string, string[] | null>();
   const repoCache = new Map<string, string[] | null>();
 
@@ -519,6 +525,146 @@ export async function validateContent(
     }
   }
 
+  function checkQuestionCodeStatic(item: Question, file: string): boolean {
+    if (item.type === 'tf') {
+      return true;
+    }
+    const { code, expected } = item;
+    if (code === undefined && expected === undefined) {
+      return true;
+    }
+    const extra = { nodeId: item.nodeId };
+    let ok = true;
+    const fail = (message: string): void => {
+      addError(file, item.id, message, extra);
+      ok = false;
+    };
+
+    if (code === undefined || expected === undefined) {
+      fail('code e expected devem vir juntos');
+      return false;
+    }
+
+    if (code.html !== undefined) {
+      if (code.env !== 'dom') {
+        fail('html só é permitido com env dom');
+      }
+      if (/<script/i.test(code.html)) {
+        fail('html não pode conter <script');
+      }
+    }
+    if (code.url !== undefined) {
+      if (code.env !== 'dom') {
+        fail('url só é permitida com env dom');
+      }
+      if (!code.url.startsWith('https://')) {
+        fail('url deve começar com https://');
+      }
+    }
+
+    const blocked = QUESTION_DENYLIST.exec(code.source);
+    if (blocked) {
+      fail(`código usa construto bloqueado pela denylist: ${blocked[0]}`);
+    }
+
+    if (item.type === 'mcq') {
+      const marked = item.options[item.answer];
+      if (marked !== expected) {
+        fail(
+          `a opção marcada difere de expected: opção=${JSON.stringify(marked)} esperado=${JSON.stringify(expected)}`,
+        );
+      }
+    } else {
+      if (expected.includes('\n')) {
+        fail('expected não pode conter quebra de linha');
+      }
+      if (!item.answers.includes(expected)) {
+        fail('expected deve estar entre as respostas aceitas');
+      }
+    }
+
+    return ok;
+  }
+
+  async function checkQuestionCodeExecution(
+    item: Question,
+    file: string,
+    staticOk: boolean,
+  ): Promise<void> {
+    if (item.type === 'tf' || item.code === undefined) {
+      return;
+    }
+    codeTotal += 1;
+    const { code, expected } = item;
+    const runner = opts.runSnippet;
+    if (!staticOk || expected === undefined || !runner) {
+      return;
+    }
+
+    const extra = { nodeId: item.nodeId };
+    const spec = {
+      env: code.env,
+      source: code.source,
+      ...(code.html === undefined ? {} : { html: code.html }),
+      ...(code.url === undefined ? {} : { url: code.url }),
+      ...(code.mocks === undefined ? {} : { mocks: code.mocks }),
+    };
+    const execute = async (): Promise<SnippetOutput | undefined> => {
+      try {
+        return await runner(spec);
+      } catch (error) {
+        addError(
+          file,
+          item.id,
+          `falha ao executar o código: ${messageOf(error)}`,
+          extra,
+        );
+        return undefined;
+      }
+    };
+
+    const first = await execute();
+    if (first === undefined) {
+      return;
+    }
+    if (!first.ok) {
+      addError(
+        file,
+        item.id,
+        `falha ao executar o código: ${first.reason} ${first.detail}`,
+        extra,
+      );
+      return;
+    }
+    const second = await execute();
+    if (second === undefined) {
+      return;
+    }
+    if (!second.ok) {
+      addError(
+        file,
+        item.id,
+        `falha ao executar o código: ${second.reason} ${second.detail}`,
+        extra,
+      );
+      return;
+    }
+    if (first.output !== second.output) {
+      addError(file, item.id, 'saída não determinística', extra);
+      return;
+    }
+    if (first.output !== expected) {
+      addError(
+        file,
+        item.id,
+        `saída real difere de expected: real=${JSON.stringify(first.output)} esperado=${JSON.stringify(expected)}`,
+        extra,
+      );
+      return;
+    }
+    codeVerified += 1;
+  }
+
   function checkFlashcard(item: Flashcard, file: string): void {
     if (!looksPtBr(item.front)) {
       addError(file, item.id, 'frente não parece estar em PT-BR', {
@@ -641,6 +787,17 @@ export async function validateContent(
         addError(file, nodeId, `mínimo de 3 questões de preenchimento (encontradas ${fill})`, {
           nodeId,
         });
+      }
+      const executed = list.filter(
+        (item) => item.type !== 'tf' && item.code !== undefined,
+      ).length;
+      if (executed < minimums.executed) {
+        addError(
+          file,
+          nodeId,
+          `mínimo de ${minimums.executed} questões executadas (encontradas ${executed})`,
+          { nodeId },
+        );
       }
       const mcq = list.filter((item) => item.type === 'mcq');
       if (mcq.length >= 8) {
@@ -778,6 +935,8 @@ export async function validateContent(
         checkIdentity(item, file.path, nodeId);
         checkSource(item, file.path, nodeId);
         checkQuestion(item, file.path);
+        const staticOk = checkQuestionCodeStatic(item, file.path);
+        await checkQuestionCodeExecution(item, file.path, staticOk);
       }
       checkMinimums(nodeId, kind, result.data, file.path);
     } else if (kind === 'flashcards') {
@@ -895,7 +1054,9 @@ export async function validateContent(
     repoEvidence: opts.repoDir
       ? { status: 'verified', verified: repoVerified, total: repoTotal }
       : { status: 'skipped' },
-    code: { status: 'skipped' },
+    code: opts.runSnippet
+      ? { status: 'verified', verified: codeVerified, total: codeTotal }
+      : { status: 'skipped' },
   };
 }
 

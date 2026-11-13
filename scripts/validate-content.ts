@@ -2,6 +2,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { NODE_IDS, type NodeId } from '../src/content/tree';
 import { runInJsdom } from '../src/features/runner/jsdomRunner';
+import { createSnippetRunner } from './lib/snippet/runSnippet';
 import {
   FILE_KINDS,
   formatReport,
@@ -139,14 +140,20 @@ async function main(): Promise<void> {
     return;
   }
 
-  const report = await validateContent(readContentFiles(process.cwd()), {
-    ...opts,
-    runChallenge: ({ challenge, files }) => runInJsdom(challenge, files),
-  });
-  for (const line of formatReport(report)) {
-    console.log(line);
+  const snippetRunner = createSnippetRunner();
+  try {
+    const report = await validateContent(readContentFiles(process.cwd()), {
+      ...opts,
+      runChallenge: ({ challenge, files }) => runInJsdom(challenge, files),
+      runSnippet: (spec) => snippetRunner.run(spec),
+    });
+    for (const line of formatReport(report)) {
+      console.log(line);
+    }
+    process.exitCode = report.ok ? 0 : 1;
+  } finally {
+    await snippetRunner.close();
   }
-  process.exitCode = report.ok ? 0 : 1;
 }
 
 await main();
