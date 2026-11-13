@@ -62,7 +62,7 @@ describe('loadSave', () => {
     expect(result.save.labs).toEqual({});
   });
 
-  it('loads a valid v1 save', () => {
+  it('loads a valid v2 save', () => {
     const store = new MemoryStorage();
     const save = createEmptySave(NOW);
     save.onboarded = true;
@@ -106,7 +106,7 @@ describe('loadSave', () => {
 
     const result = loadSave(store, NOW);
 
-    expect(result.recovered).toBe('loaded');
+    expect(result.recovered).toBe('migrated');
     expect(result.save.onboarded).toBe(false);
     expect(result.save.settings.newCardsPerDay).toBe(20);
     expect(result.save.settings.reviewsPerDay).toBe(100);
@@ -128,6 +128,7 @@ describe('loadSave', () => {
 
     const result = loadSave(store, NOW, {
       0: (raw) => ({ ...raw, schemaVersion: 1, xpTotal: 42 }),
+      1: (raw) => ({ ...raw, schemaVersion: 2 }),
     });
 
     expect(result.recovered).toBe('migrated');
@@ -160,13 +161,13 @@ describe('loadSave', () => {
 
   it('backs up a newer save and starts fresh', () => {
     const store = new MemoryStorage();
-    const raw = JSON.stringify({ ...minimalSave(), schemaVersion: 2 });
+    const raw = JSON.stringify({ ...minimalSave(), schemaVersion: 3 });
     store.setItem(SAVE_KEY, raw);
 
     const result = loadSave(store, NOW);
 
     expect(result.recovered).toBe('newer');
-    expect(result.save.schemaVersion).toBe(1);
+    expect(result.save.schemaVersion).toBe(2);
     expect(store.backupValues()).toEqual([raw]);
   });
 
@@ -185,6 +186,100 @@ describe('loadSave', () => {
     expect(() => loadSave(store, NOW)).not.toThrow();
     expect(loadSave(store, NOW).recovered).toBe('corrupt');
     expect(removed).toBe(false);
+  });
+});
+
+describe('loadSave v1 migration', () => {
+  const v1Raw = () => JSON.stringify({ ...minimalSave(), xpTotal: 77, onboarded: true });
+
+  it('migrates a v1 string and backs up the raw v1 JSON', () => {
+    const store = new MemoryStorage();
+    const raw = v1Raw();
+    store.setItem(SAVE_KEY, raw);
+
+    const result = loadSave(store, NOW);
+
+    expect(result.recovered).toBe('migrated');
+    expect(result.save.schemaVersion).toBe(2);
+    expect(result.save.primersRead).toEqual({});
+    expect(result.save.xpTotal).toBe(77);
+    expect(store.backupValues()).toEqual([raw]);
+  });
+
+  it('never deletes the main key', () => {
+    const removed: string[] = [];
+    const raw = v1Raw();
+    const store: StorageLike = {
+      getItem: () => raw,
+      setItem: () => {},
+      removeItem: (key) => {
+        removed.push(key);
+      },
+    };
+
+    loadSave(store, NOW);
+
+    expect(removed).toEqual([]);
+  });
+
+  it('still returns the migrated save when the backup hits the quota', () => {
+    const store: StorageLike = {
+      getItem: () => v1Raw(),
+      setItem: () => {
+        throw new DOMException('cheio', 'QuotaExceededError');
+      },
+      removeItem: () => {},
+    };
+
+    const result = loadSave(store, NOW);
+
+    expect(result.recovered).toBe('migrated');
+    expect(result.save.xpTotal).toBe(77);
+  });
+
+  it('persists v2 for a fresh load', () => {
+    const store = new MemoryStorage();
+
+    const { save } = loadSave(store, NOW);
+    persistSave(store, save);
+
+    expect(JSON.parse(store.getItem(SAVE_KEY) ?? '{}').schemaVersion).toBe(2);
+    expect(save.primersRead).toEqual({});
+  });
+});
+
+describe('loadSave v1 migration persistence', () => {
+  const v1Raw = () => JSON.stringify({ ...minimalSave(), xpTotal: 77 });
+
+  it('writes one backup across repeated loads and loads v2 the second time', () => {
+    const store = new MemoryStorage();
+    store.setItem(SAVE_KEY, v1Raw());
+
+    const first = loadSave(store, NOW);
+    const second = loadSave(store, new Date(NOW.getTime() + 1000));
+
+    expect(first.recovered).toBe('migrated');
+    expect(second.recovered).toBe('loaded');
+    expect(second.save).toEqual(first.save);
+    expect(store.backupValues()).toEqual([v1Raw()]);
+  });
+
+  it('leaves SAVE_KEY untouched when the backup fails', () => {
+    const raw = v1Raw();
+    const writes: string[] = [];
+    const store: StorageLike = {
+      getItem: () => raw,
+      setItem: (key) => {
+        writes.push(key);
+        throw new DOMException('cheio', 'QuotaExceededError');
+      },
+      removeItem: () => {},
+    };
+
+    const result = loadSave(store, NOW);
+
+    expect(result.recovered).toBe('migrated');
+    expect(writes.includes(SAVE_KEY)).toBe(false);
   });
 });
 

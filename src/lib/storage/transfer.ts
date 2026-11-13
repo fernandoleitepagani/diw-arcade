@@ -1,4 +1,5 @@
-import { SaveV1Schema, type SaveV1 } from './schema';
+import { migrate } from './migrate';
+import type { SaveV1 } from './schema';
 
 export const EXPORT_APP = 'diw-arcade';
 export const MAX_IMPORT_BYTES = 5 * 1024 * 1024;
@@ -54,10 +55,10 @@ export function parseImport(text: string): ImportResult {
     return fail(ERRORS.wrongApp);
   }
 
-  const parsed = SaveV1Schema.safeParse(raw.save);
-  if (!parsed.success) {
+  const migrated = migrate(raw.save);
+  if (!migrated.ok) {
     return fail(ERRORS.badSave);
   }
 
-  return { ok: true, save: parsed.data };
+  return { ok: true, save: migrated.save };
 }

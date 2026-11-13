@@ -18,7 +18,7 @@ failure mode this decision guards against.
 ### Local-only, single key
 
 Progress lives in one `localStorage` key, `diw-arcade:save`, as JSON produced
-from the zod `SaveV1` schema. There is no IndexedDB, no cookie, no server and
+from the zod `SaveV2Schema` (current schema version 2). The exported type keeps the name `SaveV1` and `SaveV1Schema` stays as an alias, an expand-contract step so existing references compile unchanged. There is no IndexedDB, no cookie, no server and
 no sync. Reading is synchronous, which keeps the reducer and provider simple.
 `src/lib/storage` is the only module allowed to touch storage globals; ESLint
 enforces that boundary.
@@ -35,11 +35,18 @@ enforces that boundary.
 - A save with a version greater than `CURRENT_SCHEMA_VERSION` is "newer": this
   build cannot understand it and must not silently downgrade it.
 
+- `MIGRATIONS[1]` (v1 to v2) adds `primersRead: {}` (node id to ISO read time)
+  and bumps the version, copying every other key untouched. `migrate` validates
+  against the current schema at the end; any failure is corrupt, never partial.
+- When `loadSave` migrates, it first writes the raw pre-migration JSON to
+  `diw-arcade:save:backup:<ISO timestamp>` (best effort, a quota failure is
+  ignored), never removes `diw-arcade:save`, and returns `recovered: "migrated"`.
+
 ### Defaults for additive fields
 
-Fields added after v1 are additive and carry zod defaults, so an older v1 save
-loads without a migration. `loadSave` reports such a save as `loaded`, not
-`migrated`. The defaults are:
+Fields added within a version are additive and carry zod defaults, so a save
+missing them loads without a migration (`loaded`). Adding a field that changes
+the schema version still gets a migration step. The defaults are:
 
 - `onboarded: false`;
 - `settings.dailyGoal: 50`, `settings.sound: false`,
@@ -48,7 +55,8 @@ loads without a migration. `loadSave` reports such a save as `loaded`, not
   `challenges: {}`, `achievements: {}`;
 - each `days.<day>` entry fills `xp`, `quiz`, `cards`, `challenges` and `labs`
   with `0`;
-- `quiz: { answers: {}, rounds: {} }`.
+- `quiz: { answers: {}, rounds: {} }`;
+- `primersRead: {}` (v2).
 
 Top-level objects use `z.prefault({})` rather than `z.default({})` so the
 nested defaults are applied even when the whole object is absent.
@@ -74,12 +82,13 @@ Storage errors never escape as exceptions; the UI decides how to warn.
 `exportSave(save, now)` produces:
 
 ```json
-{ "app": "diw-arcade", "schemaVersion": 1, "exportedAt": "<ISO>", "save": { ... } }
+{ "app": "diw-arcade", "schemaVersion": 2, "exportedAt": "<ISO>", "save": { ... } }
 ```
 
 `parseImport(text)` accepts that envelope, caps the input at 5 MB, and rejects
 invalid JSON, an envelope whose `app` is not `diw-arcade`, and a `save` that
-fails `SaveV1Schema` with PT-BR messages. Import never writes storage; the
+fails `migrate` (corrupt or newer) with PT-BR messages. A v1 export is migrated
+to v2 on import. Import never writes storage; the
 caller confirms and dispatches the replacement.
 
 ## Consequences

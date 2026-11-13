@@ -4,7 +4,7 @@ import { fixtureContent } from '../../test/fixtures';
 import { newCard } from '../srs/fsrs';
 import { createEmptySave, type SaveV1 } from '../storage';
 import { applyEvent } from './reducer';
-import { isSolutionUnlocked } from './selectors';
+import { getPrimersRead, isPrimerRead, isSolutionUnlocked } from './selectors';
 
 const NOW = new Date('2026-01-05T12:00:00.000Z');
 const TODAY = '2026-01-05';
@@ -334,5 +334,38 @@ describe('applyEvent — save-wide rules', () => {
     });
 
     expect(save).toEqual(before);
+  });
+});
+
+describe('applyEvent — primer/read', () => {
+  const read = { type: 'primer/read', nodeId: 'n07' } as const;
+
+  it('records the read time once and never overwrites it', () => {
+    const first = apply(empty(), read);
+    const later = new Date('2026-01-06T08:00:00.000Z');
+    const second = apply(first.save, read, later);
+
+    expect(first.save.primersRead).toEqual({ n07: NOW.toISOString() });
+    expect(second.save.primersRead).toEqual({ n07: NOW.toISOString() });
+    expect(isPrimerRead(second.save, 'n07')).toBe(true);
+    expect(isPrimerRead(second.save, 'n08')).toBe(false);
+    expect([...getPrimersRead(second.save)]).toEqual(['n07']);
+  });
+
+  it('grants no XP or streak and leaves other progress alone', () => {
+    const save = empty();
+    const { save: next, outcome } = apply(save, read);
+
+    expect(outcome).toEqual({ xpGained: 0, levelUp: null, achievements: [], streakExtended: null });
+    expect({ ...next, primersRead: {} }).toEqual(save);
+  });
+
+  it('save/replace takes the replacement field and save/reset clears it', () => {
+    const withRead = apply(empty(), read).save;
+    const replaced = apply(empty(), { type: 'save/replace', save: withRead }).save;
+    const reset = apply(withRead, { type: 'save/reset' }).save;
+
+    expect(replaced.primersRead).toEqual({ n07: NOW.toISOString() });
+    expect(reset.primersRead).toEqual({});
   });
 });

@@ -1,12 +1,14 @@
-import { SaveV1Schema, type SaveV1 } from './schema';
+import { SaveV2Schema, type SaveV1 } from './schema';
 
-export const CURRENT_SCHEMA_VERSION = 1;
+export const CURRENT_SCHEMA_VERSION = 2;
 
 export type Migration = (raw: Record<string, unknown>) => unknown;
 export type Migrations = Record<number, Migration>;
 
 /** Ladder of schema upgrades. A key holds the migration out of that version. */
-export const MIGRATIONS: Migrations = {};
+export const MIGRATIONS: Migrations = {
+  1: (raw) => ({ ...raw, schemaVersion: 2, primersRead: {} }),
+};
 
 export type MigrationResult =
   | { ok: true; save: SaveV1; migrated: boolean }
@@ -65,7 +67,7 @@ export function migrate(
 
   if (version !== CURRENT_SCHEMA_VERSION) return corrupt();
 
-  const parsed = SaveV1Schema.safeParse(value);
+  const parsed = SaveV2Schema.safeParse(value);
   if (!parsed.success) return corrupt();
 
   return { ok: true, save: parsed.data, migrated };
