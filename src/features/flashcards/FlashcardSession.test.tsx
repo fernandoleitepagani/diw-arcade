@@ -178,7 +178,7 @@ describe('FlashcardSession', () => {
     });
 
     expect(
-      screen.getByText('Novas hoje: 0/10 · Revisões hoje: 0/100'),
+      screen.getByText('Novas hoje: 0/10, revisões hoje: 0/100'),
     ).toBeInTheDocument();
     expect(screen.getByText('10 restantes')).toBeInTheDocument();
   });
@@ -193,7 +193,7 @@ describe('FlashcardSession', () => {
     });
 
     expect(
-      screen.getByText('Novas hoje: 0/20 · Revisões hoje: 0/100'),
+      screen.getByText('Novas hoje: 0/20, revisões hoje: 0/100'),
     ).toBeInTheDocument();
     expect(screen.queryByText(/Limite diário atingido/)).not.toBeInTheDocument();
 
@@ -252,7 +252,7 @@ describe('FlashcardSession', () => {
     });
 
     expect(
-      screen.getByText('Novas hoje: 0/20 · Revisões hoje: 0/5'),
+      screen.getByText('Novas hoje: 0/20, revisões hoje: 0/5'),
     ).toBeInTheDocument();
     expect(screen.getByText('5 restantes')).toBeInTheDocument();
 
@@ -279,5 +279,37 @@ describe('FlashcardSession', () => {
       (line) => screen.queryByText(line) !== null,
     );
     expect(hasBitLine).toBe(true);
+  });
+
+  it('shows label, interval and key on each grade button', async () => {
+    const user = userEvent.setup();
+    const card = makeFlashcard(1);
+    renderWithProgress(<FlashcardSession flashcards={[card]} />, {
+      now: FIXED_NOW,
+    });
+
+    await user.keyboard('{Enter}');
+
+    const group = screen.getByRole('group', { name: 'Avaliar carta' });
+    const intervals = previewIntervals(newCard(FIXED_NOW), FIXED_NOW);
+    const buttons = within(group).getAllByRole('button');
+    expect(buttons).toHaveLength(4);
+    buttons.forEach((button, index) => {
+      expect(button.querySelector('kbd')).toHaveTextContent(String(index + 1));
+      expect(button).toHaveTextContent(intervals[index] ?? '');
+    });
+    expect(group.closest('[data-grades-bar]')).not.toBeNull();
+  });
+
+  it('keeps counters and the cap notice free of middle dots', () => {
+    const flashcards = Array.from({ length: 25 }, (_, index) =>
+      makeFlashcard(index + 1),
+    );
+    const { container } = renderWithProgress(
+      <FlashcardSession flashcards={flashcards} />,
+      { now: FIXED_NOW },
+    );
+
+    expect(container.textContent).not.toContain('·');
   });
 });
