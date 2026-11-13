@@ -241,27 +241,63 @@ describe('ChallengeView', () => {
     expect(article?.querySelector('.challenge-view__grid')).not.toBeNull();
   });
 
-  it('stacks the mascot with a single result message', async () => {
+  it('reports the run result in a FeedbackBar status', async () => {
     const user = userEvent.setup();
     const { container } = renderView(vi.fn().mockResolvedValue(failedResult));
 
+    expect(container.querySelector('.feedback-bar')).toBeNull();
     await user.click(screen.getByRole('button', { name: 'Executar testes' }));
 
-    const panel = await waitFor(() => {
-      const element = container.querySelector('.challenge-view__bit');
+    const bar = await waitFor(() => {
+      const element = container.querySelector('.feedback-bar');
       expect(element).not.toBeNull();
       return element as HTMLElement;
     });
 
-    const message = within(panel).getByText(
-      'Revise os requisitos e tente de novo.',
-    );
-    const mascot = panel.querySelector('.mascot');
-    expect(mascot).not.toBeNull();
-    expect(message).toHaveClass('challenge-view__bit-message');
-    expect(message.parentElement).toBe(panel);
-    expect(mascot?.parentElement).toBe(panel);
-    expect(panel.querySelector('.mascot__bubble')).toBeNull();
+    expect(bar).toHaveAttribute('role', 'status');
+    expect(bar).toHaveClass('feedback-bar--wrong');
+    expect(
+      within(bar).getByText('Revise os requisitos e tente de novo.'),
+    ).toBeInTheDocument();
+    expect(container.querySelector('.mascot')).toBeNull();
+
+    await user.click(within(bar).getByRole('button', { name: 'Fechar' }));
+    expect(container.querySelector('.feedback-bar')).toBeNull();
+  });
+
+  it('marks a passing run as correct in the FeedbackBar', async () => {
+    const user = userEvent.setup();
+    const { container } = renderView(vi.fn().mockResolvedValue(passingResult));
+
+    await user.click(screen.getByRole('button', { name: 'Executar testes' }));
+
+    const bar = await waitFor(() => {
+      const element = container.querySelector('.feedback-bar');
+      expect(element).not.toBeNull();
+      return element as HTMLElement;
+    });
+    expect(bar).toHaveClass('feedback-bar--correct');
+  });
+
+  it('orders the editor, the run button and the requirements for Tab', () => {
+    renderView(vi.fn());
+
+    const editor = screen.getByLabelText('Código CSS');
+    const run = screen.getByRole('button', { name: 'Executar testes' });
+    const requirements = screen.getByRole('heading', { name: 'Requisitos' });
+    const follows = (a: Element, b: Element) =>
+      Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+
+    expect(follows(editor, run)).toBe(true);
+    expect(follows(run, requirements)).toBe(true);
+  });
+
+  it('keeps hint and keyboard copy free of middle dots', async () => {
+    const user = userEvent.setup();
+    const { container } = renderView(vi.fn());
+
+    await user.click(screen.getByRole('button', { name: /Ver dica 1/ }));
+    expect(container.textContent).not.toContain('·');
   });
 
   it('wraps the preview iframe in device chrome', async () => {

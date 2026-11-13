@@ -33,12 +33,10 @@
 }
 
 .challenge-view__eyebrow {
-  color: var(--reward);
+  color: var(--text-muted);
   font-family: var(--font-mono), monospace;
   font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .challenge-view__title {
@@ -56,22 +54,16 @@
 
 .challenge-view__node-link {
   flex: none;
-  padding: 0.45rem 0.7rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-  color: var(--accent);
+  color: var(--text);
   font-size: 0.875rem;
   font-weight: 600;
-  text-decoration: none;
-  transition:
-    background-color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.challenge-view__node-link:hover {
-  border-color: var(--accent);
-  background: var(--surface-2);
+.challenge-view__node-link:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
 }
 
 .challenge-view__grid {
@@ -84,6 +76,7 @@
 }
 
 .challenge-view__editor {
+  padding: var(--space-3);
   display: grid;
   grid-template-rows: auto minmax(14rem, 1fr) auto auto auto;
   align-content: start;
@@ -95,38 +88,32 @@
 .challenge-view__tabs {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem;
-  padding: 0.3rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-  background: var(--surface-2);
+  border-block-end: 2px solid var(--edge);
 }
 
 .challenge-view__tab {
-  min-height: 2.25rem;
-  padding: 0.35rem 0.9rem;
-  border: 1px solid transparent;
-  border-radius: var(--radius-sm);
+  min-height: 2.75rem;
+  padding: 0 var(--space-4);
+  border: 0;
   background: transparent;
   color: var(--text-muted);
   font-family: var(--font-mono), monospace;
   font-size: 0.8125rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
   cursor: pointer;
-  transition:
-    background-color var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out);
 }
 
 .challenge-view__tab:hover {
-  background: var(--surface);
   color: var(--text);
 }
 
 .challenge-view__tab[aria-selected='true'] {
-  background: var(--accent);
-  color: var(--on-accent);
+  color: var(--text);
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+
+.challenge-view__tab:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -4px;
 }
 
 .challenge-view__panel {
@@ -149,7 +136,7 @@
 }
 
 .challenge-view__error {
-  color: var(--danger);
+  color: var(--bad);
   font-size: 0.875rem;
 }
 
@@ -167,54 +154,22 @@
   min-width: 0;
   min-height: 100%;
   overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface-2);
-  box-shadow: 0 18px 48px rgb(0 0 0 / 0.35);
+  border: 2px solid var(--edge);
+  background: var(--panel);
 }
 
 .challenge-view__device-bar {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
   min-height: 2.25rem;
   padding-inline: var(--space-3);
-  border-block-end: 1px solid var(--border);
-  background: var(--surface-3);
-}
-
-.challenge-view__device-dots {
-  display: flex;
-  gap: 0.35rem;
-}
-
-.challenge-view__device-dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: var(--radius-full);
-  background: var(--border);
-}
-
-.challenge-view__device-dot:first-child {
-  background: var(--danger);
-}
-
-.challenge-view__device-dot:nth-child(2) {
-  background: var(--xp);
-}
-
-.challenge-view__device-dot:nth-child(3) {
-  background: var(--success);
+  border-block-end: 2px solid var(--edge);
 }
 
 .challenge-view__device-label {
-  margin-inline-start: auto;
   color: var(--text-muted);
   font-family: var(--font-mono), monospace;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 0.75rem;
 }
 
 .challenge-view__device-screen {
@@ -232,7 +187,6 @@
 
 .challenge-view__device-screen .sandbox-frame__viewport {
   min-height: 16rem;
-  border-radius: var(--radius-md);
 }
 
 .challenge-view__device-screen .sandbox-frame__viewport iframe {
@@ -240,7 +194,6 @@
 }
 
 .challenge-view__device-screen .sandbox-frame__report {
-  border-radius: var(--radius-md);
 }
 
 .challenge-view__sidebar {
@@ -254,14 +207,30 @@
   min-width: 0;
 }
 
-/* Shared panel chrome for requirements, hints and solution. */
+/* Shared panel chrome: stepped corners, like PixelPanel. */
 .requirement-list,
 .hint-panel,
 .challenge-view__solution {
-  padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--surface);
+  position: relative;
+  padding: var(--space-4);
+  background: var(--edge);
+  clip-path: var(--notch);
+}
+
+.requirement-list::before,
+.hint-panel::before,
+.challenge-view__solution::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: var(--panel);
+  clip-path: var(--notch);
+}
+
+.requirement-list > *,
+.hint-panel > *,
+.challenge-view__solution > * {
+  position: relative;
 }
 
 .requirement-list__title,
@@ -271,8 +240,6 @@
   font-family: var(--font-body), system-ui, sans-serif;
   font-size: 0.8125rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .requirement-list__title {
@@ -281,7 +248,7 @@
 
 .requirement-list__summary {
   margin-bottom: var(--space-3);
-  color: var(--accent);
+  color: var(--text-muted);
   font-family: var(--font-mono), monospace;
   font-size: 0.8125rem;
 }
@@ -312,12 +279,12 @@
 
 .requirement-list__item--passed .requirement-list__marker,
 .requirement-list__item--passed .requirement-list__status {
-  color: var(--success);
+  color: var(--ok);
 }
 
 .requirement-list__item--failed .requirement-list__marker,
 .requirement-list__item--failed .requirement-list__status {
-  color: var(--danger);
+  color: var(--bad);
 }
 
 .requirement-list__item--pending .requirement-list__marker,
@@ -331,20 +298,18 @@
 
 .requirement-list__status {
   padding: 0.1rem 0.4rem;
-  border: 1px solid currentColor;
-  border-radius: var(--radius-full);
+  border: 2px solid currentColor;
   font-family: var(--font-mono), monospace;
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   line-height: 1.4;
-  text-transform: uppercase;
   white-space: nowrap;
 }
 
 .requirement-list__message {
   grid-column: 2 / -1;
-  color: var(--danger);
+  color: var(--bad);
   font-size: 0.8125rem;
 }
 
@@ -385,20 +350,16 @@
 
 .hint-panel__item {
   padding: 0.65rem 0.75rem;
-  border-inline-start: 3px solid var(--xp);
-  border-radius: 0 0.4rem 0.4rem 0;
-  background: var(--surface-2);
+  border-inline-start: 3px solid var(--text-muted);
+  background: var(--bg);
 }
 
 .hint-panel__label {
   display: block;
   margin-bottom: 0.2rem;
-  color: var(--xp);
+  color: var(--text-muted);
   font-family: var(--font-mono), monospace;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 0.75rem;
 }
 
 .hint-panel__text {
@@ -453,15 +414,12 @@
   color: var(--accent);
   font-family: var(--font-mono), monospace;
   font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .challenge-view__solution-panel pre {
   max-height: 14rem;
   padding: 0.65rem 0.75rem;
   overflow: auto;
-  border-radius: var(--radius-sm);
   background: var(--bg);
   font-family: var(--font-mono), monospace;
   font-size: 0.75rem;
@@ -470,31 +428,17 @@
   overflow-wrap: anywhere;
 }
 
-/* Bit reaction: the mascot and one full-width message stack vertically. */
-.challenge-view__bit {
-  display: grid;
-  justify-items: center;
-  gap: var(--space-3);
-  text-align: center;
-}
-
-.challenge-view__bit .mascot {
-  flex: none;
-}
-
-.challenge-view__bit-message {
-  width: 100%;
+/* Run result lives in the shared FeedbackBar. */
+.challenge-view__feedback-message {
   color: var(--text-muted);
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 
-.challenge-view__bit--pass {
-  border-color: var(--success);
-}
-
-.challenge-view__bit--fail {
-  border-color: var(--danger);
+.hint-panel__title:focus-visible,
+.challenge-view__solution-title:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 4px;
 }
 
 @media (max-width: 1100px) {
@@ -531,14 +475,13 @@
     display: grid;
   }
 
-  .challenge-view__actions .ui-button {
+  .challenge-view__actions .btn {
     width: 100%;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .challenge-view__node-link,
-  .challenge-view__tab {
-    transition: none;
+  .challenge-view__feedback {
+    animation: none;
   }
 }

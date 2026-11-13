@@ -3,7 +3,9 @@ import type { KeyboardEvent } from 'react';
 import { Link } from 'react-router';
 import { Dialog } from '../../components/session/Dialog';
 import { SessionSummary } from '../../components/session/SessionSummary';
-import { Button, Mascot, Panel } from '../../components/ui';
+import { Button } from '../../components/pixel/Button/Button';
+import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
+import { FeedbackBar } from '../../components/session/FeedbackBar';
 import {
   NODES,
   getChallenges,
@@ -335,7 +337,11 @@ export function ChallengeView({
       </header>
 
       <div className="challenge-view__grid">
-        <section className="challenge-view__editor" aria-label="Editor de código">
+        <PixelPanel
+          as="section"
+          className="challenge-view__editor"
+          aria-label="Editor de código"
+        >
           <div
             className="challenge-view__tabs"
             role="tablist"
@@ -381,14 +387,14 @@ export function ChallengeView({
           </div>
 
           <p className="challenge-view__keyboard-hint">
-            Esc e depois Tab sai do editor · Ctrl+Enter executa os testes
+            Esc e depois Tab sai do editor. Ctrl+Enter executa os testes.
           </p>
 
           <div className="challenge-view__actions">
             <Button onClick={() => void handleRun()} disabled={running}>
               {running ? 'Executando…' : 'Executar testes'}
             </Button>
-            <Button variant="ghost" onClick={handleReset}>
+            <Button variant="quiet" onClick={handleReset}>
               Restaurar código inicial
             </Button>
           </div>
@@ -398,16 +404,11 @@ export function ChallengeView({
               {runError}
             </p>
           ) : null}
-        </section>
+        </PixelPanel>
 
         <section className="challenge-view__preview" aria-label="Prévia">
           <div className="challenge-view__device">
             <div className="challenge-view__device-bar" aria-hidden="true">
-              <span className="challenge-view__device-dots">
-                <span className="challenge-view__device-dot" />
-                <span className="challenge-view__device-dot" />
-                <span className="challenge-view__device-dot" />
-              </span>
               <span className="challenge-view__device-label">
                 Prévia ao vivo
               </span>
@@ -445,7 +446,7 @@ export function ChallengeView({
             </summary>
             <div className="challenge-view__solution-body">
               <Button
-                variant="secondary"
+                variant="quiet"
                 disabled={!solutionUnlocked}
                 onClick={() => setSolutionVisible(true)}
               >
@@ -457,7 +458,7 @@ export function ChallengeView({
                 </p>
               ) : null}
               {solutionVisible && solutionUnlocked ? (
-                <Panel className="challenge-view__solution-panel">
+                <div className="challenge-view__solution-panel">
                   {(['html', 'css', 'js'] as const).map((language) => (
                     <div key={language}>
                       <h3>{TAB_LABELS[language]}</h3>
@@ -466,26 +467,28 @@ export function ChallengeView({
                       </pre>
                     </div>
                   ))}
-                </Panel>
+                </div>
               ) : null}
             </div>
           </details>
 
-          {lastRun !== null ? (
-            <Panel
-              className={`challenge-view__bit challenge-view__bit--${lastRun}`}
-              aria-live="polite"
-            >
-              <Mascot mood={lastRun === 'pass' ? 'happy' : 'sad'} />
-              <p className="challenge-view__bit-message">
-                {lastRun === 'pass'
-                  ? 'Todos os requisitos foram cumpridos.'
-                  : 'Revise os requisitos e tente de novo.'}
-              </p>
-            </Panel>
-          ) : null}
         </aside>
       </div>
+
+      {lastRun !== null ? (
+        <FeedbackBar
+          className="challenge-view__feedback"
+          verdict={lastRun === 'pass' ? 'correct' : 'wrong'}
+          continueLabel="Fechar"
+          onContinue={() => setLastRun(null)}
+        >
+          <p className="challenge-view__feedback-message">
+            {lastRun === 'pass'
+              ? 'Todos os requisitos foram cumpridos.'
+              : 'Revise os requisitos e tente de novo.'}
+          </p>
+        </FeedbackBar>
+      ) : null}
 
       <Dialog
         open={summary !== null}
@@ -507,7 +510,7 @@ export function ChallengeView({
             nextHref={summary.nextHref}
             mascotMood="happy"
             secondary={
-              <Button variant="secondary" onClick={() => setSummary(null)}>
+              <Button variant="quiet" onClick={() => setSummary(null)}>
                 Continuar editando
               </Button>
             }
