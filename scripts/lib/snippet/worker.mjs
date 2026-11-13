@@ -8,8 +8,11 @@ const MAX_VIRTUAL_MS = 60000;
 
 // jsdom builds its interfaces in the host realm, so a dom snippet can reach
 // the host Function constructor through `window.constructor.constructor` and
-// the host global through `window._globalObject`. The ban is defense in depth
-// on top of the sandbox: any match refuses to run the snippet at all.
+// the host global through `window._globalObject`. The dom environment is not a
+// security boundary: this ban is best-effort, rejects only direct identifier
+// forms, and obfuscated access such as
+// `window["con"+"structor"]["con"+"structor"](...)` still reaches the worker
+// process. Any match refuses to run the snippet at all.
 const DOM_BANNED_IDENTIFIERS = [
   { name: 'constructor', pattern: /\bconstructor\b/ },
   { name: '__proto__', pattern: /\b__proto__\b/ },
@@ -46,9 +49,11 @@ function blockedDomResult(identifier) {
 process.on('unhandledRejection', () => {});
 
 /**
- * Everything the snippet can see is defined inside the target realm by this
- * prelude. No host object or function is passed into the context; mocks arrive
- * later as a JSON string and are parsed in-context.
+ * In `js`, everything the snippet can see is defined inside the sealed target
+ * realm by this prelude. In `dom`, jsdom builds its interfaces in the host
+ * realm, so the prelude cannot seal the environment. Either way no host object
+ * or function is passed into the context directly; mocks arrive later as a
+ * JSON string and are parsed in-context.
  */
 const PRELUDE = `(function () {
   'use strict';

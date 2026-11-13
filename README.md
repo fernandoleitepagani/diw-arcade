@@ -87,10 +87,16 @@ Perguntas de múltipla escolha e de preenchimento podem trazer `code` e
   (`https://`) e `mocks` de `fetch` indexados pela URL exata.
 - **`expected`** é a saída exata que o trecho imprime.
 
-O validador roda o trecho duas vezes em um worker isolado, sem `process`,
-`require`, `import`, `eval` ou rede. Timeout, erro, saída não determinística ou
-saída diferente de `expected` reprovam o conteúdo, e a mensagem mostra o valor
-real:
+O validador roda o trecho duas vezes em um worker isolado. Em `js`, o contexto
+`vm` é selado e o trecho não tem `process`, `require`, `import`, `eval` nem
+rede. Em `dom`, o jsdom constrói seus objetos no realm do host, então o
+ambiente **não** é uma fronteira de segurança: uma lista estática só rejeita as
+formas diretas de identificador (`constructor`, `process`, `require`,
+`import(`, entre outras), e um acesso indireto ainda pode alcançar o processo do
+worker. Por isso o ambiente `dom` é best-effort, apenas para conteúdo
+confiável e revisado, validado localmente. Timeout, erro, saída não
+determinística ou saída diferente de `expected` reprovam o conteúdo, e a
+mensagem mostra o valor real:
 
 ```text
 saída real difere de expected: real="..." esperado="..."

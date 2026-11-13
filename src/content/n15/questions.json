@@ -252,7 +252,7 @@
     "options": [
       "A função sempre retorna 0, porque o resultado de `total + preco` não é atribuído a `total`.",
       "`forEach` não percorre arrays, então o callback nunca executa.",
-      "`let total` não pode ser alterado dentro de um callback.",
+      "Uma variável declarada com `let` não pode ser alterada dentro de um callback.",
       "Falta um `return` dentro do callback para devolver a soma."
     ],
     "answer": 0,
@@ -341,7 +341,7 @@
     "id": "n15-q017",
     "nodeId": "n15",
     "type": "fill",
-    "prompt": "A primeira linha impressa é ____.",
+    "prompt": "A linha impressa é ____.",
     "answers": [
       "[2,4,6,8]"
     ],

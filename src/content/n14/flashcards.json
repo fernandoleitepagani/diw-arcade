@@ -275,7 +275,7 @@
     "id": "n14-f035",
     "nodeId": "n14",
     "front": "O que a declaração `const API_URL` define no `script.js`?",
-    "back": "Define a URL base da API local: `http://localhost:3001/alunos`, endereço do JSON Server criado a partir do `db.json`.",
+    "back": "Define o endereço do recurso alunos: `http://localhost:3001/alunos`, no JSON Server criado a partir do `db.json`.",
     "source": {
       "kind": "repo",
       "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
