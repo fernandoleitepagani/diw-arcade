@@ -8,7 +8,11 @@ import { PixelSprite } from './PixelSprite';
 describe('PixelSprite', () => {
   it('renders one rect per filled cell', () => {
     const { container } = render(
-      <PixelSprite rows={['X.X', '.X.']} palette={{ X: '#123456' }} scale={1} />,
+      <PixelSprite
+        rows={['X.X', '.X.']}
+        palette={{ X: '#123456' }}
+        scale={1}
+      />,
     );
 
     const rects = container.querySelectorAll('rect');
@@ -60,9 +64,10 @@ describe('PixelSprite', () => {
       expect(widths.size, `icon ${name} is rectangular`).toBe(1);
       for (const row of rows) {
         for (const cell of row) {
-          expect(cell === '.' || cell === 'X', `icon ${name} cell ${cell}`).toBe(
-            true,
-          );
+          expect(
+            cell === '.' || cell === 'X',
+            `icon ${name} cell ${cell}`,
+          ).toBe(true);
         }
       }
     }
