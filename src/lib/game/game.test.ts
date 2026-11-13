@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { NODES } from '../../content';
 import {
   ACHIEVEMENTS,
   addDays,
@@ -109,6 +110,14 @@ describe('achievements', () => {
       'unidade-completa',
       'arvore-completa',
     ]);
+  });
+
+  it('unlocks Arvore completa only when every node is done', () => {
+    const almost = { ...EMPTY_STATS, completedNodes: NODES.length - 1 };
+    const every = { ...EMPTY_STATS, completedNodes: NODES.length };
+
+    expect(evaluateAchievements(almost, {})).not.toContain('arvore-completa');
+    expect(evaluateAchievements(every, {})).toContain('arvore-completa');
   });
 
   it('unlocks nothing for a fresh save', () => {

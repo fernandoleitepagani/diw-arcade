@@ -213,7 +213,9 @@ describe('validator success paths', () => {
 
     expect(report.ok).toBe(false);
     expect(report.errors).toHaveLength(NODE_IDS.length * 3 + 4);
-    expect(formatReport(report).at(-1)).toBe('content FAILED: 46 errors');
+    expect(formatReport(report).at(-1)).toBe(
+      `content FAILED: ${NODE_IDS.length * 3 + 4} errors`,
+    );
   });
 
   it('fails --node on an empty repo', async () => {

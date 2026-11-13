@@ -1,3 +1,5 @@
+import { NODES } from '../../content/tree';
+
 export type AchievementStats = {
   xpTotal: number;
   correctAnswers: number;
@@ -28,7 +30,11 @@ export const ACHIEVEMENTS = [
   { id: 'sequencia-7', name: 'Semana completa', condition: (stats: AchievementStats) => stats.streak >= 7 },
   { id: 'meta-diaria', name: 'Meta batida', condition: (stats: AchievementStats) => stats.goalDaysHit >= 1 },
   { id: 'unidade-completa', name: 'Unidade dominada', condition: (stats: AchievementStats) => stats.completedUnits >= 1 },
-  { id: 'arvore-completa', name: 'Árvore completa', condition: (stats: AchievementStats) => stats.completedNodes >= 14 },
+  {
+    id: 'arvore-completa',
+    name: 'Árvore completa',
+    condition: (stats: AchievementStats) => stats.completedNodes >= NODES.length,
+  },
 ] as const;
 
 export type Achievement = (typeof ACHIEVEMENTS)[number];
