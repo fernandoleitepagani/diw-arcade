@@ -158,7 +158,7 @@
     "nodeId": "n19",
     "title": "Falha ao consultar a API",
     "kind": "js",
-    "goal": "Consulte http://localhost:3000/alunos, que não responde neste desafio, trate a rejeição do fetch com try/catch e mostre a mensagem de erro em #erro, sem criar itens na lista.",
+    "goal": "Consulte http://localhost:3000/alunos, que não responde neste desafio, trate a rejeição do fetch com try/catch e mostre em #erro uma mensagem que contenha \"não foi possível carregar\", sem criar itens na lista.",
     "starter": {
       "html": "<h2>Alunos</h2>\n<p id=\"erro\" hidden></p>\n<ul id=\"lista-alunos\"></ul>",
       "css": "#erro { color: #a00; font-weight: bold; }",
@@ -204,7 +204,7 @@
     ],
     "hints": [
       "Envolva o `fetch('http://localhost:3000/alunos')` em um bloco `try` e trate a falha no `catch`.",
-      "No `catch`, escreva a mensagem com `erro.textContent` e torne o aviso visível com `erro.hidden = false;`.",
+      "No `catch`, escreva uma mensagem como `Não foi possível carregar os alunos.` com `erro.textContent` e torne o aviso visível com `erro.hidden = false;`.",
       "Sem o `catch`, a promise rejeitada fica sem tratamento e a mensagem nunca aparece."
     ],
     "source": {
