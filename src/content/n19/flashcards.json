@@ -1,0 +1,439 @@
+[
+  {
+    "id": "n19-f001",
+    "nodeId": "n19",
+    "front": "O que uma função marcada com `async` sempre devolve?",
+    "back": "Uma Promise, que resolve com o valor retornado ou rejeita com o erro lançado.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/api.js",
+      "startLine": 16,
+      "endLine": 18
+    },
+    "evidence": "export async function api(caminho, { method = \"GET\", body } = {}) {"
+  },
+  {
+    "id": "n19-f002",
+    "nodeId": "n19",
+    "front": "O que o `await` faz dentro de uma função `async`?",
+    "back": "Pausa a execução da função até a Promise resolver; a continuação entra na fila de microtarefas, sem bloquear a página.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 15,
+      "endLine": 16
+    },
+    "evidence": "const resposta = await fetch(API_URL);"
+  },
+  {
+    "id": "n19-f003",
+    "nodeId": "n19",
+    "front": "O `fetch` rejeita a Promise quando a resposta HTTP é um erro, como 404?",
+    "back": "Não. A Promise resolve normalmente; é preciso conferir `resposta.ok`, que fica `false` fora da faixa 200–299.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 25,
+      "endLine": 30
+    },
+    "evidence": "if (!resposta.ok) return [];"
+  },
+  {
+    "id": "n19-f004",
+    "nodeId": "n19",
+    "front": "`response.json()` devolve o objeto imediatamente?",
+    "back": "Não: devolve uma Promise; por isso o código usa `await resposta.json()`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/pokedexRepository.js",
+      "startLine": 22,
+      "endLine": 24
+    },
+    "evidence": "const dados = await resposta.json();"
+  },
+  {
+    "id": "n19-f005",
+    "nodeId": "n19",
+    "front": "Qual header informa ao json-server que o corpo enviado é JSON?",
+    "back": "O header `Content-Type: application/json`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 42,
+      "endLine": 48
+    },
+    "evidence": "headers: { \"Content-Type\": \"application/json\" },"
+  },
+  {
+    "id": "n19-f006",
+    "nodeId": "n19",
+    "front": "Como enviar um objeto JavaScript no corpo de um `fetch` do tipo POST?",
+    "back": "Convertê-lo com `JSON.stringify(objeto)` e usar o header `Content-Type: application/json`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 42,
+      "endLine": 48
+    },
+    "evidence": "body: JSON.stringify(aluno),"
+  },
+  {
+    "id": "n19-f007",
+    "nodeId": "n19",
+    "front": "O que `JSON.parse(texto)` faz com o texto devolvido por `resposta.text()`?",
+    "back": "Transforma o texto JSON em um objeto JavaScript.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/api.js",
+      "startLine": 39,
+      "endLine": 41
+    },
+    "evidence": "return texto ? JSON.parse(texto) : null;"
+  },
+  {
+    "id": "n19-f008",
+    "nodeId": "n19",
+    "front": "Para que serve `Promise.all` no carregamento de três coleções?",
+    "back": "Dispara as três promises juntas e resolve com um array de resultados na mesma ordem.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/pokedexRepository.js",
+      "startLine": 16,
+      "endLine": 19
+    },
+    "evidence": "const [types, pokemon, trainers] = await Promise.all([api(\"/types\"), api(\"/pokemon\"), api(\"/trainers\")]);"
+  },
+  {
+    "id": "n19-f009",
+    "nodeId": "n19",
+    "front": "Como capturar a rejeição de um `await`?",
+    "back": "Colocando a chamada dentro de `try/catch`: a rejeição vira uma exceção capturada pelo `catch`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/pokedexRepository.js",
+      "startLine": 17,
+      "endLine": 21
+    },
+    "evidence": "} catch (erroApi) {\n    try {"
+  },
+  {
+    "id": "n19-f010",
+    "nodeId": "n19",
+    "front": "Para que serve o bloco `finally` em uma função assíncrona?",
+    "back": "Executar código sempre, tanto quando a Promise resolve quanto quando rejeita.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/api.js",
+      "startLine": 31,
+      "endLine": 33
+    },
+    "evidence": "} finally {\n    clearTimeout(timer);"
+  },
+  {
+    "id": "n19-f011",
+    "nodeId": "n19",
+    "front": "Como cancelar um `fetch` que demora demais?",
+    "back": "Criar um `AbortController` e passar `signal` para o `fetch`; um `setTimeout` chama `abort()`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/api.js",
+      "startLine": 17,
+      "endLine": 18
+    },
+    "evidence": "const controle = new AbortController();\n  const timer = setTimeout(() => controle.abort(), API_TIMEOUT);"
+  },
+  {
+    "id": "n19-f012",
+    "nodeId": "n19",
+    "front": "Para que serve `encodeURIComponent` ao montar uma URL com parâmetros?",
+    "back": "Codificar o valor para que caracteres especiais não quebrem a query string.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/favoriteRepository.js",
+      "startLine": 21,
+      "endLine": 24
+    },
+    "evidence": "const linhas = await api(`/favorites?ownerToken=${encodeURIComponent(ownerToken)}`);"
+  },
+  {
+    "id": "n19-f013",
+    "nodeId": "n19",
+    "front": "No código de favoritos, o que o status 404 do json-server indica?",
+    "back": "Que o favorito não existe; o `catch` trata esse caso como `false`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/favoriteRepository.js",
+      "startLine": 27,
+      "endLine": 35
+    },
+    "evidence": "if (e.status === 404) return false;"
+  },
+  {
+    "id": "n19-f014",
+    "nodeId": "n19",
+    "front": "Por que a função `api` devolve `null` quando o json-server responde a um DELETE?",
+    "back": "Porque o DELETE costuma vir sem corpo; o código testa o texto e evita chamar `JSON.parse` à toa.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/api.js",
+      "startLine": 39,
+      "endLine": 41
+    },
+    "evidence": "// DELETE no json-server devolve {} (ou nada): sem corpo, devolve null."
+  },
+  {
+    "id": "n19-f015",
+    "nodeId": "n19",
+    "front": "No encadeamento de `then`, de onde vem o valor recebido pelo próximo `then`?",
+    "back": "Do retorno do `then` anterior; aqui `resposta.json()` devolve a Promise com os dados.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/app.js",
+      "startLine": 106,
+      "endLine": 113
+    },
+    "evidence": ".then((resposta) => resposta.json())\n    .then((atualizado) => {"
+  },
+  {
+    "id": "n19-f016",
+    "nodeId": "n19",
+    "front": "Um `.catch()` no fim de uma cadeia de promises captura o quê?",
+    "back": "A rejeição de qualquer elo anterior da cadeia.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/app.js",
+      "startLine": 101,
+      "endLine": 113
+    },
+    "evidence": ".catch(() => alert('Erro ao salvar o favorito. O JSON Server está rodando?'));"
+  },
+  {
+    "id": "n19-f017",
+    "nodeId": "n19",
+    "front": "Qual método HTTP o mapa usa para alterar apenas o campo `favorito` de um local?",
+    "back": "`PATCH`, enviando só o campo alterado no corpo JSON.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/app.js",
+      "startLine": 100,
+      "endLine": 106
+    },
+    "evidence": "fetch(`${API_URL}/${uni.id}`, {\n    method: 'PATCH',\n    headers: { 'Content-Type': 'application/json' },"
+  },
+  {
+    "id": "n19-f018",
+    "nodeId": "n19",
+    "front": "Como listar uma coleção do json-server em uma função `async`?",
+    "back": "Primeiro `await fetch(COLECAO_URL)`; depois, `await resposta.json()` para obter as cartas.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 155,
+      "endLine": 161
+    },
+    "evidence": "const resposta = await fetch(COLECAO_URL);\n    const cartas = await resposta.json();"
+  },
+  {
+    "id": "n19-f019",
+    "nodeId": "n19",
+    "front": "Por que chamar `preventDefault()` no handler de `submit` que usa `fetch`?",
+    "back": "Para impedir o recarregamento da página e manter o fluxo assíncrono.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 83,
+      "endLine": 98
+    },
+    "evidence": "form.addEventListener(\"submit\", async (evento) => {\n  evento.preventDefault(); // impede a página de recarregar"
+  },
+  {
+    "id": "n19-f020",
+    "nodeId": "n19",
+    "front": "Qual é o endereço local típico de uma coleção servida pelo json-server?",
+    "back": "O endereço é `http://localhost:3000/<recurso>`, por exemplo `http://localhost:3000/locais`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/config.js",
+      "startLine": 8,
+      "endLine": 9
+    },
+    "evidence": "const API_URL = 'http://localhost:3000/locais';"
+  },
+  {
+    "id": "n19-f021",
+    "nodeId": "n19",
+    "front": "O que é uma API?",
+    "back": "Uma interface de uma aplicação voltada a outras aplicações, que permite a integração entre sistemas.",
+    "source": {
+      "aula": 250,
+      "slide": 3
+    },
+    "evidence": "API ou Application Programming Interface é uma interface de uma aplicação que é voltada para outras aplicações, proporcionando integração entre sistemas."
+  },
+  {
+    "id": "n19-f022",
+    "nodeId": "n19",
+    "front": "O que significa REST?",
+    "back": "Representational State Transfer: um estilo arquitetural para serviços Web.",
+    "source": {
+      "aula": 250,
+      "slide": 9
+    },
+    "evidence": "REST é um estilo arquitetural para construção de serviços Web que significa a Transferência de Estado Representacional (Representational State Transfer)."
+  },
+  {
+    "id": "n19-f023",
+    "nodeId": "n19",
+    "front": "Qual método HTTP recupera um recurso?",
+    "back": "`GET`, usado para leitura (SELECT).",
+    "source": {
+      "aula": 250,
+      "slide": 11
+    },
+    "evidence": "GET – Recuperar um recurso (SELECT)"
+  },
+  {
+    "id": "n19-f024",
+    "nodeId": "n19",
+    "front": "Qual método HTTP inclui um novo curso em `/cursos/`?",
+    "back": "`POST`, que cria o recurso no servidor (INSERT).",
+    "source": {
+      "aula": 250,
+      "slide": 12
+    },
+    "evidence": "Incluir um curso            CREATE            POST /cursos/"
+  },
+  {
+    "id": "n19-f025",
+    "nodeId": "n19",
+    "front": "Qual método HTTP remove um recurso?",
+    "back": "`DELETE`, que exclui o recurso no servidor.",
+    "source": {
+      "aula": 250,
+      "slide": 11
+    },
+    "evidence": "DELETE – Remover um recurso (DELETE)"
+  },
+  {
+    "id": "n19-f026",
+    "nodeId": "n19",
+    "front": "O que os métodos `GET` e os parâmetros de query não devem fazer?",
+    "back": "Alterar o estado dos recursos; `GET` é apenas leitura.",
+    "source": {
+      "aula": 250,
+      "slide": 11
+    },
+    "evidence": "IMPORTANTE: Métodos GET e parâmetros de query não devem alterar estado de recursos."
+  },
+  {
+    "id": "n19-f027",
+    "nodeId": "n19",
+    "front": "O que significa o status HTTP 404?",
+    "back": "Recurso não encontrado: o recurso solicitado não existe.",
+    "source": {
+      "aula": 250,
+      "slide": 13
+    },
+    "evidence": "404 – Recurso não encontrado"
+  },
+  {
+    "id": "n19-f028",
+    "nodeId": "n19",
+    "front": "Qual status HTTP indica que um recurso foi criado com sucesso?",
+    "back": "O status 201 indica que o recurso foi criado.",
+    "source": {
+      "aula": 250,
+      "slide": 13
+    },
+    "evidence": "201 – Recurso Criado"
+  },
+  {
+    "id": "n19-f029",
+    "nodeId": "n19",
+    "front": "Na estrutura de notícias em JSON, qual é a chave do array que agrupa as notícias?",
+    "back": "`noticias`, um array de objetos com `titulo`, `resumo`, `data`, `autor`, `fonte` e `texto`.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 3
+    },
+    "evidence": "\"noticias\": [ { \"titulo\": \"Órgão do Ministério Público ... \","
+  },
+  {
+    "id": "n19-f030",
+    "nodeId": "n19",
+    "front": "Para que serve um JSON Schema?",
+    "back": "Ele serve para descrever, referenciar e validar documentos JSON e também como documentação legível.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 12
+    },
+    "evidence": "JSON Schema é um vocabulário que permite descrever, referenciar e validar documentos JSON"
+  },
+  {
+    "id": "n19-f031",
+    "nodeId": "n19",
+    "front": "O JSON aceita quais valores booleanos?",
+    "back": "O JSON aceita apenas `true` e `false` como booleanos.",
+    "source": {
+      "aula": 240,
+      "slide": 7
+    },
+    "evidence": "Dados booleanos: true e false"
+  },
+  {
+    "id": "n19-f032",
+    "nodeId": "n19",
+    "front": "Como o JSON representa um valor nulo?",
+    "back": "Com a palavra `null`, sem aspas.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 8
+    },
+    "evidence": "\"lazy\": false,\n        \"married\": null"
+  },
+  {
+    "id": "n19-f033",
+    "nodeId": "n19",
+    "front": "Em que ordem o motor JavaScript executa código síncrono, microtarefas e timers?",
+    "back": "Primeiro o código síncrono; depois as microtarefas das Promises; por último os timers como `setTimeout`.",
+    "source": {
+      "kind": "orientacao"
+    },
+    "evidence": "o fluxo assíncrono das funções"
+  },
+  {
+    "id": "n19-f034",
+    "nodeId": "n19",
+    "front": "O que aparece no console quando `resposta.json()` é usado sem `await` dentro de uma template string?",
+    "back": "`[object Promise]`, porque `json()` devolve uma Promise, não o objeto.",
+    "source": {
+      "kind": "orientacao"
+    },
+    "evidence": "consumo de rotas assíncronas"
+  },
+  {
+    "id": "n19-f035",
+    "nodeId": "n19",
+    "front": "Depois de um `await`, quando o restante da função `async` é executado?",
+    "back": "Quando a Promise resolve: a continuação entra na fila de microtarefas, depois do código síncrono atual.",
+    "source": {
+      "kind": "orientacao"
+    },
+    "evidence": "o fluxo assíncrono das funções"
+  },
+  {
+    "id": "n19-f036",
+    "nodeId": "n19",
+    "front": "Para que serve a palavra-chave `required` em um JSON Schema?",
+    "back": "Ela lista as propriedades que o objeto precisa ter.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 16
+    },
+    "evidence": "\"required\": [ \"productId\", \"productName\" ]"
+  }
+]
