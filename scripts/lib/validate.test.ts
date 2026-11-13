@@ -755,6 +755,68 @@ describe('validator source kinds', () => {
   });
 });
 
+function makePrimer(
+  nodeId = 'n07',
+  count = 6,
+  source?: Source,
+): Record<string, unknown> {
+  const flashcard = firstFlashcard();
+  return {
+    nodeId,
+    points: Array.from({ length: count }, (_, index) => ({
+      title: `Ponto ${index + 1}`,
+      body: 'Um ponto de leitura sobre o nó.',
+      source: source ?? flashcard.source,
+      evidence: flashcard.evidence,
+    })),
+  };
+}
+
+describe('validator primers', () => {
+  it('verifies primer evidence against the slide text', async () => {
+    const report = await validateContent(
+      withFile(validContent(), 'src/content/n07/primers.json', makePrimer()),
+      options(),
+    );
+
+    expect(report.errors).toEqual([]);
+    expect(report.ok).toBe(true);
+    expect(report.evidence).toEqual({
+      status: 'verified',
+      verified: 47,
+      total: 47,
+    });
+  });
+
+  it('rejects a primer point citing an aula outside the node', async () => {
+    const report = await validateContent(
+      withFile(
+        validContent(),
+        'src/content/n07/primers.json',
+        makePrimer('n07', 6, { aula: 999, slide: 1 }),
+      ),
+      options(),
+    );
+
+    expect(report.ok).toBe(false);
+    expect(
+      report.errors.some((error) => /não pertence ao nó/.test(error.message)),
+    ).toBe(true);
+  });
+
+  it('flags a primers.json whose nodeId does not match the folder', async () => {
+    const report = await validateContent(
+      withFile({}, 'src/content/n06/primers.json', makePrimer('n07')),
+      options(),
+    );
+
+    expect(report.ok).toBe(false);
+    expect(
+      report.errors.some((error) => /não corresponde à pasta/.test(error.message)),
+    ).toBe(true);
+  });
+});
+
 describe('validator --only', () => {
   it('validates just the requested node file', async () => {
     const report = await validateContent(
