@@ -19,3 +19,4 @@ Content is typed JSON generated from the course PDFs; each item cites its source
 - Never commit course PDFs or Canvas data; content cites slides but does not embed the PDFs.
 - All user-facing copy is PT-BR.
 - Respect `prefers-reduced-motion`; everything keyboard-navigable.
+- Questões com `code` são executadas pelo validador; use a saída real que ele imprime, nunca adivinhe `expected`.
