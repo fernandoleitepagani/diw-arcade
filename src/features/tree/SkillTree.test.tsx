@@ -130,7 +130,7 @@ describe('SkillTree', () => {
       const title = getLab(labId)!.title;
       const link = screen.getByRole('link', { name: title });
       expect(link).toHaveAttribute('href', `/laboratorios/${labId}`);
-      expect(link).toHaveTextContent(/Não iniciado|passos?|Concluído/);
+      expect(link.closest('li')).toHaveTextContent(/Não iniciado|passos?|Concluído/);
     }
   });
 

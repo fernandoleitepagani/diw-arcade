@@ -5,7 +5,6 @@ import {
 } from '../../app/ProgressProvider';
 import { UNITS } from '../../content';
 import { createEmptySave } from '../../lib/storage';
-import { ContinueCard } from './ContinueCard';
 import { SkillTree } from './SkillTree';
 import './TreePage.css';
 
@@ -34,8 +33,6 @@ export function TreePage() {
   return (
     <section className="page tree-page">
       <h1 className="sr-only">DIW Arcade</h1>
-
-      <ContinueCard save={save} now={now} />
 
       <div className="tree-page__layout">
         <section className="tree-page__trail" aria-label="Trilha">

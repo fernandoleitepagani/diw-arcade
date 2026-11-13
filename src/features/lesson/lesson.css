@@ -30,6 +30,18 @@
   max-width: 16rem;
 }
 
+.lesson__back {
+  justify-self: start;
+  color: var(--muted);
+  font-family: var(--font-code);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.lesson__back:hover {
+  color: var(--text);
+}
+
 .lesson__back:focus-visible {
   outline: 2px solid var(--text);
   outline-offset: 2px;
