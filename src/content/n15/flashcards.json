@@ -1,0 +1,455 @@
+[
+  {
+    "id": "n15-f001",
+    "nodeId": "n15",
+    "front": "Por que `TODOS` e `TODOS_IDS` são declarados com `let` e não com `const` no `main.js`?",
+    "back": "Porque `iniciar()` os reatribui depois (`TODOS = getAllPokemon()`). Com `const`, a reatribuição lançaria `TypeError`; `let` permite trocar a ligação.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 783,
+      "endLine": 785
+    },
+    "evidence": "  inicializar(dados);\n  TODOS = getAllPokemon();\n  TODOS_IDS = TODOS.map((p) => p.id);"
+  },
+  {
+    "id": "n15-f002",
+    "nodeId": "n15",
+    "front": "Se `estado` é declarado com `const`, por que o código pode alterar `estado.busca`?",
+    "back": "`const` impede reatribuir a ligação (`estado = ...`), mas não congela o objeto. As propriedades de `estado` continuam mutáveis.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 78,
+      "endLine": 81
+    },
+    "evidence": "const estado = {\n  pronto: false,\n  aba: \"pokedex\", // \"pokedex\" | \"favoritos\" | \"treinadores\"\n  busca: \"\","
+  },
+  {
+    "id": "n15-f003",
+    "nodeId": "n15",
+    "front": "O que a função `$` faz e o que ela devolve quando o seletor não encontra nenhum elemento?",
+    "back": "É um atalho para `document.querySelector`: devolve o primeiro elemento que casa com o seletor ou `null` se não houver correspondência.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 45,
+      "endLine": 45
+    },
+    "evidence": "const $ = (seletor) => document.querySelector(seletor);"
+  },
+  {
+    "id": "n15-f004",
+    "nodeId": "n15",
+    "front": "O que significa dizer que a declaração `async function iniciar()` sofre hoisting?",
+    "back": "A declaração inteira da função é elevada ao topo do escopo do módulo; por isso `iniciar()` já existe quando o arquivo chega à chamada final.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 758,
+      "endLine": 758
+    },
+    "evidence": "async function iniciar() {"
+  },
+  {
+    "id": "n15-f005",
+    "nodeId": "n15",
+    "front": "O que acontece ao ler `TODOS` antes de a linha `let TODOS = [];` ser executada?",
+    "back": "Ocorre `ReferenceError`: variáveis `let` e `const` ficam na TDZ (zona morta temporal) desde o início do bloco até a inicialização.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 73,
+      "endLine": 76
+    },
+    "evidence": "let TODOS = [];\nlet TODOS_IDS = [];\nlet TIPOS = [];\nlet TREINADORES = [];"
+  },
+  {
+    "id": "n15-f006",
+    "nodeId": "n15",
+    "front": "No trecho `const medir = () => corpo.toggleAttribute(...)`, o que a arrow function lembra do escopo externo?",
+    "back": "É um closure: captura o parâmetro `corpo` de `observarRolagem` e continua a acessá-lo quando o `ResizeObserver` chama `medir`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 372,
+      "endLine": 372
+    },
+    "evidence": "  const medir = () => corpo.toggleAttribute(\"data-rola\", corpo.scrollHeight - corpo.clientHeight > 4);"
+  },
+  {
+    "id": "n15-f007",
+    "nodeId": "n15",
+    "front": "Por que o listener `() => toast.remove()` continua funcionando depois que `mostrarToast` termina?",
+    "back": "A arrow function fecha sobre a variável `toast`; o elemento criado permanece acessível ao closure quando o evento `hidden.bs.toast` dispara.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 564,
+      "endLine": 564
+    },
+    "evidence": "  toast.addEventListener(\"hidden.bs.toast\", () => toast.remove());"
+  },
+  {
+    "id": "n15-f008",
+    "nodeId": "n15",
+    "front": "Em `sortPokemon(filterPokemon(listaBase(), {...}), estado.ordem)`, em que ordem as funções são executadas?",
+    "back": "Primeiro `listaBase()`, depois `filterPokemon(...)` com o resultado e, por fim, `sortPokemon(...)` com a lista filtrada. As chamadas internas terminam antes das externas.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 112,
+      "endLine": 114
+    },
+    "evidence": "function resultado() {\n  return sortPokemon(filterPokemon(listaBase(), { busca: estado.busca, tipo: estado.tipo }), estado.ordem);\n}"
+  },
+  {
+    "id": "n15-f009",
+    "nodeId": "n15",
+    "front": "O que `esconderTooltips()` retorna?",
+    "back": "`undefined`. A função só executa `forEach` e não tem `return`; sem `return`, toda função JavaScript devolve `undefined`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 579,
+      "endLine": 581
+    },
+    "evidence": "function esconderTooltips() {\n  tooltips.forEach((t) => t.hide());\n}"
+  },
+  {
+    "id": "n15-f010",
+    "nodeId": "n15",
+    "front": "Qual é o valor de retorno de `tooltips.forEach((t) => t.hide())`?",
+    "back": "`undefined`. `forEach` apenas percorre o array; se a intenção é obter um novo array, usa-se `map`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 580,
+      "endLine": 580
+    },
+    "evidence": "  tooltips.forEach((t) => t.hide());"
+  },
+  {
+    "id": "n15-f011",
+    "nodeId": "n15",
+    "front": "Em `abrirDetalhes(id, ids = TODOS_IDS, indice)`, quando o valor padrão de `ids` é usado?",
+    "back": "Somente quando `ids` é `undefined` (ou omitido). Se for passado `null`, o valor continua `null` e o padrão não é aplicado.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 379,
+      "endLine": 379
+    },
+    "evidence": "function abrirDetalhes(id, ids = TODOS_IDS, indice) {"
+  },
+  {
+    "id": "n15-f012",
+    "nodeId": "n15",
+    "front": "O que acontece ao chamar `mostrarToast(\"Salvo\")` sem o segundo argumento?",
+    "back": "`tipo` assume o padrão `\"add\"`, então o toast é criado com o estilo e o ícone de adição.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 544,
+      "endLine": 544
+    },
+    "evidence": "function mostrarToast(mensagem, tipo = \"add\") {"
+  },
+  {
+    "id": "n15-f013",
+    "nodeId": "n15",
+    "front": "Em `{ ArrowRight: 1, ArrowLeft: -1 }[e.key]`, o que vale `delta` quando `e.key` é `\"Escape\"`?",
+    "back": "`undefined`: a chave não existe no objeto. Por isso o código seguinte usa `delta ?? 0` antes de somar ao índice.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 728,
+      "endLine": 728
+    },
+    "evidence": "      const delta = { ArrowRight: 1, ArrowLeft: -1 }[e.key];"
+  },
+  {
+    "id": "n15-f014",
+    "nodeId": "n15",
+    "front": "Em `statusFavoritos()`, por que a ordem dos `if` altera o resultado?",
+    "back": "Cada condição verdadeira faz `return` imediato. O primeiro estado vence: `off`, depois `error`, `loading`, `saving`; só se nenhum casar a função chega a `ok`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 125,
+      "endLine": 131
+    },
+    "evidence": "function statusFavoritos() {\n  const f = estado.favoritos;\n  if (!f.habilitado) return \"off\";\n  if (f.erro) return \"error\";\n  if (f.carregando) return \"loading\";\n  if (f.salvando.size > 0) return \"saving\";\n  return \"ok\";"
+  },
+  {
+    "id": "n15-f015",
+    "nodeId": "n15",
+    "front": "As arrow functions de `SKINS.map((s) => s.id)` e `SKINS.find((s) => s.id === estado.skin)` compartilham o mesmo parâmetro `s`?",
+    "back": "Não. Cada arrow function tem seu próprio escopo; o `s` de uma não interfere no `s` da outra.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 641,
+      "endLine": 643
+    },
+    "evidence": "  const ids = SKINS.map((s) => s.id);\n  const atual = SKINS.find((s) => s.id === estado.skin);\n  const proximo = SKINS[(ids.indexOf(estado.skin) + 1) % ids.length];"
+  },
+  {
+    "id": "n15-f016",
+    "nodeId": "n15",
+    "front": "O que `TIPOS.find((t) => t.name === estado.tipo)?.label` devolve se nenhum tipo casar?",
+    "back": "`undefined`, sem lançar erro: o `?.` interrompe o acesso a `.label` quando `find` retorna `undefined`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 265,
+      "endLine": 266
+    },
+    "evidence": "  const busca = estado.busca.trim();\n  const nomeTipo = TIPOS.find((t) => t.name === estado.tipo)?.label;"
+  },
+  {
+    "id": "n15-f017",
+    "nodeId": "n15",
+    "front": "Por que `normalizar` começa com `String(texto ?? \"\")` em vez de chamar `texto.toLowerCase()` diretamente?",
+    "back": "Porque `texto` pode ser `null` ou `undefined`: o `?? \"\"` troca esses valores por uma string vazia, e `String(...)` também converte números.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/utils/text.js",
+      "startLine": 5,
+      "endLine": 6
+    },
+    "evidence": "export function normalizar(texto) {\n  return String(texto ?? \"\")"
+  },
+  {
+    "id": "n15-f018",
+    "nodeId": "n15",
+    "front": "O que `formatarNumero(25)` devolve?",
+    "back": "`\"#025\"`: o template literal adiciona `#` e `String(id).padStart(3, \"0\")` completa com zeros à esquerda até 3 caracteres.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/utils/text.js",
+      "startLine": 13,
+      "endLine": 16
+    },
+    "evidence": "/** 25 -> \"#025\" */\nexport function formatarNumero(id) {\n  return `#${String(id).padStart(3, \"0\")}`;\n}"
+  },
+  {
+    "id": "n15-f019",
+    "nodeId": "n15",
+    "front": "O que `plural(1, \"favorito\", \"favoritos\")` e `plural(3, \"favorito\", \"favoritos\")` devolvem?",
+    "back": "`\"favorito\"` e `\"favoritos\"`: o operador ternário testa `n === 1` e escolhe a forma singular ou plural.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/utils/text.js",
+      "startLine": 18,
+      "endLine": 20
+    },
+    "evidence": "/** n === 1 ? singular : plural */\nexport function plural(n, singular, pluralTexto) {\n  return n === 1 ? singular : pluralTexto;"
+  },
+  {
+    "id": "n15-f020",
+    "nodeId": "n15",
+    "front": "Por que `TIPOS_JSON`, `POKEMON`, `POR_ID` e `TREINADORES` são variáveis de módulo declaradas com `let`?",
+    "back": "Porque `inicializar(dados)` reatribui essas variáveis, e as funções exportadas as consultam depois; `let` permite trocar a ligação.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 11,
+      "endLine": 14
+    },
+    "evidence": "let TIPOS_JSON = [];\nlet POKEMON = [];\nlet POR_ID = new Map();\nlet TREINADORES = [];"
+  },
+  {
+    "id": "n15-f021",
+    "nodeId": "n15",
+    "front": "No `for (const pokemon of lista)` de `countByType`, como `const` pode receber um Pokémon diferente a cada iteração?",
+    "back": "Cada iteração do `for...of` cria uma nova ligação de bloco. O `pokemon` é constante dentro daquela iteração, mas muda de iteração para iteração.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 53,
+      "endLine": 53
+    },
+    "evidence": "  for (const pokemon of lista) {"
+  },
+  {
+    "id": "n15-f022",
+    "nodeId": "n15",
+    "front": "O que `getTrainersOf` devolve e o array original `TREINADORES` é alterado?",
+    "back": "Devolve um novo array com os treinadores cujo `pokemonIds` inclui o id. `filter` não altera o array original.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 36,
+      "endLine": 39
+    },
+    "evidence": "/** Treinadores que têm este Pokémon no time. */\nexport function getTrainersOf(pokemonId) {\n  return TREINADORES.filter((t) => t.pokemonIds.includes(pokemonId));\n}"
+  },
+  {
+    "id": "n15-f023",
+    "nodeId": "n15",
+    "front": "Em `getAvailableTypes`, o que fazem `flatMap`, `filter` e `map`, nessa ordem?",
+    "back": "`flatMap` reúne os nomes de todos os tipos em uma lista, `filter` mantém os usados por algum Pokémon e `map(createPokemonType)` transforma cada nome no objeto de tipo.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 45,
+      "endLine": 48
+    },
+    "evidence": "export function getAvailableTypes() {\n  const usados = new Set(POKEMON.flatMap((p) => p.types.map((t) => t.name)));\n  return TIPOS_JSON.filter((t) => usados.has(t.name)).map(createPokemonType);\n}"
+  },
+  {
+    "id": "n15-f024",
+    "nodeId": "n15",
+    "front": "O que acontece ao chamar `filterPokemon(lista, null)`?",
+    "back": "O padrão `{ busca = \"\", tipo = null } = {}` só vale para `undefined`; com `null`, a desestruturação lança `TypeError`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 68,
+      "endLine": 68
+    },
+    "evidence": "export function filterPokemon(lista, { busca = \"\", tipo = null } = {}) {"
+  },
+  {
+    "id": "n15-f025",
+    "nodeId": "n15",
+    "front": "Por que `sortPokemon` faz `[...lista].sort(...)` em vez de `lista.sort(...)`?",
+    "back": "`sort` ordena o próprio array, ou seja, muta a lista recebida. O spread cria uma cópia rasa e preserva a lista original.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 97,
+      "endLine": 100
+    },
+    "evidence": "/** Ordena sem alterar a lista original. Empate desempata pelo número. */\nexport function sortPokemon(lista, { campo = \"id\", direcao = \"asc\" } = {}) {\n  const sinal = direcao === \"desc\" ? -1 : 1;\n  return [...lista].sort((a, b) => {"
+  },
+  {
+    "id": "n15-f026",
+    "nodeId": "n15",
+    "front": "Em `STATS.reduce((a, b) => ...)` sem valor inicial, o que é `a` na primeira chamada?",
+    "back": "O primeiro elemento de `STATS`; `b` é o segundo. Sem `initialValue`, o `reduce` usa o primeiro item como acumulador.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 117,
+      "endLine": 120
+    },
+    "evidence": "export function getBestStat(pokemon) {\n  const melhor = STATS.reduce((a, b) => (pokemon.stats[b.key] > pokemon.stats[a.key] ? b : a));\n  return { ...melhor, valor: pokemon.stats[melhor.key], posicao: getStatRank(pokemon, melhor.key) };\n}"
+  },
+  {
+    "id": "n15-f027",
+    "nodeId": "n15",
+    "front": "Em `(contagem.get(tipo.name) ?? 0) + 1`, por que usar `?? 0`?",
+    "back": "Porque na primeira ocorrência do tipo o `Map` ainda não tem a chave e `get` devolve `undefined`; `?? 0` transforma esse valor em zero para somar 1.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 55,
+      "endLine": 55
+    },
+    "evidence": "      contagem.set(tipo.name, (contagem.get(tipo.name) ?? 0) + 1);"
+  },
+  {
+    "id": "n15-f028",
+    "nodeId": "n15",
+    "front": "O que `getPokemonById(\"25\")` faz com o argumento antes de procurar no `Map`?",
+    "back": "Converte com `Number(id)` e busca a chave numérica `25`; se não encontrar, devolve `null` por causa de `?? null`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 28,
+      "endLine": 30
+    },
+    "evidence": "export function getPokemonById(id) {\n  return POR_ID.get(Number(id)) ?? null;\n}"
+  },
+  {
+    "id": "n15-f029",
+    "nodeId": "n15",
+    "front": "Qual é o risco de `getAllPokemon()` devolver `POKEMON` diretamente?",
+    "back": "Quem chama recebe a referência do array interno e pode mutá-lo, alterando o estado do serviço sem passar por `inicializar`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 24,
+      "endLine": 26
+    },
+    "evidence": "export function getAllPokemon() {\n  return POKEMON;\n}"
+  },
+  {
+    "id": "n15-f030",
+    "nodeId": "n15",
+    "front": "Como `getStatRank` calcula a posição de um atributo entre os Pokémon?",
+    "back": "Conta com `filter` quantos Pokémon têm valor maior e soma 1; assim, empates recebem a mesma posição.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 111,
+      "endLine": 114
+    },
+    "evidence": "export function getStatRank(pokemon, campo) {\n  const valor = valorDe(pokemon, campo);\n  return POKEMON.filter((p) => valorDe(p, campo) > valor).length + 1;\n}"
+  },
+  {
+    "id": "n15-f031",
+    "nodeId": "n15",
+    "front": "Em que ano foi lançado o ECMAScript 6 (ES6), segundo a aula?",
+    "back": "Em 2015. O slide registra o ES6 como a versão lançada naquele ano, em estágio avançado de adoção pelos browsers.",
+    "source": {
+      "aula": 310,
+      "slide": 5
+    },
+    "evidence": "Em 2015 foi lançado o ECMA Script 6 (ES6)"
+  },
+  {
+    "id": "n15-f032",
+    "nodeId": "n15",
+    "front": "Qual é o motor ECMAScript (JavaScript engine) usado pelo Google Chrome?",
+    "back": "Google V8, que roda sobre o motor de renderização Blink.",
+    "source": {
+      "aula": 310,
+      "slide": 7
+    },
+    "evidence": "Google Chrome              Blink            Google V8"
+  },
+  {
+    "id": "n15-f033",
+    "nodeId": "n15",
+    "front": "Como se inclui um arquivo JavaScript externo em uma página HTML?",
+    "back": "Com a tag `<script>` e o atributo `src` apontando para o arquivo, como em `<script src=\"script.js\"></script>`.",
+    "source": {
+      "aula": 310,
+      "slide": 9
+    },
+    "evidence": "<script type=\"text/javascript\" src=\"script.js\"></script>"
+  },
+  {
+    "id": "n15-f034",
+    "nodeId": "n15",
+    "front": "O que a Prova 2 cobra nas questões 1 a 7?",
+    "back": "Análise de trechos reais em JavaScript: manipulação do DOM, escopo de variáveis e tratamento de URLs/parâmetros.",
+    "source": {
+      "kind": "orientacao"
+    },
+    "evidence": "Focada em trechos reais em JavaScript, manipulação do DOM, escopo de variáveis e tratamento de URLs/parâmetros."
+  },
+  {
+    "id": "n15-f035",
+    "nodeId": "n15",
+    "front": "Além do resultado do código, o que as questões analíticas avaliam?",
+    "back": "A capacidade de analisar comportamentos, identificar bugs e compreender como o motor JavaScript executa o código.",
+    "source": {
+      "kind": "orientacao"
+    },
+    "evidence": "O objetivo é avaliar como vocês analisam comportamentos, identificam bugs e compreendem a execução do motor JS."
+  },
+  {
+    "id": "n15-f036",
+    "nodeId": "n15",
+    "front": "Que três pontos a orientação manda observar na leitura ativa do código?",
+    "back": "Os tipos de dados, o uso de operadores (como igualdade estrita versus ampla) e o fluxo assíncrono das funções.",
+    "source": {
+      "kind": "orientacao"
+    },
+    "evidence": "Leitura Ativa do Código: Nas questões analíticas, observem atentamente os tipos de dados, o uso de operadores (como a diferença entre igualdade estrita e ampla) e o fluxo assíncrono das funções."
+  }
+]
