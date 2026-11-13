@@ -1,0 +1,338 @@
+[
+  {
+    "id": "n20-f001",
+    "nodeId": "n20",
+    "front": "O que a tag `<form>` delimita na página?",
+    "back": "O formulário a ser criado, reunindo os campos que serão enviados ao servidor.",
+    "source": { "aula": 162, "slide": 4 },
+    "evidence": "A tag form delimita o formulário a ser criado."
+  },
+  {
+    "id": "n20-f002",
+    "nodeId": "n20",
+    "front": "Qual é a função do atributo `action` em um `<form>`?",
+    "back": "Indicar a URL que será disparada para processar o formulário.",
+    "source": { "aula": 162, "slide": 4 },
+    "evidence": "O atributo action indica qual a URL a ser disparada para"
+  },
+  {
+    "id": "n20-f003",
+    "nodeId": "n20",
+    "front": "O que o atributo `method` define no envio de um formulário?",
+    "back": "Como o formulário será submetido na requisição HTTP: POST ou GET.",
+    "source": { "aula": 162, "slide": 4 },
+    "evidence": "O atributo method indica como o formulário será submetido via requisição HTTP (POST ou GET)."
+  },
+  {
+    "id": "n20-f004",
+    "nodeId": "n20",
+    "front": "O que as tags `<input>` representam dentro de um formulário?",
+    "back": "Os campos ou entradas de dados manipulados pelo formulário.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "As tags input definem os campos ou entradas de dados manipulados pelo formulário."
+  },
+  {
+    "id": "n20-f005",
+    "nodeId": "n20",
+    "front": "O que o atributo `type` de um `<input>` identifica?",
+    "back": "O tipo do campo, como `text`, `password` ou `submit`.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "O atributo type identifica o tipo do campo: text, password, submit, etc."
+  },
+  {
+    "id": "n20-f006",
+    "nodeId": "n20",
+    "front": "Para que serve o atributo `name` em um campo de formulário?",
+    "back": "Para identificar o campo, formando o par nome/valor enviado ao servidor.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "O atributo name identifica o campo do formulário"
+  },
+  {
+    "id": "n20-f007",
+    "nodeId": "n20",
+    "front": "O que o atributo `value` representa em um campo?",
+    "back": "O valor contido naquele campo do formulário.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "O atributo value trata o valor contido no campo"
+  },
+  {
+    "id": "n20-f008",
+    "nodeId": "n20",
+    "front": "O que o atributo `maxlength` limita em um campo de texto?",
+    "back": "A quantidade de caracteres que o usuário pode digitar no campo.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "O atributo maxlength permite limitar a quantidade de caracteres a serem digitados pelo usuário."
+  },
+  {
+    "id": "n20-f009",
+    "nodeId": "n20",
+    "front": "O que acontece ao tentar enviar um formulário com um campo `required` vazio?",
+    "back": "A validação automática do navegador impede o envio e aponta o campo vazio.",
+    "source": { "aula": 162, "slide": 6 },
+    "evidence": "Nome: <input type=\"text\" name=\"nome\" required><br>"
+  },
+  {
+    "id": "n20-f010",
+    "nodeId": "n20",
+    "front": "Que verificação o campo `type=\"email\"` faz antes do envio?",
+    "back": "Valida se o endereço informado tem @ e nome do servidor.",
+    "source": { "aula": 162, "slide": 8 },
+    "evidence": "um endereço de e-mail correto (com o caracter @ e o nome"
+  },
+  {
+    "id": "n20-f011",
+    "nodeId": "n20",
+    "front": "O que o campo `type=\"date\"` oferece ao usuário?",
+    "back": "Um controle de edição de data com calendário para escolher o dia.",
+    "source": { "aula": 162, "slide": 9 },
+    "evidence": "O campo do tipo date controla a edição por parte do"
+  },
+  {
+    "id": "n20-f012",
+    "nodeId": "n20",
+    "front": "O que acontece com vários `input type=\"radio\"` que usam o mesmo `name`?",
+    "back": "Eles formam um grupo em que o usuário escolhe uma única opção.",
+    "source": { "aula": 162, "slide": 10 },
+    "evidence": "<input type=\"radio\" name=\"sex\" value=\"male\">Masculino<br>"
+  },
+  {
+    "id": "n20-f013",
+    "nodeId": "n20",
+    "front": "Como o `checkbox` se comporta quando vários usam o mesmo `name`?",
+    "back": "Permite que o usuário escolha uma ou mais opções entre as disponíveis.",
+    "source": { "aula": 162, "slide": 11 },
+    "evidence": "<input type=\"checkbox\" name=\"acao\" value=\"vel\"> Ver teste de velocidade<br>"
+  },
+  {
+    "id": "n20-f014",
+    "nodeId": "n20",
+    "front": "Para que serve um botão `type=\"submit\"`?",
+    "back": "Para o usuário submeter o formulário para processamento.",
+    "source": { "aula": 162, "slide": 12 },
+    "evidence": "O botão submit é utilizado para que o"
+  },
+  {
+    "id": "n20-f015",
+    "nodeId": "n20",
+    "front": "Para que serve um botão `type=\"reset\"`?",
+    "back": "Para o usuário limpar todo o formulário.",
+    "source": { "aula": 162, "slide": 12 },
+    "evidence": "permite ao usuário limpar todo o"
+  },
+  {
+    "id": "n20-f016",
+    "nodeId": "n20",
+    "front": "Um formulário pode ter mais de um botão submit? O que eles fazem?",
+    "back": "Sim; todos os botões submit executam a mesma ação.",
+    "source": { "aula": 162, "slide": 12 },
+    "evidence": "submit, porém todos executam a mesma"
+  },
+  {
+    "id": "n20-f017",
+    "nodeId": "n20",
+    "front": "Qual tag organiza os campos de um formulário em grupos?",
+    "back": "A tag `<fieldset>` organiza os campos do formulário.",
+    "source": { "aula": 162, "slide": 13 },
+    "evidence": "Utilize as tags fieldset para organizar os campos do formulário."
+  },
+  {
+    "id": "n20-f018",
+    "nodeId": "n20",
+    "front": "Qual é a função da tag `<legend>`?",
+    "back": "Informar o título do `<fieldset>` ao qual pertence.",
+    "source": { "aula": 162, "slide": 13 },
+    "evidence": "A tag filha legend informa o título do fieldset."
+  },
+  {
+    "id": "n20-f019",
+    "nodeId": "n20",
+    "front": "Para que serve a tag `<textarea>`?",
+    "back": "Definir um campo que permite a entrada de texto livre.",
+    "source": { "aula": 162, "slide": 14 },
+    "evidence": "A tag textarea define um campo que permite a entrada de texto livre."
+  },
+  {
+    "id": "n20-f020",
+    "nodeId": "n20",
+    "front": "O que os atributos `rows` e `cols` definem em um `<textarea>`?",
+    "back": "O número de linhas e de colunas usado na apresentação do controle.",
+    "source": { "aula": 162, "slide": 14 },
+    "evidence": "O atributo rows e cols definem o número de linhas e colunas para a apresentação do controle."
+  },
+  {
+    "id": "n20-f021",
+    "nodeId": "n20",
+    "front": "Para que serve um campo `type=\"hidden\"`?",
+    "back": "Repassar informações ocultas que não exigem interação do usuário.",
+    "source": { "aula": 162, "slide": 15 },
+    "evidence": "O campo do tipo hidden permite que sejam repassadas informações \"ocultas\" que não exigem interação do usuário."
+  },
+  {
+    "id": "n20-f022",
+    "nodeId": "n20",
+    "front": "Em que situação prática o campo `hidden` costuma ser usado?",
+    "back": "Para passar informações de um formulário para outro em uma sequência de passos.",
+    "source": { "aula": 162, "slide": 15 },
+    "evidence": "Este tipo de campo é utilizado para passagem de informações de um formulário para outro em uma sequencia de passos, por exemplo."
+  },
+  {
+    "id": "n20-f023",
+    "nodeId": "n20",
+    "front": "O que a tag `<datalist>` define?",
+    "back": "Um conjunto de opções que ficam disponíveis para outro campo de input.",
+    "source": { "aula": 162, "slide": 16 },
+    "evidence": "A tag datalist permite definir um conjunto de opções que estarão disponíveis para um outro campo de input."
+  },
+  {
+    "id": "n20-f024",
+    "nodeId": "n20",
+    "front": "Como incluir um arquivo JavaScript externo em uma página HTML?",
+    "back": "Inclua no HTML a tag `<script type=\"text/javascript\" src=\"script.js\"></script>`.",
+    "source": { "aula": 310, "slide": 9 },
+    "evidence": "<script type=\"text/javascript\" src=\"script.js\"></script>"
+  },
+  {
+    "id": "n20-f025",
+    "nodeId": "n20",
+    "front": "Qual capacidade do JavaScript cuida da manipulação de objetos da página e do tratamento de eventos?",
+    "back": "A manipulação de objetos da página HTML e o tratamento de eventos (DOM).",
+    "source": { "aula": 310, "slide": 10 },
+    "evidence": "Manipulação de objetos da página HTML e tratamento de eventos (DOM Document Object Model)"
+  },
+  {
+    "id": "n20-f026",
+    "nodeId": "n20",
+    "front": "Qual capacidade do JavaScript permite conversar com o servidor por uma API?",
+    "back": "A comunicação com o servidor e o uso de API via AJAX (XMLHttpRequest).",
+    "source": { "aula": 310, "slide": 10 },
+    "evidence": "Comunicação com o servidor e uso de Application Programming Interface (API) via AJAX"
+  },
+  {
+    "id": "n20-f027",
+    "nodeId": "n20",
+    "front": "Quais estruturas do navegador podem persistir dados em JavaScript?",
+    "back": "Indexed DB e LocalStorage são estruturas do navegador para persistir dados.",
+    "source": { "aula": 310, "slide": 10 },
+    "evidence": "estruturas providas pelo Browser"
+  },
+  {
+    "id": "n20-f028",
+    "nodeId": "n20",
+    "front": "Como o script do Cadastro de Alunos obtém os elementos do formulário?",
+    "back": "Com `document.getElementById(...)`, guardando cada elemento em uma constante.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 4,
+      "endLine": 10
+    },
+    "evidence": "const form = document.getElementById(\"form-aluno\");"
+  },
+  {
+    "id": "n20-f029",
+    "nodeId": "n20",
+    "front": "O que `evento.preventDefault()` faz no handler de submit do projeto?",
+    "back": "Impede o recarregamento padrão da página antes do envio assíncrono.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 83,
+      "endLine": 84
+    },
+    "evidence": "evento.preventDefault(); // impede a página de recarregar"
+  },
+  {
+    "id": "n20-f030",
+    "nodeId": "n20",
+    "front": "Por que o projeto aplica `.trim()` nos valores do formulário?",
+    "back": "Para remover os espaços das pontas antes de montar o objeto enviado.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 86,
+      "endLine": 89
+    },
+    "evidence": "nome: inputNome.value.trim(),"
+  },
+  {
+    "id": "n20-f031",
+    "nodeId": "n20",
+    "front": "Como o Cadastro de Alunos decide entre atualizar e criar um aluno?",
+    "back": "Se `inputId.value` estiver preenchido, chama a atualização; senão, cria.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 91,
+      "endLine": 95
+    },
+    "evidence": "if (inputId.value) {\n    await atualizarAluno(inputId.value, aluno);\n  } else {\n    await criarAluno(aluno);"
+  },
+  {
+    "id": "n20-f032",
+    "nodeId": "n20",
+    "front": "O que acontece com os campos após `form.reset()` no projeto?",
+    "back": "Voltam aos valores definidos no HTML; depois o `inputId` é esvaziado à mão.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 75,
+      "endLine": 77
+    },
+    "evidence": "function limparFormulario() {\n  form.reset();"
+  },
+  {
+    "id": "n20-f033",
+    "nodeId": "n20",
+    "front": "Como o projeto cria um aluno novo no JSON Server?",
+    "back": "Com `fetch` em POST, cabeçalho JSON e corpo em `JSON.stringify(aluno)`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 42,
+      "endLine": 48
+    },
+    "evidence": "await fetch(API_URL, {\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },"
+  },
+  {
+    "id": "n20-f034",
+    "nodeId": "n20",
+    "front": "Qual método HTTP o projeto usa para alterar um aluno existente?",
+    "back": "PATCH, enviado para `${API_URL}/${id}` com o corpo em JSON.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 50,
+      "endLine": 57
+    },
+    "evidence": "await fetch(`${API_URL}/${id}`, {\n    method: \"PATCH\","
+  },
+  {
+    "id": "n20-f035",
+    "nodeId": "n20",
+    "front": "Qual método HTTP remove um aluno no projeto?",
+    "back": "DELETE, enviado para `${API_URL}/${id}`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 59,
+      "endLine": 64
+    },
+    "evidence": "await fetch(`${API_URL}/${id}`, { method: \"DELETE\" });"
+  },
+  {
+    "id": "n20-f036",
+    "nodeId": "n20",
+    "front": "Quais recursos a parte prática da Prova 2 pede que sejam integrados?",
+    "back": "Consumo de APIs com fetch, manipulação do DOM, formulários e validações.",
+    "source": { "kind": "orientacao" },
+    "evidence": "manipulação de elementos HTML, tratamento de formulários e validações."
+  },
+  {
+    "id": "n20-f037",
+    "nodeId": "n20",
+    "front": "O que a parte analítica da Prova 2 avalia na leitura de código?",
+    "back": "Tipos de dados, operadores (igualdade estrita x ampla) e o fluxo assíncrono.",
+    "source": { "kind": "orientacao" },
+    "evidence": "observem atentamente os tipos de dados, o uso de operadores (como a diferença entre igualdade estrita e ampla) e o fluxo assíncrono das funções."
+  }
+]
