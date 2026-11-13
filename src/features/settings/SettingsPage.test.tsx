@@ -1,6 +1,7 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { THEME_KEY, applyTheme } from '../../lib/theme/theme';
 import {
   SAVE_KEY,
   createEmptySave,
@@ -11,6 +12,11 @@ import {
 } from '../../lib/storage';
 import { FIXED_NOW, renderWithProgress } from '../../test/renderWithProgress';
 import { SettingsPage } from './SettingsPage';
+
+afterEach(() => {
+  window.localStorage.removeItem(THEME_KEY);
+  delete document.documentElement.dataset.theme;
+});
 
 function persisted(storage: StorageLike): SaveV1 {
   const raw = storage.getItem(SAVE_KEY);
@@ -31,6 +37,26 @@ describe('SettingsPage', () => {
     for (const name of ['Meta diária', 'Cartas', 'Som', 'Dados']) {
       expect(screen.getByRole('region', { name })).toBeInTheDocument();
     }
+  });
+
+  it('switches the theme from Ajustes', async () => {
+    const user = userEvent.setup();
+    applyTheme('dark');
+    renderWithProgress(<SettingsPage />);
+
+    const appearance = screen.getByRole('region', { name: 'Aparência' });
+    const light = within(appearance).getByRole('radio', { name: 'Claro' });
+    const dark = within(appearance).getByRole('radio', { name: 'Escuro' });
+
+    await user.click(light);
+    expect(light).toBeChecked();
+    expect(document.documentElement.dataset.theme).toBe('light');
+    expect(window.localStorage.getItem(THEME_KEY)).toBe('light');
+
+    await user.click(dark);
+    expect(dark).toBeChecked();
+    expect(document.documentElement.dataset.theme).toBe('dark');
+    expect(window.localStorage.getItem(THEME_KEY)).toBe('dark');
   });
 
   it('keeps sound off by default', () => {
