@@ -1,0 +1,33 @@
+.landing { min-height: 100vh; background: var(--bg); color: var(--text); font-family: var(--font-body); }
+.landing__top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px; max-width: 960px; margin: 0 auto; }
+.landing__brand { display: inline-flex; align-items: center; gap: 12px; color: var(--text); text-decoration: none; font-family: var(--font-px); font-weight: 600; font-size: 20px; }
+.landing__brand:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
+.landing__main { max-width: 960px; margin: 0 auto; padding: 0 16px 64px; }
+.landing__main:focus { outline: none; }
+.landing__hero, .landing__end { display: grid; justify-items: start; gap: 16px; padding: 32px 0; }
+.landing__title { margin: 0; font-family: var(--font-px); font-weight: 600; font-size: clamp(28px, 7vw, 48px); line-height: 1.1; overflow-wrap: anywhere; }
+.landing__endtitle { margin: 0; font-family: var(--font-px); font-weight: 600; font-size: clamp(24px, 5vw, 32px); line-height: 1.2; }
+.landing__sub { margin: 0; max-width: 56ch; color: var(--muted); font-size: 18px; line-height: 1.5; }
+.landing__trail { list-style: none; margin: 0; padding: 0; display: grid; gap: 32px; position: relative; }
+.landing__trail::before { content: ''; position: absolute; top: 0; bottom: 0; left: 24px; width: 4px; background: var(--dither); }
+.landing__node { position: relative; display: flex; align-items: flex-start; gap: 16px; min-width: 0; }
+.landing__disc { flex: none; z-index: 1; width: 48px; height: 48px; display: grid; place-items: center; background: var(--panel); border: 2px solid var(--edge); color: var(--text); font-family: var(--font-px); font-weight: 600; font-size: 20px; clip-path: var(--notch); }
+.landing__card { flex: 1; min-width: 0; padding: 20px; display: grid; gap: 8px; }
+.landing__step { margin: 0; font-family: var(--font-px); font-weight: 600; font-size: 24px; }
+.landing__lead { margin: 0; color: var(--muted); }
+.landing__text { margin: 0; line-height: 1.5; overflow-wrap: anywhere; }
+.landing__text span, .landing__source { color: var(--muted); font-size: 14px; }
+.landing__source { margin: 0; }
+.landing__options { margin: 0; padding-left: 20px; font-family: var(--font-code); }
+.landing__code { margin: 0; padding: 12px; background: var(--bg); font: 14px var(--font-code); overflow-x: auto; }
+.landing__code code { color: var(--k-str); }
+@media (min-width: 720px) {
+  .landing__trail::before { left: 50%; margin-left: -2px; }
+  .landing__node { width: calc(50% + 24px); }
+  .landing__node--a { margin-right: auto; flex-direction: row; }
+  .landing__node--b { margin-left: auto; flex-direction: row-reverse; }
+  .landing__node--a .landing__disc { order: 2; margin-right: -24px; }
+  .landing__node--a .landing__card { order: 1; margin-right: 0; }
+  .landing__node--b .landing__disc { margin-left: -24px; }
+}
+@media (prefers-reduced-motion: reduce) { .landing * { transition: none !important; animation: none !important; } }

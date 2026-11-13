@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import {
   checkRoutePage,
   isBaselined,
+  REDIRECT_CHECKS,
   SMOKE_ROUTES,
+  THEMES,
   VIEWPORTS,
+  baselineProblems,
   type RoutePage,
 } from './smoke-routes';
 
@@ -42,10 +46,14 @@ function harness(
 }
 
 describe('rotas do smoke', () => {
-  it('cobre as 15 rotas do app', () => {
+  it('cobre as 18 rotas do app', () => {
     expect(SMOKE_ROUTES.map((route) => route.path)).toEqual([
       '/',
+      '/?inicio',
+      '/hoje',
+      '/trilha',
       '/no/n01',
+      '/no/n01?passo=ler',
       '/no/n01/quiz',
       '/no/n01/cartas',
       '/no/n15',
@@ -53,12 +61,22 @@ describe('rotas do smoke', () => {
       '/desafio/n19-c01',
       '/revisao',
       '/desafio/n01-c01',
-      '/laboratorios',
       '/laboratorios/lab-01',
-      '/estatisticas',
+      '/progresso',
       '/ajustes',
       '/boas-vindas',
       '/caminho-inexistente',
+    ]);
+  });
+
+  it('sonda os dois temas', () => {
+    expect([...THEMES]).toEqual(['dark', 'light']);
+  });
+
+  it('confere os redirects das rotas antigas', () => {
+    expect([...REDIRECT_CHECKS]).toEqual([
+      { from: '/estatisticas', to: '/progresso' },
+      { from: '/laboratorios', to: '/trilha' },
     ]);
   });
 
@@ -106,7 +124,7 @@ describe('checagem da página renderizada', () => {
     const calls: string[] = [];
 
     const result = await checkRoutePage(
-      { path: '/', label: 'árvore' },
+      { path: '/trilha', label: 'trilha' },
       harness(calls),
       [],
     );
@@ -119,7 +137,7 @@ describe('checagem da página renderizada', () => {
     const calls: string[] = [];
 
     const result = await checkRoutePage(
-      { path: '/estatisticas', label: 'estatísticas' },
+      { path: '/progresso', label: 'progresso' },
       harness(calls, {
         waitForHeading: async () => {
           calls.push('h1');
@@ -142,7 +160,7 @@ describe('checagem da página renderizada', () => {
     const calls: string[] = [];
 
     const result = await checkRoutePage(
-      { path: '/', label: 'árvore' },
+      { path: '/trilha', label: 'trilha' },
       harness(calls, {
         isRootBlank: async () => {
           calls.push('blank');
@@ -162,7 +180,7 @@ describe('checagem da página renderizada', () => {
     const calls: string[] = [];
 
     const result = await checkRoutePage(
-      { path: '/estatisticas', label: 'estatísticas' },
+      { path: '/progresso', label: 'progresso' },
       harness(calls, {
         measureOverflow: async () => {
           calls.push('overflow');
@@ -250,5 +268,34 @@ describe('checagem da página renderizada', () => {
     expect(result.failures).toEqual([
       { kind: 'axe', detail: expect.stringContaining('button-name') },
     ]);
+  });
+});
+
+describe('smoke-baseline.json', () => {
+  it('exige um motivo escrito e só tolera color-contrast', () => {
+    const entries = JSON.parse(
+      readFileSync('scripts/smoke-baseline.json', 'utf8'),
+    ) as { route: string; rule: string; reason?: string }[];
+    for (const entry of entries) {
+      expect(entry.rule).toBe('color-contrast');
+      expect(entry.reason?.trim()).toBeTruthy();
+    }
+  });
+});
+
+describe('baselineProblems', () => {
+  it('rejeita entrada sem motivo ou com regra diferente de color-contrast', () => {
+    expect(
+      baselineProblems([{ route: '/a', rule: 'color-contrast', reason: 'x' }]),
+    ).toEqual([]);
+    expect(
+      baselineProblems([{ route: '/a', rule: 'color-contrast' }]),
+    ).toHaveLength(1);
+    expect(
+      baselineProblems([{ route: '/a', rule: 'color-contrast', reason: ' ' }]),
+    ).toHaveLength(1);
+    expect(
+      baselineProblems([{ route: '/a', rule: 'button-name', reason: 'x' }]),
+    ).toHaveLength(1);
   });
 });

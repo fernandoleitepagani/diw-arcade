@@ -1,21 +1,23 @@
+import { useState, type CSSProperties } from 'react';
 import { Link } from 'react-router';
 import {
   getChallenges,
   getFlashcards,
+  getLab,
   getQuestions,
+  NODE_BY_ID,
   NODES,
   UNITS,
-  type NodeId,
 } from '../../content';
-import { StarRating } from '../../components/ui';
+import type { UnitId } from '../../content';
+import { Tag } from '../../components/pixel/Tag/Tag';
+import '../../components/pixel/PixelPanel/PixelPanel.css';
 import type { ProgressContent } from '../../lib/progress/events';
-import { getRecommendedNodeId } from '../../lib/progress/recommend';
-import {
-  getDueCountByNode,
-  getStars,
-} from '../../lib/progress/selectors';
 import type { SaveV1 } from '../../lib/storage';
-import { getNodeState, NODE_STATE_LABEL } from './nodeState';
+import { getLabProgress } from '../../lib/progress/selectors';
+import { NODE_STATE_LABEL, type NodeState } from './nodeState';
+import { NodeDisc, type DiscState } from './NodeDisc/NodeDisc';
+import { buildTrail } from './trailModel';
 import './SkillTree.css';
 
 /** Static content shaped for the progress selectors. */
@@ -36,117 +38,160 @@ export interface SkillTreeProps {
   now: Date;
 }
 
-/** Alternating lanes give the desktop list its winding shape. */
-const LANES = ['center', 'right', 'center', 'left'] as const;
+const DISC_STATE: Record<NodeState, DiscState> = {
+  nova: 'todo',
+  'em-progresso': 'current',
+  dominada: 'done',
+};
+
+/** Winding offsets, in the same 0 to 100 range as the prototype path. */
+const OFFSETS = ['0', '28%', '48%', '28%'] as const;
 
 function dueLabel(count: number): string {
   return `${count} ${count === 1 ? 'carta para revisar' : 'cartas para revisar'}`;
 }
 
 export function SkillTree({ save, now }: SkillTreeProps) {
-  const recommendedId = getRecommendedNodeId(save, TREE_CONTENT, now);
-  const dueByNode = getDueCountByNode(save, TREE_CONTENT, now);
+  const trail = buildTrail(save, TREE_CONTENT, now);
+  const [expanded, setExpanded] = useState<ReadonlySet<UnitId>>(new Set());
+
+  const toggle = (unitId: UnitId) =>
+    setExpanded((previous) => {
+      const next = new Set(previous);
+      if (!next.delete(unitId)) next.add(unitId);
+      return next;
+    });
 
   return (
     <div className="skill-tree">
-      {UNITS.map((unit) => (
-        <section
-          key={unit.id}
-          className="skill-tree__unit"
-          aria-labelledby={`unit-${unit.id}`}
-        >
-          <header className="skill-tree__banner">
-            <span className="skill-tree__banner-mark" aria-hidden="true">
-              {unit.id.slice(1)}
-            </span>
-            <span className="skill-tree__banner-body">
-              <span className="skill-tree__banner-kicker">
-                Unidade {unit.id.slice(1)}
-              </span>
-              <h2 className="skill-tree__unit-title" id={`unit-${unit.id}`}>
-                {unit.title}
-              </h2>
-            </span>
-            <span className="skill-tree__banner-count">
-              {unit.nodes.length} nós
-            </span>
-          </header>
+      {trail.map((entry) => {
+        const unit = UNITS.find((candidate) => candidate.id === entry.unitId)!;
+        const collapsible = entry.finished && !entry.current;
+        const open = !collapsible || expanded.has(entry.unitId);
+        const headingId = `unit-${unit.id}`;
 
-          <ul className="skill-tree__nodes">
-            {/* The line is decoration; the nodes themselves carry the meaning. */}
-            <svg
-              className="skill-tree__connector"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path d="M50 0 C80 6 80 17 50 24 C20 31 20 44 50 51 C80 58 80 72 50 79 C20 86 20 94 50 100" />
-            </svg>
-
-            {unit.nodes.map((nodeId, index) => {
-              const node = NODES.find((candidate) => candidate.id === nodeId);
-              if (!node) return null;
-
-              const recommended = node.id === recommendedId;
-              const stars = getStars(save, node.id, TREE_CONTENT);
-              const state = getNodeState(save, node.id, TREE_CONTENT);
-              const due = dueByNode[node.id as NodeId] ?? 0;
-              const lane = LANES[index % LANES.length];
-              const classes = [
-                'skill-node',
-                `skill-node--${state}`,
-                recommended ? 'skill-node--recommended' : '',
-              ]
-                .filter(Boolean)
-                .join(' ');
-
-              return (
-                <li
-                  key={node.id}
-                  className={`skill-tree__item skill-tree__item--${lane}`}
+        return (
+          <section
+            key={unit.id}
+            id={headingId}
+            className="skill-tree__unit"
+            aria-labelledby={`${headingId}-title`}
+          >
+            <h2 className="skill-tree__unit-title" id={`${headingId}-title`}>
+              {collapsible ? (
+                <button
+                  type="button"
+                  className="px skill-tree__toggle"
+                  aria-expanded={open}
+                  aria-controls={`${headingId}-nodes`}
+                  onClick={() => toggle(unit.id)}
                 >
-                  <Link
-                    className={classes}
-                    to={`/no/${node.id}`}
-                    data-node-id={node.id}
+                  <NodeDisc unit={unit.id} state="done" number="" />
+                  <span className="skill-tree__toggle-text">
+                    <span className="skill-tree__unit-name">{unit.title}</span>
+                    <span className="skill-tree__unit-count">
+                      {entry.nodes.length} de {entry.nodes.length} nós, concluída
+                    </span>
+                  </span>
+                </button>
+              ) : (
+                <Tag unit={unit.id}>{unit.title}</Tag>
+              )}
+            </h2>
+
+            {open ? (
+              <div id={`${headingId}-nodes`}>
+                <ul className="skill-tree__nodes">
+                  {/* The dotted line is decoration; the nodes carry the meaning. */}
+                  <svg
+                    className="skill-tree__path"
+                    viewBox="0 0 100 100"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                    focusable="false"
                   >
-                    <span className="skill-node__orb" aria-hidden="true">
-                      <span className="skill-node__index">
-                        {node.id.slice(1)}
-                      </span>
-                    </span>
-                    <span className="skill-node__body">
-                      <span className="skill-node__title">{node.title}</span>
-                      <span className="skill-node__status">
-                        <span
-                          className={`skill-node__state skill-node__state--${state}`}
+                    <path d="M10 0 C60 8 60 22 10 33 C-20 44 60 55 10 66 C-20 78 60 90 10 100" />
+                  </svg>
+                  {entry.nodes.map((item, index) => {
+                    const node = NODE_BY_ID[item.id];
+                    return (
+                      <li
+                        key={item.id}
+                        className="skill-tree__item"
+                        style={{ '--offset': OFFSETS[index % OFFSETS.length] } as CSSProperties}
+                      >
+                        <Link
+                          className={`px skill-node skill-node--${item.state}`}
+                          to={`/no/${item.id}`}
+                          data-node-id={item.id}
                         >
-                          {NODE_STATE_LABEL[state]}
-                        </span>
-                        {due > 0 ? (
-                          <span className="skill-node__due">
-                            {dueLabel(due)}
+                          <NodeDisc
+                            unit={unit.id}
+                            state={DISC_STATE[item.state]}
+                            number={item.number}
+                          />
+                          <span className="skill-node__body">
+                            <span className="skill-node__title">{node.title}</span>
+                            <span className="skill-node__status">
+                              <span className="skill-node__state">
+                                {NODE_STATE_LABEL[item.state]}
+                              </span>
+                              {item.due > 0 ? (
+                                <span className="skill-node__due">
+                                  {dueLabel(item.due)}
+                                </span>
+                              ) : null}
+                              {item.recommended ? (
+                                <span className="skill-node__tag">Recomendado</span>
+                              ) : null}
+                            </span>
                           </span>
-                        ) : null}
-                        {recommended ? (
-                          <span className="skill-node__tag">Recomendado</span>
-                        ) : null}
-                      </span>
-                      <StarRating
-                        modes={stars}
-                        showLabels
-                        size="lg"
-                        className="skill-node__stars"
-                      />
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      ))}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+
+                {entry.projects.length > 0 ? (
+                  <div className="skill-tree__projects">
+                    <h3 className="skill-tree__projects-title">Projetos</h3>
+                    <ul className="skill-tree__project-list">
+                      {entry.projects.map((labId) => {
+                        const lab = getLab(labId);
+                        const title = lab?.title ?? labId;
+                        const { done, total } = getLabProgress(save, labId, lab);
+                        const status =
+                          done === 0
+                            ? 'Não iniciado'
+                            : total > 0 && done >= total
+                              ? 'Concluído'
+                              : `${done} de ${total} passos`;
+                        return (
+                          <li key={labId}>
+                            <Link
+                              className="px skill-tree__project"
+                              to={`/laboratorios/${labId}`}
+                              aria-describedby={`project-${labId}-status`}
+                            >
+                              <span className="skill-node__title">{title}</span>
+                            </Link>
+                            <span
+                              className="skill-tree__unit-count skill-tree__project-status"
+                              id={`project-${labId}-status`}
+                            >
+                              {status}
+                            </span>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+          </section>
+        );
+      })}
     </div>
   );
 }

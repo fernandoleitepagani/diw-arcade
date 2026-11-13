@@ -30,6 +30,14 @@ function activeDayKeys(save: SaveV1): string[] {
     .map(([day]) => day);
 }
 
+export function isPrimerRead(save: SaveV1, nodeId: NodeId): boolean {
+  return Object.hasOwn(save.primersRead, nodeId);
+}
+
+export function getPrimersRead(save: SaveV1): Set<string> {
+  return new Set(Object.keys(save.primersRead));
+}
+
 export function getLevel(save: SaveV1): number {
   return levelForXp(save.xpTotal);
 }

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
 import { BIT_LINES } from '../../content/copy';
-import type { McqQuestion } from '../../content/schema';
+import type { McqQuestion, Question } from '../../content/schema';
 import { fixtureQuestions } from '../../test/fixtures';
 import { QuizRound } from './QuizRound';
 
@@ -11,7 +11,9 @@ const mcqQuestions = fixtureQuestions.filter(
   (question): question is McqQuestion => question.type === 'mcq',
 );
 
-function renderRound(questions = mcqQuestions.slice(0, 2)) {
+function renderRound(
+  questions: readonly Question[] = mcqQuestions.slice(0, 2),
+) {
   const dispatch = vi.fn();
   const onRestart = vi.fn();
   const onExit = vi.fn();
@@ -64,7 +66,7 @@ describe('QuizRound', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/2 de 2/)).toBeInTheDocument();
     expect(screen.getByText(/100%/)).toBeInTheDocument();
-    expect(screen.getByText('+30')).toBeInTheDocument();
+    expect(screen.getByText('+30 XP')).toBeInTheDocument();
     expect(dispatch).toHaveBeenCalledWith({
       type: 'quiz/roundComplete',
       nodeId: 'n07',
@@ -92,7 +94,7 @@ describe('QuizRound', () => {
         'A propriedade color atua diretamente na cor do texto.',
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText('Fonte: aula-172, slide 2')).toBeInTheDocument();
+    expect(screen.getByText('Fonte: aula 172, slide 2')).toBeInTheDocument();
   });
 
   it('usa uma fala do Bit no feedback de acerto', async () => {
@@ -154,9 +156,9 @@ describe('QuizRound', () => {
     await user.keyboard('{Enter}');
     await user.keyboard('{Enter}');
 
-    expect(
-      screen.getByRole('link', { name: 'Próximo passo' }),
-    ).toHaveAttribute('href', '/no/n07');
+    const links = screen.getAllByRole('link');
+    expect(links).toHaveLength(1);
+    expect(links[0]).toHaveAttribute('href', '/no/n01?passo=praticar');
   });
 
   it('mostra a URL, o HTML de exemplo e o JavaScript acima das alternativas', () => {
@@ -282,3 +284,78 @@ function codeQuestion(): McqQuestion {
     answer: 0,
   };
 }
+
+describe('QuizRound atalhos e feedback', () => {
+  const tf = fixtureQuestions.filter((q) => q.type === 'tf').slice(0, 1);
+  const fill = fixtureQuestions.filter((q) => q.type === 'fill').slice(0, 1);
+
+  it('letras A a D escolhem as alternativas 1 a 4 no mcq', async () => {
+    const user = userEvent.setup();
+    renderRound([mcqQuestions[0] as McqQuestion]);
+
+    await user.keyboard('b');
+    expect(screen.getAllByRole('radio')[1]).toBeChecked();
+    await user.keyboard('D');
+    expect(screen.getAllByRole('radio')[3]).toBeChecked();
+    await user.keyboard('a');
+    expect(screen.getAllByRole('radio')[0]).toBeChecked();
+  });
+
+  it('em verdadeiro ou falso só A e B escolhem', async () => {
+    const user = userEvent.setup();
+    renderRound(tf);
+
+    await user.keyboard('b');
+    expect(screen.getAllByRole('radio')[1]).toBeChecked();
+    await user.keyboard('c');
+    expect(screen.getAllByRole('radio')[1]).toBeChecked();
+    await user.keyboard('a');
+    expect(screen.getAllByRole('radio')[0]).toBeChecked();
+    await user.keyboard('2');
+    expect(screen.getAllByRole('radio')[1]).toBeChecked();
+  });
+
+  it('não dispara atalhos ao digitar em um campo de texto', async () => {
+    const user = userEvent.setup();
+    renderRound(fill);
+
+    const input = screen.getByRole('textbox', { name: 'Sua resposta' });
+    await user.type(input, 'abcd1');
+    expect(input).toHaveValue('abcd1');
+    expect(screen.queryAllByRole('radio')).toHaveLength(0);
+  });
+
+  it('mostra a dica em português', () => {
+    renderRound([mcqQuestions[0] as McqQuestion]);
+
+    expect(
+      screen.getByText('Teclas A a D escolhem; Enter responde.'),
+    ).toBeInTheDocument();
+  });
+
+  it('o feedback fica numa barra de status com veredito, explicação e fonte', async () => {
+    const user = userEvent.setup();
+    renderRound([mcqQuestions[0] as McqQuestion]);
+
+    await user.keyboard('a');
+    await user.keyboard('{Enter}');
+
+    const bar = screen.getByRole('status');
+    expect(within(bar).getByText('Correto!')).toBeInTheDocument();
+    expect(within(bar).getByText('Fonte: aula 172, slide 2')).toBeInTheDocument();
+    expect(
+      within(bar).getByRole('button', { name: 'Continuar' }),
+    ).toHaveFocus();
+  });
+
+  it('usa um sprite de pixel no feedback, sem o mascote', async () => {
+    const user = userEvent.setup();
+    renderRound([mcqQuestions[0] as McqQuestion]);
+
+    await user.keyboard('a');
+    await user.keyboard('{Enter}');
+
+    expect(document.querySelector('.mascot')).toBeNull();
+    expect(document.querySelector('.quiz-round__sprite svg')).not.toBeNull();
+  });
+});

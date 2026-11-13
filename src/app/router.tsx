@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter, type RouteObject } from 'react-router';
+import { createBrowserRouter, Navigate, type RouteObject } from 'react-router';
 import { PageSkeleton } from '../components/ui';
+import { HomeRoute } from '../features/landing/HomeRoute';
 import { Layout } from './Layout';
 import { RequireOnboarding } from './RequireOnboarding';
 import { RouteError } from './RouteError';
@@ -21,11 +22,6 @@ const FlashcardsPage = lazy(() =>
 const LabGuidePage = lazy(() =>
   import('../features/labs/LabGuidePage').then((module) => ({
     default: module.LabGuidePage,
-  })),
-);
-const LabsPage = lazy(() =>
-  import('../features/labs/LabsPage').then((module) => ({
-    default: module.LabsPage,
   })),
 );
 const OnboardingPage = lazy(() =>
@@ -58,6 +54,11 @@ const TreePage = lazy(() =>
     default: module.TreePage,
   })),
 );
+const TodayPage = lazy(() =>
+  import('../features/today/TodayPage').then((module) => ({
+    default: module.TodayPage,
+  })),
+);
 const NotFoundPage = lazy(() =>
   import('./NotFoundPage').then((module) => ({
     default: module.NotFoundPage,
@@ -74,6 +75,7 @@ export const routes: RouteObject[] = [
     ),
     errorElement: routeError,
   },
+  { path: '/', element: <HomeRoute />, errorElement: routeError },
   {
     element: <RequireOnboarding />,
     children: [
@@ -81,12 +83,12 @@ export const routes: RouteObject[] = [
         path: '/',
         element: <Layout />,
         children: [
-          { index: true, element: <TreePage />, errorElement: routeError },
+          { path: 'hoje', element: <TodayPage />, errorElement: routeError },
+          { path: 'trilha', element: <TreePage />, errorElement: routeError },
           { path: 'no/:nodeId', element: <NodePage />, errorElement: routeError },
           {
             path: 'laboratorios',
-            element: <LabsPage />,
-            errorElement: routeError,
+            element: <Navigate to="/trilha" replace />,
           },
           {
             path: 'laboratorios/:labId',
@@ -94,9 +96,13 @@ export const routes: RouteObject[] = [
             errorElement: routeError,
           },
           {
-            path: 'estatisticas',
+            path: 'progresso',
             element: <StatsPage />,
             errorElement: routeError,
+          },
+          {
+            path: 'estatisticas',
+            element: <Navigate to="/progresso" replace />,
           },
           {
             path: 'ajustes',

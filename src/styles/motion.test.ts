@@ -5,11 +5,7 @@ import { describe, expect, it } from 'vitest';
 const CSS_ROOT = 'src';
 const MAX_DURATION_MS = 600;
 
-// Ambient effects loop on purpose. The spec exempts them from the duration
-// rule (they are still disabled under prefers-reduced-motion: reduce).
 const ALLOWLIST = new Set([
-  'src/components/effects/Aurora/Aurora.css',
-  'src/components/effects/ShinyText/ShinyText.css',
   // The recommended-node glow (2.8s) predates the motion gate. Task 11
   // (Home path map) owns the replacement pulse and must keep it under 600ms.
   'src/features/tree/SkillTree.css',

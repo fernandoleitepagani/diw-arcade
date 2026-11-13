@@ -2,10 +2,12 @@ import { Component, useState } from 'react';
 import type { ChangeEvent, ReactNode } from 'react';
 import { useProgress } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
-import { Button, Card, PageHeader } from '../../components/ui';
+import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
+import { Button, PageHeader } from '../../components/ui';
 import { toDayKey } from '../../lib/game/days';
 import { createSfx } from '../../lib/sound/sfx';
 import { exportSave, parseImport, type SaveV1 } from '../../lib/storage';
+import { setTheme, useTheme, type Theme } from '../../lib/theme/theme';
 import './SettingsPage.css';
 
 const GOALS = [
@@ -13,6 +15,11 @@ const GOALS = [
   { value: 50, label: 'Regular (50 XP)' },
   { value: 100, label: 'Intenso (100 XP)' },
 ] as const;
+
+const THEMES: readonly { value: Theme; label: string }[] = [
+  { value: 'dark', label: 'Escuro' },
+  { value: 'light', label: 'Claro' },
+];
 
 const NEW_CARD_CAPS = [10, 20, 30, 50] as const;
 const REVIEW_CAPS = [50, 100, 200, 500] as const;
@@ -64,9 +71,9 @@ class SettingsBoundary extends Component<
       return (
         <section className="page settings">
           <PageHeader title="Ajustes" />
-          <Card as="section" className="settings__group">
+          <PixelPanel as="section" className="settings__group">
             <p>O progresso não está disponível neste momento.</p>
-          </Card>
+          </PixelPanel>
         </section>
       );
     }
@@ -91,6 +98,7 @@ function SettingsContent() {
   const [pendingImport, setPendingImport] = useState<SaveV1 | null>(null);
   const [resetWord, setResetWord] = useState('');
   const [notice, setNotice] = useState<string | null>(null);
+  const theme = useTheme();
 
   function updateSettings(patch: Partial<SaveV1['settings']>) {
     dispatch({ type: 'settings/update', patch });
@@ -161,9 +169,31 @@ function SettingsContent() {
       />
 
       <div className="settings__groups">
-        <Card
+        <PixelPanel
           as="section"
-          tone="accent"
+          className="settings__group"
+          aria-labelledby="settings-appearance"
+        >
+          <h2 id="settings-appearance">Aparência</h2>
+          <fieldset className="settings__goals settings__themes">
+            <legend className="settings__sr-only">Aparência</legend>
+            {THEMES.map(({ value, label }) => (
+              <label className="settings__goal" key={value}>
+                <input
+                  type="radio"
+                  name="theme"
+                  value={value}
+                  checked={theme === value}
+                  onChange={() => setTheme(value)}
+                />
+                <span>{label}</span>
+              </label>
+            ))}
+          </fieldset>
+        </PixelPanel>
+
+        <PixelPanel
+          as="section"
           className="settings__group"
           aria-labelledby="settings-goal"
         >
@@ -187,9 +217,9 @@ function SettingsContent() {
               </label>
             ))}
           </fieldset>
-        </Card>
+        </PixelPanel>
 
-        <Card
+        <PixelPanel
           as="section"
           className="settings__group"
           aria-labelledby="settings-cards"
@@ -233,9 +263,9 @@ function SettingsContent() {
               </select>
             </div>
           </div>
-        </Card>
+        </PixelPanel>
 
-        <Card
+        <PixelPanel
           as="section"
           className="settings__group"
           aria-labelledby="settings-sound"
@@ -263,9 +293,9 @@ function SettingsContent() {
               Testar som
             </Button>
           </div>
-        </Card>
+        </PixelPanel>
 
-        <Card
+        <PixelPanel
           as="section"
           className="settings__group"
           aria-labelledby="settings-data"
@@ -362,7 +392,7 @@ function SettingsContent() {
               </Button>
             </div>
           </div>
-        </Card>
+        </PixelPanel>
       </div>
 
       <p className="settings__notice" role="status">

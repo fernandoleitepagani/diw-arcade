@@ -6,6 +6,7 @@ export const DEFAULT_DESCRIPTION =
   'Pratique Desenvolvimento de Interfaces Web como num fliperama: trilha, quiz, cartas e desafios de código no navegador.';
 
 export const PAGE_DESCRIPTIONS = {
+  Hoje: 'Seu próximo passo na trilha de Desenvolvimento de Interfaces Web, escolhido a partir do seu progresso.',
   'Árvore':
     'Sua trilha de Desenvolvimento de Interfaces Web: veja os nós, as estrelas de domínio e o próximo passo recomendado.',
   Revisão:
@@ -48,7 +49,7 @@ function setDescription(description: string) {
 
 export function usePageTitle(page?: string) {
   useEffect(() => {
-    document.title = page ? `${PREFIX} — ${page}` : PREFIX;
+    document.title = page ? `${PREFIX}: ${page}` : PREFIX;
 
     setDescription(
       page !== undefined && Object.hasOwn(PAGE_DESCRIPTIONS, page)

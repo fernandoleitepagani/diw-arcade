@@ -76,7 +76,7 @@ describe('SessionLayout', () => {
 
     await waitFor(() =>
       expect(
-        screen.getByRole('heading', { level: 1, name: 'DIW Arcade' }),
+        screen.getByRole('heading', { level: 1, name: 'Hoje' }),
       ).toBeInTheDocument(),
     );
   });
@@ -84,15 +84,16 @@ describe('SessionLayout', () => {
   it('keeps a single quiz progress bar and puts the header in the content column', async () => {
     const { container } = renderAt('/no/n07/quiz');
 
-    const bars = screen.getAllByRole('progressbar');
-    expect(bars).toHaveLength(1);
-    expect(bars[0]).toHaveAccessibleName('Progresso da sessão');
-    expect(bars[0]).toHaveAttribute('aria-valuenow', '1');
-
     const heading = await screen.findByRole('heading', {
       level: 1,
       name: 'Quiz',
     });
+    const bars = screen.getAllByRole('progressbar');
+    expect(bars).toHaveLength(1);
+    expect(bars[0]).toHaveAccessibleName('Progresso da sessão');
+    await waitFor(() =>
+      expect(bars[0]).toHaveAttribute('aria-valuenow', '1'),
+    );
     const column = heading.closest('.session-page');
     expect(column).not.toBeNull();
     expect(column).toContainElement(container.querySelector('.quiz-round'));
@@ -136,6 +137,21 @@ describe('SessionLayout', () => {
       expect(
         screen.getByRole('heading', { level: 1, name: 'Destino' }),
       ).toBeInTheDocument(),
+    );
+  });
+
+  it('uses a segmented progress bar and keeps the main focus target', async () => {
+    const { container } = renderConfirmingSession();
+
+    expect(container.querySelectorAll('.seg i')).toHaveLength(4);
+    expect(
+      screen.getByRole('progressbar', { name: 'Progresso da sessão' }),
+    ).toHaveAttribute('aria-valuenow', '1');
+    expect(
+      screen.getByRole('link', { name: 'Pular para o conteúdo' }),
+    ).toHaveAttribute('href', '#conteudo');
+    await waitFor(() =>
+      expect(container.querySelector('#conteudo')).toHaveFocus(),
     );
   });
 });

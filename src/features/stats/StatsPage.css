@@ -19,8 +19,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-4) var(--space-5);
-  border-style: dashed;
-  background: var(--surface);
+  padding: var(--space-5);
 }
 
 .stats__empty p {

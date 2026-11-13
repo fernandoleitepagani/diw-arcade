@@ -1,6 +1,9 @@
 import { Link } from 'react-router';
 import { usePageTitle } from '../../app/usePageTitle';
-import { Card, Mascot, PageHeader, ProgressRing } from '../../components/ui';
+import { Bit } from '../../components/pixel/Bit/Bit';
+import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
+import { SegBar } from '../../components/pixel/SegBar/SegBar';
+import { PageHeader } from '../../components/ui';
 import { getLabs, type LabGuide } from '../../content';
 import { pickLine } from '../../content/copy';
 import { getLabProgress } from '../../lib/progress';
@@ -28,7 +31,7 @@ export function LabsPage({ labs }: LabsPageProps = {}) {
       {guides.length === 0 ? (
         <div className="labs-empty">
           <p>Conteúdo em breve</p>
-          <Mascot mood="idle" line={pickLine('empty', 0)} />
+          <Bit line={pickLine('empty', 0)} scale={12} />
         </div>
       ) : (
         <ul className="labs-grid">
@@ -41,9 +44,8 @@ export function LabsPage({ labs }: LabsPageProps = {}) {
 
             return (
               <li key={lab.id}>
-                <Card
+                <PixelPanel
                   as="article"
-                  interactive
                   className="labs-card"
                   aria-labelledby={`labs-${lab.id}`}
                 >
@@ -51,17 +53,15 @@ export function LabsPage({ labs }: LabsPageProps = {}) {
                     <h2 className="labs-card__title" id={`labs-${lab.id}`}>
                       <Link to={`/laboratorios/${lab.id}`}>{lab.title}</Link>
                     </h2>
-                    <ProgressRing
-                      className="labs-card__ring"
-                      label={`Passos concluídos de ${lab.title}`}
-                      max={total}
-                      size={56}
-                      stroke={6}
-                      tone={complete ? 'success' : 'xp'}
-                      value={done}
-                    >
+                    <div className="labs-card__ring">
+                      <SegBar
+                        label={`Passos concluídos de ${lab.title}`}
+                        on={done}
+                        total={total}
+                        color={complete ? 'var(--ok)' : undefined}
+                      />
                       <span aria-hidden="true">{percent}%</span>
-                    </ProgressRing>
+                    </div>
                   </div>
 
                   <p className="labs-card__summary">{lab.summary}</p>
@@ -69,7 +69,7 @@ export function LabsPage({ labs }: LabsPageProps = {}) {
                   <p className="labs-card__progress">
                     {done} de {total} passos
                   </p>
-                </Card>
+                </PixelPanel>
               </li>
             );
           })}

@@ -1,0 +1,67 @@
+.lesson-stepper {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-2, 8px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lesson-stepper__link {
+  position: relative;
+  display: grid;
+  gap: 2px;
+  min-height: 56px;
+  padding: 8px 12px;
+  background: var(--edge);
+  color: var(--text);
+  text-decoration: none;
+  clip-path: var(--notch);
+}
+
+.lesson-stepper__link::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  z-index: 0;
+  background: var(--panel);
+  clip-path: var(--notch);
+}
+
+.lesson-stepper__link > * {
+  position: relative;
+}
+
+.lesson-stepper__item[aria-current='step'] .lesson-stepper__link {
+  background: var(--text);
+}
+
+.lesson-stepper__num {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+}
+
+.lesson-stepper__label {
+  font-weight: 600;
+}
+
+.lesson-stepper__status {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.lesson-stepper__item--indisponivel .lesson-stepper__label {
+  color: var(--muted);
+}
+
+/* Ring drawn inside the clip-path so it is not clipped. */
+.lesson-stepper__link:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -6px;
+}
+
+@media (max-width: 40rem) {
+  .lesson-stepper {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -8,8 +8,11 @@ import AxeBuilder from '@axe-core/playwright';
 import { chromium, type Browser, type LaunchOptions, type Page } from 'playwright';
 import {
   checkRoutePage,
+  REDIRECT_CHECKS,
   SMOKE_ROUTES,
+  THEMES,
   VIEWPORTS,
+  type SmokeTheme,
   type Finding,
   type ProbeKind,
   type RoutePage,
@@ -310,7 +313,8 @@ function watchPage(page: Page, origin: string): RoutePage {
   };
 }
 
-function seedScript(route: SmokeRoute): string {
+function seedScript(route: SmokeRoute, theme: SmokeTheme): string {
+  const themeAction = `localStorage.setItem('diw-theme', ${JSON.stringify(theme)});`;
   const action =
     route.seed === 'fresh'
       ? `localStorage.removeItem(${JSON.stringify(SAVE_KEY)});`
@@ -327,6 +331,7 @@ function seedScript(route: SmokeRoute): string {
   // localStorage lança SecurityError por causa da origem opaca.
   return `if (window === window.top) {
   try {
+    ${themeAction}
     ${action}
   } catch {
     // localStorage indisponível: a rota decide o estado inicial.
@@ -339,6 +344,7 @@ async function checkRoute(
   baseUrl: string,
   route: SmokeRoute,
   viewport: Viewport,
+  theme: SmokeTheme,
 ): Promise<RouteCheckResult> {
   const context = await browser.newContext({
     viewport: { width: viewport.width, height: viewport.height },
@@ -349,7 +355,7 @@ async function checkRoute(
     const page = await context.newPage();
     const routePage = watchPage(page, new URL(baseUrl).origin);
 
-    await context.addInitScript(seedScript(route));
+    await context.addInitScript(seedScript(route, theme));
     await page.goto(`${baseUrl}${route.path}`, { waitUntil: 'load' });
 
     return await checkRoutePage(route, routePage, BASELINE);
@@ -376,30 +382,54 @@ async function runSmoke(): Promise<number> {
 
     for (const route of SMOKE_ROUTES) {
       for (const viewport of VIEWPORTS) {
-        const result = await checkRoute(browser, server.url, route, viewport);
-        baselined += result.baselined;
-
-        if (result.failures.length > 0) {
-          failures.push(
-            `smoke: ${route.path} @ ${viewport.width}px (${route.label})`,
+        for (const theme of THEMES) {
+          const result = await checkRoute(
+            browser,
+            server.url,
+            route,
+            viewport,
+            theme,
           );
-          for (const finding of result.failures) {
-            failures.push(`  - ${finding.kind}: ${finding.detail}`);
+          baselined += result.baselined;
+
+          if (result.failures.length > 0) {
+            failures.push(
+              `smoke: ${route.path} @ ${viewport.width}px ${theme} (${route.label})`,
+            );
+            for (const finding of result.failures) {
+              failures.push(`  - ${finding.kind}: ${finding.detail}`);
+            }
           }
         }
+      }
+    }
+
+    for (const redirect of REDIRECT_CHECKS) {
+      const context = await browser.newContext();
+      try {
+        await context.addInitScript(
+          seedScript({ path: redirect.from, label: 'redirect' }, 'dark'),
+        );
+        const page = await context.newPage();
+        await page.goto(`${server.url}${redirect.from}`, { waitUntil: 'load' });
+        await page.waitForURL(`**${redirect.to}`, { timeout: PROBE_WAIT_MS });
+      } catch {
+        failures.push(`smoke: ${redirect.from} não redireciona para ${redirect.to}`);
+      } finally {
+        await context.close();
       }
     }
 
     if (failures.length > 0) {
       console.error(failures.join('\n'));
       console.error(
-        `smoke: ${SMOKE_ROUTES.length} rotas x ${VIEWPORTS.length} larguras — falhas acima`,
+        `smoke: ${SMOKE_ROUTES.length} rotas x ${VIEWPORTS.length} larguras x ${THEMES.length} temas + ${REDIRECT_CHECKS.length} redirects — falhas acima`,
       );
       return 1;
     }
 
     console.log(
-      `smoke: ${SMOKE_ROUTES.length} rotas x ${VIEWPORTS.length} larguras OK`,
+      `smoke: ${SMOKE_ROUTES.length} rotas x ${VIEWPORTS.length} larguras x ${THEMES.length} temas + ${REDIRECT_CHECKS.length} redirects OK`,
     );
     if (baselined > 0) {
       console.log(`smoke: ${baselined} violação(ões) conhecida(s) na baseline`);

@@ -101,8 +101,10 @@ describe('ConfirmDialog', () => {
 });
 
 describe('SessionSummary', () => {
-  it('renders the title, XP, stats and next step link', () => {
-    render(
+  const next = { label: 'Revisar 3 cartas', href: '/revisao' };
+
+  function renderSummary(extra: Record<string, unknown> = {}) {
+    return render(
       <MemoryRouter>
         <SessionSummary
           title="Rodada concluída"
@@ -111,25 +113,44 @@ describe('SessionSummary', () => {
             { label: 'Acertos de primeira', value: '2 de 2 (100%)' },
             { label: 'Precisão', value: '100%' },
           ]}
-          starsBefore={{ quiz: false, cards: false, code: false }}
-          starsAfter={{ quiz: true, cards: true, code: false }}
-          nextHref="/no/n02"
-          mascotMood="happy"
+          next={next}
+          secondary={<button type="button">Nova rodada</button>}
+          {...extra}
         />
       </MemoryRouter>,
     );
+  }
+
+  it('renders title, plain XP, stats and a single primary link from the selector', () => {
+    renderSummary();
 
     expect(
       screen.getByRole('heading', { level: 2, name: 'Rodada concluída' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('+30')).toBeInTheDocument();
-    expect(screen.getByText('Acertos de primeira')).toBeInTheDocument();
+    expect(screen.getByText('+30 XP')).toBeInTheDocument();
     expect(screen.getByText('2 de 2 (100%)')).toBeInTheDocument();
-    expect(screen.getByText('Precisão')).toBeInTheDocument();
-    expect(screen.getByText('Estrelas conquistadas')).toBeInTheDocument();
 
-    const next = screen.getByRole('link', { name: 'Próximo passo' });
-    expect(next).toHaveAttribute('href', '/no/n02');
+    const links = screen.getAllByRole('link');
+    expect(links).toHaveLength(1);
+    expect(links[0]).toHaveTextContent('Revisar 3 cartas');
+    expect(links[0]).toHaveAttribute('href', '/revisao');
+    expect(links[0]).toHaveClass('primary');
+    expect(screen.getByRole('button', { name: 'Nova rodada' })).toBeInTheDocument();
+  });
+
+  it('omits the stars block when starsAfter is absent', () => {
+    renderSummary();
+    expect(screen.queryByText('Estrelas conquistadas')).not.toBeInTheDocument();
+  });
+
+  it('shows stars when starsAfter is given', () => {
+    renderSummary({
+      starsBefore: { quiz: false, cards: false, code: false },
+      starsAfter: { quiz: true, cards: false, code: false },
+    });
+    expect(
+      screen.getByRole('img', { name: 'Estrelas conquistadas: quiz' }),
+    ).toBeInTheDocument();
   });
 });
 

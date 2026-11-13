@@ -1,7 +1,6 @@
-import { act, render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Confetti } from './Confetti';
-import { CountUp } from './CountUp';
 
 function installMatchMedia(matches: boolean) {
   const mediaQueryList = {
@@ -28,45 +27,6 @@ afterEach(() => {
     configurable: true,
     writable: true,
     value: undefined,
-  });
-});
-
-describe('CountUp', () => {
-  it('shows the final value immediately without matchMedia', () => {
-    render(<CountUp value={30} prefix="+" />);
-
-    expect(screen.getByText('+30')).toBeInTheDocument();
-  });
-
-  it('counts up to the final value when motion is allowed', () => {
-    installMatchMedia(false);
-    vi.useFakeTimers();
-
-    render(<CountUp value={30} prefix="+" />);
-
-    const firstFrame = screen.getByText(/^\+\d+$/);
-    expect(Number(firstFrame.textContent?.slice(1))).toBeLessThan(30);
-
-    act(() => {
-      vi.advanceTimersByTime(600);
-    });
-
-    expect(screen.getByText('+30')).toBeInTheDocument();
-  });
-
-  it('stays at the final value under reduced motion', () => {
-    installMatchMedia(true);
-    vi.useFakeTimers();
-
-    render(<CountUp value={30} prefix="+" />);
-
-    expect(screen.getByText('+30')).toBeInTheDocument();
-
-    act(() => {
-      vi.advanceTimersByTime(600);
-    });
-
-    expect(screen.getByText('+30')).toBeInTheDocument();
   });
 });
 

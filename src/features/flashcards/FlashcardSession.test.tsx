@@ -61,7 +61,7 @@ describe('FlashcardSession', () => {
     await user.keyboard(' ');
 
     expect(screen.getByText(card.back)).toBeInTheDocument();
-    expect(screen.getByText('Fonte: aula-172, slide 2')).toBeInTheDocument();
+    expect(screen.getByText('Fonte: aula 172, slide 2')).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Mostrar resposta' }),
     ).not.toBeInTheDocument();
@@ -136,9 +136,9 @@ describe('FlashcardSession', () => {
     expect(screen.getByText('Lembradas')).toBeInTheDocument();
     expect(screen.getByText('1 de 1')).toBeInTheDocument();
     expect(screen.getByText('1 carta revisada')).toBeInTheDocument();
-    expect(screen.getByText('+5')).toBeInTheDocument();
+    expect(screen.getAllByText('+5 XP').length).toBeGreaterThan(0);
     expect(
-      screen.getByRole('link', { name: 'Próximo passo' }),
+      screen.getByRole('link', { name: /Ler o resumo|Praticar|Fixar|Construir|Revisar|Abrir a trilha|Rever/ }),
     ).toBeInTheDocument();
     expect(screen.getByText(/Próxima revisão: em/)).toBeInTheDocument();
   });
@@ -178,7 +178,7 @@ describe('FlashcardSession', () => {
     });
 
     expect(
-      screen.getByText('Novas hoje: 0/10 · Revisões hoje: 0/100'),
+      screen.getByText('Novas hoje: 0/10, revisões hoje: 0/100'),
     ).toBeInTheDocument();
     expect(screen.getByText('10 restantes')).toBeInTheDocument();
   });
@@ -193,12 +193,12 @@ describe('FlashcardSession', () => {
     });
 
     expect(
-      screen.getByText('Novas hoje: 0/20 · Revisões hoje: 0/100'),
+      screen.getByText('Novas hoje: 0/20, revisões hoje: 0/100'),
     ).toBeInTheDocument();
     expect(screen.queryByText(/Limite diário atingido/)).not.toBeInTheDocument();
 
     const limit = screen.getByRole('link', {
-      name: 'Limite diário: 20 de 25 cartas hoje — ajuste em Ajustes',
+      name: 'Limite diário: 20 de 25 cartas hoje, ajuste em Ajustes',
     });
     expect(limit).toHaveAttribute('href', '/ajustes');
   });
@@ -223,7 +223,7 @@ describe('FlashcardSession', () => {
 
     expect(
       screen.getByRole('link', {
-        name: 'Limite diário atingido — ajuste em Ajustes',
+        name: 'Limite diário atingido, ajuste em Ajustes',
       }),
     ).toHaveAttribute('href', '/ajustes');
   });
@@ -252,12 +252,12 @@ describe('FlashcardSession', () => {
     });
 
     expect(
-      screen.getByText('Novas hoje: 0/20 · Revisões hoje: 0/5'),
+      screen.getByText('Novas hoje: 0/20, revisões hoje: 0/5'),
     ).toBeInTheDocument();
     expect(screen.getByText('5 restantes')).toBeInTheDocument();
 
     const limit = screen.getByRole('link', {
-      name: 'Limite diário: 5 de 8 cartas hoje — ajuste em Ajustes',
+      name: 'Limite diário: 5 de 8 cartas hoje, ajuste em Ajustes',
     });
     expect(limit).toHaveAttribute('href', '/ajustes');
   });
@@ -279,5 +279,37 @@ describe('FlashcardSession', () => {
       (line) => screen.queryByText(line) !== null,
     );
     expect(hasBitLine).toBe(true);
+  });
+
+  it('shows label, interval and key on each grade button', async () => {
+    const user = userEvent.setup();
+    const card = makeFlashcard(1);
+    renderWithProgress(<FlashcardSession flashcards={[card]} />, {
+      now: FIXED_NOW,
+    });
+
+    await user.keyboard('{Enter}');
+
+    const group = screen.getByRole('group', { name: 'Avaliar carta' });
+    const intervals = previewIntervals(newCard(FIXED_NOW), FIXED_NOW);
+    const buttons = within(group).getAllByRole('button');
+    expect(buttons).toHaveLength(4);
+    buttons.forEach((button, index) => {
+      expect(button.querySelector('kbd')).toHaveTextContent(String(index + 1));
+      expect(button).toHaveTextContent(intervals[index] ?? '');
+    });
+    expect(group.closest('[data-grades-bar]')).not.toBeNull();
+  });
+
+  it('keeps counters and the cap notice free of middle dots', () => {
+    const flashcards = Array.from({ length: 25 }, (_, index) =>
+      makeFlashcard(index + 1),
+    );
+    const { container } = renderWithProgress(
+      <FlashcardSession flashcards={flashcards} />,
+      { now: FIXED_NOW },
+    );
+
+    expect(container.textContent).not.toContain('·');
   });
 });

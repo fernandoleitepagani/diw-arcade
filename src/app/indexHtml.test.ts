@@ -55,6 +55,10 @@ describe('head estático', () => {
     expect(meta('property', 'og:image:height')).toBe('630');
   });
 
+  it('declara os dois esquemas de cor para o tema claro e escuro', () => {
+    expect(meta('name', 'color-scheme')).toBe('dark light');
+  });
+
   it('liga o favicon SVG, os PNGs, o apple-touch-icon e o manifest', () => {
     expect(link('link[rel="icon"][type="image/svg+xml"]')).toBe(
       '/favicon.svg',

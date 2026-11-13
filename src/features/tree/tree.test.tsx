@@ -42,7 +42,9 @@ describe('árvore de habilidades', () => {
       UNITS.length,
     );
 
-    const links = tree.getAllByRole('link');
+    const links = tree
+      .getAllByRole('link')
+      .filter((link) => link.getAttribute('href')?.startsWith('/no/'));
     expect(links).toHaveLength(NODES.length);
     for (const link of links) {
       expect(link).toHaveAttribute('href', expect.stringMatching(/^\/no\/n\d{2}$/));
@@ -50,36 +52,12 @@ describe('árvore de habilidades', () => {
     }
   });
 
-  it('mostra o herói Continuar', () => {
+  it('não repete o herói Continuar acima da trilha (Hoje cuida do próximo passo)', () => {
     renderWithProgress(<TreePage />);
 
-    const hero = within(screen.getByRole('region', { name: 'Continuar' }));
-    expect(
-      hero.getByText('Introdução à Web e tecnologias'),
-    ).toBeInTheDocument();
-    expect(hero.getByRole('link', { name: 'Continuar' })).toHaveAttribute(
-      'href',
-      '/no/n01',
-    );
-    expect(
-      hero.getByRole('progressbar', { name: 'Meta diária' }),
-    ).toBeInTheDocument();
-    expect(hero.queryByRole('link', { name: /^Revisar/ })).not.toBeInTheDocument();
-  });
-
-  it('oferece revisar as cartas devidas pelo herói', () => {
-    const cards = dueCards(
-      Array.from({ length: 10 }, (_, index) =>
-        `n09-f${String(index + 1).padStart(3, '0')}`,
-      ),
-    );
-
-    renderWithProgress(<TreePage />, { save: { cards } });
-
-    const hero = within(screen.getByRole('region', { name: 'Continuar' }));
-    expect(
-      hero.getByRole('link', { name: 'Revisar 10 cartas' }),
-    ).toHaveAttribute('href', '/revisao');
+    expect(screen.queryByRole('region', { name: 'Continuar' })).toBeNull();
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+    expect(document.getElementById('unit-u1')).not.toBeNull();
   });
 
   it('mantém o título da página só para leitores de tela', () => {
@@ -119,14 +97,10 @@ describe('árvore de habilidades', () => {
     expect(tags[0]!.closest('a')).toHaveAttribute('href', '/no/n09');
   });
 
-  it('shows the star rating label on every node card', () => {
+  it('shows the node state as text on every node card', () => {
     renderWithProgress(<TreePage />);
 
-    const labels = screen.getAllByRole('img', { name: /^Domínio: / });
-    expect(labels).toHaveLength(NODES.length);
-    expect(labels[0]).toHaveAccessibleName(
-      'Domínio: quiz pendente, cartas pendente, código pendente',
-    );
+    expect(trilha().getAllByText('Nova')).toHaveLength(NODES.length);
   });
 
   it('draws the decorative connectors out of the accessibility tree', () => {
@@ -138,7 +112,7 @@ describe('árvore de habilidades', () => {
 });
 
 describe('página do nó', () => {
-  it('shows the node title as the h1, with aulas, state, stars and the three modes', () => {
+  it('shows the node title as the h1, with aulas, state and mastery text', () => {
     renderNode('/no/n07');
 
     expect(
@@ -147,31 +121,106 @@ describe('página do nó', () => {
     expect(screen.getByText(/Aulas:.*172/)).toBeInTheDocument();
     expect(screen.getByText('Nova')).toBeInTheDocument();
     expect(
-      screen.getByRole('img', { name: /^Domínio: / }),
+      screen.getByRole('progressbar', { name: '0 de 3 estrelas' }),
     ).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('link', { name: 'Começar quiz' }),
-    ).toHaveAttribute('href', '/no/n07/quiz');
-    expect(
-      screen.getByRole('link', { name: 'Revisar cartas' }),
-    ).toHaveAttribute('href', '/no/n07/cartas');
-    expect(
-      screen.getByRole('heading', { name: 'Código' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '← Trilha' })).toHaveAttribute(
+      'href',
+      '/trilha',
+    );
   });
 
-  it('lists the node challenges as pending status rows', () => {
+  it('points Continuar at the first unfinished step and selects its panel', () => {
     renderNode('/no/n07');
 
-    expect(screen.getAllByText('pendente')).toHaveLength(
+    expect(screen.getByRole('link', { name: 'Continuar' })).toHaveAttribute(
+      'href',
+      '/no/n07?passo=praticar',
+    );
+    expect(
+      document.querySelector('[aria-current="step"]'),
+    ).toHaveTextContent('Praticar');
+    expect(screen.getByRole('link', { name: 'Começar quiz' })).toHaveAttribute(
+      'href',
+      '/no/n07/quiz',
+    );
+  });
+
+  it('?passo selects the panel and unknown values fall back', () => {
+    const { unmount } = renderNode('/no/n07?passo=fixar');
+    expect(screen.getByRole('link', { name: 'Revisar cartas' })).toHaveAttribute(
+      'href',
+      '/no/n07/cartas',
+    );
+    unmount();
+
+    const second = renderNode('/no/n07?passo=ler');
+    expect(screen.getByText('Resumo ainda não disponível')).toBeInTheDocument();
+    second.unmount();
+
+    renderNode('/no/n07?passo=xyz');
+    expect(
+      document.querySelector('[aria-current="step"]'),
+    ).toHaveTextContent('Praticar');
+  });
+
+  it('lists the node challenges as pending rows in Construir', () => {
+    renderNode('/no/n07?passo=construir');
+
+    const links = screen
+      .getAllByRole('link')
+      .filter((link) => link.getAttribute('href')?.startsWith('/desafio/'));
+    expect(links).toHaveLength(getChallenges('n07').length);
+    expect(screen.getAllByText('pendente').length).toBeGreaterThanOrEqual(
       getChallenges('n07').length,
     );
   });
 
+  it('lists the node terms with their SRS state', () => {
+    renderNode('/no/n07');
+
+    expect(
+      screen.getByRole('heading', { name: 'O que você já domina' }),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText('nova').length).toBe(getFlashcards('n07').length);
+  });
+
+  it('shows Nó concluído when every available step is done', () => {
+    const cards = Object.fromEntries(
+      getFlashcards('n07').map((card) => [
+        card.id,
+        { ...newCard(FIXED_NOW), reps: 3, state: 2 as const, stability: 40 },
+      ]),
+    );
+    const challenges = Object.fromEntries(
+      getChallenges('n07').map((challenge) => [
+        challenge.id,
+        {
+          passed: true,
+          failedRuns: 0,
+          hintsUsed: 0 as const,
+          xpAwarded: 0,
+          code: null,
+        },
+      ]),
+    );
+    renderNode('/no/n07', {
+      save: {
+        cards,
+        challenges,
+        quiz: {
+          answers: {},
+          rounds: { n07: { best: 100, count: 1, perfect: true } },
+        },
+      },
+    });
+
+    expect(screen.getByText('Nó concluído')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Continuar' })).toBeNull();
+  });
+
   it('introduces the whole deck and reports how many cards were added', async () => {
     const user = userEvent.setup();
-    const { storage } = renderNode('/no/n01');
+    const { storage } = renderNode('/no/n01?passo=fixar');
     const deckSize = getFlashcards('n01').length;
 
     const button = screen.getByRole('button', {
@@ -189,6 +238,11 @@ describe('página do nó', () => {
     expect(
       await screen.findByText(`${deckSize} cartas adicionadas`),
     ).toBeInTheDocument();
+    expect(
+      screen
+        .getAllByRole('status')
+        .some((el) => el.textContent === `${deckSize} cartas adicionadas`),
+    ).toBe(true);
 
     const saved = JSON.parse(storage.getItem(SAVE_KEY) ?? '{}') as SaveV1;
     expect(Object.keys(saved.cards)).toHaveLength(deckSize);
@@ -202,7 +256,7 @@ describe('página do nó', () => {
   it('disables the whole-deck button when every card is already introduced', () => {
     const cards = dueCards(getFlashcards('n01').map((card) => card.id));
 
-    renderNode('/no/n01', { save: { cards } });
+    renderNode('/no/n01?passo=fixar', { save: { cards } });
 
     expect(
       screen.getByRole('button', {
@@ -215,5 +269,8 @@ describe('página do nó', () => {
     renderNode('/no/n99');
 
     expect(screen.getByText('Nó não encontrado')).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /Trilha/ }),
+    ).toHaveAttribute('href', '/trilha');
   });
 });

@@ -2,8 +2,8 @@ import type { Plugin } from 'vite';
 
 /** Nomes dos woff2 críticos, já com hash do build. */
 const CRITICAL_FONTS = [
-  /^inter-latin-400-normal-.+\.woff2$/,
-  /^press-start-2p-latin-400-normal-.+\.woff2$/,
+  /^hanken-grotesk-latin-400-normal-.+\.woff2$/,
+  /^pixelify-sans-latin-600-normal-.+\.woff2$/,
 ] as const;
 
 interface SocialMeta {

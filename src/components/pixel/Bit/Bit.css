@@ -1,0 +1,15 @@
+.bit {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.bit__line {
+  max-width: 18rem;
+  color: var(--text);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  text-align: center;
+  overflow-wrap: anywhere;
+}

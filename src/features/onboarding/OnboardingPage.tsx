@@ -2,7 +2,9 @@ import { useCallback, useEffect, useRef } from 'react';
 import { Navigate, useNavigate } from 'react-router';
 import { useProgress } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
-import { Button, Card, Mascot } from '../../components/ui';
+import { Bit } from '../../components/pixel/Bit/Bit';
+import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
+import { Button } from '../../components/ui';
 import { pickLine } from '../../content/copy';
 import type { DailyGoal } from '../../lib/progress/events';
 import './OnboardingPage.css';
@@ -13,9 +15,9 @@ interface GoalOption {
 }
 
 const GOALS: readonly GoalOption[] = [
-  { goal: 20, label: 'Leve · 20 XP' },
-  { goal: 50, label: 'Regular · 50 XP' },
-  { goal: 100, label: 'Intenso · 100 XP' },
+  { goal: 20, label: 'Leve, 20 XP' },
+  { goal: 50, label: 'Regular, 50 XP' },
+  { goal: 100, label: 'Intenso, 100 XP' },
 ];
 
 /** Meta sugerida: o botão que recebe o foco ao abrir a página. */
@@ -57,12 +59,12 @@ export function OnboardingPage() {
 
   return (
     <main className="onboarding">
-      <Card
+      <PixelPanel
         as="section"
         className="onboarding__card"
         aria-labelledby="onboarding-title"
       >
-        <Mascot mood="happy" line={pickLine('welcome', 0)} size={128} />
+        <Bit line={pickLine('welcome', 0)} scale={16} />
 
         <div className="onboarding__intro">
           <h1 className="onboarding__brand" id="onboarding-title">
@@ -96,7 +98,7 @@ export function OnboardingPage() {
         >
           Pular
         </Button>
-      </Card>
+      </PixelPanel>
     </main>
   );
 }

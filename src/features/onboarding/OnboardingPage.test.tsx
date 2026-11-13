@@ -44,8 +44,8 @@ function readSave(storage: StorageLike): SaveV1 {
 }
 
 describe('OnboardingPage', () => {
-  it('redireciona uma sessão nova de / para /boas-vindas', async () => {
-    const { router } = renderApp('/', false);
+  it('redireciona uma sessão nova de /hoje para /boas-vindas', async () => {
+    const { router } = renderApp('/hoje', false);
 
     await waitFor(() => {
       expect(router.state.location.pathname).toBe('/boas-vindas');
@@ -64,25 +64,25 @@ describe('OnboardingPage', () => {
 
   it('Tab e Enter em Intenso definem a meta 100 e levam à árvore', async () => {
     const user = userEvent.setup();
-    const { router, storage } = renderApp('/', false);
+    const { router, storage } = renderApp('/hoje', false);
 
     const regular = await screen.findByRole('button', {
-      name: 'Regular · 50 XP',
+      name: 'Regular, 50 XP',
     });
     await waitFor(() => expect(regular).toHaveFocus());
 
     await user.tab();
     expect(
-      screen.getByRole('button', { name: 'Intenso · 100 XP' }),
+      screen.getByRole('button', { name: 'Intenso, 100 XP' }),
     ).toHaveFocus();
 
     await user.keyboard('{Enter}');
 
     await waitFor(() => {
-      expect(router.state.location.pathname).toBe('/');
+      expect(router.state.location.pathname).toBe('/hoje');
     });
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'DIW Arcade' }),
+      await screen.findByRole('heading', { level: 1, name: 'Hoje' }),
     ).toBeInTheDocument();
 
     const save = readSave(storage);
@@ -92,13 +92,13 @@ describe('OnboardingPage', () => {
 
   it('Esc pula a escolha e mantém a meta padrão 50', async () => {
     const user = userEvent.setup();
-    const { router, storage } = renderApp('/', false);
+    const { router, storage } = renderApp('/hoje', false);
 
-    await screen.findByRole('button', { name: 'Regular · 50 XP' });
+    await screen.findByRole('button', { name: 'Regular, 50 XP' });
     await user.keyboard('{Escape}');
 
     await waitFor(() => {
-      expect(router.state.location.pathname).toBe('/');
+      expect(router.state.location.pathname).toBe('/hoje');
     });
 
     const save = readSave(storage);
@@ -108,12 +108,12 @@ describe('OnboardingPage', () => {
 
   it('Pular conclui o onboarding sem trocar a meta', async () => {
     const user = userEvent.setup();
-    const { router, storage } = renderApp('/', false);
+    const { router, storage } = renderApp('/hoje', false);
 
     await user.click(await screen.findByRole('button', { name: 'Pular' }));
 
     await waitFor(() => {
-      expect(router.state.location.pathname).toBe('/');
+      expect(router.state.location.pathname).toBe('/hoje');
     });
 
     const save = readSave(storage);
@@ -125,10 +125,10 @@ describe('OnboardingPage', () => {
     const { router } = renderApp('/boas-vindas', true);
 
     await waitFor(() => {
-      expect(router.state.location.pathname).toBe('/');
+      expect(router.state.location.pathname).toBe('/hoje');
     });
     expect(
-      screen.getByRole('heading', { level: 1, name: 'DIW Arcade' }),
+      await screen.findByRole('heading', { level: 1, name: 'Hoje' }),
     ).toBeInTheDocument();
   });
 });

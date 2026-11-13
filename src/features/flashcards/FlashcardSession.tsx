@@ -1,33 +1,25 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { Link } from 'react-router';
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router";
 import {
   useProgress,
   type ProgressContextValue,
-} from '../../app/ProgressProvider';
-import { SessionSummary, useSessionBar } from '../../components/session';
-import { Button, Mascot } from '../../components/ui';
-import {
-  NODES,
-  getChallenges,
-  getFlashcards,
-  getQuestions,
-} from '../../content';
-import { pickLine } from '../../content/copy';
-import { formatSource } from '../../content/source';
-import type { Flashcard } from '../../content/schema';
-import type { Outcome, ProgressContent } from '../../lib/progress/events';
-import { getRecommendedNodeId } from '../../lib/progress/recommend';
+} from "../../app/ProgressProvider";
+import { SessionSummary, useSessionBar } from "../../components/session";
+import { Button } from "../../components/pixel/Button/Button";
+import { PixelPanel } from "../../components/pixel/PixelPanel/PixelPanel";
+import { PixelSprite } from "../../components/pixel/PixelSprite/PixelSprite";
+import { SPRITES } from "../../components/pixel/sprites";
+import { pickLine } from "../../content/copy";
+import { formatSource } from "../../content/source";
+import type { Flashcard } from "../../content/schema";
+import type { Outcome } from "../../lib/progress/events";
+import { STATIC_CONTENT } from "../../lib/progress/content";
+import { getNextStep } from "../../lib/progress/nextStep";
 import {
   getNewIntroducedToday,
   getReviewsDoneToday,
   getStars,
-} from '../../lib/progress/selectors';
+} from "../../lib/progress/selectors";
 import {
   GRADES,
   GRADE_LABELS,
@@ -37,25 +29,12 @@ import {
   reviewCard,
   type Grade,
   type SrsCard,
-} from '../../lib/srs/fsrs';
-import { createEmptySave } from '../../lib/storage';
-import { getLimitNotice } from './limitNotice';
-import './FlashcardSession.css';
+} from "../../lib/srs/fsrs";
+import { createEmptySave } from "../../lib/storage";
+import { getLimitNotice } from "./limitNotice";
+import "./FlashcardSession.css";
 
 const REQUEUE_WINDOW_MS = 15 * 60_000;
-
-/** Static content for the recommended node and star calculations. */
-const SESSION_CONTENT: ProgressContent = {
-  questions: Object.fromEntries(
-    NODES.map((node) => [node.id, getQuestions(node.id)]),
-  ),
-  flashcards: Object.fromEntries(
-    NODES.map((node) => [node.id, getFlashcards(node.id)]),
-  ),
-  challenges: Object.fromEntries(
-    NODES.map((node) => [node.id, getChallenges(node.id)]),
-  ),
-};
 
 const ISOLATED_SAVE = createEmptySave(new Date(0));
 const ISOLATED_NOW = new Date(0);
@@ -112,29 +91,27 @@ function nextDueAt(
 }
 
 function formatNextDue(next: number | null, now: Date): string {
-  if (next === null) return 'nenhuma carta agendada';
+  if (next === null) return "nenhuma carta agendada";
 
   const minutes = Math.round((next - now.getTime()) / 60_000);
-  if (minutes <= 0) return 'agora';
+  if (minutes <= 0) return "agora";
   if (minutes < 60) return `em ${minutes} min`;
 
   const hours = Math.round(minutes / 60);
   if (minutes < 24 * 60) return `em ${hours} h`;
 
   const days = Math.round(minutes / (24 * 60));
-  if (days < 30) return `em ${days} ${days === 1 ? 'dia' : 'dias'}`;
+  if (days < 30) return `em ${days} ${days === 1 ? "dia" : "dias"}`;
 
   const months = Math.round(days / 30);
-  if (months < 12) return `em ${months} ${months === 1 ? 'mês' : 'meses'}`;
+  if (months < 12) return `em ${months} ${months === 1 ? "mês" : "meses"}`;
 
   const years = Math.round(months / 12);
-  return `em ${years} ${years === 1 ? 'ano' : 'anos'}`;
+  return `em ${years} ${years === 1 ? "ano" : "anos"}`;
 }
 
-function gradeVariant(grade: Grade): 'primary' | 'secondary' | 'danger' {
-  if (grade === 1) return 'danger';
-  if (grade === 3) return 'primary';
-  return 'secondary';
+function gradeVariant(grade: Grade): "primary" | "quiet" {
+  return grade === 3 ? "primary" : "quiet";
 }
 
 export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
@@ -213,19 +190,19 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
   useSessionBar({
     value: completed,
     max: completed + queue.length,
-    exitTo: deckNodeId === undefined ? '/' : `/no/${deckNodeId}`,
+    exitTo: deckNodeId === undefined ? "/" : `/no/${deckNodeId}`,
   });
 
   const xpEarned = Math.max(0, save.xpTotal - sessionStart.xpTotal);
   const starsBefore =
     deckNodeId === undefined
       ? undefined
-      : getStars(sessionStart.save, deckNodeId, SESSION_CONTENT);
+      : getStars(sessionStart.save, deckNodeId, STATIC_CONTENT);
   const starsAfter =
     deckNodeId === undefined
       ? undefined
-      : getStars(save, deckNodeId, SESSION_CONTENT);
-  const recommendedId = getRecommendedNodeId(save, SESSION_CONTENT, now);
+      : getStars(save, deckNodeId, STATIC_CONTENT);
+  const nextStep = getNextStep(save, STATIC_CONTENT, now);
 
   const reveal = useCallback(() => setRevealed(true), []);
 
@@ -235,7 +212,7 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
 
       const next = reviewCard(currentCard, value, now);
       dispatch({
-        type: 'card/review',
+        type: "card/review",
         nodeId: current.nodeId,
         cardId: current.id,
         grade: value,
@@ -271,22 +248,22 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
       if (target instanceof HTMLElement) {
         const tag = target.tagName;
         if (
-          tag === 'INPUT' ||
-          tag === 'TEXTAREA' ||
-          tag === 'SELECT' ||
+          tag === "INPUT" ||
+          tag === "TEXTAREA" ||
+          tag === "SELECT" ||
           target.isContentEditable
         ) {
           return;
         }
         // Let Space and Enter activate a focused button or link natively.
-        if (!revealed && (tag === 'BUTTON' || tag === 'A')) return;
+        if (!revealed && (tag === "BUTTON" || tag === "A")) return;
       }
 
       if (!revealed) {
         if (
-          event.key === ' ' ||
-          event.code === 'Space' ||
-          event.key === 'Enter'
+          event.key === " " ||
+          event.code === "Space" ||
+          event.key === "Enter"
         ) {
           event.preventDefault();
           reveal();
@@ -301,13 +278,13 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
       }
     }
 
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
   }, [current, grade, reveal, revealed]);
 
   useEffect(() => {
     if (!revealed) return;
-    gradesRef.current?.querySelector<HTMLButtonElement>('button')?.focus();
+    gradesRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
   }, [revealed]);
 
   const isEmpty = queue.length === 0 && completed === 0;
@@ -321,7 +298,7 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
     <section className="flashcard-session" aria-label="Sessão de revisão">
       <header className="flashcard-session__header">
         <p className="flashcard-session__counters">
-          {`Novas hoje: ${newIntroducedToday}/${newLimit} · Revisões hoje: ${reviewsDoneToday}/${reviewLimit}`}
+          {`Novas hoje: ${newIntroducedToday}/${newLimit}, revisões hoje: ${reviewsDoneToday}/${reviewLimit}`}
         </p>
         {queue.length > 0 ? (
           <p className="flashcard-session__remaining" role="status">
@@ -333,13 +310,13 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
       {limitNotice ? (
         <p
           className={`flashcard-session__cap${
-            limitNotice.reached ? ' flashcard-session__cap--reached' : ''
+            limitNotice.reached ? " flashcard-session__cap--reached" : ""
           }`}
         >
           <Link to="/ajustes">
             {limitNotice.reached
-              ? 'Limite diário atingido — ajuste em Ajustes'
-              : `Limite diário: ${limitNotice.shown} de ${limitNotice.total} cartas hoje — ajuste em Ajustes`}
+              ? "Limite diário atingido, ajuste em Ajustes"
+              : `Limite diário: ${limitNotice.shown} de ${limitNotice.total} cartas hoje, ajuste em Ajustes`}
           </Link>
         </p>
       ) : null}
@@ -350,7 +327,15 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
           <p className="flashcard-session__next">
             {`Próxima revisão: ${nextLabel}`}
           </p>
-          <Mascot mood="idle" line={pickLine('empty', save.xpTotal)} size={96} />
+          <p className="flashcard-session__bit">
+            <PixelSprite
+              rows={SPRITES.bit.rows}
+              palette={SPRITES.bit.palette}
+              scale={6}
+              label="Bit, o robô mascote"
+            />
+            <span>{pickLine("empty", save.xpTotal)}</span>
+          </p>
         </div>
       ) : isFinished ? (
         <div className="flashcard-session__done">
@@ -359,27 +344,27 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
             xp={xpEarned}
             stats={[
               {
-                label: 'Cartas',
+                label: "Cartas",
                 value: `${completed} ${
-                  completed === 1 ? 'carta revisada' : 'cartas revisadas'
+                  completed === 1 ? "carta revisada" : "cartas revisadas"
                 }`,
               },
               {
-                label: 'Lembradas',
+                label: "Lembradas",
                 value: `${remembered} de ${completed}`,
               },
             ]}
             starsBefore={starsBefore}
             starsAfter={starsAfter}
-            nextHref={`/no/${recommendedId}`}
-            mascotMood={remembered > 0 ? 'happy' : 'idle'}
+            next={nextStep.primary}
           />
           <p className="flashcard-session__next">
             {`Próxima revisão: ${nextLabel}`}
           </p>
         </div>
       ) : current ? (
-        <article
+        <PixelPanel
+          as="article"
           key={current.id}
           className="flashcard-session__card"
           aria-live="polite"
@@ -392,41 +377,41 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
               <p className="flashcard-session__source">
                 {formatSource(current.source)}
               </p>
-              <div
-                ref={gradesRef}
-                className="flashcard-session__grades"
-                role="group"
-                aria-label="Avaliar carta"
-              >
-                {GRADES.map((value, index) => (
-                  <Button
-                    key={value}
-                    className="flashcard-session__grade"
-                    variant={gradeVariant(value)}
-                    size="lg"
-                    onClick={() => grade(value)}
-                  >
-                    <span className="flashcard-session__grade-label">
-                      {GRADE_LABELS[value]}
-                    </span>
-                    <span className="flashcard-session__grade-interval">
-                      {intervals[index]}
-                    </span>
-                    <kbd className="flashcard-session__grade-key">{value}</kbd>
-                  </Button>
-                ))}
-              </div>
             </div>
           ) : (
-            <Button
-              className="flashcard-session__reveal"
-              size="lg"
-              onClick={reveal}
-            >
+            <Button className="flashcard-session__reveal" onClick={reveal}>
               Mostrar resposta
             </Button>
           )}
-        </article>
+        </PixelPanel>
+      ) : null}
+
+      {current && revealed ? (
+        <div className="flashcard-session__bar" data-grades-bar>
+          <div
+            ref={gradesRef}
+            className="flashcard-session__grades"
+            role="group"
+            aria-label="Avaliar carta"
+          >
+            {GRADES.map((value, index) => (
+              <Button
+                key={value}
+                className="flashcard-session__grade"
+                variant={gradeVariant(value)}
+                onClick={() => grade(value)}
+              >
+                <span className="flashcard-session__grade-label">
+                  {GRADE_LABELS[value]}
+                </span>
+                <span className="flashcard-session__grade-interval">
+                  {intervals[index]}
+                </span>
+                <kbd className="flashcard-session__grade-key">{value}</kbd>
+              </Button>
+            ))}
+          </div>
+        </div>
       ) : null}
     </section>
   );

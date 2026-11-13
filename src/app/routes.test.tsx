@@ -15,35 +15,36 @@ function renderAt(path: string) {
     SaveV1Schema.parse({ ...createEmptySave(FIXED_NOW), onboarded: true }),
   );
   const router = createMemoryRouter(routes, { initialEntries: [path] });
-  return render(
+  render(
     <ToastProvider>
       <ProgressProvider storage={storage} clock={() => FIXED_NOW}>
         <RouterProvider router={router} />
       </ProgressProvider>
     </ToastProvider>,
   );
+  return router;
 }
 
 const pages = [
-  { path: '/', heading: 'DIW Arcade' },
+  { path: '/hoje', heading: 'Hoje' },
+  { path: '/trilha', heading: 'DIW Arcade' },
+  { path: '/progresso', heading: 'Progresso' },
   { path: '/no/n01', heading: 'Introdução à Web e tecnologias' },
   { path: '/no/n01/quiz', heading: 'Quiz' },
   { path: '/no/n01/cartas', heading: 'Cartas' },
   { path: '/revisao', heading: 'Revisão' },
   { path: '/desafio/n01-c01', heading: 'Minha primeira página HTML' },
-  { path: '/laboratorios', heading: 'Laboratórios' },
   { path: '/laboratorios/lab-01', heading: 'Laboratório' },
-  { path: '/estatisticas', heading: 'Estatísticas' },
   { path: '/ajustes', heading: 'Ajustes' },
 ] as const;
 
 describe('rotas', () => {
   it('lazy pages show the skeleton then the page', async () => {
-    renderAt('/estatisticas');
+    renderAt('/progresso');
 
     expect(screen.getByText('Carregando…')).toBeInTheDocument();
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Estatísticas' }),
+      await screen.findByRole('heading', { level: 1, name: 'Progresso' }),
     ).toBeInTheDocument();
   });
 
@@ -69,7 +70,7 @@ describe('rotas', () => {
   });
 
   it('points the skip link at #conteudo', () => {
-    renderAt('/');
+    renderAt('/hoje');
 
     expect(
       screen.getByRole('link', { name: 'Pular para o conteúdo' }),
@@ -77,13 +78,13 @@ describe('rotas', () => {
   });
 
   it('marks the active nav link with aria-current', () => {
-    renderAt('/estatisticas');
+    renderAt('/progresso');
 
-    expect(screen.getByRole('link', { name: 'Estatísticas' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Progresso' })).toHaveAttribute(
       'aria-current',
       'page',
     );
-    expect(screen.getByRole('link', { name: 'Árvore' })).not.toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Trilha' })).not.toHaveAttribute(
       'aria-current',
     );
   });
@@ -92,19 +93,47 @@ describe('rotas', () => {
     renderAt('/revisao');
 
     await waitFor(() => {
-      expect(document.title).toBe('DIW Arcade — Revisão');
+      expect(document.title).toBe('DIW Arcade: Revisão');
     });
   });
 
   it('moves focus to the main content on navigation', async () => {
     const user = userEvent.setup();
-    renderAt('/');
+    renderAt('/hoje');
 
-    await user.click(screen.getByRole('link', { name: 'Ajustes' }));
+    await user.click(screen.getByRole('link', { name: 'Progresso' }));
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 1, name: 'Ajustes' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 1, name: 'Progresso' })).toBeInTheDocument();
       expect(document.activeElement).toBe(screen.getByRole('main'));
     });
   });
+
+  it('reaches Ajustes from the avatar menu', async () => {
+    const user = userEvent.setup();
+    renderAt('/hoje');
+
+    await user.click(screen.getByRole('button', { name: 'Menu da conta' }));
+    await user.click(screen.getByRole('menuitem', { name: 'Ajustes' }));
+
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Ajustes' }),
+    ).toBeInTheDocument();
+  });
+
+  const redirects = [
+    { from: '/', to: '/hoje' },
+    { from: '/estatisticas', to: '/progresso' },
+    { from: '/laboratorios', to: '/trilha' },
+  ] as const;
+
+  for (const { from, to } of redirects) {
+    it(`redirects ${from} to ${to}`, async () => {
+      const router = renderAt(from);
+
+      await waitFor(() => {
+        expect(router.state.location.pathname).toBe(to);
+      });
+    });
+  }
 });

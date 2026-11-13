@@ -13,6 +13,7 @@ Content is typed JSON generated from the course PDFs; each item cites its source
 - Commands: `lint=npm run lint` `typecheck=npm run typecheck` `test=npm test -- --run` `content=npm run validate:content` `build=npm run build`
 - Conventions: feature folders under `src/`, plain CSS per component, CodeMirror 6 editor, sandboxed iframe runner,
   progress in localStorage (versioned schema), content in `src/content/**.json` validated by a schema. No backend.
+- Fontes: Pixelify Sans (títulos curtos), Hanken Grotesk (texto), JetBrains Mono (código)
 
 ## Gotchas
 
