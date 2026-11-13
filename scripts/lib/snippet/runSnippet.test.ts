@@ -213,6 +213,30 @@ describe('ambiente js', () => {
       runJs("Promise.reject(new Error('x')); console.log('fim');"),
     ).resolves.toBe('fim');
   });
+
+  it('bloqueia fuga por hasOwnProperty, toString e __lookupGetter__', async () => {
+    const targets = [
+      'this.hasOwnProperty.constructor',
+      'this.toString.constructor',
+      'this.__lookupGetter__.constructor',
+    ];
+
+    for (const target of targets) {
+      const output = await runJs(`console.log(${target}('return 1')());`);
+
+      expect(output.split('\n')[0]).toMatch(/^Uncaught EvalError/);
+      expect(output).not.toBe('1');
+    }
+  });
+
+  it('não alcança o process real pela fuga', async () => {
+    const output = await runJs(
+      `console.log(typeof this.hasOwnProperty.constructor("return this['pro'+'cess']")());`,
+    );
+
+    expect(output.split('\n')[0]).toMatch(/^Uncaught EvalError/);
+    expect(output).not.toMatch(/^object$/m);
+  });
 });
 
 describe('ambiente dom', () => {
@@ -275,6 +299,34 @@ describe('ambiente dom', () => {
     });
 
     expect(output).toBe('A\nC\nB');
+  });
+
+  it('rejeita fuga por constructor antes de executar', async () => {
+    const result = await runner.run({
+      env: 'dom',
+      source: 'window.constructor.constructor("return 1")()',
+    });
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.reason).toBe('crash');
+      expect(result.detail).toContain('"constructor"');
+      expect(result.detail).toContain('bloqueado');
+    }
+  });
+
+  it('rejeita _globalObject antes de executar', async () => {
+    const result = await runner.run({
+      env: 'dom',
+      source: 'console.log(window._globalObject);',
+    });
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.reason).toBe('crash');
+      expect(result.detail).toContain('"_globalObject"');
+      expect(result.detail).toContain('bloqueado');
+    }
   });
 });
 
