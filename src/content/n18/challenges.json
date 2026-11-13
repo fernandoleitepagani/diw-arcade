@@ -1,0 +1,232 @@
+[
+  {
+    "id": "n18-c01",
+    "nodeId": "n18",
+    "title": "Busca de alunos por curso",
+    "kind": "js",
+    "goal": "Ao enviar o formulário #form-busca, monte a URL `http://localhost:3000/alunos?curso=` com o valor escolhido em #curso, busque com fetch e mostre o nome de cada aluno em um item de #resultado. Cada busca deve substituir a lista anterior.",
+    "starter": {
+      "html": "<form id=\"form-busca\">\n  <label for=\"curso\">Curso</label>\n  <select id=\"curso\">\n    <option value=\"SI\">SI</option>\n    <option value=\"ADS\">ADS</option>\n  </select>\n  <button id=\"botao-buscar\" type=\"submit\">Buscar</button>\n</form>\n<ul id=\"resultado\"></ul>",
+      "css": "#resultado li { font-weight: bold; }",
+      "js": "// Escute o envio de #form-busca, monte a URL com o curso escolhido e renderize os alunos.\n"
+    },
+    "solution": {
+      "html": "<form id=\"form-busca\">\n  <label for=\"curso\">Curso</label>\n  <select id=\"curso\">\n    <option value=\"SI\">SI</option>\n    <option value=\"ADS\">ADS</option>\n  </select>\n  <button id=\"botao-buscar\" type=\"submit\">Buscar</button>\n</form>\n<ul id=\"resultado\"></ul>",
+      "css": "#resultado li { font-weight: bold; }",
+      "js": "const form = document.querySelector('#form-busca');\nconst curso = document.querySelector('#curso');\nconst resultado = document.querySelector('#resultado');\n\nform.addEventListener('submit', async (evento) => {\n  evento.preventDefault();\n  const url = `http://localhost:3000/alunos?curso=${encodeURIComponent(curso.value)}`;\n  const resposta = await fetch(url);\n  const alunos = await resposta.json();\n\n  resultado.textContent = '';\n  alunos.forEach((aluno) => {\n    const li = document.createElement('li');\n    li.textContent = aluno.nome;\n    resultado.appendChild(li);\n  });\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "form-existe",
+        "label": "O formulário #form-busca existe na página.",
+        "check": { "kind": "exists", "selector": "#form-busca" }
+      },
+      {
+        "id": "resultado-existe",
+        "label": "A lista #resultado existe na página.",
+        "check": { "kind": "exists", "selector": "#resultado" }
+      },
+      {
+        "id": "lista-renderizada",
+        "label": "Após buscar o curso SI, #resultado mostra os 2 alunos da resposta.",
+        "before": [
+          { "do": "input", "selector": "#curso", "value": "SI" },
+          { "do": "click", "selector": "#botao-buscar" },
+          { "do": "wait", "ms": 100 }
+        ],
+        "check": { "kind": "count", "selector": "#resultado li", "min": 2, "max": 2 }
+      },
+      {
+        "id": "nomes-renderizados",
+        "label": "Os nomes Ana e Bruno aparecem em #resultado.",
+        "before": [
+          { "do": "input", "selector": "#curso", "value": "SI" },
+          { "do": "click", "selector": "#botao-buscar" },
+          { "do": "wait", "ms": 100 }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#resultado",
+          "match": { "pattern": "ana.*bruno" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Selecione o formulário, o select #curso e a lista #resultado com `document.querySelector`.",
+      "No evento `submit`, chame `evento.preventDefault()` e monte `http://localhost:3000/alunos?curso=` junto do valor de `curso.value`.",
+      "Depois de `await resposta.json()`, limpe `resultado.textContent`, crie um `li` por aluno e adicione com `resultado.appendChild(li)`."
+    ],
+    "mocks": {
+      "http://localhost:3000/alunos?curso=SI": [
+        { "id": 1, "nome": "Ana", "curso": "SI" },
+        { "id": 2, "nome": "Bruno", "curso": "SI" }
+      ]
+    },
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 33,
+      "endLine": 35
+    },
+    "evidence": "const q = encodeURIComponent(`name:\"${nome}*\"`);"
+  },
+  {
+    "id": "n18-c02",
+    "nodeId": "n18",
+    "title": "Partes de uma URL",
+    "kind": "js",
+    "goal": "Ao clicar em #analisar, leia o texto de #url com `new URL` e mostre o protocolo em #protocolo, o hostname em #host, o pathname em #caminho e a query em #query.",
+    "starter": {
+      "html": "<label for=\"url\">URL</label>\n<input id=\"url\" type=\"text\" value=\"https://site.com/detalhes.html?id=3#info\">\n<button id=\"analisar\" type=\"button\">Analisar</button>\n<dl>\n  <dt>Protocolo</dt><dd id=\"protocolo\"></dd>\n  <dt>Host</dt><dd id=\"host\"></dd>\n  <dt>Caminho</dt><dd id=\"caminho\"></dd>\n  <dt>Query</dt><dd id=\"query\"></dd>\n</dl>",
+      "css": "dd { font-family: monospace; }",
+      "js": "// Ao clicar em #analisar, use new URL(#url.value) e preencha os quatro campos.\n"
+    },
+    "solution": {
+      "html": "<label for=\"url\">URL</label>\n<input id=\"url\" type=\"text\" value=\"https://site.com/detalhes.html?id=3#info\">\n<button id=\"analisar\" type=\"button\">Analisar</button>\n<dl>\n  <dt>Protocolo</dt><dd id=\"protocolo\"></dd>\n  <dt>Host</dt><dd id=\"host\"></dd>\n  <dt>Caminho</dt><dd id=\"caminho\"></dd>\n  <dt>Query</dt><dd id=\"query\"></dd>\n</dl>",
+      "css": "dd { font-family: monospace; }",
+      "js": "const campoUrl = document.querySelector('#url');\nconst botao = document.querySelector('#analisar');\n\nbotao.addEventListener('click', () => {\n  const url = new URL(campoUrl.value);\n  document.querySelector('#protocolo').textContent = url.protocol;\n  document.querySelector('#host').textContent = url.hostname;\n  document.querySelector('#caminho').textContent = url.pathname;\n  document.querySelector('#query').textContent = url.search;\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "campo-url",
+        "label": "O campo #url existe na página.",
+        "check": { "kind": "exists", "selector": "#url" }
+      },
+      {
+        "id": "protocolo",
+        "label": "Após analisar, #protocolo mostra https:.",
+        "before": [
+          { "do": "input", "selector": "#url", "value": "https://site.com/detalhes.html?id=3#info" },
+          { "do": "click", "selector": "#analisar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#protocolo",
+          "match": { "equals": "https:" }
+        }
+      },
+      {
+        "id": "host",
+        "label": "Após analisar, #host mostra site.com.",
+        "before": [
+          { "do": "input", "selector": "#url", "value": "https://site.com/detalhes.html?id=3#info" },
+          { "do": "click", "selector": "#analisar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#host",
+          "match": { "equals": "site.com" }
+        }
+      },
+      {
+        "id": "caminho",
+        "label": "Após analisar, #caminho mostra /detalhes.html.",
+        "before": [
+          { "do": "input", "selector": "#url", "value": "https://site.com/detalhes.html?id=3#info" },
+          { "do": "click", "selector": "#analisar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#caminho",
+          "match": { "equals": "/detalhes.html" }
+        }
+      },
+      {
+        "id": "query",
+        "label": "Após analisar, #query mostra ?id=3.",
+        "before": [
+          { "do": "input", "selector": "#url", "value": "https://site.com/detalhes.html?id=3#info" },
+          { "do": "click", "selector": "#analisar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#query",
+          "match": { "equals": "?id=3" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Guarde `document.querySelector('#url')` e o botão `#analisar` em constantes.",
+      "No evento de clique, crie a URL com `const url = new URL(campoUrl.value);`.",
+      "Use `url.protocol`, `url.hostname`, `url.pathname` e `url.search` em `textContent`."
+    ],
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Host – nome ou número IP onde se encontra a aplicação servidor"
+  },
+  {
+    "id": "n18-c03",
+    "nodeId": "n18",
+    "title": "Links de detalhe dos alunos",
+    "kind": "js",
+    "goal": "Para cada aluno da lista do arquivo JS, crie dentro de #lista um item com um link `<a href=\"detalhe.html?id=N\">Nome</a>`, em que N é o id do aluno.",
+    "starter": {
+      "html": "<ul id=\"lista\"></ul>",
+      "css": "#lista a { color: #1d4ed8; }",
+      "js": "// Crie um link detalhe.html?id=N para cada aluno da lista.\n"
+    },
+    "solution": {
+      "html": "<ul id=\"lista\"></ul>",
+      "css": "#lista a { color: #1d4ed8; }",
+      "js": "const alunos = [\n  { id: 1, nome: 'Ana' },\n  { id: 2, nome: 'Bruno' },\n  { id: 3, nome: 'Carla' },\n];\nconst lista = document.querySelector('#lista');\n\nalunos.forEach((aluno) => {\n  const li = document.createElement('li');\n  const link = document.createElement('a');\n  link.href = `detalhe.html?id=${aluno.id}`;\n  link.textContent = aluno.nome;\n  li.appendChild(link);\n  lista.appendChild(li);\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "lista-existe",
+        "label": "A lista #lista existe na página.",
+        "check": { "kind": "exists", "selector": "#lista" }
+      },
+      {
+        "id": "tres-links",
+        "label": "#lista contém exatamente 3 links.",
+        "check": { "kind": "count", "selector": "#lista a", "min": 3, "max": 3 }
+      },
+      {
+        "id": "link-id-1",
+        "label": "Existe um link com href detalhe.html?id=1.",
+        "check": { "kind": "exists", "selector": "a[href=\"detalhe.html?id=1\"]" }
+      },
+      {
+        "id": "href-com-query",
+        "label": "O href de cada link segue o formato detalhe.html?id=N.",
+        "check": {
+          "kind": "attr",
+          "selector": "#lista a",
+          "name": "href",
+          "match": { "pattern": "^detalhe\\.html\\?id=\\d+$" }
+        }
+      },
+      {
+        "id": "link-id-3",
+        "label": "Existe um link com href detalhe.html?id=3.",
+        "check": { "kind": "exists", "selector": "a[href=\"detalhe.html?id=3\"]" }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Comece com um array de alunos, cada um com `id` e `nome`, e selecione `#lista`.",
+      "Para cada aluno, crie um `li` e um `a` com `document.createElement`.",
+      "Monte o endereço com `` link.href = `detalhe.html?id=${aluno.id}` ``, defina `link.textContent` e adicione o `a` ao `li` e o `li` à lista."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/favoriteRepository.js",
+      "startLine": 20,
+      "endLine": 24
+    },
+    "evidence": "const linhas = await api(`/favorites?ownerToken=${encodeURIComponent(ownerToken)}`);"
+  }
+]
