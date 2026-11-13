@@ -315,8 +315,8 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
         >
           <Link to="/ajustes">
             {limitNotice.reached
-              ? "Limite diário atingido — ajuste em Ajustes"
-              : `Limite diário: ${limitNotice.shown} de ${limitNotice.total} cartas hoje — ajuste em Ajustes`}
+              ? "Limite diário atingido, ajuste em Ajustes"
+              : `Limite diário: ${limitNotice.shown} de ${limitNotice.total} cartas hoje, ajuste em Ajustes`}
           </Link>
         </p>
       ) : null}

@@ -49,7 +49,7 @@ function setDescription(description: string) {
 
 export function usePageTitle(page?: string) {
   useEffect(() => {
-    document.title = page ? `${PREFIX} — ${page}` : PREFIX;
+    document.title = page ? `${PREFIX}: ${page}` : PREFIX;
 
     setDescription(
       page !== undefined && Object.hasOwn(PAGE_DESCRIPTIONS, page)

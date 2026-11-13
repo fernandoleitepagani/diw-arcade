@@ -67,13 +67,13 @@ describe('OnboardingPage', () => {
     const { router, storage } = renderApp('/hoje', false);
 
     const regular = await screen.findByRole('button', {
-      name: 'Regular · 50 XP',
+      name: 'Regular, 50 XP',
     });
     await waitFor(() => expect(regular).toHaveFocus());
 
     await user.tab();
     expect(
-      screen.getByRole('button', { name: 'Intenso · 100 XP' }),
+      screen.getByRole('button', { name: 'Intenso, 100 XP' }),
     ).toHaveFocus();
 
     await user.keyboard('{Enter}');
@@ -94,7 +94,7 @@ describe('OnboardingPage', () => {
     const user = userEvent.setup();
     const { router, storage } = renderApp('/hoje', false);
 
-    await screen.findByRole('button', { name: 'Regular · 50 XP' });
+    await screen.findByRole('button', { name: 'Regular, 50 XP' });
     await user.keyboard('{Escape}');
 
     await waitFor(() => {
