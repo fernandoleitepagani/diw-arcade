@@ -1,0 +1,31 @@
+.seg {
+  display: flex;
+  gap: 3px;
+  --c: var(--text);
+}
+
+.seg i {
+  flex: 1;
+  height: 12px;
+  background: var(--c);
+  min-width: 0;
+}
+
+.seg i.off {
+  background: var(--dither);
+}
+
+.seg.sm i {
+  height: 8px;
+}
+
+.seg:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seg i {
+    transition: none;
+  }
+}
