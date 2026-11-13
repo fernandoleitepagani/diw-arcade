@@ -3,22 +3,49 @@ import { join } from 'node:path';
 import { NODE_IDS, type NodeId } from '../src/content/tree';
 import { runInJsdom } from '../src/features/runner/jsdomRunner';
 import {
+  FILE_KINDS,
   formatReport,
   validateContent,
   type ContentFile,
+  type FileKind,
   type ValidateOptions,
 } from './lib/validate';
 
 const NODE_DIR_PATTERN = /^n\d{2}$/;
 const NODE_FILE_PATTERN = /^(questions|flashcards|challenges)\.json$/;
 
+function parseOnly(
+  value: string | undefined,
+): { only: { nodeId: NodeId; kind?: FileKind } } | { invalid: string } {
+  const parts = (value ?? '').split('/');
+  const [nodeId, kind] = parts;
+  if (
+    !value ||
+    parts.length > 2 ||
+    !nodeId ||
+    !(NODE_IDS as readonly string[]).includes(nodeId) ||
+    (kind !== undefined && !(FILE_KINDS as readonly string[]).includes(kind))
+  ) {
+    return { invalid: value ?? '(ausente)' };
+  }
+  return {
+    only: {
+      nodeId: nodeId as NodeId,
+      ...(kind ? { kind: kind as FileKind } : {}),
+    },
+  };
+}
+
 function parseArgs(argv: readonly string[]): {
   opts: ValidateOptions;
   invalidNode?: string;
+  invalidOnly?: string;
 } {
   const opts: ValidateOptions = {};
   const nodeIndex = argv.indexOf('--node');
   const nodeValue = nodeIndex >= 0 ? argv[nodeIndex + 1] : undefined;
+  const onlyIndex = argv.indexOf('--only');
+  const onlyValue = onlyIndex >= 0 ? argv[onlyIndex + 1] : undefined;
 
   if (argv.includes('--require-all')) {
     opts.requireAll = true;
@@ -33,9 +60,21 @@ function parseArgs(argv: readonly string[]): {
     return { opts, invalidNode: nodeValue ?? '(ausente)' };
   }
 
+  if (onlyIndex >= 0) {
+    const parsed = parseOnly(onlyValue);
+    if ('invalid' in parsed) {
+      return { opts, invalidOnly: parsed.invalid };
+    }
+    opts.only = parsed.only;
+  }
+
   const sources = process.env.DIW_SOURCES;
   if (sources) {
     opts.sourcesDir = sources;
+  }
+  const repo = process.env.DIW_REPO;
+  if (repo) {
+    opts.repoDir = repo;
   }
   return { opts };
 }
@@ -86,9 +125,15 @@ function readContentFiles(root: string): ContentFile[] {
 }
 
 async function main(): Promise<void> {
-  const { opts, invalidNode } = parseArgs(process.argv.slice(2));
+  const { opts, invalidNode, invalidOnly } = parseArgs(process.argv.slice(2));
   if (invalidNode) {
     console.log(`ERROR - -: nó inválido: ${invalidNode}`);
+    console.log('content FAILED: 1 errors');
+    process.exitCode = 1;
+    return;
+  }
+  if (invalidOnly) {
+    console.log(`ERROR - -: --only inválido: ${invalidOnly}`);
     console.log('content FAILED: 1 errors');
     process.exitCode = 1;
     return;

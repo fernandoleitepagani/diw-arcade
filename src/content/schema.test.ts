@@ -7,9 +7,10 @@ import {
   MatcherSchema,
   McqQuestionSchema,
   QuestionSchema,
+  SourceSchema,
   type Question,
 } from './schema';
-import { LAB_IDS, NODES, NODE_IDS, UNITS } from './tree';
+import { LAB_IDS, NODES, NODE_IDS, UNITS, resolveMinimums } from './tree';
 import {
   fixtureChallenge,
   fixtureFlashcards,
@@ -130,6 +131,82 @@ describe('challenge schema', () => {
   });
 });
 
+describe('source schema', () => {
+  it('parses the legacy aula form unchanged', () => {
+    expect(SourceSchema.parse({ aula: 172, slide: 2 })).toEqual({
+      aula: 172,
+      slide: 2,
+    });
+  });
+
+  it('accepts every explicit kind', () => {
+    expect(
+      SourceSchema.safeParse({ kind: 'tiaw', doc: 'tiaw-json', slide: 3 })
+        .success,
+    ).toBe(true);
+    expect(
+      SourceSchema.safeParse({ kind: 'orientacao' }).success,
+    ).toBe(true);
+    expect(
+      SourceSchema.safeParse({
+        kind: 'repo',
+        path: 'PROJETOS/exemplo/app.js',
+        startLine: 1,
+        endLine: 2,
+      }).success,
+    ).toBe(true);
+  });
+
+  it('rejects an unknown kind', () => {
+    expect(
+      SourceSchema.safeParse({ kind: 'podcast', slide: 1 }).success,
+    ).toBe(false);
+  });
+
+  it('rejects unsafe repo paths', () => {
+    const unsafe = [
+      'PROJETOS/../app.js',
+      '/PROJETOS/app.js',
+      'PROJETOS\\app.js',
+      'PROJETOS/a..b.js',
+      'PROJETOS/app.txt',
+      'OUTRO/app.js',
+    ];
+    for (const path of unsafe) {
+      expect(
+        SourceSchema.safeParse({
+          kind: 'repo',
+          path,
+          startLine: 1,
+          endLine: 2,
+        }).success,
+      ).toBe(false);
+    }
+  });
+
+  it('limits a repo range to 80 lines and rejects an inverted range', () => {
+    const base = {
+      kind: 'repo' as const,
+      path: 'PROJETOS/app.js',
+      startLine: 1,
+    };
+    expect(SourceSchema.safeParse({ ...base, endLine: 81 }).success).toBe(true);
+    expect(SourceSchema.safeParse({ ...base, endLine: 82 }).success).toBe(
+      false,
+    );
+    expect(
+      SourceSchema.safeParse({ ...base, startLine: 2, endLine: 1 }).success,
+    ).toBe(false);
+  });
+
+  it('rejects a tiaw doc outside the allowlist', () => {
+    expect(
+      SourceSchema.safeParse({ kind: 'tiaw', doc: 'aula-172', slide: 1 })
+        .success,
+    ).toBe(false);
+  });
+});
+
 describe('lab schema', () => {
   it('requires at least five steps and three requirements', () => {
     expect(
@@ -209,5 +286,14 @@ describe('tree', () => {
 
   it('lists the four lab ids', () => {
     expect([...LAB_IDS]).toEqual(['lab-01', 'lab-02', 'lab-03', 'jsonserver']);
+  });
+
+  it('resolves the default minimums (15/20/3/0)', () => {
+    expect(resolveMinimums(NODES[0]!)).toEqual({
+      questions: 15,
+      flashcards: 20,
+      challenges: 3,
+      executed: 0,
+    });
   });
 });

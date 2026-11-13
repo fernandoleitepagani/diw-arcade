@@ -10,20 +10,22 @@ import {
   type Flashcard,
   type LabGuide,
   type Question,
+  type Source,
 } from '../../src/content/schema';
 import {
   LAB_IDS,
   NODE_BY_ID,
   NODE_IDS,
+  resolveMinimums,
   type LabId,
   type NodeId,
 } from '../../src/content/tree';
 import { looksPtBr } from '../../src/lib/text/ptbr';
-import { hasEvidence, loadSlides } from './sources';
+import { hasEvidence, loadRepoLines, loadSlides, normalize } from './sources';
 
-type FileKind = 'questions' | 'flashcards' | 'challenges';
+export type FileKind = 'questions' | 'flashcards' | 'challenges';
 
-const FILE_KINDS: readonly FileKind[] = [
+export const FILE_KINDS: readonly FileKind[] = [
   'questions',
   'flashcards',
   'challenges',
@@ -84,6 +86,25 @@ export type RunChallenge = (
   input: RunChallengeInput,
 ) => RunChallengeResult | Promise<RunChallengeResult>;
 
+export interface SnippetMock {
+  status?: number;
+  body: unknown;
+}
+
+export interface SnippetSpec {
+  env: 'js' | 'dom';
+  source: string;
+  html?: string;
+  url?: string;
+  mocks?: Record<string, SnippetMock>;
+}
+
+export type SnippetOutput =
+  | { ok: true; output: string }
+  | { ok: false; reason: string; detail: string };
+
+export type RunSnippet = (spec: SnippetSpec) => Promise<SnippetOutput>;
+
 export interface ValidateOptions {
   /** All 14×3 node files and 4 labs are required. */
   requireAll?: boolean;
@@ -93,8 +114,14 @@ export interface ValidateOptions {
   withChallenges?: boolean;
   /** When set, evidence is checked against the slide texts. */
   sourcesDir?: string;
+  /** When set, repo evidence is checked against the repository files. */
+  repoDir?: string;
+  /** Validate just this node's files (all three, or one kind) and skip labs. */
+  only?: { nodeId: NodeId; kind?: FileKind };
   /** Injected by Task 11; rule 9 is skipped when absent. */
   runChallenge?: RunChallenge;
+  /** Injected by Task 3; snippet execution is skipped when absent. */
+  runSnippet?: RunSnippet;
   /** Defaults to `src/content`. */
   contentRoot?: string;
 }
@@ -125,6 +152,8 @@ export interface ValidationReport {
   nodes: NodeReport[];
   labs: number;
   evidence: EvidenceReport;
+  repoEvidence: EvidenceReport;
+  code: EvidenceReport;
 }
 
 type Classification =
@@ -222,9 +251,23 @@ export async function validateContent(
   opts: ValidateOptions = {},
 ): Promise<ValidationReport> {
   const root = opts.contentRoot ?? 'src/content';
-  const entries: ContentFile[] = Array.isArray(files)
-    ? files.map((file) => ({ ...file }))
-    : Object.entries(files).map(([path, data]) => ({ path, data }));
+  const only = opts.only;
+  const entries: ContentFile[] = (
+    Array.isArray(files)
+      ? files.map((file) => ({ ...file }))
+      : Object.entries(files).map(([path, data]) => ({ path, data }))
+  ).filter((file) => {
+    if (!only) {
+      return true;
+    }
+    const classified = classify(file.path);
+    return (
+      classified.kind !== 'unknown' &&
+      classified.kind !== 'lab' &&
+      classified.nodeId === only.nodeId &&
+      (only.kind === undefined || classified.kind === only.kind)
+    );
+  });
 
   const errors: ValidationError[] = [];
   const questions = emptyNodeRecord<Question>();
@@ -238,7 +281,10 @@ export async function validateContent(
 
   let evidenceVerified = 0;
   let evidenceTotal = 0;
+  let repoVerified = 0;
+  let repoTotal = 0;
   const slideCache = new Map<string, string[] | null>();
+  const repoCache = new Map<string, string[] | null>();
 
   function addError(
     file: string,
@@ -302,6 +348,55 @@ export async function validateContent(
     evidenceVerified += 1;
   }
 
+  function verifyRepoEvidence(
+    file: string,
+    id: string,
+    path: string,
+    startLine: number,
+    endLine: number,
+    evidence: string,
+    extra: { nodeId?: NodeId; labId?: LabId },
+  ): void {
+    if (!opts.repoDir) {
+      return;
+    }
+    repoTotal += 1;
+    let lines = repoCache.get(path);
+    if (lines === undefined) {
+      lines = loadRepoLines(opts.repoDir, path);
+      repoCache.set(path, lines);
+    }
+    if (lines === null) {
+      addError(
+        file,
+        id,
+        `arquivo do repositório ${path} não encontrado`,
+        extra,
+      );
+      return;
+    }
+    if (startLine < 1 || endLine > lines.length) {
+      addError(
+        file,
+        id,
+        `intervalo de linhas ${startLine}–${endLine} fora do arquivo (${path} tem ${lines.length} linhas)`,
+        extra,
+      );
+      return;
+    }
+    const excerpt = lines.slice(startLine - 1, endLine).join('\n');
+    if (!normalize(excerpt).includes(normalize(evidence))) {
+      addError(
+        file,
+        id,
+        'evidência não encontrada no intervalo de linhas citado',
+        extra,
+      );
+      return;
+    }
+    repoVerified += 1;
+  }
+
   function checkIdentity(
     item: { id: string; nodeId: NodeId },
     file: string,
@@ -334,30 +429,81 @@ export async function validateContent(
     item: {
       id: string;
       nodeId: NodeId;
-      source: { aula: number; slide: number };
+      source: Source;
       evidence: string;
     },
     file: string,
     folderNode: NodeId,
   ): void {
     const node = NODE_BY_ID[item.nodeId];
-    if (node && !node.aulas.includes(item.source.aula)) {
-      addError(
-        file,
-        item.id,
-        `aula ${item.source.aula} não pertence ao nó ${item.nodeId}`,
-        { nodeId: folderNode },
-      );
+    const source = item.source;
+    const extra = { nodeId: folderNode };
+
+    if (!('kind' in source)) {
+      if (node && !node.aulas.includes(source.aula)) {
+        addError(
+          file,
+          item.id,
+          `aula ${source.aula} não pertence ao nó ${item.nodeId}`,
+          extra,
+        );
+      }
+      const doc = `aula-${String(source.aula).padStart(3, '0')}`;
+      verifyEvidence(file, item.id, doc, source.slide, item.evidence, extra);
+      return;
     }
-    const doc = `aula-${String(item.source.aula).padStart(3, '0')}`;
-    verifyEvidence(
-      file,
-      item.id,
-      doc,
-      item.source.slide,
-      item.evidence,
-      { nodeId: folderNode },
-    );
+
+    switch (source.kind) {
+      case 'tiaw': {
+        if (!(node?.docs ?? []).includes(source.doc)) {
+          addError(
+            file,
+            item.id,
+            `documento ${source.doc} não pertence ao nó ${item.nodeId}`,
+            extra,
+          );
+        }
+        verifyEvidence(
+          file,
+          item.id,
+          source.doc,
+          source.slide,
+          item.evidence,
+          extra,
+        );
+        return;
+      }
+      case 'orientacao': {
+        if (!(node?.docs ?? []).includes('orientacao-prova2')) {
+          addError(
+            file,
+            item.id,
+            `documento orientacao-prova2 não pertence ao nó ${item.nodeId}`,
+            extra,
+          );
+        }
+        verifyEvidence(
+          file,
+          item.id,
+          'orientacao-prova2',
+          1,
+          item.evidence,
+          extra,
+        );
+        return;
+      }
+      case 'repo':
+        verifyRepoEvidence(
+          file,
+          item.id,
+          source.path,
+          source.startLine,
+          source.endLine,
+          item.evidence,
+          extra,
+        );
+        return;
+    }
   }
 
   function checkQuestion(item: Question, file: string): void {
@@ -473,12 +619,16 @@ export async function validateContent(
     items: readonly (Question | Flashcard | Challenge)[],
     file: string,
   ): void {
+    const minimums = resolveMinimums(NODE_BY_ID[nodeId]);
     if (kind === 'questions') {
       const list = items as readonly Question[];
-      if (list.length < 15) {
-        addError(file, nodeId, `mínimo de 15 questões (encontradas ${list.length})`, {
+      if (list.length < minimums.questions) {
+        addError(
+          file,
           nodeId,
-        });
+          `mínimo de ${minimums.questions} questões (encontradas ${list.length})`,
+          { nodeId },
+        );
       }
       const tf = list.filter((item) => item.type === 'tf').length;
       if (tf < 3) {
@@ -509,18 +659,21 @@ export async function validateContent(
         }
       }
     } else if (kind === 'flashcards') {
-      if (items.length < 20) {
+      if (items.length < minimums.flashcards) {
         addError(
           file,
           nodeId,
-          `mínimo de 20 flashcards (encontrados ${items.length})`,
+          `mínimo de ${minimums.flashcards} flashcards (encontrados ${items.length})`,
           { nodeId },
         );
       }
-    } else if (items.length < 3) {
-      addError(file, nodeId, `mínimo de 3 desafios (encontrados ${items.length})`, {
+    } else if (items.length < minimums.challenges) {
+      addError(
+        file,
         nodeId,
-      });
+        `mínimo de ${minimums.challenges} desafios (encontrados ${items.length})`,
+        { nodeId },
+      );
     }
   }
 
@@ -660,27 +813,35 @@ export async function validateContent(
   }
 
   const requiredNodes = new Set<NodeId>();
-  if (opts.requireAll) {
-    for (const nodeId of NODE_IDS) {
-      requiredNodes.add(nodeId);
-    }
-  }
-  if (opts.node) {
-    requiredNodes.add(opts.node);
-  }
-  if (opts.withChallenges && !opts.requireAll && requiredNodes.size === 0) {
-    for (const nodeId of NODE_IDS) {
-      const hasAny = FILE_KINDS.some((kind) =>
-        present.has(`${nodeId}/${kind}`),
-      );
-      if (hasAny) {
+  if (only) {
+    requiredNodes.add(only.nodeId);
+  } else {
+    if (opts.requireAll) {
+      for (const nodeId of NODE_IDS) {
         requiredNodes.add(nodeId);
+      }
+    }
+    if (opts.node) {
+      requiredNodes.add(opts.node);
+    }
+    if (opts.withChallenges && !opts.requireAll && requiredNodes.size === 0) {
+      for (const nodeId of NODE_IDS) {
+        const hasAny = FILE_KINDS.some((kind) =>
+          present.has(`${nodeId}/${kind}`),
+        );
+        if (hasAny) {
+          requiredNodes.add(nodeId);
+        }
       }
     }
   }
 
-  const requiredKinds: FileKind[] = ['questions', 'flashcards'];
-  if (opts.requireAll || opts.withChallenges) {
+  const requiredKinds: FileKind[] = only
+    ? only.kind
+      ? [only.kind]
+      : [...FILE_KINDS]
+    : ['questions', 'flashcards'];
+  if (!only && (opts.requireAll || opts.withChallenges)) {
     requiredKinds.push('challenges');
   }
   for (const nodeId of requiredNodes) {
@@ -693,7 +854,7 @@ export async function validateContent(
     }
   }
 
-  if (opts.requireAll) {
+  if (opts.requireAll && !only) {
     for (const labId of LAB_IDS) {
       if (!presentLabs.has(labId)) {
         addError(`${root}/labs/${labId}.json`, '-', 'arquivo obrigatório ausente', {
@@ -731,8 +892,14 @@ export async function validateContent(
     evidence: opts.sourcesDir
       ? { status: 'verified', verified: evidenceVerified, total: evidenceTotal }
       : { status: 'skipped' },
+    repoEvidence: opts.repoDir
+      ? { status: 'verified', verified: repoVerified, total: repoTotal }
+      : { status: 'skipped' },
+    code: { status: 'skipped' },
   };
 }
+
+export { resolveMinimums };
 
 export function formatReport(report: ValidationReport): string[] {
   const lines = report.nodes.map(
@@ -749,9 +916,23 @@ export function formatReport(report: ValidationReport): string[] {
       `evidence: verified ${report.evidence.verified}/${report.evidence.total}`,
     );
   }
+  if (report.repoEvidence.status === 'skipped') {
+    lines.push('repo evidence: skipped (DIW_REPO not set)');
+  } else {
+    lines.push(
+      `repo evidence: verified ${report.repoEvidence.verified}/${report.repoEvidence.total}`,
+    );
+  }
+  if (report.code.status === 'skipped') {
+    lines.push('code: skipped (executor ausente)');
+  } else {
+    lines.push(`code: verified ${report.code.verified}/${report.code.total}`);
+  }
   if (report.ok) {
     const okNodes = report.nodes.filter((node) => node.ok).length;
-    lines.push(`content OK: ${okNodes}/14 nodes, ${report.labs} labs`);
+    lines.push(
+      `content OK: ${okNodes}/${NODE_IDS.length} nodes, ${report.labs} labs`,
+    );
   } else {
     lines.push(`content FAILED: ${report.errors.length} errors`);
   }

@@ -44,18 +44,43 @@ referência e o código inicial de cada desafio.
 `npm run validate:content` roda em **modo estrito** (`--require-all`): exige os
 14 nós e os 4 laboratórios, e sai com erro se qualquer arquivo faltar.
 
-### Evidências e `DIW_SOURCES`
+### Evidências
 
-Cada item cita uma aula e um slide e traz uma evidência verbatim. Para conferir
-que a evidência existe no slide, aponte `DIW_SOURCES` para a pasta com os
-arquivos de texto das aulas e laboratórios (`aula-NNN.txt` e `lab-0N.txt`):
+Cada item cita uma fonte e traz uma evidência verbatim. Há quatro formas de
+fonte:
+
+- **aula** — o formato legado `{ "aula": 172, "slide": 2 }`, conferido contra
+  `aula-NNN.txt`.
+- **tiaw** — `{ "kind": "tiaw", "doc": "tiaw-json", "slide": 2 }`, conferido
+  contra `tiaw-*.txt`.
+- **orientacao** — `{ "kind": "orientacao" }`, conferido contra
+  `orientacao-prova2.txt`.
+- **repo** — `{ "kind": "repo", "path": "PROJETOS/.../app.js", "startLine": 10,
+  "endLine": 24 }`, conferido contra o arquivo real do repositório da
+  disciplina. O caminho precisa começar com `PROJETOS/` e o intervalo não pode
+  passar de 80 linhas.
+
+Aponte `DIW_SOURCES` para a pasta com os textos das aulas, dos TIAW e da
+orientação, e `DIW_REPO` para a raiz do repositório da disciplina:
 
 ```bash
-DIW_SOURCES=/caminho/fora/do/repo/sources npm run validate:content
+DIW_SOURCES=/caminho/fora/do/repo/sources \
+DIW_REPO=/caminho/fora/do/repo/desenvolvimento-de-interfaces-web \
+npm run validate:content
 ```
 
-A saída mostra `evidence: verified N/N`. Sem `DIW_SOURCES`, o validador imprime
-`evidence: skipped (DIW_SOURCES not set)` e não confere as evidências.
+A saída mostra `evidence: verified N/N` (aula, tiaw e orientação) e
+`repo evidence: verified N/N` (código do repositório). A linha `code:` fica
+`skipped (executor ausente)` enquanto o executor de trechos não é usado. Sem
+`DIW_SOURCES` ou `DIW_REPO`, o validador imprime `skipped` e não confere
+aquelas evidências.
+
+Para validar só um nó, ou um tipo de arquivo dele, use `--only`:
+
+```bash
+npx tsx scripts/validate-content.ts --only n07
+npx tsx scripts/validate-content.ts --only n07/flashcards
+```
 
 **Nunca faça commit das fontes, dos PDFs ou dos dados do Canvas.** Essa pasta
 fica fora do repositório e é somente leitura. O `.gitignore` já bloqueia PDFs e

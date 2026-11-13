@@ -25,6 +25,31 @@ export const LAB_IDS = ['lab-01', 'lab-02', 'lab-03', 'jsonserver'] as const;
 
 export type LabId = (typeof LAB_IDS)[number];
 
+/** Documents a node may cite beyond the course aulas. */
+export const SOURCE_DOCS = [
+  'tiaw-json',
+  'tiaw-design-thinking',
+  'tiaw-dtg',
+  'tiaw-requisitos',
+  'orientacao-prova2',
+] as const;
+
+export type DocId = (typeof SOURCE_DOCS)[number];
+
+export const TIAW_DOCS = [
+  'tiaw-json',
+  'tiaw-design-thinking',
+  'tiaw-dtg',
+  'tiaw-requisitos',
+] as const satisfies readonly DocId[];
+
+export interface NodeMinimums {
+  questions?: number;
+  flashcards?: number;
+  challenges?: number;
+  executed?: number;
+}
+
 export interface Unit {
   id: UnitId;
   title: string;
@@ -37,6 +62,28 @@ export interface TreeNode {
   /** Aulas that feed this node, in the canonical course order. */
   aulas: readonly number[];
   unitId: UnitId;
+  /** Extra documents this node may cite; absent means aulas only. */
+  docs?: readonly DocId[];
+  /** Overrides the default per-node minimums. */
+  minimums?: NodeMinimums;
+}
+
+export const DEFAULT_NODE_MINIMUMS: Required<NodeMinimums> = {
+  questions: 15,
+  flashcards: 20,
+  challenges: 3,
+  executed: 0,
+};
+
+/** Fills a node's minimums with the project defaults. */
+export function resolveMinimums(node: TreeNode): Required<NodeMinimums> {
+  const minimums = node.minimums ?? {};
+  return {
+    questions: minimums.questions ?? DEFAULT_NODE_MINIMUMS.questions,
+    flashcards: minimums.flashcards ?? DEFAULT_NODE_MINIMUMS.flashcards,
+    challenges: minimums.challenges ?? DEFAULT_NODE_MINIMUMS.challenges,
+    executed: minimums.executed ?? DEFAULT_NODE_MINIMUMS.executed,
+  };
 }
 
 export const UNITS: readonly Unit[] = [
