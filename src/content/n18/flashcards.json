@@ -1,0 +1,305 @@
+[
+  {
+    "id": "n18-f001",
+    "nodeId": "n18",
+    "front": "Segundo a aula, o que a URL indica ao browser?",
+    "back": "O recurso que o usuário deseja acessar. A URL é o texto exibido na parte superior do browser.",
+    "source": { "aula": 131, "slide": 3 },
+    "evidence": "qual recurso o usuário deseja acessar."
+  },
+  {
+    "id": "n18-f002",
+    "nodeId": "n18",
+    "front": "O que é uma URI?",
+    "back": "É o padrão de endereçamento de recursos da rede que engloba os conceitos de URL e de URN.",
+    "source": { "aula": 131, "slide": 4 },
+    "evidence": "URI (Uniform Resource Identifier) é um padrão para o endereçamento de recursos disponíveis na rede que engloba os conceitos de URL (Uniform Resource Locator) e URN (Uniform Resource Name)."
+  },
+  {
+    "id": "n18-f003",
+    "nodeId": "n18",
+    "front": "O que é uma URL?",
+    "back": "É um tipo de URI que referencia um recurso e sua localização, normalmente na Internet.",
+    "source": { "aula": 131, "slide": 5 },
+    "evidence": "URL (Uniform Resource Locator) é um padrão de URI que serve para referenciar um recurso e sua localização, normalmente na Internet."
+  },
+  {
+    "id": "n18-f004",
+    "nodeId": "n18",
+    "front": "O que é uma URN?",
+    "back": "É um tipo de URI que identifica um recurso pelo nome em um namespace, sem indicar sua localização.",
+    "source": { "aula": 131, "slide": 9 },
+    "evidence": "URN (Uniform Resource Name) é um tipo de URI que identifica um recurso específico (NSS) pelo nome em um namespace (NID)."
+  },
+  {
+    "id": "n18-f005",
+    "nodeId": "n18",
+    "front": "Qual é a estrutura genérica de uma URL?",
+    "back": "A estrutura é `esquema://user:pass@host:porta/caminho?query#fragmento`.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "esquema://user:pass@host:porta/caminho?query#fragmento"
+  },
+  {
+    "id": "n18-f006",
+    "nodeId": "n18",
+    "front": "O que o esquema de uma URL identifica?",
+    "back": "A forma de interação entre um cliente e um servidor, como `http`, `https` e `ftp`.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Esquema – identifica a forma de interação entre um cliente e um servidor, como por exemplo http, https, ftp, entre outros"
+  },
+  {
+    "id": "n18-f007",
+    "nodeId": "n18",
+    "front": "O que o host de uma URL representa?",
+    "back": "O nome ou número IP onde está a aplicação servidor.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Host – nome ou número IP onde se encontra a aplicação servidor"
+  },
+  {
+    "id": "n18-f008",
+    "nodeId": "n18",
+    "front": "O que a porta de uma URL identifica e quando ela pode ser omitida?",
+    "back": "A porta TCP/IP associada ao servidor. A porta padrão do HTTP (80) pode ser omitida.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Porta – identifica a porta TCP/IP associada ao servidor. A porta padrão do HTTP (80) pode ser omitida"
+  },
+  {
+    "id": "n18-f009",
+    "nodeId": "n18",
+    "front": "O que o caminho de uma URL indica?",
+    "back": "O local exato onde o recurso se encontra.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Caminho – indica o local exato onde o recurso se encontra"
+  },
+  {
+    "id": "n18-f010",
+    "nodeId": "n18",
+    "front": "O que é a query de uma URL?",
+    "back": "São dados não hierárquicos que detalham a consulta, normalmente em pares nome e valor.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Query – dados não hierárquicos, detalhando a consulta normalmente sob a forma de pares nome e valor"
+  },
+  {
+    "id": "n18-f011",
+    "nodeId": "n18",
+    "front": "O que o fragmento de uma URL identifica?",
+    "back": "Uma seção dentro do recurso.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Fragmento – identifica uma seção no recurso"
+  },
+  {
+    "id": "n18-f012",
+    "nodeId": "n18",
+    "front": "Na URL `http://localhost:80/admin/index.php?z1=w1&z2=w2`, quais são o caminho e a query?",
+    "back": "O caminho é `/admin/index.php` e a query é `z1=w1&z2=w2`, precedida por `?`.",
+    "source": { "aula": 131, "slide": 10 },
+    "evidence": "http://localhost:80/admin/index.php?z1=w1&z2=w2"
+  },
+  {
+    "id": "n18-f013",
+    "nodeId": "n18",
+    "front": "No exemplo da aula, qual é o domínio (site) da URL do Google?",
+    "back": "O domínio é `www.google.com`.",
+    "source": { "aula": 131, "slide": 8 },
+    "evidence": "Domínio/Site www.google.com"
+  },
+  {
+    "id": "n18-f014",
+    "nodeId": "n18",
+    "front": "Segundo a aula, o que o método HTTP GET faz?",
+    "back": "Recupera um recurso, equivalente ao SELECT do CRUD.",
+    "source": { "aula": 250, "slide": 11 },
+    "evidence": "GET – Recuperar um recurso (SELECT)"
+  },
+  {
+    "id": "n18-f015",
+    "nodeId": "n18",
+    "front": "Parâmetros de consulta em uma requisição GET podem alterar o estado de um recurso?",
+    "back": "Não. A aula afirma que GET e parâmetros de query não devem alterar estado de recursos.",
+    "source": { "aula": 250, "slide": 11 },
+    "evidence": "IMPORTANTE: Métodos GET e parâmetros de query não devem alterar estado de recursos."
+  },
+  {
+    "id": "n18-f016",
+    "nodeId": "n18",
+    "front": "Como se obtém um curso específico na API de exemplo?",
+    "back": "Com `GET /cursos/:id`, em que `:id` identifica o recurso.",
+    "source": { "aula": 250, "slide": 12 },
+    "evidence": "Obter um curso específico   RETRIEVE          GET /cursos/:id"
+  },
+  {
+    "id": "n18-f017",
+    "nodeId": "n18",
+    "front": "Como se obtém a lista de cursos na API de exemplo?",
+    "back": "Com `GET /cursos`, sem id na URL.",
+    "source": { "aula": 250, "slide": 12 },
+    "evidence": "Obter lista de cursos       RETRIEVE          GET /cursos"
+  },
+  {
+    "id": "n18-f018",
+    "nodeId": "n18",
+    "front": "No projeto Pokemon, como é montada a URL para buscar uma carta pelo ID?",
+    "back": "O ID entra como segmento do caminho: `` `${POKEMON_API}/${id}` ``.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 24,
+      "endLine": 29
+    },
+    "evidence": "const resposta = await fetch(`${POKEMON_API}/${id}`, { headers: headersPokemon() });"
+  },
+  {
+    "id": "n18-f019",
+    "nodeId": "n18",
+    "front": "No projeto Pokemon, por que o termo de busca passa por `encodeURIComponent` antes de entrar na query?",
+    "back": "Para escapar caracteres especiais do valor e não quebrar a URL ao montar `?q=...`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 33,
+      "endLine": 37
+    },
+    "evidence": "const q = encodeURIComponent(`name:\"${nome}*\"`);"
+  },
+  {
+    "id": "n18-f020",
+    "nodeId": "n18",
+    "front": "No projeto Pokemon, o que o parâmetro `pageSize=12` controla?",
+    "back": "Limita a resposta da API a 12 cartas por página.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 33,
+      "endLine": 37
+    },
+    "evidence": "const resposta = await fetch(`${POKEMON_API}?q=${q}&pageSize=12`, { headers: headersPokemon() });"
+  },
+  {
+    "id": "n18-f021",
+    "nodeId": "n18",
+    "front": "Na busca inicial do projeto Pokemon, qual query é enviada sem filtro de nome?",
+    "back": "Apenas `?pageSize=20`, que pede 20 cartas à API.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 41,
+      "endLine": 45
+    },
+    "evidence": "const resposta = await fetch(`${POKEMON_API}?pageSize=20`, { headers: headersPokemon() });"
+  },
+  {
+    "id": "n18-f022",
+    "nodeId": "n18",
+    "front": "Qual é a URL base usada pelo script do Cadastro de alunos?",
+    "back": "A URL base é `http://localhost:3001/alunos`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 1,
+      "endLine": 2
+    },
+    "evidence": "const API_URL = \"http://localhost:3001/alunos\";"
+  },
+  {
+    "id": "n18-f023",
+    "nodeId": "n18",
+    "front": "No Cadastro de alunos, como o id do aluno entra na URL da requisição de atualização?",
+    "back": "Como segmento de caminho: `` `${API_URL}/${id}` ``, junto do método `PATCH`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 50,
+      "endLine": 57
+    },
+    "evidence": "await fetch(`${API_URL}/${id}`, { method: \"PATCH\","
+  },
+  {
+    "id": "n18-f024",
+    "nodeId": "n18",
+    "front": "Qual é a URL da API configurada no projeto Mapa PUC Minas?",
+    "back": "A URL configurada é `http://localhost:3000/locais`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/config.js",
+      "startLine": 8,
+      "endLine": 9
+    },
+    "evidence": "const API_URL = 'http://localhost:3000/locais';"
+  },
+  {
+    "id": "n18-f025",
+    "nodeId": "n18",
+    "front": "Como a Pokédex busca os favoritos de um `ownerToken`?",
+    "back": "Com `GET /favorites?ownerToken=...`, usando `encodeURIComponent` no token.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/favoriteRepository.js",
+      "startLine": 20,
+      "endLine": 23
+    },
+    "evidence": "const linhas = await api(`/favorites?ownerToken=${encodeURIComponent(ownerToken)}`);"
+  },
+  {
+    "id": "n18-f026",
+    "nodeId": "n18",
+    "front": "O comentário do repositório mostra qual requisição que lista os favoritos deste navegador?",
+    "back": "A requisição é `GET /favorites?ownerToken=<uuid>`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/favoriteRepository.js",
+      "startLine": 12,
+      "endLine": 15
+    },
+    "evidence": "GET    /favorites?ownerToken=<uuid>   -> favoritos deste navegador"
+  },
+  {
+    "id": "n18-f027",
+    "nodeId": "n18",
+    "front": "Na Pokédex, de onde saem o protocolo, a porta e a origem usados para montar `API_URL`?",
+    "back": "De `window.location.protocol`, `window.location.port` e `window.location.origin`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/config/appConfig.js",
+      "startLine": 11,
+      "endLine": 14
+    },
+    "evidence": "const MESMA_ORIGEM = window.location.protocol.startsWith(\"http\") && window.location.port === PORTA_JSON_SERVER;"
+  },
+  {
+    "id": "n18-f028",
+    "nodeId": "n18",
+    "front": "Como a função `api` da Pokédex monta a URL final de cada requisição?",
+    "back": "Concatena a base `API_URL` com o caminho recebido: `` `${API_URL}${caminho}` ``. A query vai dentro de `caminho`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/api.js",
+      "startLine": 16,
+      "endLine": 27
+    },
+    "evidence": "resposta = await fetch(`${API_URL}${caminho}`, {"
+  },
+  {
+    "id": "n18-f029",
+    "nodeId": "n18",
+    "front": "O que `new URLSearchParams('a=1&b=2').get('c')` retorna quando a chave não existe?",
+    "back": "`null`. `get` devolve string para chave presente e `null` para chave ausente.",
+    "source": { "kind": "orientacao" },
+    "evidence": "observem atentamente os tipos de dados, o uso de operadores (como a diferença entre igualdade estrita e ampla)"
+  },
+  {
+    "id": "n18-f030",
+    "nodeId": "n18",
+    "front": "Em `new URLSearchParams('curso=SI&curso=ADS')`, o que `get('curso')` e `getAll('curso')` retornam?",
+    "back": "O primeiro valor é `'SI'`; `getAll('curso')` devolve `['SI', 'ADS']`.",
+    "source": { "kind": "orientacao" },
+    "evidence": "tratamento de URLs/parâmetros"
+  },
+  {
+    "id": "n18-f031",
+    "nodeId": "n18",
+    "front": "Em uma página com `?id=3` na URL, `location.search` retorna o quê?",
+    "back": "`?id=3`, com o `?` inicial. Para ler o valor, use `new URLSearchParams(location.search)`.",
+    "source": { "kind": "orientacao" },
+    "evidence": "Focada em trechos reais em JavaScript, manipulação do DOM, escopo de variáveis e tratamento de URLs/parâmetros."
+  }
+]
