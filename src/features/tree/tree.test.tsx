@@ -42,7 +42,9 @@ describe('árvore de habilidades', () => {
       UNITS.length,
     );
 
-    const links = tree.getAllByRole('link');
+    const links = tree
+      .getAllByRole('link')
+      .filter((link) => link.getAttribute('href')?.startsWith('/no/'));
     expect(links).toHaveLength(NODES.length);
     for (const link of links) {
       expect(link).toHaveAttribute('href', expect.stringMatching(/^\/no\/n\d{2}$/));
@@ -119,14 +121,10 @@ describe('árvore de habilidades', () => {
     expect(tags[0]!.closest('a')).toHaveAttribute('href', '/no/n09');
   });
 
-  it('shows the star rating label on every node card', () => {
+  it('shows the node state as text on every node card', () => {
     renderWithProgress(<TreePage />);
 
-    const labels = screen.getAllByRole('img', { name: /^Domínio: / });
-    expect(labels).toHaveLength(NODES.length);
-    expect(labels[0]).toHaveAccessibleName(
-      'Domínio: quiz pendente, cartas pendente, código pendente',
-    );
+    expect(trilha().getAllByText('Nova')).toHaveLength(NODES.length);
   });
 
   it('draws the decorative connectors out of the accessibility tree', () => {
