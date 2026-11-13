@@ -1,8 +1,26 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { cssVars, tokens } from './tokens';
+import { THEMES, cssVars, tokens } from './tokens';
 
 const css = readFileSync('src/styles/tokens.css', 'utf8');
+const themeCss = readFileSync('src/styles/theme.css', 'utf8');
+
+function parseThemeBlocks(source: string): Record<'dark' | 'light', Record<string, string>> {
+  const stripped = source.replace(/\/\*[\s\S]*?\*\//g, '');
+  const blocks: Record<'dark' | 'light', Record<string, string>> = { dark: {}, light: {} };
+
+  for (const match of stripped.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const selector = match[1] ?? '';
+    const body = match[2] ?? '';
+    if (selector.includes('data-theme=dark')) {
+      Object.assign(blocks.dark, parseCssTokens(body));
+    } else if (selector.includes('data-theme=light')) {
+      Object.assign(blocks.light, parseCssTokens(body));
+    }
+  }
+
+  return blocks;
+}
 
 function parseCssTokens(source: string): Record<string, string> {
   const declared: Record<string, string> = {};
@@ -83,6 +101,58 @@ describe('design tokens', () => {
   it('keeps on-accent readable on every accent fill', () => {
     for (const fill of [tokens.accent, tokens.reward, tokens.xp]) {
       expect(contrast(tokens.onAccent, fill)).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  it('keeps theme.css in sync with THEMES', () => {
+    const blocks = parseThemeBlocks(themeCss);
+
+    for (const theme of ['dark', 'light'] as const) {
+      const declared = blocks[theme];
+      const names = Object.keys(declared).map((name) => name.slice(2));
+
+      expect(Object.keys(THEMES[theme]).sort(), theme).toEqual(names.sort());
+
+      for (const [key, value] of Object.entries(THEMES[theme])) {
+        expect(declared[`--${key}`], `${theme} --${key}`).toBe(value);
+      }
+    }
+  });
+
+  it('meets AA for text and muted on bg and panel in both themes', () => {
+    for (const theme of Object.values(THEMES)) {
+      for (const text of [theme.text, theme.muted]) {
+        for (const background of [theme.bg, theme.panel]) {
+          expect(contrast(text, background)).toBeGreaterThanOrEqual(4.5);
+        }
+      }
+    }
+  });
+
+  it('keeps faint, unit colors and on-u at 3:1 in both themes', () => {
+    for (const theme of Object.values(THEMES)) {
+      for (const background of [theme.bg, theme.panel]) {
+        expect(contrast(theme.faint, background)).toBeGreaterThanOrEqual(3);
+        for (const [key, value] of Object.entries(theme)) {
+          if (key.startsWith('u-')) {
+            expect(contrast(value, background), key).toBeGreaterThanOrEqual(3);
+          }
+        }
+      }
+
+      for (const [key, value] of Object.entries(theme)) {
+        if (key.startsWith('u-')) {
+          expect(contrast(theme['on-u'], value), key).toBeGreaterThanOrEqual(3);
+        }
+      }
+    }
+  });
+
+  it('keeps btn-fg on btn-bg and ok and bad on panel at 4.5', () => {
+    for (const theme of Object.values(THEMES)) {
+      expect(contrast(theme['btn-fg'], theme['btn-bg'])).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(theme.ok, theme.panel)).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(theme.bad, theme.panel)).toBeGreaterThanOrEqual(4.5);
     }
   });
 });
