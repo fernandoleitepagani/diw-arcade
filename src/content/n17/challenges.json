@@ -1,0 +1,342 @@
+[
+  {
+    "id": "n17-c01",
+    "nodeId": "n17",
+    "title": "Catálogo em cards",
+    "kind": "js",
+    "goal": "Renderize o array jogos como cards dentro de #catalogo, com o título em .card-titulo e o gênero em .card-genero.",
+    "starter": {
+      "html": "<h2>Catálogo</h2>\n<div id=\"catalogo\"></div>",
+      "css": ".card { border: 1px solid #ccc; margin: 8px 0; padding: 8px; }",
+      "js": "const jogos = [\n  { titulo: 'Zelda', genero: 'Aventura' },\n  { titulo: 'Tetris', genero: 'Puzzle' },\n  { titulo: 'Hades', genero: 'Ação' },\n];\n\n// Renderize um card para cada jogo dentro de #catalogo.\n"
+    },
+    "solution": {
+      "html": "<h2>Catálogo</h2>\n<div id=\"catalogo\"></div>",
+      "css": ".card { border: 1px solid #ccc; margin: 8px 0; padding: 8px; }",
+      "js": "const jogos = [\n  { titulo: 'Zelda', genero: 'Aventura' },\n  { titulo: 'Tetris', genero: 'Puzzle' },\n  { titulo: 'Hades', genero: 'Ação' },\n];\n\nconst catalogo = document.querySelector('#catalogo');\n\njogos.forEach((jogo) => {\n  const card = document.createElement('article');\n  card.className = 'card';\n\n  const titulo = document.createElement('h3');\n  titulo.className = 'card-titulo';\n  titulo.textContent = jogo.titulo;\n\n  const genero = document.createElement('p');\n  genero.className = 'card-genero';\n  genero.textContent = jogo.genero;\n\n  card.appendChild(titulo);\n  card.appendChild(genero);\n  catalogo.appendChild(card);\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "catalogo-existe",
+        "label": "O container #catalogo existe na página.",
+        "check": { "kind": "exists", "selector": "#catalogo" }
+      },
+      {
+        "id": "tres-cards",
+        "label": "O array é renderizado como exatamente três elementos .card.",
+        "check": { "kind": "count", "selector": "#catalogo .card", "min": 3, "max": 3 }
+      },
+      {
+        "id": "primeiro-titulo",
+        "label": "O primeiro card mostra o título Zelda em .card-titulo.",
+        "check": {
+          "kind": "text",
+          "selector": ".card-titulo",
+          "match": { "equals": "Zelda" }
+        }
+      },
+      {
+        "id": "primeiro-genero",
+        "label": "O primeiro card mostra o gênero Aventura em .card-genero.",
+        "check": {
+          "kind": "text",
+          "selector": ".card-genero",
+          "match": { "equals": "Aventura" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Selecione o container com `document.querySelector('#catalogo')` antes do laço.",
+      "Use `jogos.forEach((jogo) => { ... })` e crie um elemento com `document.createElement('article')` para cada objeto.",
+      "Configure `className` e `textContent` dos filhos, use `appendChild` dentro do card e por fim `catalogo.appendChild(card)`."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 48,
+      "endLine": 62
+    },
+    "evidence": "const div = document.createElement(\"div\");"
+  },
+  {
+    "id": "n17-c02",
+    "nodeId": "n17",
+    "title": "Alternar tema",
+    "kind": "js",
+    "goal": "Ao clicar em #alternar, alterne a classe escuro em #app: o primeiro clique adiciona e o segundo remove.",
+    "starter": {
+      "html": "<button id=\"alternar\" type=\"button\">Alternar tema</button>\n<main id=\"app\" class=\"claro\">\n  <h1>DIW Arcade</h1>\n  <p>Conteúdo da página.</p>\n</main>",
+      "css": "body { font-family: sans-serif; }\n.claro { background: #ffffff; color: #111111; padding: 12px; }\n.escuro { background: #111111; color: #ffffff; padding: 12px; }",
+      "js": "// Registre o clique em #alternar e alterne a classe escuro em #app.\n"
+    },
+    "solution": {
+      "html": "<button id=\"alternar\" type=\"button\">Alternar tema</button>\n<main id=\"app\" class=\"claro\">\n  <h1>DIW Arcade</h1>\n  <p>Conteúdo da página.</p>\n</main>",
+      "css": "body { font-family: sans-serif; }\n.claro { background: #ffffff; color: #111111; padding: 12px; }\n.escuro { background: #111111; color: #ffffff; padding: 12px; }",
+      "js": "const botao = document.querySelector('#alternar');\nconst app = document.querySelector('#app');\n\nbotao.addEventListener('click', () => {\n  app.classList.toggle('escuro');\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "app-existe",
+        "label": "O elemento #app existe na página.",
+        "check": { "kind": "exists", "selector": "#app" }
+      },
+      {
+        "id": "classe-inicial",
+        "label": "Antes de qualquer clique, #app tem a classe claro.",
+        "check": {
+          "kind": "attr",
+          "selector": "#app",
+          "name": "class",
+          "match": { "pattern": "\\bclaro\\b" }
+        }
+      },
+      {
+        "id": "primeiro-clique",
+        "label": "Após um clique em #alternar, #app passa a ter a classe escuro.",
+        "before": [{ "do": "click", "selector": "#alternar" }],
+        "check": {
+          "kind": "attr",
+          "selector": "#app",
+          "name": "class",
+          "match": { "pattern": "\\bescuro\\b" }
+        }
+      },
+      {
+        "id": "segundo-clique",
+        "label": "Após outro clique, a classe escuro é removida de #app.",
+        "before": [{ "do": "click", "selector": "#alternar" }],
+        "check": { "kind": "count", "selector": "#app.escuro", "min": 0, "max": 0 }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Guarde em constantes o botão `#alternar` e o container `#app` com `document.querySelector`.",
+      "Registre o evento com `botao.addEventListener('click', () => { ... })`.",
+      "Dentro do callback, chame `app.classList.toggle('escuro')`: o mesmo método adiciona e remove a classe."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/components/favoriteButton.js",
+      "startLine": 25,
+      "endLine": 40
+    },
+    "evidence": "svg.classList.toggle(\"icon--filled\", isFavorite);"
+  },
+  {
+    "id": "n17-c03",
+    "nodeId": "n17",
+    "title": "Contador de curtidas",
+    "kind": "js",
+    "goal": "Comece #total em 0 e aumente em 1 a cada clique no botão #curtir.",
+    "starter": {
+      "html": "<button id=\"curtir\" type=\"button\">Curtir</button>\n<p>Total de curtidas: <strong id=\"total\">0</strong></p>",
+      "css": "#total { font-size: 1.5rem; }",
+      "js": "// Some 1 a cada clique em #curtir e mostre o valor em #total.\n"
+    },
+    "solution": {
+      "html": "<button id=\"curtir\" type=\"button\">Curtir</button>\n<p>Total de curtidas: <strong id=\"total\">0</strong></p>",
+      "css": "#total { font-size: 1.5rem; }",
+      "js": "const botao = document.querySelector('#curtir');\nconst total = document.querySelector('#total');\nlet curtidas = 0;\n\nbotao.addEventListener('click', () => {\n  curtidas += 1;\n  total.textContent = curtidas;\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "botao-existe",
+        "label": "O botão #curtir existe na página.",
+        "check": { "kind": "exists", "selector": "#curtir" }
+      },
+      {
+        "id": "total-inicial",
+        "label": "O contador #total começa em 0.",
+        "check": {
+          "kind": "text",
+          "selector": "#total",
+          "match": { "equals": "0" }
+        }
+      },
+      {
+        "id": "primeira-curtida",
+        "label": "Após um clique em #curtir, #total mostra 1.",
+        "before": [{ "do": "click", "selector": "#curtir" }],
+        "check": {
+          "kind": "text",
+          "selector": "#total",
+          "match": { "equals": "1" }
+        }
+      },
+      {
+        "id": "segunda-curtida",
+        "label": "Após outro clique, #total mostra 2.",
+        "before": [{ "do": "click", "selector": "#curtir" }],
+        "check": {
+          "kind": "text",
+          "selector": "#total",
+          "match": { "equals": "2" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Selecione `#curtir` e `#total` com `document.querySelector`.",
+      "Declare `let curtidas = 0;` fora do callback para o valor não zerar a cada clique.",
+      "No listener de click, faça `curtidas += 1;` e atribua `total.textContent = curtidas;`."
+    ],
+    "source": { "aula": 310, "slide": 10 },
+    "evidence": "Manipulação de objetos da página HTML e tratamento de eventos (DOM Document Object Model)"
+  },
+  {
+    "id": "n17-c04",
+    "nodeId": "n17",
+    "title": "Remover do carrinho",
+    "kind": "js",
+    "goal": "Use um único listener em #carrinho e event delegation para remover o item quando o botão .remover for clicado.",
+    "starter": {
+      "html": "<h2>Carrinho</h2>\n<ul id=\"carrinho\">\n  <li>Caneta <button class=\"remover\" type=\"button\">Remover</button></li>\n  <li>Caderno <button class=\"remover\" type=\"button\">Remover</button></li>\n  <li>Borracha <button class=\"remover\" type=\"button\">Remover</button></li>\n</ul>",
+      "css": "#carrinho li { margin: 4px 0; }\n.remover { margin-left: 8px; }",
+      "js": "// Registre um único clique em #carrinho e remova o <li> do botão clicado.\n"
+    },
+    "solution": {
+      "html": "<h2>Carrinho</h2>\n<ul id=\"carrinho\">\n  <li>Caneta <button class=\"remover\" type=\"button\">Remover</button></li>\n  <li>Caderno <button class=\"remover\" type=\"button\">Remover</button></li>\n  <li>Borracha <button class=\"remover\" type=\"button\">Remover</button></li>\n</ul>",
+      "css": "#carrinho li { margin: 4px 0; }\n.remover { margin-left: 8px; }",
+      "js": "const carrinho = document.querySelector('#carrinho');\n\ncarrinho.addEventListener('click', (evento) => {\n  const botao = evento.target.closest('.remover');\n  if (!botao) {\n    return;\n  }\n  botao.closest('li').remove();\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "tres-itens",
+        "label": "O carrinho começa com três itens.",
+        "check": { "kind": "count", "selector": "#carrinho li", "min": 3, "max": 3 }
+      },
+      {
+        "id": "primeiro-removido",
+        "label": "Após clicar no primeiro botão .remover, restam dois itens.",
+        "before": [{ "do": "click", "selector": ".remover" }],
+        "check": { "kind": "count", "selector": "#carrinho li", "min": 2, "max": 2 }
+      },
+      {
+        "id": "segundo-removido",
+        "label": "Após clicar em outro botão .remover, resta um item.",
+        "before": [{ "do": "click", "selector": ".remover" }],
+        "check": { "kind": "count", "selector": "#carrinho li", "min": 1, "max": 1 }
+      },
+      {
+        "id": "carrinho-vazio",
+        "label": "Após o último clique, o carrinho fica vazio.",
+        "before": [{ "do": "click", "selector": ".remover" }],
+        "check": { "kind": "count", "selector": "#carrinho li", "min": 0, "max": 0 }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Registre um único listener no elemento pai: `document.querySelector('#carrinho').addEventListener('click', ...)`.",
+      "Use `evento.target.closest('.remover')` para descobrir se o clique partiu de um botão de remoção.",
+      "Com o botão em mãos, chame `botao.closest('li').remove()` para remover o item inteiro."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 695,
+      "endLine": 702
+    },
+    "evidence": "document.addEventListener(\"click\", (e) => {\n    const alvo = e.target.closest(\"[data-action]\");"
+  },
+  {
+    "id": "n17-c05",
+    "nodeId": "n17",
+    "title": "Filtro instantâneo",
+    "kind": "js",
+    "goal": "A cada digitação em #filtro, esconda os itens de #lista que não contêm o texto digitado.",
+    "starter": {
+      "html": "<label for=\"filtro\">Filtrar alunos</label>\n<input id=\"filtro\" type=\"search\" placeholder=\"Digite um nome\">\n<ul id=\"lista\">\n  <li>Ana</li>\n  <li>Bruno</li>\n  <li>Ana Clara</li>\n  <li>Carla</li>\n</ul>",
+      "css": "#filtro { padding: 4px; }\n#lista li { margin: 4px 0; }",
+      "js": "// Escute o evento input de #filtro e esconda os itens que não combinam.\n"
+    },
+    "solution": {
+      "html": "<label for=\"filtro\">Filtrar alunos</label>\n<input id=\"filtro\" type=\"search\" placeholder=\"Digite um nome\">\n<ul id=\"lista\">\n  <li>Ana</li>\n  <li>Bruno</li>\n  <li>Ana Clara</li>\n  <li>Carla</li>\n</ul>",
+      "css": "#filtro { padding: 4px; }\n#lista li { margin: 4px 0; }",
+      "js": "const filtro = document.querySelector('#filtro');\nconst itens = document.querySelectorAll('#lista li');\n\nfiltro.addEventListener('input', () => {\n  const termo = filtro.value.trim().toLowerCase();\n\n  itens.forEach((item) => {\n    const combina = item.textContent.toLowerCase().includes(termo);\n    item.hidden = !combina;\n  });\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "filtro-existe",
+        "label": "O campo #filtro existe na página.",
+        "check": { "kind": "exists", "selector": "#filtro" }
+      },
+      {
+        "id": "lista-inicial",
+        "label": "Antes de digitar, os quatro itens de #lista estão visíveis.",
+        "check": {
+          "kind": "count",
+          "selector": "#lista li:not([hidden])",
+          "min": 4,
+          "max": 4
+        }
+      },
+      {
+        "id": "filtro-bru",
+        "label": "Ao digitar \"bru\", só o item Bruno continua visível.",
+        "before": [{ "do": "input", "selector": "#filtro", "value": "bru" }],
+        "check": {
+          "kind": "count",
+          "selector": "#lista li:not([hidden])",
+          "min": 1,
+          "max": 1
+        }
+      },
+      {
+        "id": "filtro-ana",
+        "label": "Ao trocar para \"ana\", os itens Ana e Ana Clara ficam visíveis.",
+        "before": [{ "do": "input", "selector": "#filtro", "value": "ana" }],
+        "check": {
+          "kind": "count",
+          "selector": "#lista li:not([hidden])",
+          "min": 2,
+          "max": 2
+        }
+      },
+      {
+        "id": "filtro-limpo",
+        "label": "Ao apagar o filtro, os quatro itens voltam a ficar visíveis.",
+        "before": [{ "do": "input", "selector": "#filtro", "value": "" }],
+        "check": {
+          "kind": "count",
+          "selector": "#lista li:not([hidden])",
+          "min": 4,
+          "max": 4
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Guarde o campo com `document.querySelector('#filtro')` e os itens com `document.querySelectorAll('#lista li')`.",
+      "Escute o evento `input` para reagir a cada tecla digitada.",
+      "Dentro do callback, compare `item.textContent.toLowerCase()` com `filtro.value.trim().toLowerCase()` e atribua o resultado negado a `item.hidden`."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 704,
+      "endLine": 709
+    },
+    "evidence": "el.conteudo.addEventListener(\"input\", (e) => {\n    if (e.target.id !== \"pesquisa\") return;\n    estado.busca = e.target.value;"
+  }
+]

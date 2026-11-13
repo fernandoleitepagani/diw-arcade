@@ -1,0 +1,254 @@
+[
+  {
+    "id": "n16-c01",
+    "nodeId": "n16",
+    "title": "Somar os valores de dois campos",
+    "kind": "js",
+    "goal": "Leia os dois campos numéricos, some os valores com Number e mostre o resultado em #resultado ao clicar em #somar.",
+    "starter": {
+      "html": "<h2>Calculadora de soma</h2>\n<label for=\"a\">Primeiro número</label>\n<input id=\"a\" type=\"number\" value=\"2\">\n<label for=\"b\">Segundo número</label>\n<input id=\"b\" type=\"number\" value=\"3\">\n<button id=\"somar\" type=\"button\">Somar</button>\n<p id=\"resultado\"></p>",
+      "css": "#resultado { font-weight: bold; }",
+      "js": "const a = document.querySelector('#a');\nconst b = document.querySelector('#b');\nconst resultado = document.querySelector('#resultado');\nconst botao = document.querySelector('#somar');\n\nbotao.addEventListener('click', () => {\n  resultado.textContent = a.value + b.value;\n});\n"
+    },
+    "solution": {
+      "html": "<h2>Calculadora de soma</h2>\n<label for=\"a\">Primeiro número</label>\n<input id=\"a\" type=\"number\" value=\"2\">\n<label for=\"b\">Segundo número</label>\n<input id=\"b\" type=\"number\" value=\"3\">\n<button id=\"somar\" type=\"button\">Somar</button>\n<p id=\"resultado\"></p>",
+      "css": "#resultado { font-weight: bold; }",
+      "js": "const a = document.querySelector('#a');\nconst b = document.querySelector('#b');\nconst resultado = document.querySelector('#resultado');\nconst botao = document.querySelector('#somar');\n\nbotao.addEventListener('click', () => {\n  resultado.textContent = Number(a.value) + Number(b.value);\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "campos-existem",
+        "label": "Os dois campos e o botão de soma existem na página.",
+        "check": { "kind": "exists", "selector": "#a" }
+      },
+      {
+        "id": "soma-padrao",
+        "label": "Com 2 e 3, clicar em Somar mostra 5 em #resultado.",
+        "before": [{ "do": "click", "selector": "#somar" }],
+        "check": {
+          "kind": "text",
+          "selector": "#resultado",
+          "match": { "equals": "5" }
+        }
+      },
+      {
+        "id": "soma-com-outros-valores",
+        "label": "Com 10 e 4, clicar em Somar mostra 14 em #resultado.",
+        "before": [
+          { "do": "input", "selector": "#a", "value": "10" },
+          { "do": "input", "selector": "#b", "value": "4" },
+          { "do": "click", "selector": "#somar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#resultado",
+          "match": { "equals": "14" }
+        }
+      },
+      {
+        "id": "soma-com-decimais",
+        "label": "Com 1.5 e 2.25, clicar em Somar mostra 3.75 em #resultado.",
+        "before": [
+          { "do": "input", "selector": "#a", "value": "1.5" },
+          { "do": "input", "selector": "#b", "value": "2.25" },
+          { "do": "click", "selector": "#somar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#resultado",
+          "match": { "equals": "3.75" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Lembre que `.value` de um `<input>` sempre devolve uma string, mesmo com `type=\"number\"`.",
+      "Converta cada valor com `Number(a.value)` e `Number(b.value)` antes de somar.",
+      "Atribua a soma convertida a `resultado.textContent` dentro do evento de clique."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/components/pokemonImage.js",
+      "startLine": 32,
+      "endLine": 32
+    },
+    "evidence": "const proxima = Number(img.dataset.indice || 0) + 1;"
+  },
+  {
+    "id": "n16-c02",
+    "nodeId": "n16",
+    "title": "Buscar aluno pelo id digitado",
+    "kind": "js",
+    "goal": "Ao clicar em #buscar, procure no array retornado por fetch o aluno cujo id seja igual ao valor de #id-aluno, comparando com === após converter o texto, e mostre o nome em #resultado ou \"Não encontrado\".",
+    "starter": {
+      "html": "<h2>Busca de aluno</h2>\n<label for=\"id-aluno\">ID do aluno</label>\n<input id=\"id-aluno\" type=\"number\" value=\"2\">\n<button id=\"buscar\" type=\"button\">Buscar</button>\n<p id=\"resultado\"></p>",
+      "css": "#resultado { font-weight: bold; }",
+      "js": "const campo = document.querySelector('#id-aluno');\nconst botao = document.querySelector('#buscar');\nconst resultado = document.querySelector('#resultado');\nconst url = 'http://localhost:3000/alunos';\n\nbotao.addEventListener('click', () => {\n  fetch(url)\n    .then((resposta) => resposta.json())\n    .then((alunos) => {\n      const encontrado = alunos.find((aluno) => aluno.id === campo.value);\n      resultado.textContent = encontrado ? encontrado.nome : 'Não encontrado';\n    });\n});\n"
+    },
+    "solution": {
+      "html": "<h2>Busca de aluno</h2>\n<label for=\"id-aluno\">ID do aluno</label>\n<input id=\"id-aluno\" type=\"number\" value=\"2\">\n<button id=\"buscar\" type=\"button\">Buscar</button>\n<p id=\"resultado\"></p>",
+      "css": "#resultado { font-weight: bold; }",
+      "js": "const campo = document.querySelector('#id-aluno');\nconst botao = document.querySelector('#buscar');\nconst resultado = document.querySelector('#resultado');\nconst url = 'http://localhost:3000/alunos';\n\nbotao.addEventListener('click', () => {\n  fetch(url)\n    .then((resposta) => resposta.json())\n    .then((alunos) => {\n      const encontrado = alunos.find((aluno) => aluno.id === Number(campo.value));\n      resultado.textContent = encontrado ? encontrado.nome : 'Não encontrado';\n    });\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "campo-existe",
+        "label": "O campo #id-aluno existe na página.",
+        "check": { "kind": "exists", "selector": "#id-aluno" }
+      },
+      {
+        "id": "busca-id-dois",
+        "label": "Com o id 2, a busca mostra Bruno em #resultado.",
+        "before": [
+          { "do": "click", "selector": "#buscar" },
+          { "do": "wait", "ms": 150 }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#resultado",
+          "match": { "equals": "Bruno" }
+        }
+      },
+      {
+        "id": "busca-id-um",
+        "label": "Com o id 1, a busca mostra Ana em #resultado.",
+        "before": [
+          { "do": "input", "selector": "#id-aluno", "value": "1" },
+          { "do": "click", "selector": "#buscar" },
+          { "do": "wait", "ms": 150 }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#resultado",
+          "match": { "equals": "Ana" }
+        }
+      },
+      {
+        "id": "busca-id-inexistente",
+        "label": "Com um id que não existe, a busca mostra Não encontrado.",
+        "before": [
+          { "do": "input", "selector": "#id-aluno", "value": "9" },
+          { "do": "click", "selector": "#buscar" },
+          { "do": "wait", "ms": 150 }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#resultado",
+          "match": { "equals": "Não encontrado" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "mocks": {
+      "http://localhost:3000/alunos": [
+        { "id": 1, "nome": "Ana" },
+        { "id": 2, "nome": "Bruno" }
+      ]
+    },
+    "hints": [
+      "`campo.value` devolve texto, mas `aluno.id` é um número no JSON retornado.",
+      "Converta o texto antes de comparar: `aluno.id === Number(campo.value)`.",
+      "Use `.find` para localizar o registro e teste o retorno para exibir o nome ou a mensagem de ausência."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 76,
+      "endLine": 76
+    },
+    "evidence": "if (numero) return pokemon.id === Number(numero[1]);"
+  },
+  {
+    "id": "n16-c03",
+    "nodeId": "n16",
+    "title": "Validar a idade antes de comparar",
+    "kind": "js",
+    "goal": "Ao clicar em #validar, mostre \"Idade inválida\" quando #idade estiver vazio ou não for um número, \"Menor de idade\" para valores abaixo de 18 e \"Maior de idade\" a partir de 18.",
+    "starter": {
+      "html": "<h2>Validação de idade</h2>\n<label for=\"idade\">Idade</label>\n<input id=\"idade\" type=\"text\" inputmode=\"numeric\" value=\"\">\n<button id=\"validar\" type=\"button\">Validar</button>\n<p id=\"mensagem\"></p>",
+      "css": "#mensagem { font-weight: bold; }",
+      "js": "const campo = document.querySelector('#idade');\nconst botao = document.querySelector('#validar');\nconst mensagem = document.querySelector('#mensagem');\n\nbotao.addEventListener('click', () => {\n  const idade = parseInt(campo.value, 10);\n\n  if (idade >= 18) {\n    mensagem.textContent = 'Maior de idade';\n  } else {\n    mensagem.textContent = 'Menor de idade';\n  }\n});\n"
+    },
+    "solution": {
+      "html": "<h2>Validação de idade</h2>\n<label for=\"idade\">Idade</label>\n<input id=\"idade\" type=\"text\" inputmode=\"numeric\" value=\"\">\n<button id=\"validar\" type=\"button\">Validar</button>\n<p id=\"mensagem\"></p>",
+      "css": "#mensagem { font-weight: bold; }",
+      "js": "const campo = document.querySelector('#idade');\nconst botao = document.querySelector('#validar');\nconst mensagem = document.querySelector('#mensagem');\n\nbotao.addEventListener('click', () => {\n  const texto = campo.value.trim();\n  const idade = Number(texto);\n\n  if (texto === '' || Number.isNaN(idade)) {\n    mensagem.textContent = 'Idade inválida';\n  } else if (idade >= 18) {\n    mensagem.textContent = 'Maior de idade';\n  } else {\n    mensagem.textContent = 'Menor de idade';\n  }\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "campo-existe",
+        "label": "O campo #idade existe na página.",
+        "check": { "kind": "exists", "selector": "#idade" }
+      },
+      {
+        "id": "idade-vazia",
+        "label": "Com o campo vazio, clicar em Validar mostra Idade inválida.",
+        "before": [{ "do": "click", "selector": "#validar" }],
+        "check": {
+          "kind": "text",
+          "selector": "#mensagem",
+          "match": { "equals": "Idade inválida" }
+        }
+      },
+      {
+        "id": "idade-nao-numerica",
+        "label": "Com o texto abc, clicar em Validar mostra Idade inválida.",
+        "before": [
+          { "do": "input", "selector": "#idade", "value": "abc" },
+          { "do": "click", "selector": "#validar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#mensagem",
+          "match": { "equals": "Idade inválida" }
+        }
+      },
+      {
+        "id": "idade-menor",
+        "label": "Com 12, clicar em Validar mostra Menor de idade.",
+        "before": [
+          { "do": "input", "selector": "#idade", "value": "12" },
+          { "do": "click", "selector": "#validar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#mensagem",
+          "match": { "equals": "Menor de idade" }
+        }
+      },
+      {
+        "id": "idade-maior",
+        "label": "Com 21, clicar em Validar mostra Maior de idade.",
+        "before": [
+          { "do": "input", "selector": "#idade", "value": "21" },
+          { "do": "click", "selector": "#validar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#mensagem",
+          "match": { "equals": "Maior de idade" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "`parseInt('')` e `parseInt('abc')` resultam em `NaN`, e qualquer comparação com `NaN` é falsa.",
+      "Leia o texto com `.value.trim()` e converta com `Number(texto)`.",
+      "Trate primeiro `texto === '' || Number.isNaN(idade)` e só depois compare a idade com 18."
+    ],
+    "source": { "kind": "orientacao" },
+    "evidence": "manipulação de elementos HTML, tratamento de formulários e validações."
+  }
+]

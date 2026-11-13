@@ -1,0 +1,494 @@
+[
+  {
+    "id": "n15-q001",
+    "nodeId": "n15",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "var\nundefined",
+      "var\nReferenceError",
+      "undefined\nlet",
+      "ReferenceError\nlet"
+    ],
+    "answer": 0,
+    "code": {
+      "env": "js",
+      "source": "function teste() {\n  if (true) {\n    var a = \"var\";\n    let b = \"let\";\n  }\n  console.log(a);\n  console.log(typeof b);\n}\n\nteste();"
+    },
+    "expected": "var\nundefined",
+    "explanation": "Dentro do bloco, `var a` pertence ao escopo da função, então `console.log(a)` imprime `var`. Já `let b` existe apenas dentro do bloco; fora dele, `typeof b` sobre um nome não declarado devolve a string `undefined`, sem lançar erro.",
+    "source": {
+      "kind": "orientacao"
+    },
+    "evidence": "Focada em trechos reais em JavaScript, manipulação do DOM, escopo de variáveis e tratamento de URLs/parâmetros."
+  },
+  {
+    "id": "n15-q002",
+    "nodeId": "n15",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "ReferenceError\n10",
+      "undefined\n10",
+      "10\n10",
+      "undefined\nundefined"
+    ],
+    "answer": 1,
+    "code": {
+      "env": "js",
+      "source": "console.log(valor);\nvar valor = 10;\nconsole.log(valor);"
+    },
+    "expected": "undefined\n10",
+    "explanation": "A declaração `var valor` é içada (hoisting), mas a atribuição `= 10` permanece na linha original. Por isso o primeiro log vê `valor` já declarado e ainda sem valor, imprimindo `undefined`; o segundo, depois da atribuição, imprime `10`.",
+    "source": {
+      "kind": "orientacao"
+    },
+    "evidence": "O objetivo é avaliar como vocês analisam comportamentos, identificam bugs e compreendem a execução do motor JS."
+  },
+  {
+    "id": "n15-q003",
+    "nodeId": "n15",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "undefined",
+      "TypeError",
+      "v1",
+      "ReferenceError"
+    ],
+    "answer": 2,
+    "code": {
+      "env": "js",
+      "source": "console.log(versao());\n\nfunction versao() {\n  return \"v1\";\n}"
+    },
+    "expected": "v1",
+    "explanation": "Declarações de função são içadas por inteiro, então `versao` já existe e pode ser chamada antes da linha em que aparece no código. A chamada retorna a string `v1`, que é o valor impresso.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/utils/text.js",
+      "startLine": 5,
+      "endLine": 11
+    },
+    "evidence": "export function normalizar(texto) {"
+  },
+  {
+    "id": "n15-q004",
+    "nodeId": "n15",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "undefined",
+      "SyntaxError",
+      "TypeError",
+      "ReferenceError"
+    ],
+    "answer": 3,
+    "code": {
+      "env": "js",
+      "source": "try {\n  console.log(nome);\n  let nome = \"Ana\";\n} catch (erro) {\n  console.log(erro.name);\n}"
+    },
+    "expected": "ReferenceError",
+    "explanation": "`nome` é declarado com `let` na mesma linha do `console.log`, então o acesso antes da declaração cai na zona morta temporal (TDZ). O motor lança `ReferenceError`, capturado pelo `catch`, que imprime `erro.name`, ou seja, `ReferenceError`.",
+    "source": {
+      "aula": 310,
+      "slide": 7
+    },
+    "evidence": "Browser / Ambiente         Web Engine       ECMAScript Engine"
+  },
+  {
+    "id": "n15-q005",
+    "nodeId": "n15",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "verde\nazul",
+      "azul\nazul",
+      "azul\nverde",
+      "verde\nverde"
+    ],
+    "answer": 0,
+    "code": {
+      "env": "js",
+      "source": "let cor = \"azul\";\n\nfunction pintar() {\n  let cor = \"verde\";\n  console.log(cor);\n}\n\npintar();\nconsole.log(cor);"
+    },
+    "expected": "verde\nazul",
+    "explanation": "Dentro de `pintar`, o `let cor` cria uma variável local que sombreia a global; o primeiro log imprime `verde`. Ao sair da função, a variável local deixa de existir e o segundo log usa a `cor` externa, imprimindo `azul`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 73,
+      "endLine": 76
+    },
+    "evidence": "let TODOS = [];\nlet TODOS_IDS = [];"
+  },
+  {
+    "id": "n15-q006",
+    "nodeId": "n15",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "0\n1\n2",
+      "1\n2\n3",
+      "3\n3\n3",
+      "1\n1\n1"
+    ],
+    "answer": 1,
+    "code": {
+      "env": "js",
+      "source": "function criarContador() {\n  let total = 0;\n  return function () {\n    total += 1;\n    return total;\n  };\n}\n\nconst contar = criarContador();\nconsole.log(contar());\nconsole.log(contar());\nconsole.log(contar());"
+    },
+    "expected": "1\n2\n3",
+    "explanation": "`criarContador` cria `total` e devolve a função interna, que mantém acesso a essa variável mesmo após o retorno: é um closure. Cada chamada de `contar` incrementa o mesmo `total`, então as saídas são `1`, `2` e `3`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 560,
+      "endLine": 566
+    },
+    "evidence": "toast.addEventListener(\"hidden.bs.toast\", () => toast.remove());"
+  },
+  {
+    "id": "n15-q007",
+    "nodeId": "n15",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "0\n1\n2",
+      "1\n2\n3",
+      "3\n3\n3",
+      "0\n0\n0"
+    ],
+    "answer": 2,
+    "code": {
+      "env": "js",
+      "source": "for (var i = 0; i < 3; i += 1) {\n  setTimeout(function () {\n    console.log(i);\n  }, 0);\n}"
+    },
+    "expected": "3\n3\n3",
+    "explanation": "`var` cria uma única variável `i` compartilhada por todas as iterações. Os callbacks são executados depois que o laço termina, quando `i` já vale `3`; por isso as três linhas impressas são `3`.",
+    "source": {
+      "kind": "orientacao"
+    },
+    "evidence": "Leitura Ativa do Código: Nas questões analíticas, observem atentamente os tipos de dados, o uso de operadores (como a diferença entre igualdade estrita e ampla) e o fluxo assíncrono das funções."
+  },
+  {
+    "id": "n15-q008",
+    "nodeId": "n15",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "3\n3\n3",
+      "1\n2\n3",
+      "0\n0\n0",
+      "0\n1\n2"
+    ],
+    "answer": 3,
+    "code": {
+      "env": "js",
+      "source": "for (let i = 0; i < 3; i += 1) {\n  setTimeout(function () {\n    console.log(i);\n  }, 0);\n}"
+    },
+    "expected": "0\n1\n2",
+    "explanation": "Com `let` no `for`, cada iteração cria um novo binding de `i` para o corpo do laço. Cada callback captura o valor da sua própria iteração, então os logs saem na ordem `0`, `1`, `2`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 695,
+      "endLine": 704
+    },
+    "evidence": "document.addEventListener(\"click\", (e) => {"
+  },
+  {
+    "id": "n15-q009",
+    "nodeId": "n15",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "Bia\nTypeError",
+      "Ana\nTypeError",
+      "Bia\nCaio",
+      "Caio\nTypeError"
+    ],
+    "answer": 0,
+    "code": {
+      "env": "js",
+      "source": "const pessoa = { nome: \"Ana\" };\npessoa.nome = \"Bia\";\nconsole.log(pessoa.nome);\n\ntry {\n  pessoa = { nome: \"Caio\" };\n} catch (erro) {\n  console.log(erro.name);\n}"
+    },
+    "expected": "Bia\nTypeError",
+    "explanation": "`const` impede reatribuir o nome `pessoa`, mas não congela o objeto: alterar `pessoa.nome` funciona e imprime `Bia`. Já `pessoa = {...}` tenta uma nova atribuição, o que lança `TypeError`, capturado e impresso como `erro.name`.",
+    "source": {
+      "aula": 310,
+      "slide": 5
+    },
+    "evidence": "Em 2015 foi lançado o ECMA Script 6 (ES6)"
+  },
+  {
+    "id": "n15-q010",
+    "nodeId": "n15",
+    "type": "mcq",
+    "prompt": "Em que ordem o código abaixo imprime as linhas?",
+    "options": [
+      "a\nc\nb\ndepois",
+      "a\nb\nc\ndepois",
+      "depois\na\nb\nc",
+      "b\na\nc\ndepois"
+    ],
+    "answer": 1,
+    "code": {
+      "env": "js",
+      "source": "function a() {\n  console.log(\"a\");\n  b();\n}\n\nfunction b() {\n  console.log(\"b\");\n  c();\n}\n\nfunction c() {\n  console.log(\"c\");\n}\n\na();\nconsole.log(\"depois\");"
+    },
+    "expected": "a\nb\nc\ndepois",
+    "explanation": "As chamadas entram na pilha na ordem: `a` imprime `a` e chama `b`, que imprime `b` e chama `c`, que imprime `c`. Conforme cada função retorna, a pilha desempilha; só depois de `a` terminar o `console.log(\"depois\")` executa, gerando `a`, `b`, `c`, `depois`.",
+    "source": {
+      "aula": 310,
+      "slide": 9
+    },
+    "evidence": "<script type=\"text/javascript\" src=\"script.js\"></script>"
+  },
+  {
+    "id": "n15-q011",
+    "nodeId": "n15",
+    "type": "mcq",
+    "prompt": "Uma função curta deveria somar os preços, mas sempre devolve `0`. No callback de `forEach` há apenas `total + preco;`. Qual é o problema?",
+    "options": [
+      "A função sempre retorna 0, porque o resultado de `total + preco` não é atribuído a `total`.",
+      "`forEach` não percorre arrays, então o callback nunca executa.",
+      "Uma variável declarada com `let` não pode ser alterada dentro de um callback.",
+      "Falta um `return` dentro do callback para devolver a soma."
+    ],
+    "answer": 0,
+    "explanation": "O callback calcula `total + preco`, mas descarta o resultado: sem `total += preco`, `total` permanece `0` em todas as iterações. `forEach` percorre o array e o callback pode alterar `total`; o que falta é atribuir a soma de volta à variável.",
+    "source": {
+      "kind": "orientacao"
+    },
+    "evidence": "O objetivo é avaliar como vocês analisam comportamentos, identificam bugs e compreendem a execução do motor JS."
+  },
+  {
+    "id": "n15-q012",
+    "nodeId": "n15",
+    "type": "mcq",
+    "prompt": "Considere a função `function saudar(nome = \"visitante\") { return \"Olá, \" + nome; }`. O que `saudar()` retorna?",
+    "options": [
+      "A string `Olá, undefined`",
+      "Um `TypeError` por falta de argumento",
+      "A string `Olá, `",
+      "A string `Olá, visitante`"
+    ],
+    "answer": 3,
+    "explanation": "O parâmetro tem valor padrão `visitante`, usado quando o argumento não é passado. Por isso `saudar()` devolve `Olá, visitante`, e não `undefined`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 544,
+      "endLine": 546
+    },
+    "evidence": "function mostrarToast(mensagem, tipo = \"add\") {"
+  },
+  {
+    "id": "n15-q013",
+    "nodeId": "n15",
+    "type": "tf",
+    "prompt": "Declarações feitas com `var` são içadas para o topo da função, mas a atribuição continua acontecendo na linha original.",
+    "answer": true,
+    "explanation": "O hoisting eleva apenas a declaração de `var`; a inicialização `= valor` permanece no ponto em que foi escrita. Por isso a variável existe antes, mas vale `undefined` até a linha da atribuição.",
+    "source": {
+      "kind": "orientacao"
+    },
+    "evidence": "O objetivo é avaliar como vocês analisam comportamentos, identificam bugs e compreendem a execução do motor JS."
+  },
+  {
+    "id": "n15-q014",
+    "nodeId": "n15",
+    "type": "tf",
+    "prompt": "`let` permite declarar a mesma variável duas vezes no mesmo bloco.",
+    "answer": false,
+    "explanation": "Ao contrário de `var`, `let` não aceita redeclaração no mesmo escopo: o segundo `let` gera `SyntaxError`. Para trocar o valor, atribui-se sem repetir a palavra `let`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 11,
+      "endLine": 14
+    },
+    "evidence": "let TIPOS_JSON = [];\nlet POKEMON = [];"
+  },
+  {
+    "id": "n15-q015",
+    "nodeId": "n15",
+    "type": "tf",
+    "prompt": "`const` impede a alteração das propriedades de um objeto atribuído a essa constante.",
+    "answer": false,
+    "explanation": "`const` impede reatribuir o identificador, não congela o valor. As propriedades de um objeto em `const` podem ser alteradas normalmente; quem congela é `Object.freeze`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 45,
+      "endLine": 45
+    },
+    "evidence": "const $ = (seletor) => document.querySelector(seletor);"
+  },
+  {
+    "id": "n15-q016",
+    "nodeId": "n15",
+    "type": "tf",
+    "prompt": "No laço `for (var i = 0; i < 3; i += 1)` com um `setTimeout` dentro, os callbacks imprimem `0`, `1` e `2`.",
+    "answer": false,
+    "explanation": "Como `var` cria um único binding de `i`, todos os callbacks compartilham o mesmo valor. Eles executam após o laço, quando `i` vale `3`, então imprimem `3` três vezes.",
+    "source": {
+      "kind": "orientacao"
+    },
+    "evidence": "Leitura Ativa do Código: Nas questões analíticas, observem atentamente os tipos de dados, o uso de operadores (como a diferença entre igualdade estrita e ampla) e o fluxo assíncrono das funções."
+  },
+  {
+    "id": "n15-q017",
+    "nodeId": "n15",
+    "type": "fill",
+    "prompt": "A linha impressa é ____.",
+    "answers": [
+      "[2,4,6,8]"
+    ],
+    "code": {
+      "env": "js",
+      "source": "const numeros = [1, 2, 3, 4];\nconst dobros = numeros.map((n) => n * 2);\nconsole.log(dobros);"
+    },
+    "expected": "[2,4,6,8]",
+    "explanation": "`map` cria um novo array aplicando `n * 2` a cada elemento. O resultado é `[2, 4, 6, 8]`, que o formatador do console imprime como `[2,4,6,8]`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 783,
+      "endLine": 786
+    },
+    "evidence": "TODOS_IDS = TODOS.map((p) => p.id);"
+  },
+  {
+    "id": "n15-q018",
+    "nodeId": "n15",
+    "type": "fill",
+    "prompt": "O array impresso é ____.",
+    "answers": [
+      "[18,21,30]"
+    ],
+    "code": {
+      "env": "js",
+      "source": "const idades = [12, 18, 21, 15, 30];\nconst maiores = idades.filter((idade) => idade >= 18);\nconsole.log(maiores);"
+    },
+    "expected": "[18,21,30]",
+    "explanation": "`filter` mantém apenas os elementos para os quais o callback devolve verdadeiro. Sobram `18`, `21` e `30`, impressos como `[18,21,30]`; o array original não é alterado.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 68,
+      "endLine": 79
+    },
+    "evidence": "return lista.filter((pokemon) => {"
+  },
+  {
+    "id": "n15-q019",
+    "nodeId": "n15",
+    "type": "fill",
+    "prompt": "O valor impresso é ____.",
+    "answers": [
+      "60"
+    ],
+    "code": {
+      "env": "js",
+      "source": "const valores = [10, 20, 30];\nconst total = valores.reduce((soma, valor) => soma + valor, 0);\nconsole.log(total);"
+    },
+    "expected": "60",
+    "explanation": "`reduce` acumula os valores a partir do inicial `0`: `0 + 10`, depois `10 + 20`, depois `30 + 30`. O acumulador final é `60`, que é impresso.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 111,
+      "endLine": 120
+    },
+    "evidence": "const melhor = STATS.reduce((a, b) => (pokemon.stats[b.key] > pokemon.stats[a.key] ? b : a));"
+  },
+  {
+    "id": "n15-q020",
+    "nodeId": "n15",
+    "type": "fill",
+    "prompt": "O método de array ____ percorre todos os elementos, mas sempre retorna `undefined`, mesmo que o callback tenha `return`.",
+    "answers": [
+      "forEach"
+    ],
+    "explanation": "`forEach` executa o callback para cada item, porém ignora o valor devolvido por ele; o método em si sempre retorna `undefined`. Já `map`, `filter` e `reduce` produzem um valor de retorno.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 574,
+      "endLine": 580
+    },
+    "evidence": "tooltips.forEach((t) => t.hide());"
+  },
+  {
+    "id": "n15-q021",
+    "nodeId": "n15",
+    "type": "fill",
+    "prompt": "Uma função que termina sem um `return` explícito devolve ____.",
+    "answers": [
+      "undefined"
+    ],
+    "explanation": "Sem `return`, a função termina e devolve `undefined`. Se houver `return` sem expressão, o valor devolvido também é `undefined`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 125,
+      "endLine": 132
+    },
+    "evidence": "if (!f.habilitado) return \"off\";"
+  },
+  {
+    "id": "n15-q022",
+    "nodeId": "n15",
+    "type": "fill",
+    "prompt": "Ao contrário de `var`, uma variável declarada com ____ dentro de um bloco só existe naquele bloco.",
+    "answers": [
+      "let",
+      "const"
+    ],
+    "explanation": "`let` e `const` têm escopo de bloco: a variável deixa de existir ao fim do `{}` onde foi declarada. `var` ignora o bloco e fica visível em toda a função.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 11,
+      "endLine": 14
+    },
+    "evidence": "let TIPOS_JSON = [];\nlet POKEMON = [];"
+  },
+  {
+    "id": "n15-q023",
+    "nodeId": "n15",
+    "type": "fill",
+    "prompt": "Quando uma função interna continua acessando variáveis da função externa depois que esta retorna, dizemos que ela forma um ____.",
+    "answers": [
+      "closure",
+      "fechamento"
+    ],
+    "explanation": "O closure mantém vivo o ambiente em que a função foi criada. No serviço, a arrow `(id) => POR_ID.get(id)` continua lendo o `POR_ID` do módulo quando for chamada.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 17,
+      "endLine": 22
+    },
+    "evidence": "TREINADORES = (dados.trainers ?? []).map((t) => createTrainer(t, (id) => POR_ID.get(id)));"
+  },
+  {
+    "id": "n15-q024",
+    "nodeId": "n15",
+    "type": "fill",
+    "prompt": "Em `function filterPokemon(lista, { busca = \"\", tipo = null } = {})`, os valores `\"\"` e `null` são parâmetros ____.",
+    "answers": [
+      "padrão",
+      "default"
+    ],
+    "explanation": "O `= valor` depois do nome define um parâmetro padrão, usado quando o argumento correspondente é `undefined` ou omitido. O `= {}` final garante um objeto vazio quando o segundo argumento não é passado.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 68,
+      "endLine": 70
+    },
+    "evidence": "export function filterPokemon(lista, { busca = \"\", tipo = null } = {}) {"
+  }
+]

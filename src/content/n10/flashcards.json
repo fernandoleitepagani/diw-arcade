@@ -190,5 +190,197 @@
     "back": "Como o conteúdo do site está organizado e distribuído, além dos caminhos de acesso ou fluxo de navegação.",
     "source": { "aula": 210, "slide": 32 },
     "evidence": "Os site maps são mapas visuais que permitem verificar como o conteúdo do site está organizado e distribuído, além dos caminhos de acesso, ou fluxo de navegação."
+  },
+  {
+    "id": "n10-f025",
+    "nodeId": "n10",
+    "front": "Como o Design Thinking é definido segundo Arne van Oosterom?",
+    "back": "Uma abordagem para inovação centrada no ser humano que combina o pensamento criativo ao de negócios para gerar valor e prover soluções de longo prazo.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 12
+    },
+    "evidence": "O DESIGN THINKING É UMA ABORDAGEM PARA INOVAÇÃO CENTRADA NO SER HUMANO. COMBINA O PENSAMENTO CRIATIVO AO DE NEGÓCIOS"
+  },
+  {
+    "id": "n10-f026",
+    "nodeId": "n10",
+    "front": "Quais são os três pilares do Design Thinking e o que cada um representa?",
+    "back": "Os pilares do Design Thinking são a empatia, a experimentação e a colaboração.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 18
+    },
+    "evidence": "EXPERIMENTAÇÃO COLABORAÇÃO"
+  },
+  {
+    "id": "n10-f027",
+    "nodeId": "n10",
+    "front": "O que caracteriza a empatia no Design Thinking?",
+    "back": "É a fase de imersão que busca entender as pessoas, suas necessidades, desejos, aspirações e comportamentos em relação ao tema.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 48
+    },
+    "evidence": "necessidades, desejos, aspirações e comportamentos com relação ao tema."
+  },
+  {
+    "id": "n10-f028",
+    "nodeId": "n10",
+    "front": "Qual é o objetivo da etapa de ideação?",
+    "back": "Divergir e gerar o maior número de ideias para, depois, selecionar as melhores e priorizar o que é mais significativo e viável.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 86
+    },
+    "evidence": "o objetivo é divergir e gerar o maior número de ideias, para que depois, as"
+  },
+  {
+    "id": "n10-f029",
+    "nodeId": "n10",
+    "front": "O que é prototipação?",
+    "back": "É a construção de um modelo do produto ou serviço final para observar o que está dando certo e o que precisa ser melhorado.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 112
+    },
+    "evidence": "O protótipo deve ser um modelo do que será o produto ou serviço final"
+  },
+  {
+    "id": "n10-f030",
+    "nodeId": "n10",
+    "front": "Por que prototipar é importante?",
+    "back": "Materializa a ideia, colhe feedback, reduz riscos e investimento, permite iterar e validar as trocas de valor.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 115
+    },
+    "evidence": "Materializa a ideia • Colher feedback • Reduz riscos, diminui investimento"
+  },
+  {
+    "id": "n10-f031",
+    "nodeId": "n10",
+    "front": "Segundo o material do DTG, o que é uma persona?",
+    "back": "Arquétipo fictício criado a partir da coleta de dados da fase de pesquisa com pessoas reais, para documentar comportamentos e necessidades identificados nas conversas com clientes.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 64
+    },
+    "evidence": "são arquétipos fictícios criados a partir da coleta de dados realizada na fase de"
+  },
+  {
+    "id": "n10-f032",
+    "nodeId": "n10",
+    "front": "Quais são os três elementos importantes na criação de histórias de usuário?",
+    "back": "Os três elementos são o cartão, a conversação e a confirmação.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-requisitos",
+      "slide": 8
+    },
+    "evidence": "Podemos destacar 3 elementos importantes na criação de histórias de usuários"
+  },
+  {
+    "id": "n10-f033",
+    "nodeId": "n10",
+    "front": "O que é a conversação em uma história de usuário?",
+    "back": "É a confirmação da história com as partes interessadas, cara a cara, com o dono do produto presente para esclarecer dúvidas.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-requisitos",
+      "slide": 12
+    },
+    "evidence": "A conversa é cara a cara e o “dono do produto” tem que estar presente"
+  },
+  {
+    "id": "n10-f034",
+    "nodeId": "n10",
+    "front": "O que é um requisito funcional?",
+    "back": "Define uma função do sistema: o que o software faz, em termos de tarefas e serviços, a partir de entradas, comportamento e saídas.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-requisitos",
+      "slide": 17
+    },
+    "evidence": "O requisito funcional representa o que o software faz, em termos de tarefas e serviços."
+  },
+  {
+    "id": "n10-f035",
+    "nodeId": "n10",
+    "front": "O que é um requisito não funcional?",
+    "back": "Requisito relacionado a como as funcionalidades são entregues: desempenho, usabilidade, confiabilidade, segurança, disponibilidade e tempo de resposta.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-requisitos",
+      "slide": 18
+    },
+    "evidence": "Estes requisitos dizem respeito a como as funcionalidades serão entregues ao usuário do software."
+  },
+  {
+    "id": "n10-f036",
+    "nodeId": "n10",
+    "front": "O que são requisitos de domínio ou regras de negócio?",
+    "back": "Requisitos que derivam da organização e definem ou restringem aspectos como decisões estratégicas, leis e regulamentações e obrigações contratuais.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-requisitos",
+      "slide": 19
+    },
+    "evidence": "Derivam da organização a quem o sistema será implementado."
+  },
+  {
+    "id": "n10-f037",
+    "nodeId": "n10",
+    "front": "O que é a Matriz CSD?",
+    "back": "Ferramenta usada para identificar e alinhar o conhecimento do grupo sobre um assunto antes do projeto começar, registrando dúvidas, certezas e suposições.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 30
+    },
+    "evidence": "Usada para identificar e alinhar o conhecimento do grupo sobre um determinado assunto antes do projeto começar."
+  },
+  {
+    "id": "n10-f038",
+    "nodeId": "n10",
+    "front": "O que é brainstorming?",
+    "back": "Técnica de colaboração que explora a potencialidade criativa do indivíduo e do grupo para produzir e avaliar ideias inovadoras sobre uma questão ou problema.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-design-thinking",
+      "slide": 20
+    },
+    "evidence": "Técnica simples de colaboração que visa explorar a potencialidade criativa do indivíduo e do grupo"
+  },
+  {
+    "id": "n10-f039",
+    "nodeId": "n10",
+    "front": "O que é a iteração no Design Thinking?",
+    "back": "É voltar a alguma fase do processo, com base no que foi aprendido nos testes com clientes, para melhorar o protótipo e refazê-la.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 133
+    },
+    "evidence": "devemos voltar a alguma fase do processo e refazê-la."
+  },
+  {
+    "id": "n10-f040",
+    "nodeId": "n10",
+    "front": "O que o modelo Double Diamond representa no processo de Design Thinking?",
+    "back": "Um processo em etapas que alternam divergir — abrir possibilidades — e convergir — selecionar e focar.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-design-thinking",
+      "slide": 8
+    },
+    "evidence": "divergir convergir divergir convergir divergir convergir"
   }
 ]

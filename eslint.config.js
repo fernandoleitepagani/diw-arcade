@@ -29,6 +29,15 @@ export default tseslint.config(
     },
   },
   {
+    // ESM workers run under Node and use Node globals such as setImmediate.
+    files: ['**/*.mjs'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: { ...globals.node },
+    },
+  },
+  {
     files: ['**/*.{js,jsx,ts,tsx}'],
     ...reactHooks.configs.flat.recommended,
   },

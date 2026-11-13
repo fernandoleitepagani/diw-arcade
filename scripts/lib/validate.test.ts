@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
@@ -6,14 +6,19 @@ import type {
   Challenge,
   Flashcard,
   Question,
+  Source,
 } from '../../src/content/schema';
+import { NODE_IDS } from '../../src/content/tree';
 import {
   fixtureAulaSlides,
   fixtureChallenge,
   fixtureFlashcards,
   fixtureLab,
   fixtureLabSlides,
+  fixtureOrientacaoText,
   fixtureQuestions,
+  fixtureRepoLines,
+  fixtureTiawSlides,
 } from '../../src/test/fixtures';
 import {
   formatReport,
@@ -95,6 +100,7 @@ function fakeRunner(
 }
 
 let sourcesDir = '';
+let repoDir = '';
 
 beforeEach(() => {
   sourcesDir = mkdtempSync(join(tmpdir(), 'diw-content-'));
@@ -108,12 +114,34 @@ beforeEach(() => {
     fixtureLabSlides.join('\f'),
     'utf8',
   );
+  writeFileSync(
+    join(sourcesDir, 'tiaw-json.txt'),
+    fixtureTiawSlides.join('\f'),
+    'utf8',
+  );
+  writeFileSync(
+    join(sourcesDir, 'orientacao-prova2.txt'),
+    fixtureOrientacaoText,
+    'utf8',
+  );
+
+  repoDir = mkdtempSync(join(tmpdir(), 'diw-repo-'));
+  mkdirSync(join(repoDir, 'PROJETOS', 'exemplo'), { recursive: true });
+  writeFileSync(
+    join(repoDir, 'PROJETOS', 'exemplo', 'app.js'),
+    fixtureRepoLines.join('\n'),
+    'utf8',
+  );
 });
 
 afterEach(() => {
   if (sourcesDir) {
     rmSync(sourcesDir, { recursive: true, force: true });
     sourcesDir = '';
+  }
+  if (repoDir) {
+    rmSync(repoDir, { recursive: true, force: true });
+    repoDir = '';
   }
 });
 
@@ -127,6 +155,15 @@ function withFile(
 
 function options(overrides: Partial<ValidateOptions> = {}): ValidateOptions {
   return { sourcesDir, runChallenge: fakeRunner(), ...overrides };
+}
+
+function withFirstQuestionSource(
+  source: Source,
+  evidence: string,
+): Record<string, unknown> {
+  const questions = makeQuestions();
+  questions[0] = { ...questions[0]!, source, evidence } as Question;
+  return withFile(validContent(), 'src/content/n07/questions.json', questions);
 }
 
 describe('validator success paths', () => {
@@ -148,7 +185,15 @@ describe('validator success paths', () => {
     const lines = formatReport(report);
     expect(lines).toContain('n07 questions=15 flashcards=20 challenges=3 OK');
     expect(lines).toContain('evidence: verified 41/41');
-    expect(lines.at(-1)).toBe('content OK: 1/14 nodes, 1 labs');
+    expect(lines.at(-1)).toBe(
+      `content OK: 1/${NODE_IDS.length} nodes, 1 labs`,
+    );
+    expect(lines.slice(-4)).toEqual([
+      'evidence: verified 41/41',
+      'repo evidence: skipped (DIW_REPO not set)',
+      'code: skipped (executor ausente)',
+      `content OK: 1/${NODE_IDS.length} nodes, 1 labs`,
+    ]);
   });
 
   it('skips evidence and reports an empty repo cleanly without sources', async () => {
@@ -157,7 +202,9 @@ describe('validator success paths', () => {
     expect(report.ok).toBe(true);
     expect(formatReport(report)).toEqual([
       'evidence: skipped (DIW_SOURCES not set)',
-      'content OK: 0/14 nodes, 0 labs',
+      'repo evidence: skipped (DIW_REPO not set)',
+      'code: skipped (executor ausente)',
+      `content OK: 0/${NODE_IDS.length} nodes, 0 labs`,
     ]);
   });
 
@@ -165,8 +212,10 @@ describe('validator success paths', () => {
     const report = await validateContent([], { requireAll: true });
 
     expect(report.ok).toBe(false);
-    expect(report.errors).toHaveLength(14 * 3 + 4);
-    expect(formatReport(report).at(-1)).toBe('content FAILED: 46 errors');
+    expect(report.errors).toHaveLength(NODE_IDS.length * 3 + 4);
+    expect(formatReport(report).at(-1)).toBe(
+      `content FAILED: ${NODE_IDS.length * 3 + 4} errors`,
+    );
   });
 
   it('fails --node on an empty repo', async () => {
@@ -553,5 +602,192 @@ describe('validator lab rules', () => {
     expect(
       report.errors.some((error) => /não corresponde ao arquivo/.test(error.message)),
     ).toBe(true);
+  });
+});
+
+describe('validator source kinds', () => {
+  it('verifies a tiaw item and rejects a doc outside the node policy', async () => {
+    const report = await validateContent(
+      withFirstQuestionSource(
+        { kind: 'tiaw', doc: 'tiaw-json', slide: 2 },
+        'JSON é um formato de texto para troca de dados entre sistemas.',
+      ),
+      options(),
+    );
+
+    expect(
+      report.errors.some((error) =>
+        /documento tiaw-json não pertence ao nó n07/.test(error.message),
+      ),
+    ).toBe(true);
+    expect(
+      report.errors.some(
+        (error) =>
+          /evidência não encontrada/.test(error.message) ||
+          /arquivo de fonte .* não encontrado/.test(error.message),
+      ),
+    ).toBe(false);
+    expect(report.evidence).toEqual({
+      status: 'verified',
+      verified: 41,
+      total: 41,
+    });
+  });
+
+  it('rejects an orientacao item on a node without orientacao-prova2', async () => {
+    const report = await validateContent(
+      withFirstQuestionSource(
+        { kind: 'orientacao' },
+        'A prova tem questões de leitura de código e questões práticas.',
+      ),
+      options(),
+    );
+
+    expect(
+      report.errors.some((error) =>
+        /documento orientacao-prova2 não pertence ao nó n07/.test(
+          error.message,
+        ),
+      ),
+    ).toBe(true);
+    expect(
+      report.errors.some(
+        (error) =>
+          /evidência não encontrada/.test(error.message) ||
+          /arquivo de fonte .* não encontrado/.test(error.message),
+      ),
+    ).toBe(false);
+  });
+
+  it('verifies a repo item against a file and line range', async () => {
+    const report = await validateContent(
+      withFirstQuestionSource(
+        {
+          kind: 'repo',
+          path: 'PROJETOS/exemplo/app.js',
+          startLine: 1,
+          endLine: 2,
+        },
+        'const total = 0;\ntotal += 1;',
+      ),
+      options({ repoDir }),
+    );
+
+    expect(report.errors).toEqual([]);
+    expect(report.ok).toBe(true);
+    expect(report.evidence).toEqual({
+      status: 'verified',
+      verified: 40,
+      total: 40,
+    });
+    expect(report.repoEvidence).toEqual({
+      status: 'verified',
+      verified: 1,
+      total: 1,
+    });
+  });
+
+  it('rejects a repo range past the end of the file', async () => {
+    const report = await validateContent(
+      withFirstQuestionSource(
+        {
+          kind: 'repo',
+          path: 'PROJETOS/exemplo/app.js',
+          startLine: 10,
+          endLine: 12,
+        },
+        'const total = 0;\ntotal += 1;',
+      ),
+      options({ repoDir }),
+    );
+
+    expect(
+      report.errors.some((error) => /fora do arquivo/.test(error.message)),
+    ).toBe(true);
+    expect(report.repoEvidence).toEqual({
+      status: 'verified',
+      verified: 0,
+      total: 1,
+    });
+  });
+
+  it('rejects a repo path that escapes the repository', async () => {
+    const report = await validateContent(
+      withFirstQuestionSource(
+        {
+          kind: 'repo',
+          path: 'PROJETOS/../app.js',
+          startLine: 1,
+          endLine: 2,
+        },
+        'const total = 0;\ntotal += 1;',
+      ),
+      options({ repoDir }),
+    );
+
+    expect(
+      report.errors.some((error) =>
+        /caminho de repositório inválido/.test(error.message),
+      ),
+    ).toBe(true);
+  });
+
+  it('skips repo evidence when DIW_REPO is not set', async () => {
+    const report = await validateContent(
+      withFirstQuestionSource(
+        {
+          kind: 'repo',
+          path: 'PROJETOS/exemplo/app.js',
+          startLine: 1,
+          endLine: 2,
+        },
+        'const total = 0;\ntotal += 1;',
+      ),
+      options(),
+    );
+
+    expect(report.repoEvidence).toEqual({ status: 'skipped' });
+    expect(report.code).toEqual({ status: 'skipped' });
+    expect(formatReport(report)).toContain(
+      'repo evidence: skipped (DIW_REPO not set)',
+    );
+    expect(formatReport(report)).toContain('code: skipped (executor ausente)');
+  });
+});
+
+describe('validator --only', () => {
+  it('validates just the requested node file', async () => {
+    const report = await validateContent(
+      validContent(),
+      options({ only: { nodeId: 'n07', kind: 'flashcards' } }),
+    );
+
+    expect(report.ok).toBe(true);
+    expect(report.nodes).toEqual([
+      { nodeId: 'n07', questions: 0, flashcards: 20, challenges: 0, ok: true },
+    ]);
+    expect(report.labs).toBe(0);
+    expect(report.evidence).toEqual({
+      status: 'verified',
+      verified: 20,
+      total: 20,
+    });
+  });
+
+  it('requires only that node file', async () => {
+    const content = validContent();
+    delete content['src/content/n07/flashcards.json'];
+
+    const report = await validateContent(
+      content,
+      options({ only: { nodeId: 'n07', kind: 'flashcards' } }),
+    );
+
+    expect(report.ok).toBe(false);
+    expect(report.errors).toHaveLength(1);
+    expect(report.errors[0]).toMatchObject({
+      file: 'src/content/n07/flashcards.json',
+      message: 'arquivo obrigatório ausente',
+    });
   });
 });

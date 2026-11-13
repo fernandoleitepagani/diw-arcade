@@ -19,6 +19,7 @@ import {
   getQuestions,
 } from '../../content';
 import { pickLine } from '../../content/copy';
+import { formatSource } from '../../content/source';
 import type { Flashcard } from '../../content/schema';
 import type { Outcome, ProgressContent } from '../../lib/progress/events';
 import { getRecommendedNodeId } from '../../lib/progress/recommend';
@@ -128,11 +129,6 @@ function formatNextDue(next: number | null, now: Date): string {
 
   const years = Math.round(months / 12);
   return `em ${years} ${years === 1 ? 'ano' : 'anos'}`;
-}
-
-function sourceLabel(flashcard: Flashcard): string {
-  const aula = String(flashcard.source.aula).padStart(3, '0');
-  return `Fonte: aula-${aula}, slide ${flashcard.source.slide}`;
 }
 
 function gradeVariant(grade: Grade): 'primary' | 'secondary' | 'danger' {
@@ -394,7 +390,7 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
             <div className="flashcard-session__answer">
               <p className="flashcard-session__back">{current.back}</p>
               <p className="flashcard-session__source">
-                {sourceLabel(current)}
+                {formatSource(current.source)}
               </p>
               <div
                 ref={gradesRef}

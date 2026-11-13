@@ -1,20 +1,107 @@
 import { z } from 'zod';
-import { LAB_IDS, NODE_IDS } from './tree';
+import { LAB_IDS, NODE_IDS, TIAW_DOCS } from './tree';
 
 export const NODE_ID_SCHEMA = z.enum(NODE_IDS);
 export const LAB_ID_SCHEMA = z.enum(LAB_IDS);
 
-export const SourceSchema = z.object({
-  /** One of the node's aulas. */
-  aula: z.number().int().positive(),
-  slide: z.number().int().min(1),
-});
+/** `PROJETOS/` path with safe segments ending in a source extension. */
+export const SAFE_REPO_PATH =
+  /^(?!.*\.\.)PROJETOS\/(?:(?!\.)[^/\\]+\/)*(?!\.)[^/\\]+\.(?:js|html|css|json)$/;
+
+/** Legacy form: one of the node's aulas. */
+export const AulaSourceSchema = z
+  .object({
+    aula: z.number().int().positive(),
+    slide: z.number().int().min(1),
+  })
+  .strict();
+
+export const TiawSourceSchema = z
+  .object({
+    kind: z.literal('tiaw'),
+    doc: z.enum(TIAW_DOCS),
+    slide: z.number().int().min(1),
+  })
+  .strict();
+
+export const RepoSourceSchema = z
+  .object({
+    kind: z.literal('repo'),
+    path: z.string().regex(SAFE_REPO_PATH, 'caminho de repositório inválido'),
+    startLine: z.number().int().min(1),
+    endLine: z.number().int().min(1),
+  })
+  .strict()
+  .refine((source) => source.endLine >= source.startLine, {
+    message: 'endLine deve ser maior ou igual a startLine',
+    path: ['endLine'],
+  })
+  .refine((source) => source.endLine - source.startLine <= 80, {
+    message: 'o intervalo de linhas não pode passar de 80',
+    path: ['endLine'],
+  });
+
+export const OrientacaoSourceSchema = z
+  .object({
+    kind: z.literal('orientacao'),
+  })
+  .strict();
+
+export const SourceSchema = z.union([
+  AulaSourceSchema,
+  z.discriminatedUnion('kind', [
+    TiawSourceSchema,
+    RepoSourceSchema,
+    OrientacaoSourceSchema,
+  ]),
+]);
 
 /** Verbatim excerpt from the cited slide (whitespace may differ). */
 export const EvidenceSchema = z.string().min(20).max(300);
 
 export type Source = z.infer<typeof SourceSchema>;
+export type AulaSource = z.infer<typeof AulaSourceSchema>;
 export type Evidence = z.infer<typeof EvidenceSchema>;
+
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
+export const JsonValueSchema: z.ZodType<JsonValue> = z.lazy(() =>
+  z.union([
+    z.string(),
+    z.number(),
+    z.boolean(),
+    z.null(),
+    z.array(JsonValueSchema),
+    z.record(z.string(), JsonValueSchema),
+  ]),
+);
+
+/** A snippet whose console output the question asks about. */
+export const QuestionCodeSchema = z.object({
+  env: z.enum(['js', 'dom']),
+  source: z.string().min(1).max(1500),
+  /** env 'dom' only; must not contain "<script". */
+  html: z.string().max(2000).optional(),
+  /** env 'dom' only; must start with "https://". */
+  url: z.string().url().optional(),
+  mocks: z
+    .record(
+      z.string().min(1),
+      z.object({
+        status: z.number().int().min(100).max(599).optional(),
+        body: JsonValueSchema,
+      }),
+    )
+    .optional(),
+});
+
+export type QuestionCode = z.infer<typeof QuestionCodeSchema>;
 
 function countMatcherKeys(value: { equals?: string; oneOf?: string[]; pattern?: string }): number {
   return [value.equals, value.oneOf, value.pattern].filter((entry) => entry !== undefined).length;
@@ -137,6 +224,8 @@ export const McqQuestionSchema = z.object({
       message: 'as opções devem ser únicas',
     }),
   answer: z.number().int().min(0).max(3),
+  code: QuestionCodeSchema.optional(),
+  expected: z.string().min(1).max(500).optional(),
 });
 
 export const TfQuestionSchema = z.object({
@@ -144,6 +233,9 @@ export const TfQuestionSchema = z.object({
   type: z.literal('tf'),
   prompt: z.string().min(1),
   answer: z.boolean(),
+  // Present so a `code`/`expected` on a tf question is rejected, not stripped.
+  code: z.undefined().optional(),
+  expected: z.undefined().optional(),
 });
 
 export const FillQuestionSchema = z.object({
@@ -156,6 +248,8 @@ export const FillQuestionSchema = z.object({
       message: 'o enunciado deve conter exatamente um "____"',
     }),
   answers: z.array(z.string().min(1)).min(1),
+  code: QuestionCodeSchema.optional(),
+  expected: z.string().min(1).max(500).optional(),
 });
 
 export const QuestionSchema = z.discriminatedUnion('type', [
@@ -188,25 +282,6 @@ export const CodeFilesSchema = z.object({
 });
 
 export type CodeFiles = z.infer<typeof CodeFilesSchema>;
-
-export type JsonValue =
-  | string
-  | number
-  | boolean
-  | null
-  | JsonValue[]
-  | { [key: string]: JsonValue };
-
-export const JsonValueSchema: z.ZodType<JsonValue> = z.lazy(() =>
-  z.union([
-    z.string(),
-    z.number(),
-    z.boolean(),
-    z.null(),
-    z.array(JsonValueSchema),
-    z.record(z.string(), JsonValueSchema),
-  ]),
-);
 
 export const ChallengeSchema = z
   .object({

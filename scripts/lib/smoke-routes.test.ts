@@ -42,12 +42,15 @@ function harness(
 }
 
 describe('rotas do smoke', () => {
-  it('cobre as 12 rotas do app', () => {
+  it('cobre as 15 rotas do app', () => {
     expect(SMOKE_ROUTES.map((route) => route.path)).toEqual([
       '/',
       '/no/n01',
       '/no/n01/quiz',
       '/no/n01/cartas',
+      '/no/n15',
+      '/no/n15/quiz',
+      '/desafio/n19-c01',
       '/revisao',
       '/desafio/n01-c01',
       '/laboratorios',
@@ -73,6 +76,7 @@ describe('rotas do smoke', () => {
     expect(probes).toEqual({
       '/no/n01/quiz': 'quiz',
       '/no/n01/cartas': 'flashcard',
+      '/no/n15/quiz': 'quiz',
     });
   });
 

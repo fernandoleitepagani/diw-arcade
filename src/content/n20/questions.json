@@ -1,0 +1,328 @@
+[
+  {
+    "id": "n20-q001",
+    "nodeId": "n20",
+    "type": "fill",
+    "prompt": "No formulário abaixo, o campo começa com \"  Ana  \". O console exibe ____.",
+    "answers": ["Ana"],
+    "code": {
+      "env": "dom",
+      "html": "<form id=\"f\"><input name=\"nome\" value=\"  Ana  \"></form>",
+      "source": "const form = document.querySelector('#f');\nconst campo = form.elements.nome;\nconsole.log(campo.value.trim());"
+    },
+    "expected": "Ana",
+    "explanation": "`form.elements.nome` acessa o input pelo atributo name; `.value` devolve a string com os espaços e `.trim()` remove os espaços das pontas, então o console mostra `Ana`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 86,
+      "endLine": 89
+    },
+    "evidence": "nome: inputNome.value.trim(),"
+  },
+  {
+    "id": "n20-q002",
+    "nodeId": "n20",
+    "type": "mcq",
+    "prompt": "Com um input `type=\"number\"` preenchido com 18, o que o console exibe?",
+    "options": ["number", "string", "18", "undefined"],
+    "answer": 1,
+    "code": {
+      "env": "dom",
+      "html": "<input id=\"idade\" type=\"number\" value=\"18\">",
+      "source": "const campo = document.querySelector('#idade');\nconsole.log(typeof campo.value);"
+    },
+    "expected": "string",
+    "explanation": "Mesmo em um campo numérico, `.value` de um input é sempre uma string; por isso `typeof` devolve `string`, e não `number`.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "O atributo value trata o valor contido no campo"
+  },
+  {
+    "id": "n20-q003",
+    "nodeId": "n20",
+    "type": "fill",
+    "prompt": "O valor exibido no console é ____.",
+    "answers": ["Mobile"],
+    "code": {
+      "env": "dom",
+      "html": "<form id=\"f\"><input name=\"curso\" value=\"Mobile\"></form>",
+      "source": "const form = document.querySelector('#f');\nconst dados = new FormData(form);\nconsole.log(dados.get('curso'));"
+    },
+    "expected": "Mobile",
+    "explanation": "`new FormData(form)` lê os pares nome/valor do formulário; `dados.get('curso')` devolve o valor do campo `curso`, que é `Mobile`.",
+    "source": { "kind": "orientacao" },
+    "evidence": "manipulação de elementos HTML, tratamento de formulários e validações."
+  },
+  {
+    "id": "n20-q004",
+    "nodeId": "n20",
+    "type": "mcq",
+    "prompt": "O que o console exibe ao ler `.value` do select abaixo?",
+    "options": ["Web", "0", "Mobile", "[object HTMLOptionElement]"],
+    "answer": 2,
+    "code": {
+      "env": "dom",
+      "html": "<select id=\"curso\"><option value=\"Web\">Web</option><option value=\"Mobile\" selected>Mobile</option></select>",
+      "source": "const curso = document.querySelector('#curso');\nconsole.log(curso.value);"
+    },
+    "expected": "Mobile",
+    "explanation": "`.value` de um select devolve o `value` da option selecionada; como a option selecionada tem `value=\"Mobile\"`, o console mostra `Mobile`.",
+    "source": { "kind": "orientacao" },
+    "evidence": "tratamento de formulários e validações."
+  },
+  {
+    "id": "n20-q005",
+    "nodeId": "n20",
+    "type": "mcq",
+    "prompt": "O que o console exibe depois de `setCustomValidity('E-mail inválido')` nesse campo?",
+    "options": [
+      "false E-mail inválido",
+      "true E-mail inválido",
+      "false sem mensagem",
+      "true E-mail válido"
+    ],
+    "answer": 0,
+    "code": {
+      "env": "dom",
+      "html": "<form><input id=\"email\" type=\"email\" value=\"ana@\"></form>",
+      "source": "const campo = document.querySelector('#email');\ncampo.setCustomValidity('E-mail inválido');\nconsole.log(campo.checkValidity() + ' ' + campo.validationMessage);"
+    },
+    "expected": "false E-mail inválido",
+    "explanation": "Uma mensagem personalizada não vazia torna o campo inválido: `checkValidity()` retorna `false` e `validationMessage` traz a mensagem, por isso a saída é `false E-mail inválido`.",
+    "source": { "kind": "orientacao" },
+    "evidence": "tratamento de formulários e validações."
+  },
+  {
+    "id": "n20-q006",
+    "nodeId": "n20",
+    "type": "mcq",
+    "prompt": "O que o console exibe ao disparar esse evento `submit` cancelável?",
+    "options": ["true", "undefined", "\"submit\"", "false"],
+    "answer": 3,
+    "code": {
+      "env": "dom",
+      "html": "<form id=\"f\"><input name=\"nome\" value=\"Ana\"></form>",
+      "source": "const form = document.querySelector('#f');\nform.addEventListener('submit', (evento) => {\n  evento.preventDefault();\n});\nconst resultado = form.dispatchEvent(new Event('submit', { cancelable: true }));\nconsole.log(resultado);"
+    },
+    "expected": "false",
+    "explanation": "O handler chama `preventDefault()`, então `dispatchEvent` retorna `false`, indicando que o comportamento padrão do evento foi cancelado.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 83,
+      "endLine": 84
+    },
+    "evidence": "evento.preventDefault(); // impede a página de recarregar"
+  },
+  {
+    "id": "n20-q007",
+    "nodeId": "n20",
+    "type": "fill",
+    "prompt": "Com o campo obrigatório vazio, o console exibe ____.",
+    "answers": ["false true"],
+    "code": {
+      "env": "dom",
+      "html": "<form><input id=\"nome\" required></form>",
+      "source": "const campo = document.querySelector('#nome');\nconsole.log(campo.checkValidity() + ' ' + campo.validity.valueMissing);"
+    },
+    "expected": "false true",
+    "explanation": "`checkValidity()` retorna `false` porque o campo `required` está vazio, e `validity.valueMissing` é `true`; a saída é `false true`.",
+    "source": { "aula": 162, "slide": 6 },
+    "evidence": "Nome: <input type=\"text\" name=\"nome\" required><br>"
+  },
+  {
+    "id": "n20-q008",
+    "nodeId": "n20",
+    "type": "fill",
+    "prompt": "O valor exibido no console é ____.",
+    "answers": ["female"],
+    "code": {
+      "env": "dom",
+      "html": "<form><input type=\"radio\" name=\"sexo\" value=\"male\"><input type=\"radio\" name=\"sexo\" value=\"female\" checked></form>",
+      "source": "const marcado = document.querySelector('input[name=\"sexo\"]:checked');\nconsole.log(marcado.value);"
+    },
+    "expected": "female",
+    "explanation": "O seletor `input[name=\"sexo\"]:checked` encontra o radio marcado e `.value` devolve `female`; o radio com `value=\"male\"` está desmarcado.",
+    "source": { "aula": 162, "slide": 10 },
+    "evidence": "<input type=\"radio\" name=\"sex\" value=\"female\">Feminino<br>"
+  },
+  {
+    "id": "n20-q009",
+    "nodeId": "n20",
+    "type": "fill",
+    "prompt": "Depois de `form.reset()`, o valor exibido no console é ____.",
+    "answers": ["Bia"],
+    "code": {
+      "env": "dom",
+      "html": "<form id=\"f\"><input id=\"nome\" value=\"Bia\"></form>",
+      "source": "const form = document.querySelector('#f');\nconst campo = document.querySelector('#nome');\ncampo.value = 'Ana';\nform.reset();\nconsole.log(campo.value);"
+    },
+    "expected": "Bia",
+    "explanation": "`reset()` devolve os campos aos valores iniciais do HTML; como o input começa com `value=\"Bia\"`, o console mostra `Bia` e não o `Ana` digitado.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 75,
+      "endLine": 77
+    },
+    "evidence": "function limparFormulario() { form.reset();"
+  },
+  {
+    "id": "n20-q010",
+    "nodeId": "n20",
+    "type": "fill",
+    "prompt": "Com o mock devolvendo `{ \"id\": 7, \"nome\": \"Ana\" }`, o console exibe ____.",
+    "answers": ["7"],
+    "code": {
+      "env": "dom",
+      "html": "<form id=\"f\"><input name=\"nome\" value=\"Ana\"></form>",
+      "source": "const form = document.querySelector('#f');\nconst dados = new FormData(form);\nfetch('http://localhost:3000/alunos', {\n  method: 'POST',\n  headers: { 'Content-Type': 'application/json' },\n  body: JSON.stringify({ nome: dados.get('nome') }),\n})\n  .then((resposta) => resposta.json())\n  .then((aluno) => console.log(aluno.id));",
+      "mocks": {
+        "http://localhost:3000/alunos": { "body": { "id": 7, "nome": "Ana" } }
+      }
+    },
+    "expected": "7",
+    "explanation": "O `fetch` faz POST para `http://localhost:3000/alunos`, converte a resposta com `.json()` e imprime `aluno.id`, que vale `7`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 42,
+      "endLine": 47
+    },
+    "evidence": "await fetch(API_URL, { method: \"POST\","
+  },
+  {
+    "id": "n20-q011",
+    "nodeId": "n20",
+    "type": "mcq",
+    "prompt": "No projeto de cadastro, por que o handler de `submit` chama `evento.preventDefault()`?",
+    "options": [
+      "Para apagar os dados já enviados ao json-server",
+      "Para validar o e-mail com `type=\"email\"`",
+      "Para impedir o recarregamento padrão da página",
+      "Para converter os valores dos campos em maiúsculas"
+    ],
+    "answer": 2,
+    "explanation": "O comentário do projeto diz que `preventDefault()` impede a página de recarregar, deixando o envio assíncrono com `fetch` cuidar do POST.",
+    "source": { "aula": 310, "slide": 10 },
+    "evidence": "Manipulação de objetos da página HTML e tratamento de eventos"
+  },
+  {
+    "id": "n20-q012",
+    "nodeId": "n20",
+    "type": "mcq",
+    "prompt": "Qual atributo limita a quantidade de caracteres que o usuário pode digitar em um campo de texto?",
+    "options": ["required", "value", "name", "maxlength"],
+    "answer": 3,
+    "explanation": "A aula apresenta `maxlength` como o atributo que limita a quantidade de caracteres digitados; `required` cuida do campo vazio e `name`/`value` identificam e guardam o valor.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "O atributo maxlength permite limitar a quantidade de caracteres a serem digitados pelo usuário."
+  },
+  {
+    "id": "n20-q013",
+    "nodeId": "n20",
+    "type": "mcq",
+    "prompt": "O que o campo `type=\"email\"` verifica antes do envio do formulário?",
+    "options": [
+      "Se o valor contém @ e nome de servidor, formando um e-mail válido",
+      "Se o e-mail já está cadastrado no json-server",
+      "Se o campo está vazio mesmo sem `required`",
+      "Se o domínio termina obrigatoriamente em `.br`"
+    ],
+    "answer": 0,
+    "explanation": "A aula explica que `type=\"email\"` valida se o usuário informou um endereço com @ e nome do servidor antes do envio; não consulta o servidor nem exige `.br`.",
+    "source": { "aula": 162, "slide": 8 },
+    "evidence": "Email: <input type=\"email\" name=\"email\"><br>"
+  },
+  {
+    "id": "n20-q014",
+    "nodeId": "n20",
+    "type": "mcq",
+    "prompt": "Para exibir a mensagem de erro dentro de um elemento da página, qual propriedade grava texto sem interpretar HTML?",
+    "options": [
+      "`innerHTML`, que exibe o texto sem interpretar tags",
+      "`textContent`, que grava o texto sem interpretar HTML",
+      "`value`, que atualiza o conteúdo de qualquer elemento",
+      "`checkValidity`, que devolve a mensagem de erro"
+    ],
+    "answer": 1,
+    "explanation": "`textContent` grava a string como texto no elemento, sem interpretar marcação; `value` pertence a campos de formulário e `checkValidity` retorna um booleano.",
+    "source": { "aula": 310, "slide": 10 },
+    "evidence": "Manipulação de objetos da página HTML e tratamento de eventos"
+  },
+  {
+    "id": "n20-q015",
+    "nodeId": "n20",
+    "type": "tf",
+    "prompt": "Um formulário pode ter mais de um botão `submit`, mas todos executam a mesma ação.",
+    "answer": true,
+    "explanation": "A aula afirma que um formulário pode ter mais de um botão submit e que todos executam a mesma ação.",
+    "source": { "aula": 162, "slide": 12 },
+    "evidence": "submit, porém todos executam a mesma"
+  },
+  {
+    "id": "n20-q016",
+    "nodeId": "n20",
+    "type": "tf",
+    "prompt": "Campos `radio` com o mesmo atributo `name` permitem selecionar mais de uma opção ao mesmo tempo.",
+    "answer": false,
+    "explanation": "Com o mesmo `name`, os radios formam um grupo e o usuário escolhe uma única opção; para várias escolhas usa-se `checkbox`.",
+    "source": { "aula": 162, "slide": 10 },
+    "evidence": "Os campos do tipo radio com o mesmo valor no"
+  },
+  {
+    "id": "n20-q017",
+    "nodeId": "n20",
+    "type": "tf",
+    "prompt": "Campos `checkbox` com o mesmo atributo `name` permitem escolher uma ou mais opções.",
+    "answer": true,
+    "explanation": "A aula descreve os checkboxes de mesmo `name` como capazes de aceitar uma ou mais opções entre as disponíveis.",
+    "source": { "aula": 162, "slide": 11 },
+    "evidence": "<input type=\"checkbox\" name=\"acao\" value=\"vel\"> Ver teste de velocidade<br>"
+  },
+  {
+    "id": "n20-q018",
+    "nodeId": "n20",
+    "type": "fill",
+    "prompt": "Quando um campo `required` fica vazio, a propriedade `validity.____` fica verdadeira.",
+    "answers": ["valueMissing"],
+    "explanation": "`validity.valueMissing` indica que um campo obrigatório foi deixado vazio; é o mesmo caso que faz `checkValidity()` retornar `false`.",
+    "source": { "aula": 162, "slide": 6 },
+    "evidence": "Nome: <input type=\"text\" name=\"nome\" required><br>"
+  },
+  {
+    "id": "n20-q019",
+    "nodeId": "n20",
+    "type": "fill",
+    "prompt": "Para exigir pelo menos 3 caracteres em um campo de texto, usa-se o atributo `____=\"3\"`.",
+    "answers": ["minlength"],
+    "explanation": "`minlength` define o mínimo de caracteres; com menos que isso, a validação nativa do formulário impede o envio.",
+    "source": { "kind": "orientacao" },
+    "evidence": "manipulação de elementos HTML, tratamento de formulários e validações."
+  },
+  {
+    "id": "n20-q020",
+    "nodeId": "n20",
+    "type": "fill",
+    "prompt": "O método que valida um campo do formulário e exibe ao usuário a mensagem de validação desse campo é `campo.____()`.",
+    "answers": ["reportValidity"],
+    "explanation": "`campo.reportValidity()` valida apenas esse campo e, se houver um problema, exibe a mensagem de validação dele e leva o foco até ele. Quem percorre o formulário e reporta o primeiro campo inválido é `form.reportValidity()`; já `setCustomValidity` apenas define a mensagem.",
+    "source": { "kind": "orientacao" },
+    "evidence": "tratamento de formulários e validações."
+  },
+  {
+    "id": "n20-q021",
+    "nodeId": "n20",
+    "type": "tf",
+    "prompt": "`form.reset()` restaura os campos para os valores definidos no HTML, e não para uma string vazia.",
+    "answer": true,
+    "explanation": "O `reset()` do projeto limpa o formulário voltando aos valores iniciais marcados no HTML; por isso um input com `value=\"Bia\"` volta a `Bia`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 75,
+      "endLine": 77
+    },
+    "evidence": "form.reset(); inputId.value = \"\";"
+  }
+]

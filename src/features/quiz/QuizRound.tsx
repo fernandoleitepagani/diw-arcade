@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { SessionSummary, useSessionBar } from '../../components/session';
 import { Button, Mascot } from '../../components/ui';
 import { pickLine } from '../../content/copy';
+import { formatSource } from '../../content/source';
 import type { NodeId } from '../../content/tree';
-import type { Question } from '../../content/schema';
+import type { Question, QuestionCode } from '../../content/schema';
 import { quizAnswerXp } from '../../lib/game/xp';
 import type { ProgressEvent } from '../../lib/progress/events';
 import { isFillCorrect } from './grade';
@@ -53,9 +54,53 @@ function correctOptionIndex(question: Question): number {
   return -1;
 }
 
-function sourceLabel(question: Question): string {
-  const aula = String(question.source.aula).padStart(3, '0');
-  return `Fonte: aula-${aula}, slide ${question.source.slide}`;
+/** The page URL, the HTML fixture and the JS snippet a question asks about. */
+function QuestionCode({ code, id }: { code: QuestionCode; id: string }) {
+  const htmlLabelId = `${id}-html`;
+  const jsLabelId = `${id}-js`;
+
+  return (
+    <figure
+      className="quiz-round__code"
+      id={id}
+      role="region"
+      aria-labelledby={jsLabelId}
+    >
+      {code.url === undefined ? null : (
+        <p className="quiz-round__code-url">URL da página: {code.url}</p>
+      )}
+      {code.html === undefined ? null : (
+        <div
+          className="quiz-round__code-example"
+          role="group"
+          aria-labelledby={htmlLabelId}
+        >
+          <p id={htmlLabelId} className="quiz-round__code-caption">
+            HTML de exemplo
+          </p>
+          {/* Scrollable code stays reachable for keyboard users. */}
+          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+          <pre className="quiz-round__code-block" tabIndex={0} aria-label="HTML de exemplo">
+            <code>{code.html}</code>
+          </pre>
+        </div>
+      )}
+      <div
+        className="quiz-round__code-example"
+        role="group"
+        aria-labelledby={jsLabelId}
+      >
+        <p id={jsLabelId} className="quiz-round__code-caption">
+          Código JavaScript
+        </p>
+        {/* Scrollable code stays reachable for keyboard users. */}
+        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+        <pre className="quiz-round__code-block" tabIndex={0} aria-label="Código JavaScript">
+          <code>{code.source}</code>
+        </pre>
+      </div>
+    </figure>
+  );
 }
 
 export function QuizRound({
@@ -248,8 +293,21 @@ export function QuizRound({
           }}
         >
           {active.type === 'mcq' ? (
-            <fieldset className="quiz-round__options">
+            <fieldset
+              className="quiz-round__options"
+              aria-describedby={
+                active.code === undefined
+                  ? undefined
+                  : `quiz-code-${active.id}`
+              }
+            >
               <legend className="quiz-round__prompt">{active.prompt}</legend>
+              {active.code === undefined ? null : (
+                <QuestionCode
+                  id={`quiz-code-${active.id}`}
+                  code={active.code}
+                />
+              )}
               {active.options.map((option, index) => {
                 const picked = locked && selected === index;
                 const correct = locked && index === correctOptionIndex(active);
@@ -349,6 +407,12 @@ export function QuizRound({
               <p id={`quiz-prompt-${active.id}`} className="quiz-round__prompt">
                 {active.prompt}
               </p>
+              {active.code === undefined ? null : (
+                <QuestionCode
+                  id={`quiz-code-${active.id}`}
+                  code={active.code}
+                />
+              )}
               <label htmlFor={`quiz-fill-${active.id}`}>Sua resposta</label>
               <input
                 id={`quiz-fill-${active.id}`}
@@ -357,7 +421,11 @@ export function QuizRound({
                 value={fillValue}
                 disabled={locked}
                 readOnly={locked}
-                aria-describedby={`quiz-prompt-${active.id}`}
+                aria-describedby={
+                  active.code === undefined
+                    ? `quiz-prompt-${active.id}`
+                    : `quiz-prompt-${active.id} quiz-code-${active.id}`
+                }
                 onChange={(event) => setFillValue(event.target.value)}
               />
               {locked ? (
@@ -405,7 +473,9 @@ export function QuizRound({
           <p className="quiz-round__explanation">
             {feedback.question.explanation}
           </p>
-          <p className="quiz-round__source">{sourceLabel(feedback.question)}</p>
+          <p className="quiz-round__source">
+            {formatSource(feedback.question.source)}
+          </p>
           <Mascot
             mood={feedback.correct ? 'happy' : 'sad'}
             line={pickLine(

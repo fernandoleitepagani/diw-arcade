@@ -13,17 +13,48 @@ export const NODE_IDS = [
   'n12',
   'n13',
   'n14',
+  'n15',
+  'n16',
+  'n17',
+  'n18',
+  'n19',
+  'n20',
 ] as const;
 
 export type NodeId = (typeof NODE_IDS)[number];
 
-export const UNIT_IDS = ['u1', 'u2', 'u3', 'u4', 'u5'] as const;
+export const UNIT_IDS = ['u1', 'u2', 'u3', 'u4', 'u5', 'u6'] as const;
 
 export type UnitId = (typeof UNIT_IDS)[number];
 
 export const LAB_IDS = ['lab-01', 'lab-02', 'lab-03', 'jsonserver'] as const;
 
 export type LabId = (typeof LAB_IDS)[number];
+
+/** Documents a node may cite beyond the course aulas. */
+export const SOURCE_DOCS = [
+  'tiaw-json',
+  'tiaw-design-thinking',
+  'tiaw-dtg',
+  'tiaw-requisitos',
+  'orientacao-prova2',
+] as const;
+
+export type DocId = (typeof SOURCE_DOCS)[number];
+
+export const TIAW_DOCS = [
+  'tiaw-json',
+  'tiaw-design-thinking',
+  'tiaw-dtg',
+  'tiaw-requisitos',
+] as const satisfies readonly DocId[];
+
+export interface NodeMinimums {
+  questions?: number;
+  flashcards?: number;
+  challenges?: number;
+  executed?: number;
+}
 
 export interface Unit {
   id: UnitId;
@@ -37,6 +68,28 @@ export interface TreeNode {
   /** Aulas that feed this node, in the canonical course order. */
   aulas: readonly number[];
   unitId: UnitId;
+  /** Extra documents this node may cite; absent means aulas only. */
+  docs?: readonly DocId[];
+  /** Overrides the default per-node minimums. */
+  minimums?: NodeMinimums;
+}
+
+export const DEFAULT_NODE_MINIMUMS: Required<NodeMinimums> = {
+  questions: 15,
+  flashcards: 20,
+  challenges: 3,
+  executed: 0,
+};
+
+/** Fills a node's minimums with the project defaults. */
+export function resolveMinimums(node: TreeNode): Required<NodeMinimums> {
+  const minimums = node.minimums ?? {};
+  return {
+    questions: minimums.questions ?? DEFAULT_NODE_MINIMUMS.questions,
+    flashcards: minimums.flashcards ?? DEFAULT_NODE_MINIMUMS.flashcards,
+    challenges: minimums.challenges ?? DEFAULT_NODE_MINIMUMS.challenges,
+    executed: minimums.executed ?? DEFAULT_NODE_MINIMUMS.executed,
+  };
 }
 
 export const UNITS: readonly Unit[] = [
@@ -45,6 +98,11 @@ export const UNITS: readonly Unit[] = [
   { id: 'u3', title: 'CSS', nodes: ['n06', 'n07', 'n08', 'n09'] },
   { id: 'u4', title: 'Design e Mobile', nodes: ['n10', 'n11', 'n12'] },
   { id: 'u5', title: 'Dados e JavaScript', nodes: ['n13', 'n14'] },
+  {
+    id: 'u6',
+    title: 'Prova 2',
+    nodes: ['n15', 'n16', 'n17', 'n18', 'n19', 'n20'],
+  },
 ];
 
 export const NODES: readonly TreeNode[] = [
@@ -56,22 +114,99 @@ export const NODES: readonly TreeNode[] = [
     unitId: 'u1',
   },
   { id: 'n03', title: 'Sintaxe e elementos HTML', aulas: [160, 161], unitId: 'u2' },
-  { id: 'n04', title: 'Formulários', aulas: [162], unitId: 'u2' },
+  {
+    id: 'n04',
+    title: 'Formulários',
+    aulas: [162],
+    unitId: 'u2',
+    minimums: { questions: 28, flashcards: 37, challenges: 5 },
+  },
   { id: 'n05', title: 'Semântica', aulas: [163], unitId: 'u2' },
   { id: 'n06', title: 'CSS: introdução e sintaxe', aulas: [170, 171], unitId: 'u3' },
   { id: 'n07', title: 'Propriedades CSS', aulas: [172], unitId: 'u3' },
   { id: 'n08', title: 'Viewport e Media Queries', aulas: [173], unitId: 'u3' },
   { id: 'n09', title: 'Flexbox e Grid', aulas: [174], unitId: 'u3' },
-  { id: 'n10', title: 'UX Design e projeto web', aulas: [210], unitId: 'u4' },
+  {
+    id: 'n10',
+    title: 'UX Design e projeto web',
+    aulas: [210],
+    unitId: 'u4',
+    docs: ['tiaw-design-thinking', 'tiaw-dtg', 'tiaw-requisitos'],
+    minimums: { questions: 30, flashcards: 36, challenges: 5 },
+  },
   { id: 'n11', title: 'Web e computação móvel', aulas: [220], unitId: 'u4' },
   { id: 'n12', title: 'Bootstrap', aulas: [230], unitId: 'u4' },
-  { id: 'n13', title: 'JSON e APIs', aulas: [240, 250], unitId: 'u5' },
-  { id: 'n14', title: 'Introdução ao JavaScript', aulas: [310], unitId: 'u5' },
+  {
+    id: 'n13',
+    title: 'JSON e APIs',
+    aulas: [240, 250],
+    unitId: 'u5',
+    docs: ['tiaw-json'],
+    minimums: { questions: 32, flashcards: 40, challenges: 5, executed: 3 },
+  },
+  {
+    id: 'n14',
+    title: 'Introdução ao JavaScript',
+    aulas: [310],
+    unitId: 'u5',
+    docs: ['orientacao-prova2'],
+    minimums: { questions: 29, flashcards: 45, challenges: 5, executed: 5 },
+  },
+  {
+    id: 'n15',
+    title: 'Leitura de código: escopo, hoisting e execução',
+    aulas: [310],
+    unitId: 'u6',
+    docs: ['orientacao-prova2'],
+    minimums: { questions: 20, flashcards: 25, challenges: 3, executed: 12 },
+  },
+  {
+    id: 'n16',
+    title: 'Tipos, igualdade e coerção',
+    aulas: [240, 310],
+    unitId: 'u6',
+    docs: ['orientacao-prova2'],
+    minimums: { questions: 20, flashcards: 25, challenges: 3, executed: 12 },
+  },
+  {
+    id: 'n17',
+    title: 'DOM e eventos',
+    aulas: [310],
+    unitId: 'u6',
+    docs: ['orientacao-prova2'],
+    minimums: { questions: 20, flashcards: 25, challenges: 5, executed: 8 },
+  },
+  {
+    id: 'n18',
+    title: 'URLs e parâmetros de consulta',
+    aulas: [131, 250],
+    unitId: 'u6',
+    docs: ['orientacao-prova2'],
+    minimums: { questions: 20, flashcards: 25, challenges: 3, executed: 10 },
+  },
+  {
+    id: 'n19',
+    title: 'Assíncrono: promises, async/await e fetch',
+    aulas: [240, 250],
+    unitId: 'u6',
+    docs: ['orientacao-prova2', 'tiaw-json'],
+    minimums: { questions: 20, flashcards: 25, challenges: 5, executed: 10 },
+  },
+  {
+    id: 'n20',
+    title: 'Formulários e validação com JavaScript',
+    aulas: [162, 310],
+    unitId: 'u6',
+    docs: ['orientacao-prova2'],
+    minimums: { questions: 20, flashcards: 25, challenges: 5, executed: 6 },
+  },
 ];
 
 export const NODE_BY_ID: Record<NodeId, TreeNode> = Object.fromEntries(
   NODES.map((node) => [node.id, node]),
 ) as Record<NodeId, TreeNode>;
 
-/** Canonical aula order: the table order, flattened. */
-export const AULA_ORDER: readonly number[] = NODES.flatMap((node) => node.aulas);
+/** Canonical aula order: the table order, flattened and deduplicated. */
+export const AULA_ORDER: readonly number[] = [
+  ...new Set(NODES.flatMap((node) => node.aulas)),
+];

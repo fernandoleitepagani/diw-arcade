@@ -235,5 +235,164 @@
     "explanation": "A aula cita o AJAX e o objeto XMLHttpRequest como forma de comunicação com o servidor.",
     "source": { "aula": 310, "slide": 10 },
     "evidence": "Comunicação com o servidor e uso de Application Programming Interface (API) via AJAX (XMLHttpRequest)"
+  },
+  {
+    "id": "n14-q020",
+    "nodeId": "n14",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "DIW",
+      "TIAW",
+      "Uncaught TypeError: Assignment to constant variable.",
+      "undefined"
+    ],
+    "answer": 2,
+    "explanation": "Um valor atribuído a uma constante não pode ser reatribuído. A segunda linha lança TypeError, e o console registra a mensagem de erro em vez de imprimir DIW ou TIAW.",
+    "code": {
+      "env": "js",
+      "source": "const curso = \"DIW\";\ncurso = \"TIAW\";\nconsole.log(curso);"
+    },
+    "expected": "Uncaught TypeError: Assignment to constant variable.",
+    "source": { "aula": 310, "slide": 6 },
+    "evidence": "Classes, Modules, Arrow Functions, Const e Let, Template Literals, Promises"
+  },
+  {
+    "id": "n14-q021",
+    "nodeId": "n14",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": ["string number", "number string", "String Number", "object number"],
+    "answer": 0,
+    "explanation": "O operador typeof devolve \"string\" para textos e \"number\" para números, então a saída é \"string number\".",
+    "code": {
+      "env": "js",
+      "source": "console.log(typeof \"Ana\", typeof 42);"
+    },
+    "expected": "string number",
+    "source": { "aula": 310, "slide": 8 },
+    "evidence": "Oferece tipagem dinâmica, tipos de variáveis não são definidos previamente"
+  },
+  {
+    "id": "n14-q022",
+    "nodeId": "n14",
+    "type": "fill",
+    "prompt": "Considere o trecho a seguir. Complete a saída do console: ____",
+    "answers": ["Ana tem 20 anos.", "Ana tem 20 anos"],
+    "explanation": "O template literal substitui ${nome} por Ana e ${idade} por 20, então o console imprime \"Ana tem 20 anos.\".",
+    "code": {
+      "env": "js",
+      "source": "const nome = \"Ana\";\nconst idade = 20;\nconsole.log(`${nome} tem ${idade} anos.`);"
+    },
+    "expected": "Ana tem 20 anos.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 21,
+      "endLine": 24
+    },
+    "evidence": "li.innerHTML = ` <span> <strong>${aluno.nome}</strong>"
+  },
+  {
+    "id": "n14-q023",
+    "nodeId": "n14",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": ["23", "5", "undefined", "a + b"],
+    "answer": 1,
+    "explanation": "A chamada somar(2, 3) passa 2 e 3 como argumentos; a função devolve a soma com return, então o console imprime 5.",
+    "code": {
+      "env": "js",
+      "source": "function somar(a, b) {\n  return a + b;\n}\nconsole.log(somar(2, 3));"
+    },
+    "expected": "5",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 18,
+      "endLine": 20
+    },
+    "evidence": "function headersPokemon() {\n  return API_KEY ? { \"X-Api-Key\": API_KEY } : {};\n}"
+  },
+  {
+    "id": "n14-q024",
+    "nodeId": "n14",
+    "type": "fill",
+    "prompt": "Considere o array a seguir. Complete a saída do console: ____",
+    "answers": ["3 pera"],
+    "explanation": "O array tem 3 itens, então length vale 3; o índice 1 acessa o segundo item, \"pera\". A saída é \"3 pera\".",
+    "code": {
+      "env": "js",
+      "source": "const frutas = [\"uva\", \"pera\", \"manga\"];\nconsole.log(frutas.length, frutas[1]);"
+    },
+    "expected": "3 pera",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto base de exemplo - Mapa PUC Minas/js/app.js",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "evidence": "const centralLatLong = [-43.9397233, -19.9332786];"
+  },
+  {
+    "id": "n14-q025",
+    "nodeId": "n14",
+    "type": "fill",
+    "prompt": "Considere o trecho a seguir. Complete a saída do console: ____",
+    "answers": ["Total: 7"],
+    "explanation": "O console recebe dois argumentos, \"Total:\" e o valor 7, e os imprime separados por espaço: \"Total: 7\".",
+    "code": {
+      "env": "js",
+      "source": "const total = 3 + 4;\nconsole.log(\"Total:\", total);"
+    },
+    "expected": "Total: 7",
+    "source": { "aula": 310, "slide": 11 },
+    "evidence": "Inclui uma linha de comando para testes de expressões Javascript"
+  },
+  {
+    "id": "n14-q026",
+    "nodeId": "n14",
+    "type": "tf",
+    "prompt": "No exemplo da aula, o arquivo JavaScript externo é referenciado no atributo src da tag script.",
+    "answer": true,
+    "explanation": "A linha <script type=\"text/javascript\" src=\"script.js\"></script> usa o atributo src para carregar o arquivo externo.",
+    "source": { "aula": 310, "slide": 9 },
+    "evidence": "<script type=\"text/javascript\" src=\"script.js\"></script>"
+  },
+  {
+    "id": "n14-q027",
+    "nodeId": "n14",
+    "type": "tf",
+    "prompt": "No exemplo da aula, o bloco interno de JavaScript mantém o código entre as tags de abertura e fechamento de script.",
+    "answer": true,
+    "explanation": "O bloco interno abre com <script type=\"text/javascript\">, contém o código e fecha com </script>, sem atributo src.",
+    "source": { "aula": 310, "slide": 9 },
+    "evidence": "<script type=\"text/javascript\"> Bloco interno /* código Javascript */ alert ('Passei por aqui!'); </script>"
+  },
+  {
+    "id": "n14-q028",
+    "nodeId": "n14",
+    "type": "fill",
+    "prompt": "Para carregar um arquivo JavaScript externo, a tag script usa o atributo ____.",
+    "answers": ["src"],
+    "explanation": "O atributo src recebe o caminho do arquivo, como em src=\"script.js\".",
+    "source": { "aula": 310, "slide": 9 },
+    "evidence": "<script type=\"text/javascript\" src=\"script.js\"></script>"
+  },
+  {
+    "id": "n14-q029",
+    "nodeId": "n14",
+    "type": "mcq",
+    "prompt": "No exemplo da aula, onde ficam as tags script que incluem o arquivo externo e o bloco interno?",
+    "options": [
+      "Dentro do <head>, depois do <title>",
+      "No início do <body>, antes do parágrafo",
+      "No fim do <body>, depois do parágrafo",
+      "Fora das tags <html>"
+    ],
+    "answer": 0,
+    "explanation": "O exemplo coloca as duas tags script dentro do <head>, logo depois de <title>Exemplo Javascript</title>.",
+    "source": { "aula": 310, "slide": 9 },
+    "evidence": "<title>Exemplo Javascript</title> <script type=\"text/javascript\" src=\"script.js\"></script>"
   }
 ]

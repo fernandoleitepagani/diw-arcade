@@ -158,4 +158,127 @@ describe('QuizRound', () => {
       screen.getByRole('link', { name: 'Próximo passo' }),
     ).toHaveAttribute('href', '/no/n07');
   });
+
+  it('mostra a URL, o HTML de exemplo e o JavaScript acima das alternativas', () => {
+    renderRound([codeQuestion()]);
+
+    const region = screen.getByRole('region', { name: 'Código JavaScript' });
+    expect(
+      within(region).getByText(
+        /console\.log\(url\.searchParams\.get\('a'\)\);/,
+      ),
+    ).toBeInTheDocument();
+
+    const htmlBlock = within(region).getByRole('group', {
+      name: 'HTML de exemplo',
+    });
+    expect(
+      within(htmlBlock).getByText('<p id="alvo">Olá</p>'),
+    ).toBeInTheDocument();
+
+    const url = within(region).getByText(
+      'URL da página: https://example.com/?a=1',
+    );
+    expect(url).toHaveClass('quiz-round__code-url');
+
+    const codeBlocks = region.querySelectorAll('pre.quiz-round__code-block');
+    expect(codeBlocks).toHaveLength(2);
+    for (const block of codeBlocks) {
+      expect(block).toHaveAttribute('tabindex', '0');
+      expect(block.querySelector('code')).not.toBeNull();
+    }
+  });
+
+  it('expõe o bloco de JavaScript como uma região nomeada', () => {
+    const question: McqQuestion = {
+      ...(mcqQuestions[0] as McqQuestion),
+      id: 'n07-q091',
+      prompt: 'O que este código imprime?',
+      code: {
+        env: 'js',
+        source: "const valor = 1;\nconsole.log(valor);",
+      },
+    };
+    renderRound([question]);
+
+    const region = screen.getByRole('region', { name: 'Código JavaScript' });
+    const blocks = region.querySelectorAll('pre.quiz-round__code-block');
+    expect(blocks).toHaveLength(1);
+    expect(blocks[0]).toHaveAccessibleName('Código JavaScript');
+    expect(blocks[0]).toHaveAttribute('tabindex', '0');
+    expect(within(region).queryByText('HTML de exemplo')).not.toBeInTheDocument();
+  });
+
+  it('põe cada legenda diretamente acima do bloco que nomeia', () => {
+    renderRound([codeQuestion()]);
+
+    const region = screen.getByRole('region', { name: 'Código JavaScript' });
+    const captions = Array.from(
+      region.querySelectorAll<HTMLElement>('.quiz-round__code-caption'),
+    );
+
+    expect(captions.map((caption) => caption.textContent)).toEqual([
+      'HTML de exemplo',
+      'Código JavaScript',
+    ]);
+
+    for (const caption of captions) {
+      const block = caption.nextElementSibling;
+      expect(block?.tagName).toBe('PRE');
+      expect(block).toHaveAccessibleName(caption.textContent ?? '');
+    }
+  });
+
+  it('liga o grupo de alternativas à figura do código', () => {
+    const question = codeQuestion();
+    renderRound([question]);
+
+    const region = screen.getByRole('region', { name: 'Código JavaScript' });
+    expect(region.id).not.toBe('');
+
+    const group = screen.getByRole('group', { name: question.prompt });
+    expect(group).toHaveAttribute('aria-describedby', region.id);
+  });
+
+  it('preserva as quebras de linha de uma alternativa', () => {
+    const question: McqQuestion = {
+      ...codeQuestion(),
+      id: 'n07-q090',
+      prompt: 'Qual é a ordem impressa?',
+      options: ['A\nC\nB', 'A B C', 'B C A', 'C A B'],
+      answer: 0,
+    };
+    renderRound([question]);
+
+    const option = screen.getByText('A\nC\nB', {
+      normalizer: (value) => value,
+    });
+    expect(option).toHaveClass('quiz-round__option-text');
+    expect(option.textContent).toBe('A\nC\nB');
+  });
+
+  it('não mostra figura quando a pergunta não traz código', () => {
+    renderRound([mcqQuestions[0] as McqQuestion]);
+
+    expect(
+      screen.queryByRole('region', { name: 'Código JavaScript' }),
+    ).not.toBeInTheDocument();
+  });
 });
+
+function codeQuestion(): McqQuestion {
+  return {
+    ...(mcqQuestions[0] as McqQuestion),
+    id: 'n07-q089',
+    prompt: 'O que este código imprime?',
+    code: {
+      env: 'dom',
+      source:
+        "const url = new URL('https://example.com/?a=1');\nconsole.log(url.searchParams.get('a'));",
+      html: '<p id="alvo">Olá</p>',
+      url: 'https://example.com/?a=1',
+    },
+    options: ['a', '1', 'Olá', 'undefined'],
+    answer: 0,
+  };
+}

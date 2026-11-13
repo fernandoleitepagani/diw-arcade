@@ -150,7 +150,7 @@ describe('StatsPage', () => {
       screen.getByRole('table', { name: 'Mapa de pontos fracos' }),
     ).toBeInTheDocument();
     expect(screen.getAllByRole('listitem').length).toBeGreaterThanOrEqual(
-      12 + 14,
+      12 + NODES.length,
     );
   });
 

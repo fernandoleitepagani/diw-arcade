@@ -194,5 +194,167 @@
     ],
     "source": { "aula": 240, "slide": 10 },
     "evidence": "\"first\": \"John\", \"middle\": \"K\", \"last\": \"Doe\""
+  },
+  {
+    "id": "n13-c04",
+    "nodeId": "n13",
+    "title": "Renderizar notícias vindas de uma API",
+    "kind": "js",
+    "goal": "Use fetch para buscar em http://localhost:3000/noticias um array de notícias, como o json-server devolve, e crie um item de lista para cada título.",
+    "starter": {
+      "html": "<h2>Notícias</h2>\n<ul id=\"noticias\"></ul>",
+      "css": "",
+      "js": "const lista = document.querySelector('#noticias');\nconst url = 'http://localhost:3000/noticias';\n\n// Busque as notícias e crie um <li> com o título de cada uma.\n"
+    },
+    "solution": {
+      "html": "<h2>Notícias</h2>\n<ul id=\"noticias\"></ul>",
+      "css": "",
+      "js": "const lista = document.querySelector('#noticias');\nconst url = 'http://localhost:3000/noticias';\n\nfetch(url)\n  .then((resposta) => resposta.json())\n  .then((noticias) => {\n    for (const noticia of noticias) {\n      const li = document.createElement('li');\n      li.textContent = noticia.titulo;\n      lista.appendChild(li);\n    }\n  });\n"
+    },
+    "requirements": [
+      {
+        "id": "noticias-lista",
+        "label": "A página tem uma lista com o id noticias.",
+        "check": {
+          "kind": "exists",
+          "selector": "#noticias"
+        }
+      },
+      {
+        "id": "noticias-quantidade",
+        "label": "A lista mostra exatamente três notícias.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": {
+          "kind": "count",
+          "selector": "#noticias li",
+          "min": 3,
+          "max": 3
+        }
+      },
+      {
+        "id": "noticias-primeiro",
+        "label": "O primeiro item mostra Primeira notícia.",
+        "check": {
+          "kind": "text",
+          "selector": "#noticias li:first-child",
+          "match": { "equals": "Primeira notícia" }
+        }
+      },
+      {
+        "id": "noticias-ultimo",
+        "label": "O último item mostra Terceira notícia.",
+        "check": {
+          "kind": "text",
+          "selector": "#noticias li:last-child",
+          "match": { "equals": "Terceira notícia" }
+        }
+      },
+      {
+        "id": "noticias-sem-erros",
+        "label": "O código executa sem erros.",
+        "check": {
+          "kind": "noErrors"
+        }
+      }
+    ],
+    "hints": [
+      "Chame fetch(url) e trate a resposta com .then((resposta) => resposta.json()).",
+      "O json-server devolve um array de notícias em /noticias, então percorra esse array com for...of.",
+      "Crie um li com noticia.titulo em textContent e adicione-o à lista com appendChild."
+    ],
+    "mocks": {
+      "http://localhost:3000/noticias": [
+        { "titulo": "Primeira notícia" },
+        { "titulo": "Segunda notícia" },
+        { "titulo": "Terceira notícia" }
+      ]
+    },
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 4
+    },
+    "evidence": "\"noticias\": [ { \"titulo\": \"Órgão do Ministério Público demite procurador da Lava Jato por outdoor em Curitiba\""
+  },
+  {
+    "id": "n13-c05",
+    "nodeId": "n13",
+    "title": "Filtrar notícias por curtidas",
+    "kind": "js",
+    "goal": "Busque em http://localhost:3000/noticias o array de notícias que o json-server devolve, mantenha apenas as que têm 100 curtidas ou mais e mostre os títulos.",
+    "starter": {
+      "html": "<h2>Destaques</h2>\n<ul id=\"destaques\"></ul>",
+      "css": "",
+      "js": "const lista = document.querySelector('#destaques');\nconst url = 'http://localhost:3000/noticias';\n\n// Busque as notícias, filtre as com 100 curtidas ou mais e mostre os títulos.\n"
+    },
+    "solution": {
+      "html": "<h2>Destaques</h2>\n<ul id=\"destaques\"></ul>",
+      "css": "",
+      "js": "const lista = document.querySelector('#destaques');\nconst url = 'http://localhost:3000/noticias';\n\nfetch(url)\n  .then((resposta) => resposta.json())\n  .then((noticias) => {\n    const destaques = noticias.filter((noticia) => noticia.curtidas >= 100);\n    for (const noticia of destaques) {\n      const li = document.createElement('li');\n      li.textContent = noticia.titulo;\n      lista.appendChild(li);\n    }\n  });\n"
+    },
+    "requirements": [
+      {
+        "id": "destaques-lista",
+        "label": "A página tem uma lista com o id destaques.",
+        "check": {
+          "kind": "exists",
+          "selector": "#destaques"
+        }
+      },
+      {
+        "id": "destaques-quantidade",
+        "label": "Somente as duas notícias com 100 curtidas ou mais aparecem.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": {
+          "kind": "count",
+          "selector": "#destaques li",
+          "min": 2,
+          "max": 2
+        }
+      },
+      {
+        "id": "destaques-primeiro",
+        "label": "A primeira notícia exibida é HTML.",
+        "check": {
+          "kind": "text",
+          "selector": "#destaques li:first-child",
+          "match": { "equals": "HTML" }
+        }
+      },
+      {
+        "id": "destaques-ultimo",
+        "label": "A última notícia exibida é JavaScript.",
+        "check": {
+          "kind": "text",
+          "selector": "#destaques li:last-child",
+          "match": { "equals": "JavaScript" }
+        }
+      },
+      {
+        "id": "destaques-sem-erros",
+        "label": "O código executa sem erros.",
+        "check": {
+          "kind": "noErrors"
+        }
+      }
+    ],
+    "hints": [
+      "Depois de resposta.json(), o retorno é o array de notícias; chame filter nele.",
+      "A condição do filtro é noticia.curtidas >= 100.",
+      "Percorra o array filtrado e crie um li com noticia.titulo para cada item."
+    ],
+    "mocks": {
+      "http://localhost:3000/noticias": [
+        { "titulo": "HTML", "curtidas": 250 },
+        { "titulo": "CSS", "curtidas": 40 },
+        { "titulo": "JavaScript", "curtidas": 130 },
+        { "titulo": "JSON", "curtidas": 90 }
+      ]
+    },
+    "source": {
+      "aula": 240,
+      "slide": 7
+    },
+    "evidence": "\"curtidas\": 258, \"publicado\": true"
   }
 ]

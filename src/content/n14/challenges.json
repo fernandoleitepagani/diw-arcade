@@ -170,5 +170,137 @@
     ],
     "source": { "aula": 310, "slide": 10 },
     "evidence": "Manipulação de objetos da página HTML e tratamento de eventos (DOM Document Object Model)"
+  },
+  {
+    "id": "n14-c04",
+    "nodeId": "n14",
+    "title": "Saudação com template literal",
+    "kind": "js",
+    "goal": "Ao clicar no botão #saudar, escreva em #saudacao a mensagem \"Olá, {nome}!\" usando um template literal com o valor do campo #nome.",
+    "starter": {
+      "html": "<label for=\"nome\">Nome</label>\n<input id=\"nome\" type=\"text\">\n<button id=\"saudar\" type=\"button\">Saudar</button>\n<p id=\"saudacao\"></p>",
+      "css": "#saudacao { font-weight: bold; }",
+      "js": "// Leia o campo #nome e escreva a saudação em #saudacao ao clicar.\n"
+    },
+    "solution": {
+      "html": "<label for=\"nome\">Nome</label>\n<input id=\"nome\" type=\"text\">\n<button id=\"saudar\" type=\"button\">Saudar</button>\n<p id=\"saudacao\"></p>",
+      "css": "#saudacao { font-weight: bold; }",
+      "js": "const nome = document.querySelector('#nome');\nconst botao = document.querySelector('#saudar');\nconst saudacao = document.querySelector('#saudacao');\n\nbotao.addEventListener('click', () => {\n  saudacao.textContent = `Olá, ${nome.value}!`;\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "campo-existe",
+        "label": "O campo #nome existe na página.",
+        "check": { "kind": "exists", "selector": "#nome" }
+      },
+      {
+        "id": "botao-existe",
+        "label": "O botão #saudar existe na página.",
+        "check": { "kind": "exists", "selector": "#saudar" }
+      },
+      {
+        "id": "primeira-saudacao",
+        "label": "Ao digitar \"Ana\" e clicar, #saudacao mostra \"Olá, Ana!\".",
+        "before": [
+          { "do": "input", "selector": "#nome", "value": "Ana" },
+          { "do": "click", "selector": "#saudar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#saudacao",
+          "match": { "equals": "Olá, Ana!" }
+        }
+      },
+      {
+        "id": "segunda-saudacao",
+        "label": "Ao trocar para \"Bia\" e clicar, #saudacao mostra \"Olá, Bia!\".",
+        "before": [
+          { "do": "input", "selector": "#nome", "value": "Bia" },
+          { "do": "click", "selector": "#saudar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#saudacao",
+          "match": { "equals": "Olá, Bia!" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Selecione os três elementos com `document.querySelector('#nome')`, `document.querySelector('#saudar')` e `document.querySelector('#saudacao')`.",
+      "Registre o evento com `botao.addEventListener('click', () => { ... })`.",
+      "Dentro do callback, monte o texto com crases e `${nome.value}` e atribua o resultado a `saudacao.textContent`."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 21,
+      "endLine": 24
+    },
+    "evidence": "li.innerHTML = ` <span> <strong>${aluno.nome}</strong>"
+  },
+  {
+    "id": "n14-c05",
+    "nodeId": "n14",
+    "title": "Soma de um array",
+    "kind": "js",
+    "goal": "Ao clicar em #somar, calcule a soma dos valores do array [10, 20, 30] em uma função com retorno e mostre o resultado em #total.",
+    "starter": {
+      "html": "<button id=\"somar\" type=\"button\">Somar</button>\n<p id=\"total\">0</p>",
+      "css": "#total { font-weight: bold; }",
+      "js": "// Some os valores do array e mostre o resultado em #total.\n"
+    },
+    "solution": {
+      "html": "<button id=\"somar\" type=\"button\">Somar</button>\n<p id=\"total\">0</p>",
+      "css": "#total { font-weight: bold; }",
+      "js": "const valores = [10, 20, 30];\nconst botao = document.querySelector('#somar');\nconst total = document.querySelector('#total');\n\nfunction somar(lista) {\n  let soma = 0;\n  for (let i = 0; i < lista.length; i += 1) {\n    soma += lista[i];\n  }\n  return soma;\n}\n\nbotao.addEventListener('click', () => {\n  total.textContent = somar(valores);\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "botao-existe",
+        "label": "O botão #somar existe na página.",
+        "check": { "kind": "exists", "selector": "#somar" }
+      },
+      {
+        "id": "total-inicial",
+        "label": "O parágrafo #total começa em 0.",
+        "check": {
+          "kind": "text",
+          "selector": "#total",
+          "match": { "equals": "0" }
+        }
+      },
+      {
+        "id": "soma-apos-clique",
+        "label": "Após o clique, #total mostra 60.",
+        "before": [{ "do": "click", "selector": "#somar" }],
+        "check": {
+          "kind": "text",
+          "selector": "#total",
+          "match": { "equals": "60" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Guarde os valores em um array e selecione o botão com `document.querySelector('#somar')`.",
+      "Crie uma função que percorra o array com `for (let i = 0; i < lista.length; i += 1)` e acumule a soma.",
+      "Use `return` para devolver a soma e, no evento de clique, atribua `somar(valores)` a `total.textContent`."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto base de exemplo - Mapa PUC Minas/js/app.js",
+      "startLine": 3,
+      "endLine": 5
+    },
+    "evidence": "const locais = [ { \"id\": 1,"
   }
 ]

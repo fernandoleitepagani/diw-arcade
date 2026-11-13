@@ -2,7 +2,7 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Route, Routes } from 'react-router';
 import { describe, expect, it } from 'vitest';
-import { getChallenges, getFlashcards } from '../../content';
+import { getChallenges, getFlashcards, NODES, UNITS } from '../../content';
 import { newCard } from '../../lib/srs/fsrs';
 import { SAVE_KEY, type SaveV1 } from '../../lib/storage';
 import {
@@ -34,14 +34,16 @@ function trilha() {
 }
 
 describe('árvore de habilidades', () => {
-  it('renders five unit sections and fourteen enabled node links', () => {
+  it('renders one unit section and one enabled node link per node', () => {
     renderWithProgress(<TreePage />);
 
     const tree = trilha();
-    expect(tree.getAllByRole('heading', { level: 2 })).toHaveLength(5);
+    expect(tree.getAllByRole('heading', { level: 2 })).toHaveLength(
+      UNITS.length,
+    );
 
     const links = tree.getAllByRole('link');
-    expect(links).toHaveLength(14);
+    expect(links).toHaveLength(NODES.length);
     for (const link of links) {
       expect(link).toHaveAttribute('href', expect.stringMatching(/^\/no\/n\d{2}$/));
       expect(link).not.toHaveAttribute('aria-disabled', 'true');
@@ -121,7 +123,7 @@ describe('árvore de habilidades', () => {
     renderWithProgress(<TreePage />);
 
     const labels = screen.getAllByRole('img', { name: /^Domínio: / });
-    expect(labels).toHaveLength(14);
+    expect(labels).toHaveLength(NODES.length);
     expect(labels[0]).toHaveAccessibleName(
       'Domínio: quiz pendente, cartas pendente, código pendente',
     );

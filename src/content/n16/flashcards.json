@@ -1,0 +1,309 @@
+[
+  {
+    "id": "n16-f001",
+    "nodeId": "n16",
+    "front": "Como a aula classifica os dados numéricos em JSON?",
+    "back": "São inteiros ou reais; no exemplo, `\"id\": 45` aparece como um número sem aspas.",
+    "source": { "aula": 240, "slide": 7 },
+    "evidence": "Dados numéricos: inteiro, real"
+  },
+  {
+    "id": "n16-f002",
+    "nodeId": "n16",
+    "front": "Como os dados textuais são representados em JSON?",
+    "back": "São strings entre aspas duplas, formadas por um conjunto de caracteres.",
+    "source": { "aula": 240, "slide": 7 },
+    "evidence": "Dados textuais: caracteres, strings"
+  },
+  {
+    "id": "n16-f003",
+    "nodeId": "n16",
+    "front": "Quais são os dois valores do tipo boolean em JSON?",
+    "back": "São os valores que o JSON usa: `true` e `false`, sem aspas.",
+    "source": { "aula": 240, "slide": 7 },
+    "evidence": "Dados booleanos: true e false"
+  },
+  {
+    "id": "n16-f004",
+    "nodeId": "n16",
+    "front": "Quais itens a aula lista como exemplos de dados compostos?",
+    "back": "Datas, entre outros agrupamentos, como um array ou um objeto.",
+    "source": { "aula": 240, "slide": 7 },
+    "evidence": "Dados Compostos                   {\n – Datas"
+  },
+  {
+    "id": "n16-f005",
+    "nodeId": "n16",
+    "front": "Quais caracteres de escape o formato JSON reconhece?",
+    "back": "`\"`, `\\`, `/`, `b`, `f`, `n`, `r`, `t` e `u` seguido de hexadecimal.",
+    "source": { "aula": 240, "slide": 8 },
+    "evidence": "\" \\ / b f n r t u (hex)"
+  },
+  {
+    "id": "n16-f006",
+    "nodeId": "n16",
+    "front": "No exemplo de JSON, que tipo têm `id` e `titulo`?",
+    "back": "`id` é number, escrito sem aspas; `titulo` é string, entre aspas duplas.",
+    "source": { "aula": 240, "slide": 7 },
+    "evidence": "\"id\": 45,\n \"titulo\": \"Órgão do Ministério Público ... \","
+  },
+  {
+    "id": "n16-f007",
+    "nodeId": "n16",
+    "front": "Que estrutura o campo `name` do exemplo ocupa?",
+    "back": "Um objeto aninhado com as chaves first, middle e last.",
+    "source": { "aula": 240, "slide": 10 },
+    "evidence": "\"name\": {\n \"first\": \"John\", \"middle\": \"K\", \"last\": \"Doe\""
+  },
+  {
+    "id": "n16-f008",
+    "nodeId": "n16",
+    "front": "No JSON de exemplo, de que tipo são os valores `\"lazy\": false` e `\"married\": null`?",
+    "back": "`lazy` é boolean (`false`) e `married` é null.",
+    "source": { "aula": 240, "slide": 10 },
+    "evidence": "\"lazy\": false,\n \"married\": null"
+  },
+  {
+    "id": "n16-f009",
+    "nodeId": "n16",
+    "front": "Que estrutura o campo `phones` do exemplo ocupa?",
+    "back": "Um array de objetos, cada um com `type` e `number`.",
+    "source": { "aula": 240, "slide": 10 },
+    "evidence": "\"phones\": [\n { \"type\": \"home\", \"number\": \"555-3762\" },"
+  },
+  {
+    "id": "n16-f010",
+    "nodeId": "n16",
+    "front": "Como o JavaScript é tipado, segundo a aula?",
+    "back": "Com tipagem dinâmica: o tipo da variável não é definido previamente.",
+    "source": { "aula": 310, "slide": 8 },
+    "evidence": "Oferece tipagem dinâmica, tipos de variáveis não são definidos previamente"
+  },
+  {
+    "id": "n16-f011",
+    "nodeId": "n16",
+    "front": "JavaScript é baseado em objetos ou em classes? E Java?",
+    "back": "JavaScript é baseado em objetos; Java, em classes.",
+    "source": { "aula": 310, "slide": 8 },
+    "evidence": "Javascript é baseada em objetos enquanto Java é baseada em classes"
+  },
+  {
+    "id": "n16-f012",
+    "nodeId": "n16",
+    "front": "JavaScript é interpretada ou compilada? E Java?",
+    "back": "JavaScript é interpretada; Java é compilada.",
+    "source": { "aula": 310, "slide": 8 },
+    "evidence": "Javascript é uma linguagem interpretada, Java é compilada"
+  },
+  {
+    "id": "n16-f013",
+    "nodeId": "n16",
+    "front": "Onde o código JavaScript e o código Java são executados?",
+    "back": "O JavaScript roda no navegador; o Java, na JVM.",
+    "source": { "aula": 310, "slide": 8 },
+    "evidence": "O código Javascript é executado no Navegador, enquanto o código Java é executado na"
+  },
+  {
+    "id": "n16-f014",
+    "nodeId": "n16",
+    "front": "O que a igualdade estrita (`===`) compara?",
+    "back": "Compara o valor e o tipo, sem conversão implícita.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/index.html",
+      "startLine": 24,
+      "endLine": 24
+    },
+    "evidence": "if (salvo === \"light\" || salvo === \"dark\") tema = salvo;"
+  },
+  {
+    "id": "n16-f015",
+    "nodeId": "n16",
+    "front": "O que a igualdade ampla (`==`) faz antes de comparar?",
+    "back": "Converte os operandos para um tipo comum; por isso pode igualar tipos diferentes.",
+    "source": { "kind": "orientacao" },
+    "evidence": "a diferença entre igualdade estrita e ampla"
+  },
+  {
+    "id": "n16-f016",
+    "nodeId": "n16",
+    "front": "Por que `v != null` descarta tanto null quanto undefined?",
+    "back": "Na igualdade ampla, null e undefined são equivalentes; `!= null` exclui os dois de uma vez.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/utils/dom.js",
+      "startLine": 20,
+      "endLine": 20
+    },
+    "evidence": ".filter(([, v]) => v != null)"
+  },
+  {
+    "id": "n16-f017",
+    "nodeId": "n16",
+    "front": "O que `n === 1` garante em `plural(n, ...)`?",
+    "back": "Que n é exatamente o número 1, e não a string `'1'`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/utils/text.js",
+      "startLine": 20,
+      "endLine": 20
+    },
+    "evidence": "return n === 1 ? singular : pluralTexto;"
+  },
+  {
+    "id": "n16-f018",
+    "nodeId": "n16",
+    "front": "Que tipo `inputNome.value` retorna, mesmo quando o campo contém números?",
+    "back": "Uma string. `trim()` apenas remove espaços das pontas; não converte para número.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 86,
+      "endLine": 89
+    },
+    "evidence": "nome: inputNome.value.trim(),\n    curso: inputCurso.value.trim(),"
+  },
+  {
+    "id": "n16-f019",
+    "nodeId": "n16",
+    "front": "Por que `if (inputId.value)` decide entre atualizar e criar um aluno?",
+    "back": "Porque a string vazia é falsy: sem id preenchido, o fluxo cria um aluno novo.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 91,
+      "endLine": 95
+    },
+    "evidence": "if (inputId.value) {\n    await atualizarAluno(inputId.value, aluno);\n  } else {\n    await criarAluno(aluno);"
+  },
+  {
+    "id": "n16-f020",
+    "nodeId": "n16",
+    "front": "O que `Number(id)` faz antes de `POR_ID.get(...)`?",
+    "back": "Converte o id recebido para número, pois as chaves do Map são números.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 29,
+      "endLine": 29
+    },
+    "evidence": "return POR_ID.get(Number(id)) ?? null;"
+  },
+  {
+    "id": "n16-f021",
+    "nodeId": "n16",
+    "front": "Por que a busca por número usa `pokemon.id === Number(numero[1])`?",
+    "back": "Porque `numero[1]` é string; `Number` converte para comparar com o id number na igualdade estrita.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 76,
+      "endLine": 76
+    },
+    "evidence": "if (numero) return pokemon.id === Number(numero[1]);"
+  },
+  {
+    "id": "n16-f022",
+    "nodeId": "n16",
+    "front": "O que `Number(raw.badges ?? 0)` garante?",
+    "back": "Que `badges` seja number, usando 0 quando o valor vem nulo ou ausente.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/model/trainer.js",
+      "startLine": 13,
+      "endLine": 13
+    },
+    "evidence": "badges: Number(raw.badges ?? 0),"
+  },
+  {
+    "id": "n16-f023",
+    "nodeId": "n16",
+    "front": "Por que comparar `e.status === 404` em vez de `e.status == '404'`?",
+    "back": "Porque o status é number; a igualdade estrita evita aceitar a string `'404'`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/favoriteRepository.js",
+      "startLine": 32,
+      "endLine": 32
+    },
+    "evidence": "if (e.status === 404) return false;"
+  },
+  {
+    "id": "n16-f024",
+    "nodeId": "n16",
+    "front": "O que `Boolean(el.conteudo.querySelector(...))` retorna quando o elemento não existe?",
+    "back": "`false`, pois `querySelector` devolve null, que é falsy.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 190,
+      "endLine": 190
+    },
+    "evidence": "const temFerramentas = Boolean(el.conteudo.querySelector(\"[data-toolbar]\"));"
+  },
+  {
+    "id": "n16-f025",
+    "nodeId": "n16",
+    "front": "O que `String(valor ?? \"\")` faz antes de escapar o HTML?",
+    "back": "Converte `valor` para texto e troca null ou undefined por string vazia.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/utils/dom.js",
+      "startLine": 9,
+      "endLine": 9
+    },
+    "evidence": "return String(valor ?? \"\").replace(/[&<>\"']/g, (c) => ESCAPES[c]);"
+  },
+  {
+    "id": "n16-f026",
+    "nodeId": "n16",
+    "front": "Por que `String(nomeTreinador).trim().toLowerCase()` começa com `String`?",
+    "back": "Para garantir um texto e poder usar `trim` e `toLowerCase` sem erro.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/config/appConfig.js",
+      "startLine": 71,
+      "endLine": 71
+    },
+    "evidence": "const chave = String(nomeTreinador).trim().toLowerCase();"
+  },
+  {
+    "id": "n16-f027",
+    "nodeId": "n16",
+    "front": "O que `JSON.parse(texto)` faz em `api.js`?",
+    "back": "Converte o texto da resposta em valor JavaScript; com corpo vazio, devolve null.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/api.js",
+      "startLine": 41,
+      "endLine": 41
+    },
+    "evidence": "return texto ? JSON.parse(texto) : null;"
+  },
+  {
+    "id": "n16-f028",
+    "nodeId": "n16",
+    "front": "O que `JSON.parse(img.dataset.sprites || \"[]\")` faz?",
+    "back": "Lê o JSON do atributo; se o atributo estiver vazio, usa um array vazio como fallback.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/components/pokemonImage.js",
+      "startLine": 31,
+      "endLine": 31
+    },
+    "evidence": "const urls = JSON.parse(img.dataset.sprites || \"[]\");"
+  },
+  {
+    "id": "n16-f029",
+    "nodeId": "n16",
+    "front": "Por que `Number(img.dataset.indice || 0) + 1` usa `Number`?",
+    "back": "Para somar números; sem a conversão, o `+ 1` concatenaria texto.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/components/pokemonImage.js",
+      "startLine": 32,
+      "endLine": 32
+    },
+    "evidence": "const proxima = Number(img.dataset.indice || 0) + 1;"
+  }
+]
