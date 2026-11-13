@@ -1,0 +1,481 @@
+[
+  {
+    "id": "n17-q001",
+    "nodeId": "n17",
+    "type": "mcq",
+    "prompt": "Com o HTML `<p id=\"titulo\">Olá</p><p class=\"item\">A</p><p class=\"item\">B</p>`, qual é a saída do código?",
+    "options": ["Olá 1", "Olá 2", "titulo 2", "null 2"],
+    "answer": 1,
+    "code": {
+      "env": "dom",
+      "html": "<p id=\"titulo\">Olá</p><p class=\"item\">A</p><p class=\"item\">B</p>",
+      "source": "const titulo = document.getElementById('titulo');\nconst itens = document.querySelectorAll('.item');\nconsole.log(titulo.textContent, itens.length);"
+    },
+    "expected": "Olá 2",
+    "explanation": "`getElementById` devolve o parágrafo pelo id e `querySelectorAll('.item')` devolve uma NodeList com os dois parágrafos de classe item. Por isso o console mostra o texto e a contagem: \"Olá 2\".",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 4,
+      "endLine": 10
+    },
+    "evidence": "const form = document.getElementById(\"form-aluno\");"
+  },
+  {
+    "id": "n17-q002",
+    "nodeId": "n17",
+    "type": "fill",
+    "prompt": "O código percorre os itens da página e imprime ____.",
+    "answers": ["HTML | CSS | JS"],
+    "code": {
+      "env": "dom",
+      "html": "<ul><li>HTML</li><li>CSS</li><li>JS</li></ul>",
+      "source": "const itens = document.querySelectorAll('li');\nconst nomes = [];\nitens.forEach((item) => nomes.push(item.textContent));\nconsole.log(nomes.join(' | '));"
+    },
+    "expected": "HTML | CSS | JS",
+    "explanation": "`querySelectorAll` devolve uma NodeList, que tem o método `forEach`. O laço junta o `textContent` de cada item e o `join(' | ')` monta a linha \"HTML | CSS | JS\".",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/components/favoriteButton.js",
+      "startLine": 25,
+      "endLine": 40
+    },
+    "evidence": "raiz.querySelectorAll(`[data-fav-id=\"${pokemonId}\"]`).forEach((botao) => {"
+  },
+  {
+    "id": "n17-q003",
+    "nodeId": "n17",
+    "type": "tf",
+    "prompt": "Ler `elemento.textContent` devolve o HTML interno do elemento, incluindo as tags dos filhos.",
+    "answer": false,
+    "explanation": "`textContent` devolve apenas o texto, sem as tags. Quem devolve o HTML interno serializado é `innerHTML`, que também pode ser usado para gravar marcação.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/utils/dom.js",
+      "startLine": 38,
+      "endLine": 45
+    },
+    "evidence": "elemento.innerHTML = html;"
+  },
+  {
+    "id": "n17-q004",
+    "nodeId": "n17",
+    "type": "mcq",
+    "prompt": "Com o HTML `<div id=\"alvo\">Olá <strong>mundo</strong></div>`, o que o código imprime?",
+    "options": ["Olá mundo", "Olá <strong>mundo</strong>", "mundo", "undefined"],
+    "answer": 0,
+    "code": {
+      "env": "dom",
+      "html": "<div id=\"alvo\">Olá <strong>mundo</strong></div>",
+      "source": "const alvo = document.getElementById('alvo');\nconsole.log(alvo.textContent);"
+    },
+    "expected": "Olá mundo",
+    "explanation": "`textContent` reúne o texto do elemento e dos descendentes, sem as tags. O `<strong>` não aparece na saída, que é \"Olá mundo\".",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 67,
+      "endLine": 73
+    },
+    "evidence": "btnSalvar.textContent = \"Salvar\";"
+  },
+  {
+    "id": "n17-q005",
+    "nodeId": "n17",
+    "type": "fill",
+    "prompt": "O código cria um item e o adiciona à lista; a saída é ____.",
+    "answers": ["LI Novo item"],
+    "code": {
+      "env": "dom",
+      "html": "<ul id=\"lista\"></ul>",
+      "source": "const lista = document.getElementById('lista');\nconst item = document.createElement('li');\nitem.textContent = 'Novo item';\nlista.appendChild(item);\nconsole.log(lista.firstElementChild.tagName, lista.textContent);"
+    },
+    "expected": "LI Novo item",
+    "explanation": "`createElement('li')` cria o nó fora do documento; `appendChild(item)` o coloca dentro da lista. `tagName` aparece em maiúsculas (\"LI\") e `textContent` da lista mostra o texto do item.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 18,
+      "endLine": 33
+    },
+    "evidence": "const li = document.createElement(\"li\");"
+  },
+  {
+    "id": "n17-q006",
+    "nodeId": "n17",
+    "type": "mcq",
+    "prompt": "Com o HTML `<div id=\"alvo\"></div>`, qual é a saída do código?",
+    "options": ["AB", "A B C", "ABC", "Ocorre erro, pois `append` não aceita texto"],
+    "answer": 2,
+    "code": {
+      "env": "dom",
+      "html": "<div id=\"alvo\"></div>",
+      "source": "const alvo = document.getElementById('alvo');\nalvo.append('A', 'B');\nalvo.appendChild(document.createTextNode('C'));\nconsole.log(alvo.textContent);"
+    },
+    "expected": "ABC",
+    "explanation": "`append` aceita nós e também strings, criando nós de texto para \"A\" e \"B\". `appendChild` recebe um nó, aqui o texto \"C\". O `textContent` final concatena tudo: \"ABC\".",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 328,
+      "endLine": 332
+    },
+    "evidence": "el.viewport.append(secao);"
+  },
+  {
+    "id": "n17-q007",
+    "nodeId": "n17",
+    "type": "fill",
+    "prompt": "Após as operações de `classList`, a saída do código é ____.",
+    "answers": ["false ativo destaque"],
+    "code": {
+      "env": "dom",
+      "html": "<div id=\"card\" class=\"card\"></div>",
+      "source": "const card = document.getElementById('card');\ncard.classList.add('ativo');\ncard.classList.remove('card');\ncard.classList.toggle('destaque');\nconsole.log(card.classList.contains('card'), card.className);"
+    },
+    "expected": "false ativo destaque",
+    "explanation": "`add('ativo')` acrescenta a classe, `remove('card')` tira a original e `toggle('destaque')` acrescenta a que faltava. Ao final, a classe card não existe, então `contains('card')` é false, e `className` é \"ativo destaque\".",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/components/favoriteButton.js",
+      "startLine": 25,
+      "endLine": 40
+    },
+    "evidence": "svg.classList.toggle(\"icon--filled\", isFavorite);"
+  },
+  {
+    "id": "n17-q008",
+    "nodeId": "n17",
+    "type": "mcq",
+    "prompt": "Com o HTML `<div id=\"painel\" class=\"aberto\"></div>`, o que o código imprime?",
+    "options": ["false false aberto", "true false aberto", "true true aberto", "false true aberto"],
+    "answer": 3,
+    "code": {
+      "env": "dom",
+      "html": "<div id=\"painel\" class=\"aberto\"></div>",
+      "source": "const painel = document.getElementById('painel');\nconst primeiro = painel.classList.toggle('aberto');\nconst segundo = painel.classList.toggle('aberto');\nconsole.log(primeiro, segundo, painel.className);"
+    },
+    "expected": "false true aberto",
+    "explanation": "`toggle` remove a classe quando ela já existe e devolve false; na chamada seguinte ela não existe, então ele a acrescenta e devolve true. O className final é \"aberto\", o que produz \"false true aberto\".",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/components/favoriteButton.js",
+      "startLine": 25,
+      "endLine": 40
+    },
+    "evidence": "svg.classList.toggle(\"icon--filled\", isFavorite);"
+  },
+  {
+    "id": "n17-q009",
+    "nodeId": "n17",
+    "type": "mcq",
+    "prompt": "Com o HTML `<button id=\"btn\" data-tema=\"claro\">Tema</button>`, qual é a saída do código?",
+    "options": ["escuro grande", "claro grande", "escuro null", "escuro undefined"],
+    "answer": 0,
+    "code": {
+      "env": "dom",
+      "html": "<button id=\"btn\" data-tema=\"claro\">Tema</button>",
+      "source": "const botao = document.getElementById('btn');\nbotao.dataset.tema = 'escuro';\nbotao.setAttribute('data-tamanho', 'grande');\nconsole.log(botao.dataset.tema, botao.getAttribute('data-tamanho'));"
+    },
+    "expected": "escuro grande",
+    "explanation": "`dataset.tema` escreve o atributo `data-tema`, e `setAttribute` cria `data-tamanho`. As duas leituras devolvem os valores gravados: \"escuro grande\".",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 629,
+      "endLine": 639
+    },
+    "evidence": "el.botaoTema.setAttribute(\"aria-pressed\", String(noturno));"
+  },
+  {
+    "id": "n17-q010",
+    "nodeId": "n17",
+    "type": "fill",
+    "prompt": "Com o HTML `<p id=\"aluno\" data-nome-aluno=\"Ana\"></p>`, o código abaixo imprime ____.",
+    "answers": ["Ana"],
+    "code": {
+      "env": "dom",
+      "html": "<p id=\"aluno\" data-nome-aluno=\"Ana\"></p>",
+      "source": "console.log(document.getElementById('aluno').dataset.nomeAluno);"
+    },
+    "expected": "Ana",
+    "explanation": "O atributo `data-nome-aluno` é lido em `dataset` com o nome convertido para camelCase: `nomeAluno`. O valor gravado no HTML é \"Ana\".",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/utils/dom.js",
+      "startLine": 38,
+      "endLine": 45
+    },
+    "evidence": "const chave = ativo && elemento.contains(ativo) ? ativo.dataset.focusKey : null;"
+  },
+  {
+    "id": "n17-q011",
+    "nodeId": "n17",
+    "type": "mcq",
+    "prompt": "O código registra um ouvinte de clique e dispara dois cliques. Qual é a saída?",
+    "options": ["0", "1", "2", "3"],
+    "answer": 2,
+    "code": {
+      "env": "dom",
+      "html": "<button id=\"contar\">0</button>",
+      "source": "const botao = document.getElementById('contar');\nlet total = 0;\nbotao.addEventListener('click', () => {\n  total += 1;\n  botao.textContent = String(total);\n});\nbotao.click();\nbotao.click();\nconsole.log(botao.textContent);"
+    },
+    "expected": "2",
+    "explanation": "Cada chamada de `click()` dispara o listener, que soma 1 em `total` e atualiza o texto do botão. Depois de dois cliques, `botao.textContent` é \"2\".",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 31,
+      "endLine": 32
+    },
+    "evidence": "li.querySelector(\".editar\").addEventListener(\"click\", () => prepararEdicao(aluno));"
+  },
+  {
+    "id": "n17-q012",
+    "nodeId": "n17",
+    "type": "mcq",
+    "prompt": "Com um item na lista, o código guarda a NodeList, adiciona outro item e compara as contagens. Qual é a saída?",
+    "options": ["1 1", "1 2", "2 2", "0 2"],
+    "answer": 1,
+    "code": {
+      "env": "dom",
+      "html": "<ul id=\"lista\"><li>A</li></ul>",
+      "source": "const itens = document.querySelectorAll('li');\ndocument.getElementById('lista').appendChild(document.createElement('li'));\nconsole.log(itens.length, document.querySelectorAll('li').length);"
+    },
+    "expected": "1 2",
+    "explanation": "`querySelectorAll` devolve uma NodeList estática: ela não se atualiza sozinha quando o DOM muda. A lista guardada continua com 1 item, enquanto uma nova consulta já encontra 2.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 573,
+      "endLine": 576
+    },
+    "evidence": "[...document.querySelectorAll('[data-bs-toggle=\"tooltip\"]')].map("
+  },
+  {
+    "id": "n17-q013",
+    "nodeId": "n17",
+    "type": "tf",
+    "prompt": "Em um listener registrado no elemento pai, `event.target` aponta sempre para o elemento pai, e não para o filho clicado.",
+    "answer": false,
+    "explanation": "`event.target` é o elemento que originou o evento, que pode ser um filho. `event.currentTarget` é quem tem o listener registrado, ou seja, o elemento pai no caso da delegação.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 695,
+      "endLine": 702
+    },
+    "evidence": "const alvo = e.target.closest(\"[data-action]\");"
+  },
+  {
+    "id": "n17-q014",
+    "nodeId": "n17",
+    "type": "mcq",
+    "prompt": "O ouvinte está na lista e o clique é disparado no botão. Qual é a saída do código?",
+    "options": ["BUTTON lista 1", "BUTTON BUTTON 2", "LI lista 2", "BUTTON lista 2"],
+    "answer": 3,
+    "code": {
+      "env": "dom",
+      "html": "<ul id=\"lista\"><li><button data-id=\"1\">Um</button></li><li><button data-id=\"2\">Dois</button></li></ul>",
+      "source": "const lista = document.getElementById('lista');\nlista.addEventListener('click', (evento) => {\n  console.log(evento.target.tagName, evento.currentTarget.id, evento.target.dataset.id);\n});\nlista.querySelector('[data-id=\"2\"]').click();"
+    },
+    "expected": "BUTTON lista 2",
+    "explanation": "O clique nasce no botão, então `event.target` é o `BUTTON` com `data-id=\"2\"`. O listener pertence à lista, então `event.currentTarget.id` é \"lista\". A saída é \"BUTTON lista 2\".",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 695,
+      "endLine": 702
+    },
+    "evidence": "document.addEventListener(\"click\", (e) => {"
+  },
+  {
+    "id": "n17-q015",
+    "nodeId": "n17",
+    "type": "fill",
+    "prompt": "Há ouvintes no pai e no filho; ao clicar no botão filho, a saída do código é ____.",
+    "answers": ["filho > pai"],
+    "code": {
+      "env": "dom",
+      "html": "<div id=\"pai\"><button id=\"filho\">Ok</button></div>",
+      "source": "const pai = document.getElementById('pai');\nconst filho = document.getElementById('filho');\nconst ordem = [];\npai.addEventListener('click', () => ordem.push('pai'));\nfilho.addEventListener('click', () => ordem.push('filho'));\nfilho.click();\nconsole.log(ordem.join(' > '));"
+    },
+    "expected": "filho > pai",
+    "explanation": "O clique dispara primeiro no alvo, o botão filho, e depois sobe pela árvore até o pai: esse é o borbulhamento. Por isso a ordem registrada é \"filho > pai\".",
+    "source": {
+      "aula": 310,
+      "slide": 10
+    },
+    "evidence": "HTML e tratamento de eventos"
+  },
+  {
+    "id": "n17-q016",
+    "nodeId": "n17",
+    "type": "mcq",
+    "prompt": "O clique é disparado no botão dentro do `span`. Qual é a saída do código?",
+    "options": ["excluir", "fora", "undefined", "button"],
+    "answer": 0,
+    "code": {
+      "env": "dom",
+      "html": "<ul id=\"lista\"><li><span><button data-acao=\"excluir\">Excluir</button></span></li></ul>",
+      "source": "const lista = document.getElementById('lista');\nlista.addEventListener('click', (evento) => {\n  const botao = evento.target.closest('button[data-acao]');\n  console.log(botao ? botao.dataset.acao : 'fora');\n});\nlista.querySelector('button').click();"
+    },
+    "expected": "excluir",
+    "explanation": "Com delegação, um único ouvinte na lista trata o clique. `closest('button[data-acao]')` sobe do alvo até achar o botão, e `dataset.acao` devolve \"excluir\".",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 695,
+      "endLine": 702
+    },
+    "evidence": "if (!alvo || alvo.disabled) return;"
+  },
+  {
+    "id": "n17-q017",
+    "nodeId": "n17",
+    "type": "mcq",
+    "prompt": "O formulário tem um ouvinte de `submit` que chama `preventDefault()`. O que o código imprime?",
+    "options": ["false", "undefined", "true", "submit"],
+    "answer": 2,
+    "code": {
+      "env": "dom",
+      "html": "<form id=\"form\"><input id=\"nome\" value=\"Ana\"><button type=\"submit\">Enviar</button></form>",
+      "source": "const form = document.getElementById('form');\nform.addEventListener('submit', (evento) => {\n  evento.preventDefault();\n  console.log(evento.defaultPrevented);\n});\nform.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));"
+    },
+    "expected": "true",
+    "explanation": "`preventDefault()` cancela o comportamento padrão do envio, que recarregaria a página. Depois da chamada, a propriedade `defaultPrevented` do evento fica true, e é isso que o código imprime.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 83,
+      "endLine": 85
+    },
+    "evidence": "evento.preventDefault(); // impede a página de recarregar"
+  },
+  {
+    "id": "n17-q018",
+    "nodeId": "n17",
+    "type": "fill",
+    "prompt": "O código consulta `#lista` antes de criá-lo; a última linha imprime ____.",
+    "answers": ["true"],
+    "code": {
+      "env": "dom",
+      "html": "<main id=\"app\"></main>",
+      "source": "const lista = document.getElementById('lista');\ndocument.getElementById('app').innerHTML = '<ul id=\"lista\"></ul>';\nconsole.log(lista === null);"
+    },
+    "expected": "true",
+    "explanation": "Quando o script executa antes de o elemento existir, `getElementById` devolve null. A variável guarda esse null, e a comparação `lista === null` imprime true. Por isso scripts no `<head>` devem usar `defer` ou esperar `DOMContentLoaded`.",
+    "source": {
+      "aula": 310,
+      "slide": 9
+    },
+    "evidence": "<script type=\"text/javascript\" src=\"script.js\"></script>"
+  },
+  {
+    "id": "n17-q019",
+    "nodeId": "n17",
+    "type": "mcq",
+    "prompt": "O código registra um ouvinte de `DOMContentLoaded` e também escreve no log de forma síncrona. Qual é a saída?",
+    "options": ["evento | sincrono", "sincrono | evento", "sincrono", "evento"],
+    "answer": 1,
+    "code": {
+      "env": "dom",
+      "html": "<p id=\"status\">carregando</p>",
+      "source": "const log = [];\ndocument.addEventListener('DOMContentLoaded', () => {\n  log.push('evento');\n  console.log(log.join(' | '));\n});\nlog.push('sincrono');"
+    },
+    "expected": "sincrono | evento",
+    "explanation": "O código síncrono termina antes de o evento ser disparado. Quando `DOMContentLoaded` acontece, o log já contém \"sincrono\"; o listener acrescenta \"evento\" e imprime \"sincrono | evento\".",
+    "source": {
+      "aula": 310,
+      "slide": 9
+    },
+    "evidence": "/* código Javascript */"
+  },
+  {
+    "id": "n17-q020",
+    "nodeId": "n17",
+    "type": "tf",
+    "prompt": "O evento `DOMContentLoaded` dispara antes de o navegador terminar de analisar o HTML da página.",
+    "answer": false,
+    "explanation": "`DOMContentLoaded` dispara depois que o HTML foi analisado e o DOM está pronto, mas antes de recursos externos como imagens terminarem de carregar. O evento que espera tudo é `load`.",
+    "source": {
+      "aula": 310,
+      "slide": 9
+    },
+    "evidence": "<script type=\"text/javascript\">"
+  },
+  {
+    "id": "n17-q021",
+    "nodeId": "n17",
+    "type": "mcq",
+    "prompt": "O código grava uma string com tags usando `textContent` e depois lê `innerHTML`. Qual é a saída?",
+    "options": ["<strong>Oi</strong>", "Oi", "null", "&lt;strong&gt;Oi&lt;/strong&gt;"],
+    "answer": 3,
+    "code": {
+      "env": "dom",
+      "html": "<div id=\"caixa\"></div>",
+      "source": "const caixa = document.getElementById('caixa');\ncaixa.textContent = '<strong>Oi</strong>';\nconsole.log(caixa.innerHTML);"
+    },
+    "expected": "&lt;strong&gt;Oi&lt;/strong&gt;",
+    "explanation": "`textContent` trata o valor como texto puro, não cria o elemento `strong`. Ao serializar com `innerHTML`, os sinais de menor e maior aparecem escapados como `&lt;` e `&gt;`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 75,
+      "endLine": 80
+    },
+    "evidence": "btnSalvar.textContent = \"Adicionar\";"
+  },
+  {
+    "id": "n17-q022",
+    "nodeId": "n17",
+    "type": "tf",
+    "prompt": "`classList.contains('ativo')` devolve um booleano que indica se a classe ativo está presente no elemento.",
+    "answer": true,
+    "explanation": "`contains` apenas consulta a lista de classes e devolve true ou false, sem alterar o elemento. Quem altera são `add`, `remove` e `toggle`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/components/favoriteButton.js",
+      "startLine": 25,
+      "endLine": 40
+    },
+    "evidence": "svg.classList.toggle(\"icon--filled\", isFavorite);"
+  },
+  {
+    "id": "n17-q023",
+    "nodeId": "n17",
+    "type": "fill",
+    "prompt": "Para definir o atributo `aria-pressed`, usamos `elemento.____(\"aria-pressed\", \"true\")`.",
+    "answers": ["setAttribute"],
+    "explanation": "`setAttribute(nome, valor)` define ou atualiza um atributo do elemento. Para ler o valor depois, usa-se `getAttribute(nome)`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 629,
+      "endLine": 639
+    },
+    "evidence": "el.botaoTema.setAttribute(\"aria-pressed\", String(noturno));"
+  },
+  {
+    "id": "n17-q024",
+    "nodeId": "n17",
+    "type": "mcq",
+    "prompt": "A lista tem três itens e o código remove o segundo. Qual é a saída?",
+    "options": ["2 AC", "3 AC", "2 ABC", "3 BC"],
+    "answer": 0,
+    "code": {
+      "env": "dom",
+      "html": "<ul id=\"lista\"><li>A</li><li>B</li><li>C</li></ul>",
+      "source": "const lista = document.getElementById('lista');\nlista.querySelector('li:nth-child(2)')?.remove();\nconsole.log(lista.children.length, lista.textContent);"
+    },
+    "expected": "2 AC",
+    "explanation": "O seletor `li:nth-child(2)` encontra o item B, e `remove()` o tira do documento. Restam A e C, então `children.length` é 2 e `textContent` é \"AC\".",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 301,
+      "endLine": 305
+    },
+    "evidence": "if (secao) secao.remove();"
+  }
+]
