@@ -160,7 +160,7 @@ export function StatsPage({ content = DEFAULT_CONTENT }: StatsPageProps = {}) {
         className="stats__header"
         description="Seu avanço no DIW Arcade, nó a nó: precisão, retenção e a previsão das próximas revisões."
         eyebrow="Painel de progresso"
-        title="Estatísticas"
+        title="Progresso"
       />
 
       {fresh ? (

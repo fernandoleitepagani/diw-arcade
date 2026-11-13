@@ -171,7 +171,7 @@ describe('StatsPage', () => {
 
     expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
     expect(
-      screen.getByRole('heading', { level: 1, name: 'Estatísticas' }),
+      screen.getByRole('heading', { level: 1, name: 'Progresso' }),
     ).toBeInTheDocument();
 
     const totals = screen.getByText('XP').closest('dl');
