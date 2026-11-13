@@ -26,7 +26,7 @@ function renderAt(path: string) {
 
 const pages = [
   { path: '/', heading: 'DIW Arcade' },
-  { path: '/no/n01', heading: 'Nó' },
+  { path: '/no/n01', heading: 'Introdução à Web e tecnologias' },
   { path: '/no/n01/quiz', heading: 'Quiz' },
   { path: '/no/n01/cartas', heading: 'Cartas' },
   { path: '/revisao', heading: 'Revisão' },
@@ -38,21 +38,30 @@ const pages = [
 ] as const;
 
 describe('rotas', () => {
+  it('lazy pages show the skeleton then the page', async () => {
+    renderAt('/estatisticas');
+
+    expect(screen.getByText('Carregando…')).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Estatísticas' }),
+    ).toBeInTheDocument();
+  });
+
   for (const { path, heading } of pages) {
-    it(`renders the h1 of ${path}`, () => {
+    it(`renders the h1 of ${path}`, async () => {
       renderAt(path);
 
       expect(
-        screen.getByRole('heading', { level: 1, name: heading }),
+        await screen.findByRole('heading', { level: 1, name: heading }),
       ).toBeInTheDocument();
     });
   }
 
-  it('shows the not found page for an unknown path', () => {
+  it('shows the not found page for an unknown path', async () => {
     renderAt('/caminho-inexistente');
 
     expect(
-      screen.getByRole('heading', {
+      await screen.findByRole('heading', {
         level: 1,
         name: 'Página não encontrada',
       }),
@@ -68,9 +77,9 @@ describe('rotas', () => {
   });
 
   it('marks the active nav link with aria-current', () => {
-    renderAt('/revisao');
+    renderAt('/estatisticas');
 
-    expect(screen.getByRole('link', { name: 'Revisão' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Estatísticas' })).toHaveAttribute(
       'aria-current',
       'page',
     );
@@ -79,10 +88,12 @@ describe('rotas', () => {
     );
   });
 
-  it('sets the page title with the app prefix', () => {
+  it('sets the page title with the app prefix', async () => {
     renderAt('/revisao');
 
-    expect(document.title).toBe('DIW Arcade — Revisão');
+    await waitFor(() => {
+      expect(document.title).toBe('DIW Arcade — Revisão');
+    });
   });
 
   it('moves focus to the main content on navigation', async () => {

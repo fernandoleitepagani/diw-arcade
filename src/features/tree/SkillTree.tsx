@@ -13,9 +13,9 @@ import { getRecommendedNodeId } from '../../lib/progress/recommend';
 import {
   getDueCountByNode,
   getStars,
-  getStarCount,
 } from '../../lib/progress/selectors';
 import type { SaveV1 } from '../../lib/storage';
+import { getNodeState, NODE_STATE_LABEL } from './nodeState';
 import './SkillTree.css';
 
 /** Static content shaped for the progress selectors. */
@@ -36,9 +36,11 @@ export interface SkillTreeProps {
   now: Date;
 }
 
+/** Alternating lanes give the desktop list its winding shape. */
+const LANES = ['center', 'right', 'center', 'left'] as const;
+
 function dueLabel(count: number): string {
-  if (count === 0) return 'Em dia';
-  return `${count} ${count === 1 ? 'devida' : 'devidas'}`;
+  return `${count} ${count === 1 ? 'carta para revisar' : 'cartas para revisar'}`;
 }
 
 export function SkillTree({ save, now }: SkillTreeProps) {
@@ -53,12 +55,25 @@ export function SkillTree({ save, now }: SkillTreeProps) {
           className="skill-tree__unit"
           aria-labelledby={`unit-${unit.id}`}
         >
-          <h2 className="skill-tree__unit-title" id={`unit-${unit.id}`}>
-            {unit.title}
-          </h2>
+          <header className="skill-tree__banner">
+            <span className="skill-tree__banner-mark" aria-hidden="true">
+              {unit.id.slice(1)}
+            </span>
+            <span className="skill-tree__banner-body">
+              <span className="skill-tree__banner-kicker">
+                Unidade {unit.id.slice(1)}
+              </span>
+              <h2 className="skill-tree__unit-title" id={`unit-${unit.id}`}>
+                {unit.title}
+              </h2>
+            </span>
+            <span className="skill-tree__banner-count">
+              {unit.nodes.length} nós
+            </span>
+          </header>
 
           <ul className="skill-tree__nodes">
-            {/* The line is decoration; the cards themselves carry the meaning. */}
+            {/* The line is decoration; the nodes themselves carry the meaning. */}
             <svg
               className="skill-tree__connector"
               viewBox="0 0 100 100"
@@ -66,48 +81,64 @@ export function SkillTree({ save, now }: SkillTreeProps) {
               aria-hidden="true"
               focusable="false"
             >
-              <path d="M50 0 V100" />
+              <path d="M50 0 C80 6 80 17 50 24 C20 31 20 44 50 51 C80 58 80 72 50 79 C20 86 20 94 50 100" />
             </svg>
 
-            {unit.nodes.map((nodeId) => {
+            {unit.nodes.map((nodeId, index) => {
               const node = NODES.find((candidate) => candidate.id === nodeId);
               if (!node) return null;
 
               const recommended = node.id === recommendedId;
-              const stars = getStarCount(getStars(save, node.id, TREE_CONTENT));
+              const stars = getStars(save, node.id, TREE_CONTENT);
+              const state = getNodeState(save, node.id, TREE_CONTENT);
               const due = dueByNode[node.id as NodeId] ?? 0;
+              const lane = LANES[index % LANES.length];
+              const classes = [
+                'skill-node',
+                `skill-node--${state}`,
+                recommended ? 'skill-node--recommended' : '',
+              ]
+                .filter(Boolean)
+                .join(' ');
 
               return (
-                <li key={node.id} className="skill-tree__item">
+                <li
+                  key={node.id}
+                  className={`skill-tree__item skill-tree__item--${lane}`}
+                >
                   <Link
-                    className={
-                      recommended
-                        ? 'skill-node skill-node--recommended'
-                        : 'skill-node'
-                    }
+                    className={classes}
                     to={`/no/${node.id}`}
                     data-node-id={node.id}
                   >
-                    <span className="skill-node__index" aria-hidden="true">
-                      {node.id.slice(1)}
+                    <span className="skill-node__orb" aria-hidden="true">
+                      <span className="skill-node__index">
+                        {node.id.slice(1)}
+                      </span>
                     </span>
                     <span className="skill-node__body">
                       <span className="skill-node__title">{node.title}</span>
-                      <span className="skill-node__meta">
-                        <StarRating stars={stars} size="sm" />
+                      <span className="skill-node__status">
                         <span
-                          className={
-                            due > 0
-                              ? 'skill-node__due skill-node__due--hot'
-                              : 'skill-node__due'
-                          }
+                          className={`skill-node__state skill-node__state--${state}`}
                         >
-                          {dueLabel(due)}
+                          {NODE_STATE_LABEL[state]}
                         </span>
+                        {due > 0 ? (
+                          <span className="skill-node__due">
+                            {dueLabel(due)}
+                          </span>
+                        ) : null}
+                        {recommended ? (
+                          <span className="skill-node__tag">Recomendado</span>
+                        ) : null}
                       </span>
-                      {recommended ? (
-                        <span className="skill-node__tag">Recomendado</span>
-                      ) : null}
+                      <StarRating
+                        modes={stars}
+                        showLabels
+                        size="lg"
+                        className="skill-node__stars"
+                      />
                     </span>
                   </Link>
                 </li>

@@ -1,22 +1,36 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Link } from 'react-router';
 import {
   useProgress,
   type ProgressContextValue,
 } from '../../app/ProgressProvider';
+import { SessionSummary, useSessionBar } from '../../components/session';
 import { Button, Mascot } from '../../components/ui';
+import {
+  NODES,
+  getChallenges,
+  getFlashcards,
+  getQuestions,
+} from '../../content';
 import { pickLine } from '../../content/copy';
 import type { Flashcard } from '../../content/schema';
-import type { Outcome } from '../../lib/progress/events';
+import type { Outcome, ProgressContent } from '../../lib/progress/events';
+import { getRecommendedNodeId } from '../../lib/progress/recommend';
 import {
   getNewIntroducedToday,
   getReviewsDoneToday,
+  getStars,
 } from '../../lib/progress/selectors';
 import {
   GRADES,
   GRADE_LABELS,
   buildQueue,
-  isDue,
   newCard,
   previewIntervals,
   reviewCard,
@@ -24,9 +38,23 @@ import {
   type SrsCard,
 } from '../../lib/srs/fsrs';
 import { createEmptySave } from '../../lib/storage';
+import { getLimitNotice } from './limitNotice';
 import './FlashcardSession.css';
 
 const REQUEUE_WINDOW_MS = 15 * 60_000;
+
+/** Static content for the recommended node and star calculations. */
+const SESSION_CONTENT: ProgressContent = {
+  questions: Object.fromEntries(
+    NODES.map((node) => [node.id, getQuestions(node.id)]),
+  ),
+  flashcards: Object.fromEntries(
+    NODES.map((node) => [node.id, getFlashcards(node.id)]),
+  ),
+  challenges: Object.fromEntries(
+    NODES.map((node) => [node.id, getChallenges(node.id)]),
+  ),
+};
 
 const ISOLATED_SAVE = createEmptySave(new Date(0));
 const ISOLATED_NOW = new Date(0);
@@ -63,28 +91,6 @@ function mergeCard(
   if (update === undefined) return saved;
   if (saved === undefined) return update;
   return update.reps > saved.reps ? update : saved;
-}
-
-function capStopped(
-  flashcards: readonly Flashcard[],
-  cards: Record<string, SrsCard>,
-  now: Date,
-  newSlots: number,
-  reviewSlots: number,
-): boolean {
-  let unseen = 0;
-  let due = 0;
-
-  for (const flashcard of flashcards) {
-    const card = cards[flashcard.id];
-    if (card === undefined) {
-      unseen += 1;
-    } else if (card.reps > 0 && isDue(card, now)) {
-      due += 1;
-    }
-  }
-
-  return unseen > newSlots || due > reviewSlots;
 }
 
 function nextDueAt(
@@ -165,7 +171,13 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
   );
   const [revealed, setRevealed] = useState(false);
   const [completed, setCompleted] = useState(0);
+  const [remembered, setRemembered] = useState(0);
   const [updates, setUpdates] = useState<Record<string, SrsCard>>({});
+  const [sessionStart] = useState(() => ({
+    save,
+    xpTotal: save.xpTotal,
+  }));
+  const gradesRef = useRef<HTMLDivElement>(null);
 
   const effectiveCards = useMemo(() => {
     const merged: Record<string, SrsCard> = { ...save.cards };
@@ -176,6 +188,15 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
     return merged;
   }, [save.cards, updates]);
 
+  /** A node deck shares one id; the mixed review deck stays unscoped. */
+  const deckNodeId = useMemo(() => {
+    const first = flashcards[0];
+    if (first === undefined) return undefined;
+    return flashcards.every((card) => card.nodeId === first.nodeId)
+      ? first.nodeId
+      : undefined;
+  }, [flashcards]);
+
   const currentId = queue[0];
   const current = currentId ? flashcardById.get(currentId) : undefined;
   const currentCard = currentId
@@ -185,13 +206,30 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
 
   const newSlots = Math.max(0, newLimit - newIntroducedToday);
   const reviewSlots = Math.max(0, reviewLimit - reviewsDoneToday);
-  const blocked = capStopped(
+  const limitNotice = getLimitNotice(
     flashcards,
     effectiveCards,
     now,
     newSlots,
     reviewSlots,
   );
+
+  useSessionBar({
+    value: completed,
+    max: completed + queue.length,
+    exitTo: deckNodeId === undefined ? '/' : `/no/${deckNodeId}`,
+  });
+
+  const xpEarned = Math.max(0, save.xpTotal - sessionStart.xpTotal);
+  const starsBefore =
+    deckNodeId === undefined
+      ? undefined
+      : getStars(sessionStart.save, deckNodeId, SESSION_CONTENT);
+  const starsAfter =
+    deckNodeId === undefined
+      ? undefined
+      : getStars(save, deckNodeId, SESSION_CONTENT);
+  const recommendedId = getRecommendedNodeId(save, SESSION_CONTENT, now);
 
   const reveal = useCallback(() => setRevealed(true), []);
 
@@ -208,6 +246,7 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
       });
       setUpdates((previous) => ({ ...previous, [current.id]: next }));
       setCompleted((count) => count + 1);
+      if (value >= 3) setRemembered((count) => count + 1);
       setRevealed(false);
       setQueue((previous) => {
         if (previous[0] !== current.id) return previous;
@@ -270,6 +309,11 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [current, grade, reveal, revealed]);
 
+  useEffect(() => {
+    if (!revealed) return;
+    gradesRef.current?.querySelector<HTMLButtonElement>('button')?.focus();
+  }, [revealed]);
+
   const isEmpty = queue.length === 0 && completed === 0;
   const isFinished = queue.length === 0 && completed > 0;
   const nextLabel = formatNextDue(
@@ -290,9 +334,17 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
         ) : null}
       </header>
 
-      {blocked ? (
-        <p className="flashcard-session__cap">
-          <Link to="/ajustes">Limite diário atingido — ajuste em Ajustes</Link>
+      {limitNotice ? (
+        <p
+          className={`flashcard-session__cap${
+            limitNotice.reached ? ' flashcard-session__cap--reached' : ''
+          }`}
+        >
+          <Link to="/ajustes">
+            {limitNotice.reached
+              ? 'Limite diário atingido — ajuste em Ajustes'
+              : `Limite diário: ${limitNotice.shown} de ${limitNotice.total} cartas hoje — ajuste em Ajustes`}
+          </Link>
         </p>
       ) : null}
 
@@ -306,12 +358,26 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
         </div>
       ) : isFinished ? (
         <div className="flashcard-session__done">
-          <h2>Revisão concluída</h2>
-          <p className="flashcard-session__done-count">
-            {`${completed} ${
-              completed === 1 ? 'carta revisada' : 'cartas revisadas'
-            }`}
-          </p>
+          <SessionSummary
+            title="Revisão concluída"
+            xp={xpEarned}
+            stats={[
+              {
+                label: 'Cartas',
+                value: `${completed} ${
+                  completed === 1 ? 'carta revisada' : 'cartas revisadas'
+                }`,
+              },
+              {
+                label: 'Lembradas',
+                value: `${remembered} de ${completed}`,
+              },
+            ]}
+            starsBefore={starsBefore}
+            starsAfter={starsAfter}
+            nextHref={`/no/${recommendedId}`}
+            mascotMood={remembered > 0 ? 'happy' : 'idle'}
+          />
           <p className="flashcard-session__next">
             {`Próxima revisão: ${nextLabel}`}
           </p>
@@ -331,6 +397,7 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
                 {sourceLabel(current)}
               </p>
               <div
+                ref={gradesRef}
                 className="flashcard-session__grades"
                 role="group"
                 aria-label="Avaliar carta"

@@ -1,10 +1,24 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { Link } from 'react-router';
+import { Dialog } from '../../components/session/Dialog';
+import { SessionSummary } from '../../components/session/SessionSummary';
 import { Button, Mascot, Panel } from '../../components/ui';
-import { pickLine } from '../../content/copy';
+import {
+  NODES,
+  getChallenges,
+  getFlashcards,
+  getQuestions,
+} from '../../content';
 import type { Challenge, CodeFiles } from '../../content/schema';
-import type { HintTier, Outcome, ProgressEvent } from '../../lib/progress/events';
+import type {
+  HintTier,
+  Outcome,
+  ProgressContent,
+  ProgressEvent,
+} from '../../lib/progress/events';
+import { getRecommendedNodeId } from '../../lib/progress/recommend';
+import { getStars, type Stars } from '../../lib/progress/selectors';
 import type { SaveV1 } from '../../lib/storage/schema';
 import { SandboxFrame } from '../runner/SandboxFrame';
 import type { RequirementResult } from '../runner/messages';
@@ -19,6 +33,9 @@ export type ChallengeProgressState = SaveV1['challenges'][string];
 export interface ChallengeViewProps {
   challenge: Challenge;
   state?: ChallengeProgressState;
+  /** Whole save for the star and recommendation selectors; optional in tests. */
+  save?: SaveV1;
+  now?: Date;
   onRun: (files: CodeFiles) => Promise<RunResult> | RunResult;
   dispatch: (event: ProgressEvent) => Outcome;
 }
@@ -45,6 +62,63 @@ const KIND_LABELS: Record<Challenge['kind'], string> = {
 
 const SAVE_DEBOUNCE_MS = 600;
 const FAILURES_TO_UNLOCK = 3;
+const NO_STARS: Stars = { quiz: false, cards: false, code: false };
+
+/** Static content for the star and recommendation selectors. */
+const CHALLENGE_CONTENT: ProgressContent = {
+  questions: Object.fromEntries(
+    NODES.map((node) => [node.id, getQuestions(node.id)]),
+  ),
+  flashcards: Object.fromEntries(
+    NODES.map((node) => [node.id, getFlashcards(node.id)]),
+  ),
+  challenges: Object.fromEntries(
+    NODES.map((node) => [node.id, getChallenges(node.id)]),
+  ),
+};
+
+/**
+ * The "Próximo passo" target after a passing run: the first challenge of the
+ * same node that is still unpassed, else the node recommended by progress.
+ */
+export function getChallengeNextHref(
+  challenge: Pick<Challenge, 'id' | 'nodeId'>,
+  save: SaveV1 | undefined,
+  content: ProgressContent = CHALLENGE_CONTENT,
+  now: Date = new Date(),
+): string {
+  const next = getChallenges(challenge.nodeId).find(
+    (candidate) =>
+      candidate.id !== challenge.id &&
+      save?.challenges[candidate.id]?.passed !== true,
+  );
+
+  if (next) return `/desafio/${next.id}`;
+
+  return `/no/${
+    save ? getRecommendedNodeId(save, content, now) : challenge.nodeId
+  }`;
+}
+
+/** A copy of the save with the just-passed challenge marked as passed. */
+function withChallengePassed(
+  save: SaveV1,
+  challengeId: string,
+): SaveV1 {
+  const previous = save.challenges[challengeId];
+  const passed: ChallengeProgressState = {
+    passed: true,
+    failedRuns: previous?.failedRuns ?? 0,
+    hintsUsed: previous?.hintsUsed ?? 0,
+    xpAwarded: previous?.xpAwarded ?? 0,
+    code: previous?.code ?? null,
+  };
+
+  return {
+    ...save,
+    challenges: { ...save.challenges, [challengeId]: passed },
+  };
+}
 
 /**
  * The interactive challenge surface: editor tabs, live preview, requirement
@@ -54,6 +128,8 @@ const FAILURES_TO_UNLOCK = 3;
 export function ChallengeView({
   challenge,
   state,
+  save,
+  now = new Date(),
   onRun,
   dispatch,
 }: ChallengeViewProps) {
@@ -69,6 +145,12 @@ export function ChallengeView({
   const [localHints, setLocalHints] = useState(0);
   const [solutionVisible, setSolutionVisible] = useState(false);
   const [runError, setRunError] = useState<string | null>(null);
+  const [summary, setSummary] = useState<{
+    xp: number;
+    starsBefore: Stars;
+    starsAfter: Stars;
+    nextHref: string;
+  } | null>(null);
 
   const passed = (state?.passed ?? false) || localPassed;
   const failedRuns = Math.max(state?.failedRuns ?? 0, localFailedRuns);
@@ -158,14 +240,39 @@ export function ChallengeView({
       setLocalFailedRuns((current) => current + 1);
     }
 
-    dispatch({
+    const outcome: Outcome | undefined = dispatch({
       type: 'challenge/run',
       nodeId: challenge.nodeId,
       challengeId: challenge.id,
       passed: didPass,
     });
+
+    // The summary belongs to the first pass of the visit: later passing runs
+    // keep the passed checklist but do not reopen it.
+    if (didPass && !passed) {
+      setSummary({
+        xp: outcome?.xpGained ?? 0,
+        starsBefore: save
+          ? getStars(save, challenge.nodeId, CHALLENGE_CONTENT)
+          : NO_STARS,
+        starsAfter: save
+          ? getStars(
+              withChallengePassed(save, challenge.id),
+              challenge.nodeId,
+              CHALLENGE_CONTENT,
+            )
+          : NO_STARS,
+        nextHref: getChallengeNextHref(
+          challenge,
+          save,
+          CHALLENGE_CONTENT,
+          now,
+        ),
+      });
+    }
+
     setRunning(false);
-  }, [challenge, dispatch, files, onRun, running]);
+  }, [challenge, dispatch, files, now, onRun, passed, running, save]);
 
   const handleHint = useCallback(
     (tier: HintTier) => {
@@ -211,13 +318,9 @@ export function ChallengeView({
   );
 
   const solutionUnlocked = passed || failedRuns >= FAILURES_TO_UNLOCK;
-  const bitLine = pickLine(
-    lastRun === 'pass' ? 'challengePass' : 'wrong',
-    failedRuns + hintsUsed,
-  );
 
   return (
-    <article className="challenge-view">
+    <article className="challenge-view session-page session-page--wide">
       <header className="challenge-view__header">
         <div className="challenge-view__heading">
           <p className="challenge-view__eyebrow">
@@ -297,14 +400,30 @@ export function ChallengeView({
           ) : null}
         </section>
 
-        <aside className="challenge-view__sidebar">
-          <SandboxFrame
-            files={files}
-            libs={challenge.libs}
-            mocks={challenge.mocks}
-            title="Prévia do desafio"
-          />
+        <section className="challenge-view__preview" aria-label="Prévia">
+          <div className="challenge-view__device">
+            <div className="challenge-view__device-bar" aria-hidden="true">
+              <span className="challenge-view__device-dots">
+                <span className="challenge-view__device-dot" />
+                <span className="challenge-view__device-dot" />
+                <span className="challenge-view__device-dot" />
+              </span>
+              <span className="challenge-view__device-label">
+                Prévia ao vivo
+              </span>
+            </div>
+            <div className="challenge-view__device-screen">
+              <SandboxFrame
+                files={files}
+                libs={challenge.libs}
+                mocks={challenge.mocks}
+                title="Prévia do desafio"
+              />
+            </div>
+          </div>
+        </section>
 
+        <aside className="challenge-view__sidebar">
           <RequirementList
             requirements={challenge.requirements}
             results={results}
@@ -317,52 +436,48 @@ export function ChallengeView({
             onReveal={handleHint}
           />
 
-          <section
-            className="challenge-view__solution"
-            aria-labelledby="challenge-solution-title"
-          >
-            <h2
-              className="challenge-view__solution-title"
-              id="challenge-solution-title"
-            >
+          <details className="challenge-view__solution">
+            <summary className="challenge-view__solution-title">
               Solução
-            </h2>
-            <Button
-              variant="secondary"
-              disabled={!solutionUnlocked}
-              onClick={() => setSolutionVisible(true)}
-            >
-              Ver solução
-            </Button>
-            {!solutionUnlocked ? (
-              <p className="challenge-view__solution-lock">
-                Disponível após 3 tentativas
-              </p>
-            ) : null}
-            {solutionVisible && solutionUnlocked ? (
-              <Panel className="challenge-view__solution-panel">
-                {(['html', 'css', 'js'] as const).map((language) => (
-                  <div key={language}>
-                    <h3>{TAB_LABELS[language]}</h3>
-                    <pre>
-                      <code>{challenge.solution[language]}</code>
-                    </pre>
-                  </div>
-                ))}
-              </Panel>
-            ) : null}
-          </section>
+              <span className="challenge-view__solution-state">
+                {solutionUnlocked ? 'liberada' : 'bloqueada'}
+              </span>
+            </summary>
+            <div className="challenge-view__solution-body">
+              <Button
+                variant="secondary"
+                disabled={!solutionUnlocked}
+                onClick={() => setSolutionVisible(true)}
+              >
+                Ver solução
+              </Button>
+              {!solutionUnlocked ? (
+                <p className="challenge-view__solution-lock">
+                  Disponível após 3 tentativas
+                </p>
+              ) : null}
+              {solutionVisible && solutionUnlocked ? (
+                <Panel className="challenge-view__solution-panel">
+                  {(['html', 'css', 'js'] as const).map((language) => (
+                    <div key={language}>
+                      <h3>{TAB_LABELS[language]}</h3>
+                      <pre>
+                        <code>{challenge.solution[language]}</code>
+                      </pre>
+                    </div>
+                  ))}
+                </Panel>
+              ) : null}
+            </div>
+          </details>
 
           {lastRun !== null ? (
             <Panel
               className={`challenge-view__bit challenge-view__bit--${lastRun}`}
               aria-live="polite"
             >
-              <Mascot
-                mood={lastRun === 'pass' ? 'happy' : 'sad'}
-                line={bitLine}
-              />
-              <p className="challenge-view__attempts">
+              <Mascot mood={lastRun === 'pass' ? 'happy' : 'sad'} />
+              <p className="challenge-view__bit-message">
                 {lastRun === 'pass'
                   ? 'Todos os requisitos foram cumpridos.'
                   : 'Revise os requisitos e tente de novo.'}
@@ -371,6 +486,34 @@ export function ChallengeView({
           ) : null}
         </aside>
       </div>
+
+      <Dialog
+        open={summary !== null}
+        title="Desafio concluído"
+        onClose={() => setSummary(null)}
+      >
+        {summary ? (
+          <SessionSummary
+            title="Todos os requisitos cumpridos"
+            xp={summary.xp}
+            stats={[
+              {
+                label: 'Requisitos',
+                value: `${challenge.requirements.length} de ${challenge.requirements.length}`,
+              },
+            ]}
+            starsBefore={summary.starsBefore}
+            starsAfter={summary.starsAfter}
+            nextHref={summary.nextHref}
+            mascotMood="happy"
+            secondary={
+              <Button variant="secondary" onClick={() => setSummary(null)}>
+                Continuar editando
+              </Button>
+            }
+          />
+        ) : null}
+      </Dialog>
     </article>
   );
 }

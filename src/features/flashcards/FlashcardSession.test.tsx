@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { BIT_LINES } from '../../content/copy';
 import type { Flashcard } from '../../content/schema';
+import { toDayKey } from '../../lib/game/days';
 import { newCard, previewIntervals, type SrsCard } from '../../lib/srs/fsrs';
 import { SAVE_KEY, type SaveV1 } from '../../lib/storage';
 import {
@@ -115,6 +116,33 @@ describe('FlashcardSession', () => {
     expect(screen.getByText(/Próxima revisão: em/)).toBeInTheDocument();
   });
 
+  it('mostra o resumo com XP, lembradas e próximo passo', async () => {
+    const user = userEvent.setup();
+    const card = makeFlashcard(1);
+    renderWithProgress(<FlashcardSession flashcards={[card]} />, {
+      now: FIXED_NOW,
+      save: {
+        cards: { [card.id]: dueCard(card.id, 60) },
+        introduced: { [card.id]: PAST_DAY },
+      },
+    });
+
+    await user.keyboard('{Enter}');
+    await user.keyboard('3');
+
+    expect(
+      screen.getByRole('heading', { name: 'Revisão concluída' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Lembradas')).toBeInTheDocument();
+    expect(screen.getByText('1 de 1')).toBeInTheDocument();
+    expect(screen.getByText('1 carta revisada')).toBeInTheDocument();
+    expect(screen.getByText('+5')).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Próximo passo' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Próxima revisão: em/)).toBeInTheDocument();
+  });
+
   it('requeues a card that is due again within 15 minutes', async () => {
     const user = userEvent.setup();
     const card = makeFlashcard(1);
@@ -155,6 +183,51 @@ describe('FlashcardSession', () => {
     expect(screen.getByText('10 restantes')).toBeInTheDocument();
   });
 
+  it('não diz limite atingido com 0/20 novas', () => {
+    const flashcards = Array.from({ length: 25 }, (_, index) =>
+      makeFlashcard(index + 1),
+    );
+
+    renderWithProgress(<FlashcardSession flashcards={flashcards} />, {
+      now: FIXED_NOW,
+    });
+
+    expect(
+      screen.getByText('Novas hoje: 0/20 · Revisões hoje: 0/100'),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/Limite diário atingido/)).not.toBeInTheDocument();
+
+    const limit = screen.getByRole('link', {
+      name: 'Limite diário: 20 de 25 cartas hoje — ajuste em Ajustes',
+    });
+    expect(limit).toHaveAttribute('href', '/ajustes');
+  });
+
+  it('diz limite atingido quando as novas do dia acabaram', () => {
+    const flashcards = Array.from({ length: 25 }, (_, index) =>
+      makeFlashcard(index + 1),
+    );
+    const today = toDayKey(FIXED_NOW);
+    const introducedCards = flashcards.slice(0, 20);
+    const cards = Object.fromEntries(
+      introducedCards.map((card) => [card.id, newCard(FIXED_NOW)]),
+    );
+    const introduced = Object.fromEntries(
+      introducedCards.map((card) => [card.id, today]),
+    );
+
+    renderWithProgress(<FlashcardSession flashcards={flashcards} />, {
+      now: FIXED_NOW,
+      save: { cards, introduced },
+    });
+
+    expect(
+      screen.getByRole('link', {
+        name: 'Limite diário atingido — ajuste em Ajustes',
+      }),
+    ).toHaveAttribute('href', '/ajustes');
+  });
+
   it('caps reviews at reviewsPerDay and shows the daily limit notice', () => {
     const flashcards = Array.from({ length: 8 }, (_, index) =>
       makeFlashcard(index + 1),
@@ -184,7 +257,7 @@ describe('FlashcardSession', () => {
     expect(screen.getByText('5 restantes')).toBeInTheDocument();
 
     const limit = screen.getByRole('link', {
-      name: 'Limite diário atingido — ajuste em Ajustes',
+      name: 'Limite diário: 5 de 8 cartas hoje — ajuste em Ajustes',
     });
     expect(limit).toHaveAttribute('href', '/ajustes');
   });

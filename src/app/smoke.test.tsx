@@ -33,7 +33,7 @@ function renderApp(path: string, storage: StorageLike) {
 
 const pages = [
   { path: '/', heading: 'DIW Arcade', content: 'Introdução à Web e tecnologias' },
-  { path: '/no/n07', heading: 'Nó', content: 'Propriedades CSS' },
+  { path: '/no/n07', heading: 'Propriedades CSS' },
   { path: '/no/n07/quiz', heading: 'Quiz' },
   { path: '/no/n07/cartas', heading: 'Cartas', content: 'Propriedades CSS' },
   { path: '/revisao', heading: 'Revisão' },
@@ -58,11 +58,11 @@ const pages = [
 describe('smoke do app', () => {
   for (const { path, heading, ...rest } of pages) {
     const content = 'content' in rest ? rest.content : undefined;
-    it(`renders the real h1 of ${path}`, () => {
+    it(`renders the real h1 of ${path}`, async () => {
       renderApp(path, onboardedStorage());
 
       expect(
-        screen.getByRole('heading', { level: 1, name: heading }),
+        await screen.findByRole('heading', { level: 1, name: heading }),
       ).toBeInTheDocument();
       if (content) {
         expect(screen.getAllByText(content).length).toBeGreaterThan(0);
@@ -70,11 +70,11 @@ describe('smoke do app', () => {
     });
   }
 
-  it('shows the not found page for an unknown path', () => {
+  it('shows the not found page for an unknown path', async () => {
     renderApp('/caminho-inexistente', onboardedStorage());
 
     expect(
-      screen.getByRole('heading', {
+      await screen.findByRole('heading', {
         level: 1,
         name: 'Página não encontrada',
       }),
@@ -87,9 +87,11 @@ describe('smoke do app', () => {
     await waitFor(() => {
       expect(router.state.location.pathname).toBe('/boas-vindas');
     });
-    expect(screen.getByText('Bem-vindo ao DIW Arcade')).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: 'Regular · 50 XP' }),
+      await screen.findByText('Bem-vindo ao DIW Arcade'),
+    ).toBeInTheDocument();
+    expect(
+      await screen.findByRole('button', { name: 'Regular · 50 XP' }),
     ).toBeInTheDocument();
   });
 });

@@ -1,8 +1,8 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Route, Routes } from 'react-router';
 import { describe, expect, it } from 'vitest';
-import { getFlashcards } from '../../content';
+import { getChallenges, getFlashcards } from '../../content';
 import { newCard } from '../../lib/srs/fsrs';
 import { SAVE_KEY, type SaveV1 } from '../../lib/storage';
 import {
@@ -29,13 +29,18 @@ function renderNode(
   );
 }
 
+function trilha() {
+  return within(screen.getByRole('region', { name: 'Trilha' }));
+}
+
 describe('árvore de habilidades', () => {
   it('renders five unit sections and fourteen enabled node links', () => {
     renderWithProgress(<TreePage />);
 
-    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(5);
+    const tree = trilha();
+    expect(tree.getAllByRole('heading', { level: 2 })).toHaveLength(5);
 
-    const links = screen.getAllByRole('link');
+    const links = tree.getAllByRole('link');
     expect(links).toHaveLength(14);
     for (const link of links) {
       expect(link).toHaveAttribute('href', expect.stringMatching(/^\/no\/n\d{2}$/));
@@ -43,10 +48,50 @@ describe('árvore de habilidades', () => {
     }
   });
 
+  it('mostra o herói Continuar', () => {
+    renderWithProgress(<TreePage />);
+
+    const hero = within(screen.getByRole('region', { name: 'Continuar' }));
+    expect(
+      hero.getByText('Introdução à Web e tecnologias'),
+    ).toBeInTheDocument();
+    expect(hero.getByRole('link', { name: 'Continuar' })).toHaveAttribute(
+      'href',
+      '/no/n01',
+    );
+    expect(
+      hero.getByRole('progressbar', { name: 'Meta diária' }),
+    ).toBeInTheDocument();
+    expect(hero.queryByRole('link', { name: /^Revisar/ })).not.toBeInTheDocument();
+  });
+
+  it('oferece revisar as cartas devidas pelo herói', () => {
+    const cards = dueCards(
+      Array.from({ length: 10 }, (_, index) =>
+        `n09-f${String(index + 1).padStart(3, '0')}`,
+      ),
+    );
+
+    renderWithProgress(<TreePage />, { save: { cards } });
+
+    const hero = within(screen.getByRole('region', { name: 'Continuar' }));
+    expect(
+      hero.getByRole('link', { name: 'Revisar 10 cartas' }),
+    ).toHaveAttribute('href', '/revisao');
+  });
+
+  it('mantém o título da página só para leitores de tela', () => {
+    renderWithProgress(<TreePage />);
+
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'DIW Arcade' }),
+    ).toHaveClass('sr-only');
+  });
+
   it('tags exactly n01 as recommended on a fresh save', () => {
     renderWithProgress(<TreePage />);
 
-    const tags = screen.getAllByText('Recomendado');
+    const tags = trilha().getAllByText('Recomendado');
     expect(tags).toHaveLength(1);
     expect(tags[0]!.closest('a')).toHaveAttribute('href', '/no/n01');
   });
@@ -67,7 +112,7 @@ describe('árvore de habilidades', () => {
 
     renderWithProgress(<TreePage />, { save: { cards } });
 
-    const tags = screen.getAllByText('Recomendado');
+    const tags = trilha().getAllByText('Recomendado');
     expect(tags).toHaveLength(1);
     expect(tags[0]!.closest('a')).toHaveAttribute('href', '/no/n09');
   });
@@ -91,31 +136,35 @@ describe('árvore de habilidades', () => {
 });
 
 describe('página do nó', () => {
-  it('shows aulas, the star rating and the three modes', () => {
+  it('shows the node title as the h1, with aulas, state, stars and the three modes', () => {
     renderNode('/no/n07');
 
     expect(
-      screen.getByRole('heading', { level: 1, name: 'Nó' }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: 'Propriedades CSS' }),
+      screen.getByRole('heading', { level: 1, name: 'Propriedades CSS' }),
     ).toBeInTheDocument();
     expect(screen.getByText(/Aulas:.*172/)).toBeInTheDocument();
+    expect(screen.getByText('Nova')).toBeInTheDocument();
     expect(
       screen.getByRole('img', { name: /^Domínio: / }),
     ).toBeInTheDocument();
 
-    expect(screen.getByRole('link', { name: 'Quiz' })).toHaveAttribute(
-      'href',
-      '/no/n07/quiz',
-    );
-    expect(screen.getByRole('link', { name: 'Cartas' })).toHaveAttribute(
-      'href',
-      '/no/n07/cartas',
-    );
+    expect(
+      screen.getByRole('link', { name: 'Começar quiz' }),
+    ).toHaveAttribute('href', '/no/n07/quiz');
+    expect(
+      screen.getByRole('link', { name: 'Revisar cartas' }),
+    ).toHaveAttribute('href', '/no/n07/cartas');
     expect(
       screen.getByRole('heading', { name: 'Código' }),
     ).toBeInTheDocument();
+  });
+
+  it('lists the node challenges as pending status rows', () => {
+    renderNode('/no/n07');
+
+    expect(screen.getAllByText('pendente')).toHaveLength(
+      getChallenges('n07').length,
+    );
   });
 
   it('introduces the whole deck and reports how many cards were added', async () => {

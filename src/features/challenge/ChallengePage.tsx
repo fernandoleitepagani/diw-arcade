@@ -16,7 +16,7 @@ interface ChallengeRunnerProps {
  * can render its fallback without depending on the progress provider.
  */
 function ChallengeRunner({ challenge }: ChallengeRunnerProps) {
-  const { save, dispatch } = useProgress();
+  const { save, dispatch, now } = useProgress();
   const runnerRef = useRef<HTMLDivElement>(null);
 
   const runTests = useCallback(
@@ -49,6 +49,8 @@ function ChallengeRunner({ challenge }: ChallengeRunnerProps) {
         key={challenge.id}
         challenge={challenge}
         state={save.challenges[challenge.id]}
+        save={save}
+        now={now}
         onRun={runTests}
         dispatch={dispatch}
       />

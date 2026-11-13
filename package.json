@@ -10,6 +10,8 @@
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc --noEmit",
     "test": "vitest",
+    "smoke": "tsx scripts/smoke.ts",
+    "budget": "tsx scripts/budget.ts",
     "validate:content": "tsx scripts/validate-content.ts --require-all"
   },
   "dependencies": {
@@ -31,6 +33,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^9.39.5",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
@@ -45,6 +48,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.14.0",
     "jsdom": "^31.0.0",
+    "playwright": "1.56.0",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2",

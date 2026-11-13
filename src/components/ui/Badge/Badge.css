@@ -1,0 +1,45 @@
+.ui-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.ui-badge--accent {
+  border-color: rgb(45 226 230 / 0.55);
+  background: rgb(45 226 230 / 0.12);
+  color: var(--accent);
+}
+
+.ui-badge--reward {
+  border-color: rgb(255 79 216 / 0.55);
+  background: rgb(255 79 216 / 0.12);
+  color: var(--reward);
+}
+
+.ui-badge--xp {
+  border-color: rgb(255 194 61 / 0.55);
+  background: rgb(255 194 61 / 0.12);
+  color: var(--xp);
+}
+
+.ui-badge--success {
+  border-color: rgb(124 255 107 / 0.55);
+  background: rgb(124 255 107 / 0.12);
+  color: var(--success);
+}
+
+.ui-badge--danger {
+  border-color: rgb(255 107 139 / 0.55);
+  background: rgb(255 107 139 / 0.12);
+  color: var(--danger);
+}

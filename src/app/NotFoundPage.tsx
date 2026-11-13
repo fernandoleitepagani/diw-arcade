@@ -1,16 +1,22 @@
 import { Link } from 'react-router';
+import { Card, Mascot } from '../components/ui';
 import { usePageTitle } from './usePageTitle';
+import './NotFoundPage.css';
 
 export function NotFoundPage() {
   usePageTitle('Página não encontrada');
 
   return (
-    <section className="page">
+    <Card as="section" tone="accent" className="not-found">
+      <Mascot
+        mood="thinking"
+        line="Esse caminho não existe. A trilha está logo ali."
+        size={112}
+      />
       <h1>Página não encontrada</h1>
-      <p>O endereço que você tentou abrir não existe.</p>
-      <p>
-        <Link to="/">Voltar para a árvore</Link>
-      </p>
-    </section>
+      <Link className="not-found__link" to="/">
+        Voltar para a trilha
+      </Link>
+    </Card>
   );
 }

@@ -1,11 +1,18 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { CodeFiles } from '../../content/schema';
+import type { Challenge, CodeFiles } from '../../content/schema';
+import { createEmptySave, type SaveV1 } from '../../lib/storage';
 import { fixtureChallenge } from '../../test/fixtures';
 import type { RunResult } from '../runner/runner';
-import { ChallengeView } from './ChallengeView';
+import { ChallengeView, getChallengeNextHref } from './ChallengeView';
 
 vi.mock('./CodeEditor', () => ({
   CodeEditor: ({
@@ -38,6 +45,15 @@ const failedResult = {
   requirements: [
     { id: 'fundo-escuro', passed: false },
     { id: 'titulo-visivel', passed: false },
+  ],
+  errors: [],
+};
+
+const passingResult = {
+  status: 'ok' as const,
+  requirements: [
+    { id: 'fundo-escuro', passed: true },
+    { id: 'titulo-visivel', passed: true },
   ],
   errors: [],
 };
@@ -166,6 +182,106 @@ describe('ChallengeView', () => {
     expect(jsTab).toHaveFocus();
   });
 
+  it('shows every requirement as pending before the first run', () => {
+    renderView(vi.fn());
+
+    expect(screen.getAllByText('pendente')).toHaveLength(
+      fixtureChallenge.requirements.length,
+    );
+  });
+
+  it('marks the requirements as passed and opens the summary dialog', async () => {
+    const user = userEvent.setup();
+    const onRun = vi.fn().mockResolvedValue(passingResult);
+
+    renderView(onRun);
+
+    await user.click(screen.getByRole('button', { name: 'Executar testes' }));
+
+    expect(await screen.findByText('2 de 2 requisitos')).toBeInTheDocument();
+    expect(screen.getAllByText('passou')).toHaveLength(
+      fixtureChallenge.requirements.length,
+    );
+
+    const dialog = await screen.findByRole('dialog');
+    expect(within(dialog).getByText('Próximo passo')).toBeInTheDocument();
+    expect(
+      within(dialog).getByRole('button', { name: 'Continuar editando' }),
+    ).toBeInTheDocument();
+
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Continuar editando' }),
+    );
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('marks the requirements as failed without opening the summary', async () => {
+    const user = userEvent.setup();
+    const onRun = vi.fn().mockResolvedValue(failedResult);
+
+    renderView(onRun);
+
+    await user.click(screen.getByRole('button', { name: 'Executar testes' }));
+
+    expect(await screen.findByText('0 de 2 requisitos')).toBeInTheDocument();
+    expect(screen.getAllByText('falhou')).toHaveLength(
+      fixtureChallenge.requirements.length,
+    );
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('keeps the header and the workspace in the same session column', () => {
+    const { container } = renderView(vi.fn());
+
+    const article = container.querySelector('.challenge-view');
+    expect(article).not.toBeNull();
+    expect(article).toHaveClass('session-page');
+    expect(article?.querySelector('.challenge-view__header')).not.toBeNull();
+    expect(article?.querySelector('.challenge-view__grid')).not.toBeNull();
+  });
+
+  it('stacks the mascot with a single result message', async () => {
+    const user = userEvent.setup();
+    const { container } = renderView(vi.fn().mockResolvedValue(failedResult));
+
+    await user.click(screen.getByRole('button', { name: 'Executar testes' }));
+
+    const panel = await waitFor(() => {
+      const element = container.querySelector('.challenge-view__bit');
+      expect(element).not.toBeNull();
+      return element as HTMLElement;
+    });
+
+    const message = within(panel).getByText(
+      'Revise os requisitos e tente de novo.',
+    );
+    const mascot = panel.querySelector('.mascot');
+    expect(mascot).not.toBeNull();
+    expect(message).toHaveClass('challenge-view__bit-message');
+    expect(message.parentElement).toBe(panel);
+    expect(mascot?.parentElement).toBe(panel);
+    expect(panel.querySelector('.mascot__bubble')).toBeNull();
+  });
+
+  it('wraps the preview iframe in device chrome', async () => {
+    const { container } = renderView(vi.fn());
+
+    const device = container.querySelector('.challenge-view__device');
+    expect(device).not.toBeNull();
+    expect(
+      within(device as HTMLElement).getByLabelText('Prévia do desafio'),
+    ).toBeInTheDocument();
+
+    const iframe = await waitFor(() => {
+      const element = device?.querySelector('iframe');
+      expect(element).not.toBeNull();
+      return element as HTMLIFrameElement;
+    });
+
+    expect(device).toContainElement(iframe);
+  });
+
   it('restores the starter code', async () => {
     const user = userEvent.setup();
     const dispatch = vi.fn();
@@ -183,5 +299,161 @@ describe('ChallengeView', () => {
     expect(screen.getByLabelText('Código CSS')).toHaveValue(
       fixtureChallenge.starter.css,
     );
+  });
+});
+
+const passOutcome = {
+  xpGained: 30,
+  levelUp: null,
+  achievements: [],
+  streakExtended: null,
+};
+
+function saveWithPassedChallenges(passedIds: string[]): SaveV1 {
+  const save = createEmptySave(new Date('2026-01-01T00:00:00Z'));
+  for (const challengeId of passedIds) {
+    save.challenges[challengeId] = {
+      passed: true,
+      failedRuns: 0,
+      hintsUsed: 0,
+      xpAwarded: 30,
+      code: null,
+    };
+  }
+  return save;
+}
+
+function renderChallengeWithSave(
+  challenge: Challenge,
+  save: SaveV1,
+  onRun: (files: CodeFiles) => Promise<RunResult>,
+  dispatch = vi.fn(),
+) {
+  return render(
+    <MemoryRouter>
+      <ChallengeView
+        challenge={challenge}
+        state={save.challenges[challenge.id]}
+        onRun={onRun}
+        dispatch={dispatch}
+        save={save}
+        now={new Date('2026-01-01T12:00:00Z')}
+      />
+    </MemoryRouter>,
+  );
+}
+
+describe('ChallengeView pass summary', () => {
+  it('shows XP, the node stars and the next unpassed challenge on the first pass', async () => {
+    const user = userEvent.setup();
+    const dispatch = vi.fn().mockReturnValue(passOutcome);
+
+    renderChallengeWithSave(
+      fixtureChallenge,
+      saveWithPassedChallenges(['n07-c03']),
+      vi.fn().mockResolvedValue(passingResult),
+      dispatch,
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Executar testes' }));
+
+    const dialog = await screen.findByRole('dialog');
+    expect(within(dialog).getByText('+30')).toBeInTheDocument();
+    expect(within(dialog).getByText('Estrelas conquistadas')).toBeInTheDocument();
+    expect(
+      within(dialog).getByRole('img', {
+        name: 'Nenhuma estrela nova nesta rodada',
+      }),
+    ).toBeInTheDocument();
+    expect(
+      within(dialog).getByRole('link', { name: 'Próximo passo' }),
+    ).toHaveAttribute('href', '/desafio/n07-c02');
+  });
+
+  it('does not reopen the summary on later passing runs', async () => {
+    const user = userEvent.setup();
+    const dispatch = vi.fn().mockReturnValue(passOutcome);
+
+    renderChallengeWithSave(
+      fixtureChallenge,
+      saveWithPassedChallenges([]),
+      vi.fn().mockResolvedValue(passingResult),
+      dispatch,
+    );
+
+    const runButton = screen.getByRole('button', { name: 'Executar testes' });
+    await user.click(runButton);
+
+    const dialog = await screen.findByRole('dialog');
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Continuar editando' }),
+    );
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    await user.click(runButton);
+    await waitFor(() => expect(dispatch).toHaveBeenCalledTimes(2));
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getAllByText('passou')).toHaveLength(
+      fixtureChallenge.requirements.length,
+    );
+  });
+
+  it('links to the recommended node when the last challenge passes', async () => {
+    const user = userEvent.setup();
+    const dispatch = vi.fn().mockReturnValue(passOutcome);
+    const lastChallenge: Challenge = { ...fixtureChallenge, id: 'n07-c03' };
+
+    renderChallengeWithSave(
+      lastChallenge,
+      saveWithPassedChallenges(['n07-c01', 'n07-c02']),
+      vi.fn().mockResolvedValue(passingResult),
+      dispatch,
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Executar testes' }));
+
+    const dialog = await screen.findByRole('dialog');
+    expect(
+      within(dialog).getByRole('link', { name: 'Próximo passo' }),
+    ).toHaveAttribute('href', '/no/n01');
+  });
+});
+
+describe('getChallengeNextHref', () => {
+  it('prefers the next unpassed challenge of the same node', () => {
+    const save = saveWithPassedChallenges(['n07-c03']);
+
+    expect(
+      getChallengeNextHref(
+        { id: 'n07-c01', nodeId: 'n07' },
+        save,
+        {},
+        new Date('2026-01-01T12:00:00Z'),
+      ),
+    ).toBe('/desafio/n07-c02');
+  });
+
+  it('falls back to the recommended node when every challenge passed', () => {
+    const save = saveWithPassedChallenges(['n07-c01', 'n07-c02', 'n07-c03']);
+    const content = {
+      challenges: {
+        n01: [{ id: 'n01-c01' }],
+        n07: [
+          { id: 'n07-c01' },
+          { id: 'n07-c02' },
+          { id: 'n07-c03' },
+        ],
+      },
+    };
+
+    expect(
+      getChallengeNextHref(
+        { id: 'n07-c03', nodeId: 'n07' },
+        save,
+        content,
+        new Date('2026-01-01T12:00:00Z'),
+      ),
+    ).toBe('/no/n01');
   });
 });

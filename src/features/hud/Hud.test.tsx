@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { Route, Routes } from 'react-router';
 import { describe, expect, it } from 'vitest';
 import { Layout } from '../../app/Layout';
@@ -59,20 +59,51 @@ describe('Hud', () => {
   });
 });
 
+function renderLayout() {
+  return renderWithProgress(
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<p>Conteúdo</p>} />
+      </Route>
+    </Routes>,
+    { save: saveWithStreak(120, 20) },
+  );
+}
+
 describe('Layout effects', () => {
   it('mounts the decorative aurora and wraps the content in ClickSpark', () => {
-    const { container } = renderWithProgress(
-      <Routes>
-        <Route element={<Layout />}>
-          <Route index element={<p>Conteúdo</p>} />
-        </Route>
-      </Routes>,
-      { save: saveWithStreak(120, 20) },
-    );
+    const { container } = renderLayout();
 
     const aurora = container.querySelector('.aurora');
     expect(aurora).toHaveAttribute('aria-hidden', 'true');
     expect(container.querySelector('.click-spark')).not.toBeNull();
     expect(screen.getByText('Conteúdo')).toBeInTheDocument();
+  });
+
+  it('renders a single main navigation with five icon links', () => {
+    renderLayout();
+
+    const navigation = screen.getByRole('navigation', {
+      name: 'Navegação principal',
+    });
+    expect(
+      screen.getAllByRole('navigation', { name: 'Navegação principal' }),
+    ).toHaveLength(1);
+
+    const links = within(navigation).getAllByRole('link');
+    expect(links).toHaveLength(5);
+    for (const link of links) {
+      expect(link.querySelector('svg[aria-hidden="true"]')).not.toBeNull();
+    }
+  });
+
+  it('keeps the brand out of the headings', () => {
+    renderLayout();
+
+    const brand = screen.getByRole('link', { name: 'DIW Arcade' });
+    expect(brand.closest('h1, h2, h3, h4, h5, h6')).toBeNull();
+    expect(
+      screen.queryByRole('heading', { name: 'DIW Arcade' }),
+    ).not.toBeInTheDocument();
   });
 });

@@ -48,8 +48,20 @@ describe('design tokens', () => {
     }
   });
 
+  it('exposes the polish type, layout and motion scale', () => {
+    expect(tokens.fontSizeH1).toBe('1.25rem');
+    expect(tokens.fontSizeH2).toBe('0.875rem');
+    expect(tokens.contentMax).toBe('75rem');
+    expect(tokens.durMax).toBe('600ms');
+  });
+
   it('meets the AC19 contrast table', () => {
-    const backgrounds = [tokens.bg, tokens.surface, tokens.surface2];
+    const backgrounds = [
+      tokens.bg,
+      tokens.surface,
+      tokens.surface2,
+      tokens.surface3,
+    ];
 
     for (const text of [tokens.text, tokens.textMuted]) {
       for (const background of backgrounds) {
