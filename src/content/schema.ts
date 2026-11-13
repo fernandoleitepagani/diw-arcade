@@ -63,6 +63,46 @@ export type Source = z.infer<typeof SourceSchema>;
 export type AulaSource = z.infer<typeof AulaSourceSchema>;
 export type Evidence = z.infer<typeof EvidenceSchema>;
 
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
+export const JsonValueSchema: z.ZodType<JsonValue> = z.lazy(() =>
+  z.union([
+    z.string(),
+    z.number(),
+    z.boolean(),
+    z.null(),
+    z.array(JsonValueSchema),
+    z.record(z.string(), JsonValueSchema),
+  ]),
+);
+
+/** A snippet whose console output the question asks about. */
+export const QuestionCodeSchema = z.object({
+  env: z.enum(['js', 'dom']),
+  source: z.string().min(1).max(1500),
+  /** env 'dom' only; must not contain "<script". */
+  html: z.string().max(2000).optional(),
+  /** env 'dom' only; must start with "https://". */
+  url: z.string().url().optional(),
+  mocks: z
+    .record(
+      z.string().min(1),
+      z.object({
+        status: z.number().int().min(100).max(599).optional(),
+        body: JsonValueSchema,
+      }),
+    )
+    .optional(),
+});
+
+export type QuestionCode = z.infer<typeof QuestionCodeSchema>;
+
 function countMatcherKeys(value: { equals?: string; oneOf?: string[]; pattern?: string }): number {
   return [value.equals, value.oneOf, value.pattern].filter((entry) => entry !== undefined).length;
 }
@@ -184,6 +224,8 @@ export const McqQuestionSchema = z.object({
       message: 'as opções devem ser únicas',
     }),
   answer: z.number().int().min(0).max(3),
+  code: QuestionCodeSchema.optional(),
+  expected: z.string().min(1).max(500).optional(),
 });
 
 export const TfQuestionSchema = z.object({
@@ -191,6 +233,9 @@ export const TfQuestionSchema = z.object({
   type: z.literal('tf'),
   prompt: z.string().min(1),
   answer: z.boolean(),
+  // Present so a `code`/`expected` on a tf question is rejected, not stripped.
+  code: z.undefined().optional(),
+  expected: z.undefined().optional(),
 });
 
 export const FillQuestionSchema = z.object({
@@ -203,6 +248,8 @@ export const FillQuestionSchema = z.object({
       message: 'o enunciado deve conter exatamente um "____"',
     }),
   answers: z.array(z.string().min(1)).min(1),
+  code: QuestionCodeSchema.optional(),
+  expected: z.string().min(1).max(500).optional(),
 });
 
 export const QuestionSchema = z.discriminatedUnion('type', [
@@ -235,25 +282,6 @@ export const CodeFilesSchema = z.object({
 });
 
 export type CodeFiles = z.infer<typeof CodeFilesSchema>;
-
-export type JsonValue =
-  | string
-  | number
-  | boolean
-  | null
-  | JsonValue[]
-  | { [key: string]: JsonValue };
-
-export const JsonValueSchema: z.ZodType<JsonValue> = z.lazy(() =>
-  z.union([
-    z.string(),
-    z.number(),
-    z.boolean(),
-    z.null(),
-    z.array(JsonValueSchema),
-    z.record(z.string(), JsonValueSchema),
-  ]),
-);
 
 export const ChallengeSchema = z
   .object({
