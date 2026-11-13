@@ -44,7 +44,8 @@ function harness(
 describe('rotas do smoke', () => {
   it('cobre as 15 rotas do app', () => {
     expect(SMOKE_ROUTES.map((route) => route.path)).toEqual([
-      '/',
+      '/hoje',
+      '/trilha',
       '/no/n01',
       '/no/n01/quiz',
       '/no/n01/cartas',
@@ -53,9 +54,8 @@ describe('rotas do smoke', () => {
       '/desafio/n19-c01',
       '/revisao',
       '/desafio/n01-c01',
-      '/laboratorios',
       '/laboratorios/lab-01',
-      '/estatisticas',
+      '/progresso',
       '/ajustes',
       '/boas-vindas',
       '/caminho-inexistente',
@@ -106,7 +106,7 @@ describe('checagem da página renderizada', () => {
     const calls: string[] = [];
 
     const result = await checkRoutePage(
-      { path: '/', label: 'árvore' },
+      { path: '/trilha', label: 'trilha' },
       harness(calls),
       [],
     );
@@ -119,7 +119,7 @@ describe('checagem da página renderizada', () => {
     const calls: string[] = [];
 
     const result = await checkRoutePage(
-      { path: '/estatisticas', label: 'estatísticas' },
+      { path: '/progresso', label: 'progresso' },
       harness(calls, {
         waitForHeading: async () => {
           calls.push('h1');
@@ -142,7 +142,7 @@ describe('checagem da página renderizada', () => {
     const calls: string[] = [];
 
     const result = await checkRoutePage(
-      { path: '/', label: 'árvore' },
+      { path: '/trilha', label: 'trilha' },
       harness(calls, {
         isRootBlank: async () => {
           calls.push('blank');
@@ -162,7 +162,7 @@ describe('checagem da página renderizada', () => {
     const calls: string[] = [];
 
     const result = await checkRoutePage(
-      { path: '/estatisticas', label: 'estatísticas' },
+      { path: '/progresso', label: 'progresso' },
       harness(calls, {
         measureOverflow: async () => {
           calls.push('overflow');
