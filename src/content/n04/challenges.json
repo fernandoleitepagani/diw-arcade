@@ -165,5 +165,134 @@
     ],
     "source": { "aula": 162, "slide": 13 },
     "evidence": "A tag filha legend informa o título do fieldset."
+  },
+  {
+    "id": "n04-c04",
+    "nodeId": "n04",
+    "title": "Validação nativa do cadastro",
+    "kind": "html",
+    "goal": "Monte um formulário de cadastro com fieldset e legend, labels associados por for, nome com minlength, matrícula com pattern de seis dígitos, e-mail com type=\"email\" e os campos obrigatórios com required.",
+    "starter": {
+      "html": "<form>\n  <p>Nome</p>\n  <input type=\"text\" id=\"nome\" name=\"nome\">\n\n  <p>Matrícula</p>\n  <input type=\"text\" id=\"matricula\" name=\"matricula\">\n\n  <p>E-mail</p>\n  <input type=\"text\" id=\"email\" name=\"email\">\n\n  <button type=\"submit\">Cadastrar</button>\n</form>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<form>\n  <fieldset>\n    <legend>Dados do aluno</legend>\n\n    <label for=\"nome\">Nome</label>\n    <input type=\"text\" id=\"nome\" name=\"nome\" minlength=\"3\" required>\n\n    <label for=\"matricula\">Matrícula</label>\n    <input type=\"text\" id=\"matricula\" name=\"matricula\" pattern=\"[0-9]{6}\" required>\n\n    <label for=\"email\">E-mail</label>\n    <input type=\"email\" id=\"email\" name=\"email\" required>\n\n    <button type=\"submit\">Cadastrar</button>\n  </fieldset>\n</form>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "grupo-cadastro",
+        "label": "Existe um fieldset com legend no formulário",
+        "check": { "kind": "exists", "selector": "form fieldset > legend" }
+      },
+      {
+        "id": "labels-campos",
+        "label": "Os três campos têm label associado por for",
+        "check": { "kind": "count", "selector": "label[for]", "min": 3 }
+      },
+      {
+        "id": "nome-minlength",
+        "label": "O campo nome usa minlength=\"3\" e required",
+        "check": {
+          "kind": "exists",
+          "selector": "input#nome[minlength=\"3\"][required]"
+        }
+      },
+      {
+        "id": "matricula-pattern",
+        "label": "O campo matrícula usa pattern de seis dígitos e required",
+        "check": {
+          "kind": "exists",
+          "selector": "input#matricula[pattern=\"[0-9]{6}\"][required]"
+        }
+      },
+      {
+        "id": "email-valido",
+        "label": "O campo e-mail usa type=\"email\" e required",
+        "check": {
+          "kind": "exists",
+          "selector": "input#email[type=\"email\"][required]"
+        }
+      }
+    ],
+    "hints": [
+      "Envolva os campos em um fieldset e coloque um legend com o título do grupo.",
+      "Use label com for igual ao id de cada input para associar o rótulo ao campo.",
+      "No input de matrícula, use pattern=\"[0-9]{6}\" e adicione required nos três campos."
+    ],
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "o usuário submeta o formulário com o campo vazio."
+  },
+  {
+    "id": "n04-c05",
+    "nodeId": "n04",
+    "title": "novalidate, URL e números",
+    "kind": "html",
+    "goal": "Crie um formulário de perfil com novalidate, um site com type=\"url\", anos de experiência com type=\"number\", min, max e step, uma bio com maxlength e um fieldset com legend.",
+    "starter": {
+      "html": "<form id=\"perfil\">\n  <p>Perfil profissional</p>\n  <p>Site</p>\n  <input type=\"text\" id=\"site\" name=\"site\">\n  <p>Anos de experiência</p>\n  <input type=\"text\" id=\"experiencia\" name=\"experiencia\">\n  <p>Bio</p>\n  <input type=\"text\" id=\"bio\" name=\"bio\">\n  <button type=\"submit\">Salvar</button>\n</form>",
+      "css": "",
+      "js": ""
+    },
+    "solution": {
+      "html": "<form id=\"perfil\" novalidate>\n  <fieldset>\n    <legend>Perfil profissional</legend>\n\n    <label for=\"site\">Site</label>\n    <input type=\"url\" id=\"site\" name=\"site\" required>\n\n    <label for=\"experiencia\">Anos de experiência</label>\n    <input type=\"number\" id=\"experiencia\" name=\"experiencia\" min=\"0\" max=\"50\" step=\"1\">\n\n    <label for=\"bio\">Bio</label>\n    <input type=\"text\" id=\"bio\" name=\"bio\" maxlength=\"120\">\n\n    <button type=\"submit\">Salvar</button>\n  </fieldset>\n</form>",
+      "css": "",
+      "js": ""
+    },
+    "requirements": [
+      {
+        "id": "form-novalidate",
+        "label": "O formulário tem o atributo novalidate",
+        "check": { "kind": "attr", "selector": "form#perfil", "name": "novalidate" }
+      },
+      {
+        "id": "grupo-perfil",
+        "label": "O formulário tem fieldset com legend do perfil",
+        "check": {
+          "kind": "text",
+          "selector": "form#perfil fieldset > legend",
+          "match": { "pattern": "perfil" }
+        }
+      },
+      {
+        "id": "site-url",
+        "label": "O campo site usa type=\"url\" e required",
+        "check": {
+          "kind": "exists",
+          "selector": "input#site[type=\"url\"][required]"
+        }
+      },
+      {
+        "id": "experiencia-numero",
+        "label": "O campo experiência usa type=\"number\" com min, max e step",
+        "check": {
+          "kind": "exists",
+          "selector": "input#experiencia[type=\"number\"][min=\"0\"][max=\"50\"][step=\"1\"]"
+        }
+      },
+      {
+        "id": "bio-maxlength",
+        "label": "O campo bio usa maxlength=\"120\"",
+        "check": {
+          "kind": "exists",
+          "selector": "input#bio[maxlength=\"120\"]"
+        }
+      },
+      {
+        "id": "labels-perfil",
+        "label": "Os três campos têm label associado por for",
+        "check": { "kind": "count", "selector": "label[for]", "min": 3 }
+      }
+    ],
+    "hints": [
+      "Adicione novalidate ao form para desligar a validação nativa enquanto testa o formulário.",
+      "Troque o type dos campos: url para o site e number para os anos de experiência.",
+      "No campo numérico use min=\"0\", max=\"50\" e step=\"1\"; na bio use maxlength=\"120\"."
+    ],
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "O atributo type identifica o tipo do campo: text, password, submit, etc."
   }
 ]
