@@ -31,7 +31,7 @@ function activeDayKeys(save: SaveV1): string[] {
 }
 
 export function isPrimerRead(save: SaveV1, nodeId: NodeId): boolean {
-  return nodeId in save.primersRead;
+  return Object.hasOwn(save.primersRead, nodeId);
 }
 
 export function getPrimersRead(save: SaveV1): Set<string> {

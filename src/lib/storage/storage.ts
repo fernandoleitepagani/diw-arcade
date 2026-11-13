@@ -83,8 +83,9 @@ export function loadSave(
   }
 
   if (result.migrated) {
-    // Best effort: keep the pre-migration JSON; SAVE_KEY is never removed here.
-    backUp(store, raw, now);
+    // Overwrite SAVE_KEY only once the pre-migration JSON is safely backed up,
+    // so the next load sees v2 and writes no further backups.
+    if (backUp(store, raw, now)) persistSave(store, result.save);
     return { save: result.save, recovered: 'migrated' };
   }
 
