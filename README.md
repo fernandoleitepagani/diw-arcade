@@ -36,13 +36,16 @@ branch está pronto para revisão.
 
 ## Conteúdo
 
-O conteúdo fica em `src/content/`: `n01` a `n14`, cada um com `questions.json`,
-`flashcards.json` e `challenges.json`, mais `labs/*.json`. O validador confere
-schema, ids, fontes, mínimos, regras dos laboratórios e executa a solução de
-referência e o código inicial de cada desafio.
+O conteúdo fica em `src/content/`: `n01` a `n20`, cada um com `questions.json`,
+`flashcards.json` e `challenges.json`, mais `labs/*.json`. Os 20 nós formam seis
+unidades; a última, **Unidade 6 · Prova 2**, reúne `n15`–`n20`: leitura de
+código, tipos e coerção, DOM e eventos, URLs e parâmetros, assíncrono com
+`fetch` e formulários. O validador confere schema, ids, fontes, mínimos, regras
+dos laboratórios, executa a solução de referência e o código inicial de cada
+desafio e prova as questões com `code` (veja abaixo).
 
 `npm run validate:content` roda em **modo estrito** (`--require-all`): exige os
-14 nós e os 4 laboratórios, e sai com erro se qualquer arquivo faltar.
+20 nós e os 4 laboratórios, e sai com erro se qualquer arquivo faltar.
 
 ### Evidências
 
@@ -69,18 +72,45 @@ DIW_REPO=/caminho/fora/do/repo/desenvolvimento-de-interfaces-web \
 npm run validate:content
 ```
 
-A saída mostra `evidence: verified N/N` (aula, tiaw e orientação) e
-`repo evidence: verified N/N` (código do repositório). A linha `code:` fica
-`skipped (executor ausente)` enquanto o executor de trechos não é usado. Sem
-`DIW_SOURCES` ou `DIW_REPO`, o validador imprime `skipped` e não confere
-aquelas evidências.
+A saída mostra `evidence: verified N/N` (aula, tiaw e orientação),
+`repo evidence: verified N/N` (código do repositório) e `code: verified N/N`
+(questões executadas). Sem `DIW_SOURCES` ou `DIW_REPO`, o validador imprime
+`skipped` naquela linha e não confere aquelas evidências.
 
-Para validar só um nó, ou um tipo de arquivo dele, use `--only`:
+### Questões executadas
+
+Perguntas de múltipla escolha e de preenchimento podem trazer `code` e
+`expected` juntos:
+
+- **`code`** descreve o trecho: `env` é `js` ou `dom` e `source` guarda o
+  JavaScript. Em `dom`, aceita também `html` (sem `<script`), `url`
+  (`https://`) e `mocks` de `fetch` indexados pela URL exata.
+- **`expected`** é a saída exata que o trecho imprime.
+
+O validador roda o trecho duas vezes em um worker isolado, sem `process`,
+`require`, `import`, `eval` ou rede. Timeout, erro, saída não determinística ou
+saída diferente de `expected` reprovam o conteúdo, e a mensagem mostra o valor
+real:
+
+```text
+saída real difere de expected: real="..." esperado="..."
+```
+
+Para `mcq`, a opção marcada precisa ser exatamente `expected`; para `fill`,
+`expected` não pode ter quebra de linha e precisa constar de `answers`. A linha
+`code: verified N/N` conta essas questões, e cada nó da Prova 2 exige um mínimo
+delas. **Nunca adivinhe `expected`:** rode o validador e copie a saída real.
+
+Para validar só um nó, ou um tipo de arquivo dele, use `--only`
+(`questions`, `flashcards` ou `challenges`):
 
 ```bash
-npx tsx scripts/validate-content.ts --only n07
-npx tsx scripts/validate-content.ts --only n07/flashcards
+npx tsx scripts/validate-content.ts --only n15
+npx tsx scripts/validate-content.ts --only n15/questions
 ```
+
+Com `DIW_SOURCES` e `DIW_REPO` definidos, os totais de evidência e de código
+saem apenas para o recorte escolhido.
 
 **Nunca faça commit das fontes, dos PDFs ou dos dados do Canvas.** Essa pasta
 fica fora do repositório e é somente leitura. O `.gitignore` já bloqueia PDFs e
