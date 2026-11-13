@@ -155,4 +155,31 @@ describe('design tokens', () => {
       expect(contrast(theme.bad, theme.panel)).toBeGreaterThanOrEqual(4.5);
     }
   });
+
+  it('keeps the legacy aliases at AA on bg, panel and raised surfaces in both themes', () => {
+    const legacy = themeCss.replace(/\/\*[\s\S]*?\*\//g, '');
+    const darkRaised = parseCssTokens(/:root\{([^}]*--surface-2[^}]*)\}/.exec(legacy)?.[1] ?? '');
+    const lightLegacy = parseCssTokens(/html\[data-theme="light"\]\{([^}]*)\}/.exec(legacy)?.[1] ?? '');
+    const cases = [
+      {
+        theme: THEMES.dark,
+        raised: [darkRaised['--surface-2'], darkRaised['--surface-3']],
+        accents: [THEMES.dark['u-css'], THEMES.dark['u-prova'], THEMES.dark['u-js'], THEMES.dark.ok, THEMES.dark.bad],
+      },
+      {
+        theme: THEMES.light,
+        raised: [lightLegacy['--surface-2'], lightLegacy['--surface-3']],
+        accents: ['--accent', '--reward', '--xp', '--success', '--danger'].map((name) => lightLegacy[name]),
+      },
+    ];
+
+    for (const { theme, raised, accents } of cases) {
+      const surfaces = [theme.bg, theme.panel, ...raised] as string[];
+      for (const surface of surfaces) {
+        for (const text of [theme.text, theme.muted, ...accents] as string[]) {
+          expect(contrast(text, surface), `${text} on ${surface}`).toBeGreaterThanOrEqual(4.5);
+        }
+      }
+    }
+  });
 });
