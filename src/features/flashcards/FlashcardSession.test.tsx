@@ -198,7 +198,7 @@ describe('FlashcardSession', () => {
     expect(screen.queryByText(/Limite diário atingido/)).not.toBeInTheDocument();
 
     const limit = screen.getByRole('link', {
-      name: 'Limite diário: 20 de 25 cartas hoje — ajuste em Ajustes',
+      name: 'Limite diário: 20 de 25 cartas hoje, ajuste em Ajustes',
     });
     expect(limit).toHaveAttribute('href', '/ajustes');
   });
@@ -223,7 +223,7 @@ describe('FlashcardSession', () => {
 
     expect(
       screen.getByRole('link', {
-        name: 'Limite diário atingido — ajuste em Ajustes',
+        name: 'Limite diário atingido, ajuste em Ajustes',
       }),
     ).toHaveAttribute('href', '/ajustes');
   });
@@ -257,7 +257,7 @@ describe('FlashcardSession', () => {
     expect(screen.getByText('5 restantes')).toBeInTheDocument();
 
     const limit = screen.getByRole('link', {
-      name: 'Limite diário: 5 de 8 cartas hoje — ajuste em Ajustes',
+      name: 'Limite diário: 5 de 8 cartas hoje, ajuste em Ajustes',
     });
     expect(limit).toHaveAttribute('href', '/ajustes');
   });

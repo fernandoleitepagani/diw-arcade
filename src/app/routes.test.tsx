@@ -93,7 +93,7 @@ describe('rotas', () => {
     renderAt('/revisao');
 
     await waitFor(() => {
-      expect(document.title).toBe('DIW Arcade — Revisão');
+      expect(document.title).toBe('DIW Arcade: Revisão');
     });
   });
 

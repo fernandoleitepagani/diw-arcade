@@ -15,9 +15,9 @@ interface GoalOption {
 }
 
 const GOALS: readonly GoalOption[] = [
-  { goal: 20, label: 'Leve · 20 XP' },
-  { goal: 50, label: 'Regular · 50 XP' },
-  { goal: 100, label: 'Intenso · 100 XP' },
+  { goal: 20, label: 'Leve, 20 XP' },
+  { goal: 50, label: 'Regular, 50 XP' },
+  { goal: 100, label: 'Intenso, 100 XP' },
 ];
 
 /** Meta sugerida: o botão que recebe o foco ao abrir a página. */

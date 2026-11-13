@@ -91,7 +91,7 @@ describe('smoke do app', () => {
       await screen.findByText('Bem-vindo ao DIW Arcade'),
     ).toBeInTheDocument();
     expect(
-      await screen.findByRole('button', { name: 'Regular · 50 XP' }),
+      await screen.findByRole('button', { name: 'Regular, 50 XP' }),
     ).toBeInTheDocument();
   });
 });

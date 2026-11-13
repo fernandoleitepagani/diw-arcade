@@ -22,14 +22,14 @@ describe('usePageTitle', () => {
   it('sets the title e a descrição de Revisão', () => {
     render(<TitleProbe page="Revisão" />);
 
-    expect(document.title).toBe('DIW Arcade — Revisão');
+    expect(document.title).toBe('DIW Arcade: Revisão');
     expect(description()).toBe(PAGE_DESCRIPTIONS.Revisão);
   });
 
   it('usa a descrição padrão para uma página desconhecida', () => {
     render(<TitleProbe page="Página inventada" />);
 
-    expect(document.title).toBe('DIW Arcade — Página inventada');
+    expect(document.title).toBe('DIW Arcade: Página inventada');
     expect(description()).toBe(DEFAULT_DESCRIPTION);
   });
 
