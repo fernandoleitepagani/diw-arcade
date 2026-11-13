@@ -189,6 +189,46 @@ describe('QuizRound', () => {
     }
   });
 
+  it('expõe o bloco de JavaScript como uma região nomeada', () => {
+    const question: McqQuestion = {
+      ...(mcqQuestions[0] as McqQuestion),
+      id: 'n07-q091',
+      prompt: 'O que este código imprime?',
+      code: {
+        env: 'js',
+        source: "const valor = 1;\nconsole.log(valor);",
+      },
+    };
+    renderRound([question]);
+
+    const region = screen.getByRole('region', { name: 'Código JavaScript' });
+    const blocks = region.querySelectorAll('pre.quiz-round__code-block');
+    expect(blocks).toHaveLength(1);
+    expect(blocks[0]).toHaveAccessibleName('Código JavaScript');
+    expect(blocks[0]).toHaveAttribute('tabindex', '0');
+    expect(within(region).queryByText('HTML de exemplo')).not.toBeInTheDocument();
+  });
+
+  it('põe cada legenda diretamente acima do bloco que nomeia', () => {
+    renderRound([codeQuestion()]);
+
+    const region = screen.getByRole('region', { name: 'Código JavaScript' });
+    const captions = Array.from(
+      region.querySelectorAll<HTMLElement>('.quiz-round__code-caption'),
+    );
+
+    expect(captions.map((caption) => caption.textContent)).toEqual([
+      'HTML de exemplo',
+      'Código JavaScript',
+    ]);
+
+    for (const caption of captions) {
+      const block = caption.nextElementSibling;
+      expect(block?.tagName).toBe('PRE');
+      expect(block).toHaveAccessibleName(caption.textContent ?? '');
+    }
+  });
+
   it('liga o grupo de alternativas à figura do código', () => {
     const question = codeQuestion();
     renderRound([question]);
