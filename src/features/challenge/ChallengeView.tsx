@@ -2,9 +2,23 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import { Link } from 'react-router';
 import { Dialog } from '../../components/session/Dialog';
+import { SessionSummary } from '../../components/session/SessionSummary';
 import { Button, Mascot, Panel } from '../../components/ui';
+import {
+  NODES,
+  getChallenges,
+  getFlashcards,
+  getQuestions,
+} from '../../content';
 import type { Challenge, CodeFiles } from '../../content/schema';
-import type { HintTier, Outcome, ProgressEvent } from '../../lib/progress/events';
+import type {
+  HintTier,
+  Outcome,
+  ProgressContent,
+  ProgressEvent,
+} from '../../lib/progress/events';
+import { getRecommendedNodeId } from '../../lib/progress/recommend';
+import { getStars, type Stars } from '../../lib/progress/selectors';
 import type { SaveV1 } from '../../lib/storage/schema';
 import { SandboxFrame } from '../runner/SandboxFrame';
 import type { RequirementResult } from '../runner/messages';
@@ -19,6 +33,9 @@ export type ChallengeProgressState = SaveV1['challenges'][string];
 export interface ChallengeViewProps {
   challenge: Challenge;
   state?: ChallengeProgressState;
+  /** Whole save for the star and recommendation selectors; optional in tests. */
+  save?: SaveV1;
+  now?: Date;
   onRun: (files: CodeFiles) => Promise<RunResult> | RunResult;
   dispatch: (event: ProgressEvent) => Outcome;
 }
@@ -45,6 +62,63 @@ const KIND_LABELS: Record<Challenge['kind'], string> = {
 
 const SAVE_DEBOUNCE_MS = 600;
 const FAILURES_TO_UNLOCK = 3;
+const NO_STARS: Stars = { quiz: false, cards: false, code: false };
+
+/** Static content for the star and recommendation selectors. */
+const CHALLENGE_CONTENT: ProgressContent = {
+  questions: Object.fromEntries(
+    NODES.map((node) => [node.id, getQuestions(node.id)]),
+  ),
+  flashcards: Object.fromEntries(
+    NODES.map((node) => [node.id, getFlashcards(node.id)]),
+  ),
+  challenges: Object.fromEntries(
+    NODES.map((node) => [node.id, getChallenges(node.id)]),
+  ),
+};
+
+/**
+ * The "Próximo passo" target after a passing run: the first challenge of the
+ * same node that is still unpassed, else the node recommended by progress.
+ */
+export function getChallengeNextHref(
+  challenge: Pick<Challenge, 'id' | 'nodeId'>,
+  save: SaveV1 | undefined,
+  content: ProgressContent = CHALLENGE_CONTENT,
+  now: Date = new Date(),
+): string {
+  const next = getChallenges(challenge.nodeId).find(
+    (candidate) =>
+      candidate.id !== challenge.id &&
+      save?.challenges[candidate.id]?.passed !== true,
+  );
+
+  if (next) return `/desafio/${next.id}`;
+
+  return `/no/${
+    save ? getRecommendedNodeId(save, content, now) : challenge.nodeId
+  }`;
+}
+
+/** A copy of the save with the just-passed challenge marked as passed. */
+function withChallengePassed(
+  save: SaveV1,
+  challengeId: string,
+): SaveV1 {
+  const previous = save.challenges[challengeId];
+  const passed: ChallengeProgressState = {
+    passed: true,
+    failedRuns: previous?.failedRuns ?? 0,
+    hintsUsed: previous?.hintsUsed ?? 0,
+    xpAwarded: previous?.xpAwarded ?? 0,
+    code: previous?.code ?? null,
+  };
+
+  return {
+    ...save,
+    challenges: { ...save.challenges, [challengeId]: passed },
+  };
+}
 
 /**
  * The interactive challenge surface: editor tabs, live preview, requirement
@@ -54,6 +128,8 @@ const FAILURES_TO_UNLOCK = 3;
 export function ChallengeView({
   challenge,
   state,
+  save,
+  now = new Date(),
   onRun,
   dispatch,
 }: ChallengeViewProps) {
@@ -69,7 +145,12 @@ export function ChallengeView({
   const [localHints, setLocalHints] = useState(0);
   const [solutionVisible, setSolutionVisible] = useState(false);
   const [runError, setRunError] = useState<string | null>(null);
-  const [summaryOpen, setSummaryOpen] = useState(false);
+  const [summary, setSummary] = useState<{
+    xp: number;
+    starsBefore: Stars;
+    starsAfter: Stars;
+    nextHref: string;
+  } | null>(null);
 
   const passed = (state?.passed ?? false) || localPassed;
   const failedRuns = Math.max(state?.failedRuns ?? 0, localFailedRuns);
@@ -155,19 +236,43 @@ export function ChallengeView({
     setLastRun(didPass ? 'pass' : 'fail');
     if (didPass) {
       setLocalPassed(true);
-      setSummaryOpen(true);
     } else {
       setLocalFailedRuns((current) => current + 1);
     }
 
-    dispatch({
+    const outcome: Outcome | undefined = dispatch({
       type: 'challenge/run',
       nodeId: challenge.nodeId,
       challengeId: challenge.id,
       passed: didPass,
     });
+
+    // The summary belongs to the first pass of the visit: later passing runs
+    // keep the passed checklist but do not reopen it.
+    if (didPass && !passed) {
+      setSummary({
+        xp: outcome?.xpGained ?? 0,
+        starsBefore: save
+          ? getStars(save, challenge.nodeId, CHALLENGE_CONTENT)
+          : NO_STARS,
+        starsAfter: save
+          ? getStars(
+              withChallengePassed(save, challenge.id),
+              challenge.nodeId,
+              CHALLENGE_CONTENT,
+            )
+          : NO_STARS,
+        nextHref: getChallengeNextHref(
+          challenge,
+          save,
+          CHALLENGE_CONTENT,
+          now,
+        ),
+      });
+    }
+
     setRunning(false);
-  }, [challenge, dispatch, files, onRun, running]);
+  }, [challenge, dispatch, files, now, onRun, passed, running, save]);
 
   const handleHint = useCallback(
     (tier: HintTier) => {
@@ -383,24 +488,31 @@ export function ChallengeView({
       </div>
 
       <Dialog
-        open={summaryOpen}
+        open={summary !== null}
         title="Desafio concluído"
-        onClose={() => setSummaryOpen(false)}
+        onClose={() => setSummary(null)}
       >
-        <p className="challenge-view__summary-text">
-          Você cumpriu todos os requisitos de {challenge.title}.
-        </p>
-        <div className="challenge-view__summary-actions">
-          <Button variant="secondary" onClick={() => setSummaryOpen(false)}>
-            Continuar editando
-          </Button>
-          <Link
-            className="ui-button ui-button--primary"
-            to={`/no/${challenge.nodeId}`}
-          >
-            Próximo passo
-          </Link>
-        </div>
+        {summary ? (
+          <SessionSummary
+            title="Todos os requisitos cumpridos"
+            xp={summary.xp}
+            stats={[
+              {
+                label: 'Requisitos',
+                value: `${challenge.requirements.length} de ${challenge.requirements.length}`,
+              },
+            ]}
+            starsBefore={summary.starsBefore}
+            starsAfter={summary.starsAfter}
+            nextHref={summary.nextHref}
+            mascotMood="happy"
+            secondary={
+              <Button variant="secondary" onClick={() => setSummary(null)}>
+                Continuar editando
+              </Button>
+            }
+          />
+        ) : null}
       </Dialog>
     </article>
   );
