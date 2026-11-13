@@ -16,6 +16,7 @@ export const SMOKE_ROUTES: readonly SmokeRoute[] = [
   { path: '/hoje', label: 'hoje' },
   { path: '/trilha', label: 'trilha' },
   { path: '/no/n01', label: 'nó' },
+  { path: '/no/n01?passo=ler', label: 'nó, passo ler' },
   { path: '/no/n01/quiz', label: 'quiz', probe: 'quiz' },
   { path: '/no/n01/cartas', label: 'cartas do nó', probe: 'flashcard' },
   { path: '/no/n15', label: 'nó Prova 2' },
@@ -29,6 +30,37 @@ export const SMOKE_ROUTES: readonly SmokeRoute[] = [
   { path: '/boas-vindas', label: 'boas-vindas', seed: 'fresh' },
   { path: '/caminho-inexistente', label: 'não encontrada' },
 ];
+
+/** Temas sondados: a cor das unidades difere entre eles. */
+export const THEMES = ['dark', 'light'] as const;
+
+export type SmokeTheme = (typeof THEMES)[number];
+
+/** Rotas antigas que só redirecionam; não são páginas de smoke. */
+export const REDIRECT_CHECKS = [
+  { from: '/estatisticas', to: '/progresso' },
+  { from: '/laboratorios', to: '/trilha' },
+] as const;
+
+export interface BaselineEntry {
+  route: string;
+  rule: string;
+  reason?: string;
+}
+
+/** Entradas da baseline inválidas: sem motivo escrito ou fora de color-contrast. */
+export function baselineProblems(entries: readonly BaselineEntry[]): string[] {
+  const problems: string[] = [];
+  for (const entry of entries) {
+    if (entry.rule !== 'color-contrast') {
+      problems.push(`${entry.route}: só color-contrast pode ser tolerada`);
+    }
+    if (!entry.reason?.trim()) {
+      problems.push(`${entry.route}: motivo ausente`);
+    }
+  }
+  return problems;
+}
 
 /** Larguras de desktop e de celular. */
 export const VIEWPORTS = [
