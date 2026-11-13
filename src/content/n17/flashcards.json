@@ -1,0 +1,359 @@
+[
+  {
+    "id": "n17-f001",
+    "nodeId": "n17",
+    "front": "O que `document.getElementById(\"form-aluno\")` devolve?",
+    "back": "O elemento cujo atributo `id` é `form-aluno`; se nenhum elemento tiver esse id, devolve `null`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 4,
+      "endLine": 10
+    },
+    "evidence": "const form = document.getElementById(\"form-aluno\");"
+  },
+  {
+    "id": "n17-f002",
+    "nodeId": "n17",
+    "front": "Qual é a diferença entre `getElementById` e `querySelector`?",
+    "back": "`getElementById` busca só por `id`; `querySelector` aceita qualquer seletor CSS e devolve o primeiro elemento que casa.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 45,
+      "endLine": 45
+    },
+    "evidence": "const $ = (seletor) => document.querySelector(seletor);"
+  },
+  {
+    "id": "n17-f003",
+    "nodeId": "n17",
+    "front": "`querySelectorAll` devolve um `Array`?",
+    "back": "Não: devolve uma `NodeList` estática, que tem `forEach` mas não métodos como `map`; para virar array, use `Array.from(...)`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/components/favoriteButton.js",
+      "startLine": 24,
+      "endLine": 30
+    },
+    "evidence": "raiz.querySelectorAll(`[data-fav-id=\"${pokemonId}\"]`).forEach((botao) => {"
+  },
+  {
+    "id": "n17-f004",
+    "nodeId": "n17",
+    "front": "O que acontece ao atribuir um valor a `elemento.textContent`?",
+    "back": "Todo o conteúdo interno é substituído por um nó de texto com esse valor; as tags dos filhos não são interpretadas.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 207,
+      "endLine": 211
+    },
+    "evidence": "if (contador) contador.textContent = aba.count;"
+  },
+  {
+    "id": "n17-f005",
+    "nodeId": "n17",
+    "front": "Como esvaziar uma lista de uma vez antes de redesenhá-la?",
+    "back": "Com `lista.innerHTML = \"\"`, que remove todos os filhos do elemento.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 12,
+      "endLine": 19
+    },
+    "evidence": "lista.innerHTML = \"\";"
+  },
+  {
+    "id": "n17-f006",
+    "nodeId": "n17",
+    "front": "O que `document.createElement(\"li\")` faz?",
+    "back": "Cria um elemento `li` na memória, ainda fora do documento; ele só aparece na página depois de ser inserido.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 18,
+      "endLine": 21
+    },
+    "evidence": "const li = document.createElement(\"li\");"
+  },
+  {
+    "id": "n17-f007",
+    "nodeId": "n17",
+    "front": "Para que serve `lista.appendChild(li)`?",
+    "back": "Insere `li` como último filho de `lista` e devolve o nó inserido, fazendo-o aparecer na página.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 30,
+      "endLine": 34
+    },
+    "evidence": "lista.appendChild(li);"
+  },
+  {
+    "id": "n17-f008",
+    "nodeId": "n17",
+    "front": "Qual é a diferença entre `append` e `appendChild`?",
+    "back": "`append` aceita vários nós e também strings (que viram texto); `appendChild` aceita um único nó e devolve esse nó.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 561,
+      "endLine": 565
+    },
+    "evidence": "el.toasts.append(toast);"
+  },
+  {
+    "id": "n17-f009",
+    "nodeId": "n17",
+    "front": "Como remover um elemento do documento a partir do próprio nó?",
+    "back": "Chamando `elemento.remove()`; não é preciso chegar ao pai com `parentNode.removeChild`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 300,
+      "endLine": 305
+    },
+    "evidence": "if (secao) secao.remove();"
+  },
+  {
+    "id": "n17-f010",
+    "nodeId": "n17",
+    "front": "O que `classList.toggle(\"classe\", condicao)` faz?",
+    "back": "Adiciona a classe quando a condição é verdadeira e a remove quando é falsa, devolvendo o estado final.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/components/favoriteButton.js",
+      "startLine": 31,
+      "endLine": 34
+    },
+    "evidence": "svg.classList.toggle(\"icon--filled\", isFavorite);"
+  },
+  {
+    "id": "n17-f011",
+    "nodeId": "n17",
+    "front": "Como retirar uma classe de um elemento sem apagar as outras?",
+    "back": "Com `elemento.classList.remove(\"classe\")`; as demais classes permanecem.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/components/pokemonImage.js",
+      "startLine": 23,
+      "endLine": 27
+    },
+    "evidence": "img.classList.remove(\"is-pixelated\");"
+  },
+  {
+    "id": "n17-f012",
+    "nodeId": "n17",
+    "front": "O que `setAttribute(\"aria-pressed\", \"true\")` faz?",
+    "back": "Grava o atributo HTML `aria-pressed` com o texto `\"true\"`, refletindo no DOM e no HTML serializado.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/components/favoriteButton.js",
+      "startLine": 25,
+      "endLine": 29
+    },
+    "evidence": "botao.setAttribute(\"aria-pressed\", String(isFavorite));"
+  },
+  {
+    "id": "n17-f013",
+    "nodeId": "n17",
+    "front": "Como ler em JavaScript o atributo `data-tab=\"pokedex\"`?",
+    "back": "Com `elemento.dataset.tab`; atributos `data-focus-key` viram `dataset.focusKey` (camelCase).",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 656,
+      "endLine": 662
+    },
+    "evidence": "tab: (alvo) => trocarAba(alvo.dataset.tab),"
+  },
+  {
+    "id": "n17-f014",
+    "nodeId": "n17",
+    "front": "Como registrar uma função para rodar quando um botão for clicado?",
+    "back": "Com `botao.addEventListener(\"click\", funcao)`; a função recebe o objeto do evento.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 30,
+      "endLine": 34
+    },
+    "evidence": "li.querySelector(\".editar\").addEventListener(\"click\", () => prepararEdicao(aluno));"
+  },
+  {
+    "id": "n17-f015",
+    "nodeId": "n17",
+    "front": "Qual evento escutar para reagir a cada tecla digitada em um campo?",
+    "back": "O evento `input`, disparado a cada alteração do valor; `e.target.value` traz o texto atual.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 704,
+      "endLine": 709
+    },
+    "evidence": "el.conteudo.addEventListener(\"input\", (e) => {"
+  },
+  {
+    "id": "n17-f016",
+    "nodeId": "n17",
+    "front": "Quando o evento `change` dispara em um `<select>`?",
+    "back": "Quando o valor escolhido muda e é confirmado; no `<select>` costuma disparar logo após a escolha.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 710,
+      "endLine": 713
+    },
+    "evidence": "if (e.target.id === \"ordenar\") ordenarPor(e.target.value);"
+  },
+  {
+    "id": "n17-f017",
+    "nodeId": "n17",
+    "front": "Por que chamar `evento.preventDefault()` no evento `submit` do formulário?",
+    "back": "Para impedir o envio padrão, que recarregaria a página; o JavaScript assume o envio e valida os dados.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 82,
+      "endLine": 85
+    },
+    "evidence": "evento.preventDefault(); // impede a página de recarregar"
+  },
+  {
+    "id": "n17-f018",
+    "nodeId": "n17",
+    "front": "Em um ouvinte no `document`, qual a diferença entre `e.target` e `e.currentTarget`?",
+    "back": "`e.target` é o elemento que originou o evento; `e.currentTarget` é onde o ouvinte está registrado (aqui, `document`).",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 695,
+      "endLine": 702
+    },
+    "evidence": "const alvo = e.target.closest(\"[data-action]\");"
+  },
+  {
+    "id": "n17-f019",
+    "nodeId": "n17",
+    "front": "O que é delegação de eventos?",
+    "back": "Registrar um único ouvinte em um ancestral e usar `e.target.closest(...)` para descobrir qual elemento disparou a ação.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 653,
+      "endLine": 656
+    },
+    "evidence": "// Eventos (delegação: um ouvinte só para a página toda)"
+  },
+  {
+    "id": "n17-f020",
+    "nodeId": "n17",
+    "front": "O que `evento.target.closest(\"[data-action]\")` devolve?",
+    "back": "O ancestral mais próximo (incluindo o próprio alvo) que casa com o seletor, ou `null`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 742,
+      "endLine": 752
+    },
+    "evidence": "if (e.target.closest?.(\"input, select, textarea\")) return;"
+  },
+  {
+    "id": "n17-f021",
+    "nodeId": "n17",
+    "front": "Por que o clique na estrela chama `stopPropagation()`?",
+    "back": "Para impedir que o evento suba (borbulhe) até o `<li>`, cujo ouvinte faria o mapa voar até a unidade.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/app.js",
+      "startLine": 91,
+      "endLine": 96
+    },
+    "evidence": "evento.stopPropagation(); // não deixa o clique na estrela \"voar\" o mapa"
+  },
+  {
+    "id": "n17-f022",
+    "nodeId": "n17",
+    "front": "Em que ordem o evento de clique percorre os ouvintes quando o alvo está dentro de outro elemento?",
+    "back": "Primeiro os ouvintes do alvo; depois o evento borbulha para os ancestrais, de dentro para fora.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/app.js",
+      "startLine": 85,
+      "endLine": 96
+    },
+    "evidence": "li.addEventListener('click', () => {"
+  },
+  {
+    "id": "n17-f023",
+    "nodeId": "n17",
+    "front": "Como impedir o comportamento padrão de uma tecla, como o Esc?",
+    "back": "Chamar `e.preventDefault()` dentro do ouvinte de `keydown`; aqui o Esc limpa a pesquisa em vez do comportamento padrão.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 715,
+      "endLine": 722
+    },
+    "evidence": "if (e.target.id === \"pesquisa\" && e.key === \"Escape\" && estado.busca) {"
+  },
+  {
+    "id": "n17-f024",
+    "nodeId": "n17",
+    "front": "Por que o `<script src=\"script.js\">` deste projeto fica no fim do `<body>`?",
+    "back": "Para que os elementos já existam quando o script roda; se rodasse no `<head>` sem `defer`, `getElementById` poderia devolver `null`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/index.html",
+      "startLine": 23,
+      "endLine": 28
+    },
+    "evidence": "<script src=\"script.js\"></script>"
+  },
+  {
+    "id": "n17-f025",
+    "nodeId": "n17",
+    "front": "Como adiar a busca no DOM até a página estar carregada?",
+    "back": "Escutando `DOMContentLoaded` (ou `window.onload`, usado no projeto) e só então manipulando os elementos com segurança.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/app.js",
+      "startLine": 9,
+      "endLine": 16
+    },
+    "evidence": "window.onload = () => {"
+  },
+  {
+    "id": "n17-f026",
+    "nodeId": "n17",
+    "front": "Quais são as três formas de incluir JavaScript em uma página?",
+    "back": "Arquivo externo com `src`, bloco interno dentro de `<script>` e inline em atributos como `onClick`.",
+    "source": {
+      "aula": 310,
+      "slide": 9
+    },
+    "evidence": "<script type=\"text/javascript\" src=\"script.js\"></script>"
+  },
+  {
+    "id": "n17-f027",
+    "nodeId": "n17",
+    "front": "Qual capacidade do JavaScript a sigla DOM representa?",
+    "back": "A manipulação de objetos da página HTML e o tratamento de eventos.",
+    "source": {
+      "aula": 310,
+      "slide": 10
+    },
+    "evidence": "Manipulação de objetos da página HTML e tratamento de eventos"
+  },
+  {
+    "id": "n17-f028",
+    "nodeId": "n17",
+    "front": "O que a parte analítica da Prova 2 cobra do estudante?",
+    "back": "Ler trechos reais de JavaScript, identificar bugs e compreender a execução do motor JS, incluindo DOM e eventos.",
+    "source": {
+      "kind": "orientacao"
+    },
+    "evidence": "identificam bugs e compreendem a execução do motor JS."
+  }
+]
