@@ -58,8 +58,20 @@ The build now emits **20 JS chunks** (eleven page chunks plus shared vendor/UI
 chunks). `scripts/budget.config.json` records both measurements and sets
 `entryJsGzipKb` to **248**, which is `ceil(224.91 × 1.10)` — 10% headroom for
 future shell code. Entry CSS also fell from 31.13 KB to 23.79 KB gzip because
-page styles moved with their chunks. The total JS budget (463 KB) is unchanged;
-splitting moves bytes out of the entry without hiding growth elsewhere.
+page styles moved with their chunks. At the time of this decision the total JS
+budget (463 KB) was unchanged; splitting moves bytes out of the entry without
+hiding growth elsewhere.
+
+### Prova 2 content grew the startup set
+
+The Prova 2 complement added six nodes (`n15`–`n20`) and extended `n04`, `n10`,
+`n13` and `n14`. `src/content/index.ts` imports every content JSON eagerly, so
+that material now ships in the preloaded startup set: entry JS grew from
+**224.91 KB** to **288.65 KB gzip** and total JS from 437.46 KB to 502.17 KB.
+The budget was re-baselined to `ceil(288.65 × 1.10) = 318` KB entry JS,
+`ceil(23.93 × 1.10) = 27` KB entry CSS and `ceil(502.17 × 1.10) = 553` KB total
+JS, keeping the same 10% headroom. Lazy-loading content per node is the proper
+follow-up; implementing it was out of scope for this change.
 
 ## Consequences
 
