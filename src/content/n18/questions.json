@@ -1,0 +1,375 @@
+[
+  {
+    "id": "n18-q001",
+    "nodeId": "n18",
+    "type": "mcq",
+    "prompt": "Ao executar `const u = new URL('https://www.google.com/search?q=pucminas#top')`, o que `console.log(u.protocol)` imprime?",
+    "options": ["https", "https://", "https:", "www.google.com"],
+    "answer": 2,
+    "code": {
+      "env": "dom",
+      "source": "const u = new URL('https://www.google.com/search?q=pucminas#top');\nconsole.log(u.protocol);"
+    },
+    "expected": "https:",
+    "explanation": "A propriedade protocol devolve o esquema com os dois-pontos, então u.protocol vale `https:`. O valor sem os dois-pontos seria apenas o nome do esquema.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Esquema – identifica a forma de interação entre um cliente e um servidor, como por exemplo http, https, ftp, entre outros"
+  },
+  {
+    "id": "n18-q002",
+    "nodeId": "n18",
+    "type": "mcq",
+    "prompt": "Na URL `http://localhost:3000/alunos?curso=SI`, qual é o valor de `url.hostname`?",
+    "options": ["localhost:3000", "localhost", "3000", "/alunos"],
+    "answer": 1,
+    "code": {
+      "env": "dom",
+      "source": "const url = new URL('http://localhost:3000/alunos?curso=SI');\nconsole.log(url.hostname);"
+    },
+    "expected": "localhost",
+    "explanation": "hostname devolve só o nome do host, sem a porta. A porta 3000 aparece em url.port, e o par completo aparece em url.host.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Host – nome ou número IP onde se encontra a aplicação servidor"
+  },
+  {
+    "id": "n18-q003",
+    "nodeId": "n18",
+    "type": "mcq",
+    "prompt": "Para a URL `https://site.com/detalhes.html?id=3#info`, o que `pathname` retorna?",
+    "options": ["detalhes.html", "?id=3", "#info", "/detalhes.html"],
+    "answer": 3,
+    "code": {
+      "env": "dom",
+      "source": "const url = new URL('https://site.com/detalhes.html?id=3#info');\nconsole.log(url.pathname);"
+    },
+    "expected": "/detalhes.html",
+    "explanation": "pathname inclui a barra inicial e para antes da query. A query fica em search e o fragmento fica em hash.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Caminho – indica o local exato onde o recurso se encontra"
+  },
+  {
+    "id": "n18-q004",
+    "nodeId": "n18",
+    "type": "mcq",
+    "prompt": "Qual propriedade de `new URL('https://site.com/detalhes.html?id=3#info')` devolve `?id=3`, com o ponto de interrogação?",
+    "options": ["id=3", "#info", "?id=3", "searchParams"],
+    "answer": 2,
+    "code": {
+      "env": "dom",
+      "source": "const url = new URL('https://site.com/detalhes.html?id=3#info');\nconsole.log(url.search);"
+    },
+    "expected": "?id=3",
+    "explanation": "search devolve a query string inteira, incluindo o `?`. Já searchParams oferece acesso estruturado aos pares nome e valor.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Query – dados não hierárquicos, detalhando a consulta normalmente sob a forma de pares nome e valor"
+  },
+  {
+    "id": "n18-q005",
+    "nodeId": "n18",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "number true false",
+      "string false true",
+      "string true false",
+      "object false true"
+    ],
+    "answer": 1,
+    "code": {
+      "env": "dom",
+      "source": "const u = new URL('https://site.com/detalhes.html?id=3');\nconst id = u.searchParams.get('id');\nconsole.log(typeof id, id === 3, id === '3');"
+    },
+    "expected": "string false true",
+    "explanation": "searchParams.get sempre devolve string (ou null), então `id` é a string `'3'`. A comparação estrita com o número 3 falha, e a comparação com a string `'3'` passa.",
+    "source": { "kind": "orientacao" },
+    "evidence": "Leitura Ativa do Código: Nas questões analíticas, observem atentamente os tipos de dados, o uso de operadores (como a diferença entre igualdade estrita e ampla) e o fluxo assíncrono das funções."
+  },
+  {
+    "id": "n18-q006",
+    "nodeId": "n18",
+    "type": "mcq",
+    "prompt": "O que `new URLSearchParams('a=1&b=2').get('c')` retorna quando a chave não existe?",
+    "options": ["undefined", "uma string vazia", "NaN", "null"],
+    "answer": 3,
+    "code": {
+      "env": "dom",
+      "source": "console.log(new URLSearchParams('a=1&b=2').get('c'));"
+    },
+    "expected": "null",
+    "explanation": "get devolve null para chave ausente. undefined é o valor de uma variável não atribuída, não o retorno documentado de get.",
+    "source": { "kind": "orientacao" },
+    "evidence": "Focada em trechos reais em JavaScript, manipulação do DOM, escopo de variáveis e tratamento de URLs/parâmetros."
+  },
+  {
+    "id": "n18-q007",
+    "nodeId": "n18",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "[\"js\",\"dom\",\"css\"]",
+      "js,dom,css",
+      "[\"js\"]",
+      "[\"css\",\"dom\",\"js\"]"
+    ],
+    "answer": 0,
+    "code": {
+      "env": "dom",
+      "source": "console.log(new URLSearchParams('tag=js&tag=dom&tag=css').getAll('tag'));"
+    },
+    "expected": "[\"js\",\"dom\",\"css\"]",
+    "explanation": "getAll devolve um array com todos os valores daquela chave, na ordem em que aparecem. get devolveria apenas o primeiro valor, `js`.",
+    "source": { "kind": "orientacao" },
+    "evidence": "O objetivo é avaliar como vocês analisam comportamentos, identificam bugs e compreendem a execução do motor JS."
+  },
+  {
+    "id": "n18-q008",
+    "nodeId": "n18",
+    "type": "mcq",
+    "prompt": "O que `new URLSearchParams({ q: 'url e params' }).toString()` produz?",
+    "options": [
+      "q=url%20e%20params",
+      "q=url e params",
+      "q=url+e+params",
+      "q=url%2Be%2Bparams"
+    ],
+    "answer": 2,
+    "code": {
+      "env": "dom",
+      "source": "console.log(new URLSearchParams({ q: 'url e params' }).toString());"
+    },
+    "expected": "q=url+e+params",
+    "explanation": "URLSearchParams serializa espaços como `+`, então a query fica `q=url+e+params`. O `%20` também decodifica como espaço, mas não é o que toString produz.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Query – dados não hierárquicos, detalhando a consulta normalmente sob a forma de pares nome e valor"
+  },
+  {
+    "id": "n18-q009",
+    "nodeId": "n18",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "a%20b&c a%20b%26c",
+      "a%20b%26c a%20b&c",
+      "a+b%26c a+b&c",
+      "a%20b%26c a%20b%26c"
+    ],
+    "answer": 1,
+    "code": {
+      "env": "dom",
+      "source": "console.log(encodeURIComponent('a b&c'), encodeURI('a b&c'));"
+    },
+    "expected": "a%20b%26c a%20b&c",
+    "explanation": "encodeURIComponent escapa também `&`, `=` e `?`, por isso o valor vira `a%20b%26c`. encodeURI preserva os separadores da URL e deixa o `&` intacto.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 33,
+      "endLine": 37
+    },
+    "evidence": "const q = encodeURIComponent(`name:\"${nome}*\"`);"
+  },
+  {
+    "id": "n18-q010",
+    "nodeId": "n18",
+    "type": "mcq",
+    "prompt": "Segundo a aula, qual é a regra para requisições GET com parâmetros de consulta?",
+    "options": [
+      "Podem alterar o estado do recurso se o parâmetro for o id",
+      "Só podem alterar o estado quando usam ?q=",
+      "Devem alterar o estado por meio de POST na mesma URL",
+      "Não devem alterar o estado dos recursos"
+    ],
+    "answer": 3,
+    "explanation": "A aula destaca que GET e parâmetros de query apenas recuperam dados. Mudanças de estado ficam com POST, PUT/PATCH e DELETE.",
+    "source": { "aula": 250, "slide": 11 },
+    "evidence": "IMPORTANTE: Métodos GET e parâmetros de query não devem alterar estado de recursos."
+  },
+  {
+    "id": "n18-q011",
+    "nodeId": "n18",
+    "type": "tf",
+    "prompt": "Em uma página aberta em `https://site.com/detalhes.html?id=3`, `location.search` retorna `?id=3`, incluindo o `?` inicial.",
+    "answer": true,
+    "explanation": "location.search carrega a query string exatamente como aparece na URL, começando pelo `?`. Para ler o valor, use `new URLSearchParams(location.search)`.",
+    "source": { "kind": "orientacao" },
+    "evidence": "Focada em trechos reais em JavaScript, manipulação do DOM, escopo de variáveis e tratamento de URLs/parâmetros."
+  },
+  {
+    "id": "n18-q012",
+    "nodeId": "n18",
+    "type": "tf",
+    "prompt": "Em `new URLSearchParams('?curso=SI&curso=ADS')`, o método `get('curso')` retorna `'SI'` e `getAll('curso')` retorna os dois valores.",
+    "answer": true,
+    "explanation": "get devolve o primeiro valor da chave; getAll devolve todos, na ordem em que aparecem: `SI` e `ADS`.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Query – dados não hierárquicos, detalhando a consulta normalmente sob a forma de pares nome e valor"
+  },
+  {
+    "id": "n18-q013",
+    "nodeId": "n18",
+    "type": "tf",
+    "prompt": "Em `new URL('https://site.com/detalhes.html?id=3#info')`, a propriedade `hash` retorna `#info`.",
+    "answer": true,
+    "explanation": "hash inclui o `#` inicial. Já search inclui o `?` e fica com a query.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Fragmento – identifica uma seção no recurso"
+  },
+  {
+    "id": "n18-q014",
+    "nodeId": "n18",
+    "type": "tf",
+    "prompt": "Uma requisição GET com `?curso=SI` pode alterar o estado do recurso, desde que o servidor valide a query.",
+    "answer": false,
+    "explanation": "A query em GET é para consulta e filtro, e não deve alterar estado. A aula registra essa regra de forma explícita.",
+    "source": { "aula": 250, "slide": 11 },
+    "evidence": "IMPORTANTE: Métodos GET e parâmetros de query não devem alterar estado de recursos."
+  },
+  {
+    "id": "n18-q015",
+    "nodeId": "n18",
+    "type": "tf",
+    "prompt": "Chamar `params.append('tag', 'js')` duas vezes substitui o valor anterior, deixando apenas um par `tag=js`.",
+    "answer": false,
+    "explanation": "append acrescenta outra ocorrência da chave; quem substitui os valores existentes é set. Por isso append duas vezes gera `tag=js&tag=js`.",
+    "source": { "kind": "orientacao" },
+    "evidence": "Revisem os conceitos de manipulação dinâmica de elementos no DOM e consumo de rotas assíncronas, pois a etapa prática exige a implementação de funções completas."
+  },
+  {
+    "id": "n18-q016",
+    "nodeId": "n18",
+    "type": "fill",
+    "prompt": "Na URL `https://site.com:8080/detalhes.html`, a propriedade `hostname` vale ____.",
+    "answers": ["site.com"],
+    "explanation": "hostname separa o nome do host da porta: devolve `site.com`, enquanto host devolve `site.com:8080` e port devolve `8080`.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Host – nome ou número IP onde se encontra a aplicação servidor"
+  },
+  {
+    "id": "n18-q017",
+    "nodeId": "n18",
+    "type": "fill",
+    "prompt": "A propriedade de `new URL()` que devolve a query string com o `?` inicial chama-se ____.",
+    "answers": ["search"],
+    "explanation": "search devolve a query inteira, com `?`. O acesso aos pares individuais fica em searchParams.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Query – dados não hierárquicos, detalhando a consulta normalmente sob a forma de pares nome e valor"
+  },
+  {
+    "id": "n18-q018",
+    "nodeId": "n18",
+    "type": "fill",
+    "prompt": "Quando a chave procurada não existe, o código abaixo imprime ____.",
+    "answers": ["null"],
+    "code": {
+      "env": "dom",
+      "source": "console.log(new URLSearchParams('a=1&b=2').get('c'));"
+    },
+    "expected": "null",
+    "explanation": "get devolve null para chave ausente, então a saída é `null`, e não undefined ou string vazia.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Query – dados não hierárquicos, detalhando a consulta normalmente sob a forma de pares nome e valor"
+  },
+  {
+    "id": "n18-q019",
+    "nodeId": "n18",
+    "type": "fill",
+    "prompt": "Com a página em `detalhes.html?id=3`, o código abaixo imprime ____, pois o valor lido da URL é uma string.",
+    "answers": ["false"],
+    "code": {
+      "env": "dom",
+      "source": "const id = new URLSearchParams(location.search).get('id');\nconsole.log(id === 3);",
+      "url": "https://site.com/detalhes.html?id=3"
+    },
+    "expected": "false",
+    "explanation": "get devolve a string `'3'`. A comparação estrita com o número 3 é falsa; para comparar como número seria preciso converter com `Number(id)`.",
+    "source": { "kind": "orientacao" },
+    "evidence": "Leitura Ativa do Código: Nas questões analíticas, observem atentamente os tipos de dados, o uso de operadores (como a diferença entre igualdade estrita e ampla) e o fluxo assíncrono das funções."
+  },
+  {
+    "id": "n18-q020",
+    "nodeId": "n18",
+    "type": "fill",
+    "prompt": "Para montar `?q=` com um valor que pode conter espaços, aspas e `&`, o código do projeto usa ____, e não `encodeURI`.",
+    "answers": ["encodeURIComponent"],
+    "explanation": "encodeURIComponent escapa todos os caracteres especiais do valor, inclusive `&` e `=`. encodeURI é pensado para uma URL inteira e preserva esses separadores.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 33,
+      "endLine": 37
+    },
+    "evidence": "const q = encodeURIComponent(`name:\"${nome}*\"`);"
+  },
+  {
+    "id": "n18-q021",
+    "nodeId": "n18",
+    "type": "fill",
+    "prompt": "O código abaixo imprime ____.",
+    "answers": ["a=1&a=2"],
+    "code": {
+      "env": "dom",
+      "source": "const p = new URLSearchParams('a=1');\np.append('a', '2');\nconsole.log(p.toString());"
+    },
+    "expected": "a=1&a=2",
+    "explanation": "append adiciona outra ocorrência da chave, sem apagar o valor anterior. Por isso a saída é `a=1&a=2`; set teria deixado apenas `a=2`.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Query – dados não hierárquicos, detalhando a consulta normalmente sob a forma de pares nome e valor"
+  },
+  {
+    "id": "n18-q022",
+    "nodeId": "n18",
+    "type": "fill",
+    "prompt": "O código abaixo imprime ____.",
+    "answers": ["https://site.com/detalhes.html?id=7"],
+    "code": {
+      "env": "dom",
+      "source": "const u = new URL('https://site.com/detalhes.html?id=3');\nu.searchParams.set('id', '7');\nconsole.log(u.href);"
+    },
+    "expected": "https://site.com/detalhes.html?id=7",
+    "explanation": "set substitui o valor existente da chave e atualiza a URL. Ao ler href, a query já aparece como `?id=7`.",
+    "source": { "aula": 131, "slide": 10 },
+    "evidence": "http://localhost:80/admin/index.php?z1=w1&z2=w2"
+  },
+  {
+    "id": "n18-q023",
+    "nodeId": "n18",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime?",
+    "options": [
+      "true false false",
+      "true true false",
+      "false false false",
+      "true false true"
+    ],
+    "answer": 0,
+    "code": {
+      "env": "dom",
+      "source": "const p = new URLSearchParams('curso=SI');\nconsole.log(p.has('curso'), p.has('Curso'), p.has('nome'));"
+    },
+    "expected": "true false false",
+    "explanation": "has verifica a presença da chave exata e diferencia maiúsculas de minúsculas. Por isso só `curso` retorna true; `Curso` e `nome` não existem.",
+    "source": { "aula": 131, "slide": 6 },
+    "evidence": "Query – dados não hierárquicos, detalhando a consulta normalmente sob a forma de pares nome e valor"
+  },
+  {
+    "id": "n18-q024",
+    "nodeId": "n18",
+    "type": "mcq",
+    "prompt": "No projeto Pokemon, por que o código aplica `encodeURIComponent` ao termo de busca antes de montar ``${POKEMON_API}?q=${q}&pageSize=12``?",
+    "options": [
+      "Para converter o texto da busca em número",
+      "Para substituir o parâmetro pageSize",
+      "Para escapar caracteres especiais do valor antes de inseri-lo na query",
+      "Para ordenar a resposta da API"
+    ],
+    "answer": 2,
+    "explanation": "O termo pode conter aspas, espaços e outros caracteres. encodeURIComponent garante que ele vire um único valor do parâmetro q, sem quebrar a URL.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 33,
+      "endLine": 37
+    },
+    "evidence": "const q = encodeURIComponent(`name:\"${nome}*\"`);"
+  }
+]
