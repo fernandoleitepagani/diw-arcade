@@ -306,5 +306,150 @@
       "slide": 12
     },
     "evidence": "Excluir um curso DELETE DELETE /cursos/:id"
+  },
+  {
+    "id": "n13-f029",
+    "nodeId": "n13",
+    "front": "O que é JSON Schema?",
+    "back": "É um vocabulário que permite descrever, referenciar e validar documentos JSON.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 12
+    },
+    "evidence": "JSON Schema é um vocabulário que permite descrever, referenciar e validar documentos JSON"
+  },
+  {
+    "id": "n13-f030",
+    "nodeId": "n13",
+    "front": "Quais benefícios o JSON Schema oferece?",
+    "back": "Descrever formatos de dados, prover documentação legível e permitir a validação dos dados.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 12
+    },
+    "evidence": "Provê uma documentação legível para seres humanos"
+  },
+  {
+    "id": "n13-f031",
+    "nodeId": "n13",
+    "front": "O que a palavra reservada $schema indica em um JSON Schema?",
+    "back": "O dialeto (versão) usado para descrever o esquema, por meio de uma URI.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 18
+    },
+    "evidence": "Indica o dialeto (Versão) utilizado para descrever o esquema."
+  },
+  {
+    "id": "n13-f032",
+    "nodeId": "n13",
+    "front": "O que a palavra reservada $id indica em um JSON Schema?",
+    "back": "O base URI da definição do esquema na Internet.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 18
+    },
+    "evidence": "Indica o base URI para esta definição de esquema na Internet."
+  },
+  {
+    "id": "n13-f033",
+    "nodeId": "n13",
+    "front": "Para que serve a palavra reservada $defs?",
+    "back": "Para definir esquemas e sub-esquemas reutilizáveis em um esquema maior.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 18
+    },
+    "evidence": "Indica um local para definição de esquemas e sub-esquemas JSON"
+  },
+  {
+    "id": "n13-f034",
+    "nodeId": "n13",
+    "front": "O que o campo required faz em um JSON Schema?",
+    "back": "Lista as propriedades que precisam estar presentes no documento.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 16
+    },
+    "evidence": "\"required\": [ \"productId\", \"productName\" ]"
+  },
+  {
+    "id": "n13-f035",
+    "nodeId": "n13",
+    "front": "Depois de aplicar JSON.parse no JSON de notícias, como acessar o título da primeira notícia?",
+    "back": "Com dados.noticias[0].titulo, pois noticias é um array de objetos.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 4
+    },
+    "evidence": "\"noticias\": [ { \"titulo\": \"Órgão do Ministério Público demite procurador da Lava Jato por outdoor em Curitiba\""
+  },
+  {
+    "id": "n13-f036",
+    "nodeId": "n13",
+    "front": "O que o método JSON.stringify devolve?",
+    "back": "Uma string de texto JSON que representa o objeto, com chaves entre aspas duplas.",
+    "source": {
+      "aula": 240,
+      "slide": 10
+    },
+    "evidence": "\"first\": \"John\", \"middle\": \"K\", \"last\": \"Doe\""
+  },
+  {
+    "id": "n13-f037",
+    "nodeId": "n13",
+    "front": "Como filtrar um array de objetos de notícias pela propriedade curtidas?",
+    "back": "Com noticias.filter((noticia) => noticia.curtidas > 20), que devolve um novo array.",
+    "source": {
+      "aula": 240,
+      "slide": 7
+    },
+    "evidence": "\"curtidas\": 258, \"publicado\": true"
+  },
+  {
+    "id": "n13-f038",
+    "nodeId": "n13",
+    "front": "No projeto Cadastro de alunos, para que serve a constante API_URL?",
+    "back": "Guarda o endereço http://localhost:3001/alunos fornecido pelo JSON Server a partir do db.json.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 1,
+      "endLine": 2
+    },
+    "evidence": "// Endereço da \"API\" criada pelo JSON Server a partir do db.json"
+  },
+  {
+    "id": "n13-f039",
+    "nodeId": "n13",
+    "front": "No projeto Mapa PUC Minas, como a lista mostra apenas as unidades favoritas?",
+    "back": "Com locais.filter((uni) => uni.favorito), que mantém só os locais marcados como favoritos.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/app.js",
+      "startLine": 48,
+      "endLine": 56
+    },
+    "evidence": "desenharUnidades(locais.filter((uni) => uni.favorito));"
+  },
+  {
+    "id": "n13-f040",
+    "nodeId": "n13",
+    "front": "Como o projeto Mapa PUC Minas envia o novo valor de favorito ao JSON Server?",
+    "back": "Com um fetch PATCH cujo corpo é JSON.stringify({ favorito: !uni.favorito }).",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/app.js",
+      "startLine": 100,
+      "endLine": 113
+    },
+    "evidence": "body: JSON.stringify({ favorito: !uni.favorito })"
   }
 ]

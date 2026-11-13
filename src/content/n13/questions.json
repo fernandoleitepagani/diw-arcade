@@ -377,5 +377,210 @@
       "slide": 13
     },
     "evidence": "404 – Recurso não encontrado"
+  },
+  {
+    "id": "n13-q023",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "O código abaixo converte um objeto com JSON.stringify. Qual é a saída exibida no console?",
+    "options": [
+      "{\"titulo\":\"PUC\",\"curtidas\":12}",
+      "{\"titulo\":\"PUC\",\"curtidas\":\"12\"}",
+      "[{\"titulo\":\"PUC\",\"curtidas\":12}]",
+      "{titulo:\"PUC\",curtidas:12}"
+    ],
+    "answer": 0,
+    "explanation": "JSON.stringify devolve texto JSON com chaves entre aspas duplas e mantém 12 como número, sem aspas. Por isso a saída é {\"titulo\":\"PUC\",\"curtidas\":12}.",
+    "code": {
+      "env": "js",
+      "source": "const noticia = { titulo: 'PUC', curtidas: 12 };\nconsole.log(JSON.stringify(noticia));"
+    },
+    "expected": "{\"titulo\":\"PUC\",\"curtidas\":12}",
+    "source": {
+      "aula": 240,
+      "slide": 10
+    },
+    "evidence": "\"first\": \"John\", \"middle\": \"K\", \"last\": \"Doe\""
+  },
+  {
+    "id": "n13-q024",
+    "nodeId": "n13",
+    "type": "fill",
+    "prompt": "Considere a string JSON de notícias e o código abaixo. A quantidade impressa no console é ____.",
+    "answers": [
+      "3"
+    ],
+    "explanation": "JSON.parse transforma a string em objeto; dados.noticias é um array com três objetos, então length imprime 3.",
+    "code": {
+      "env": "js",
+      "source": "const texto = '{\"noticias\":[{\"titulo\":\"A\"},{\"titulo\":\"B\"},{\"titulo\":\"C\"}]}';\nconst dados = JSON.parse(texto);\nconsole.log(dados.noticias.length);"
+    },
+    "expected": "3",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 4
+    },
+    "evidence": "\"noticias\": [ { \"titulo\": \"Órgão do Ministério Público demite procurador da Lava Jato por outdoor em Curitiba\""
+  },
+  {
+    "id": "n13-q025",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "No código abaixo, qual autor é impresso no console?",
+    "options": [
+      "Italo",
+      "Carolina",
+      "Segunda",
+      "Primeira"
+    ],
+    "answer": 1,
+    "explanation": "dados.noticias é um array de objetos; o índice 1 aponta para a segunda notícia, cujo campo autor vale Carolina.",
+    "code": {
+      "env": "js",
+      "source": "const texto = '{\"noticias\":[{\"titulo\":\"Primeira\",\"autor\":\"Italo\"},{\"titulo\":\"Segunda\",\"autor\":\"Carolina\"}]}';\nconst dados = JSON.parse(texto);\nconsole.log(dados.noticias[1].autor);"
+    },
+    "expected": "Carolina",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 4
+    },
+    "evidence": "\"autor\": \"Carolina Linhares\""
+  },
+  {
+    "id": "n13-q026",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "O código abaixo filtra um array de objetos pela propriedade curtidas. Qual é a saída no console?",
+    "options": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "answer": 2,
+    "explanation": "Apenas B tem 40 curtidas e C tem 25, ambas acima de 20; o array filtrado fica com 2 itens e length imprime 2.",
+    "code": {
+      "env": "js",
+      "source": "const noticias = [\n  { titulo: 'A', curtidas: 10 },\n  { titulo: 'B', curtidas: 40 },\n  { titulo: 'C', curtidas: 25 }\n];\nconst filtradas = noticias.filter((noticia) => noticia.curtidas > 20);\nconsole.log(filtradas.length);"
+    },
+    "expected": "2",
+    "source": {
+      "aula": 240,
+      "slide": 7
+    },
+    "evidence": "\"curtidas\": 258, \"publicado\": true"
+  },
+  {
+    "id": "n13-q027",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "O código abaixo cria itens a partir do array de notícias. Qual texto é exibido no console?",
+    "options": [
+      "HTML",
+      "undefined",
+      "null",
+      "CSS"
+    ],
+    "answer": 3,
+    "explanation": "O laço cria um li para cada notícia; o último item recebe o título CSS, então lastElementChild.textContent imprime CSS.",
+    "code": {
+      "env": "dom",
+      "html": "<ul id=\"lista\"></ul>",
+      "source": "const dados = {\n  noticias: [\n    { titulo: 'HTML' },\n    { titulo: 'CSS' }\n  ]\n};\nconst lista = document.querySelector('#lista');\n\nfor (const noticia of dados.noticias) {\n  const item = document.createElement('li');\n  item.textContent = noticia.titulo;\n  lista.appendChild(item);\n}\n\nconsole.log(lista.lastElementChild.textContent);"
+    },
+    "expected": "CSS",
+    "source": {
+      "aula": 240,
+      "slide": 6
+    },
+    "evidence": "\"noticias\": [ { \"titulo\": \"Órgão do Ministério Público demite procurador da Lava Jato por outdoor em Curitiba\""
+  },
+  {
+    "id": "n13-q028",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "Segundo o material da TIAW, o que é JSON Schema?",
+    "options": [
+      "Um banco de dados que substitui o JSON Server em produção",
+      "Um vocabulário que permite descrever, referenciar e validar documentos JSON",
+      "Um método HTTP usado para criar recursos em uma API REST",
+      "Um formato binário que compacta arquivos JSON"
+    ],
+    "answer": 1,
+    "explanation": "O material define JSON Schema como um vocabulário para descrever, referenciar e validar documentos JSON.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 12
+    },
+    "evidence": "JSON Schema é um vocabulário que permite descrever, referenciar e validar documentos JSON"
+  },
+  {
+    "id": "n13-q029",
+    "nodeId": "n13",
+    "type": "mcq",
+    "prompt": "Em um JSON Schema, o que a palavra reservada $ref indica?",
+    "options": [
+      "A versão do dialeto usada para descrever o esquema",
+      "Que a propriedade é obrigatória no documento",
+      "Um esquema definido em outro local",
+      "Que o esquema vale apenas para arrays"
+    ],
+    "answer": 2,
+    "explanation": "A tabela de palavras reservadas do material diz que $ref indica um esquema definido em outro local, permitindo reutilizá-lo.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 18
+    },
+    "evidence": "$ref Indica um esquema definido em outro local."
+  },
+  {
+    "id": "n13-q030",
+    "nodeId": "n13",
+    "type": "tf",
+    "prompt": "No JSON de notícias da TIAW, a chave noticias guarda um array de objetos, e cada objeto traz campos como titulo, resumo e autor.",
+    "answer": true,
+    "explanation": "O exemplo abre noticias como um array e, dentro dele, cada notícia é um objeto com titulo, resumo, data, autor, fonte e texto.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-json",
+      "slide": 4
+    },
+    "evidence": "\"noticias\": [ { \"titulo\": \"Órgão do Ministério Público demite procurador da Lava Jato por outdoor em Curitiba\""
+  },
+  {
+    "id": "n13-q031",
+    "nodeId": "n13",
+    "type": "tf",
+    "prompt": "No projeto Cadastro de alunos, a função atualizarAluno envia um PATCH para alterar um aluno existente.",
+    "answer": true,
+    "explanation": "O comentário da função marca UPDATE (PATCH) e o fetch envia method: \"PATCH\" para a URL do aluno com id.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 50,
+      "endLine": 56
+    },
+    "evidence": "// UPDATE (PATCH) - altera um aluno existente"
+  },
+  {
+    "id": "n13-q032",
+    "nodeId": "n13",
+    "type": "fill",
+    "prompt": "No projeto Mapa PUC Minas, a constante API_URL do arquivo config.js vale \"http://localhost:3000/____\".",
+    "answers": [
+      "locais"
+    ],
+    "explanation": "O config.js define API_URL como o endereço do JSON Server para a coleção locais, usada pelo app.js no fetch.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/config.js",
+      "startLine": 8,
+      "endLine": 9
+    },
+    "evidence": "const API_URL = 'http://localhost:3000/locais';"
   }
 ]
