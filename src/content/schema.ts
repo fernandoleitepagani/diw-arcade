@@ -373,3 +373,33 @@ export const LabGuideSchema = z.object({
 });
 
 export type LabGuide = z.infer<typeof LabGuideSchema>;
+
+export const PrimerCodeSchema = z
+  .object({
+    lang: z.enum(['html', 'css', 'js', 'json']),
+    caption: z.string().max(40).optional(),
+    text: z.string().min(1).max(800),
+  })
+  .strict();
+
+export const PrimerPointSchema = z
+  .object({
+    title: z.string().min(1).max(80),
+    /** Plain text; backtick spans render as <code>. */
+    body: z.string().min(1).max(600),
+    code: PrimerCodeSchema.optional(),
+    source: SourceSchema,
+    evidence: EvidenceSchema,
+  })
+  .strict();
+
+export type PrimerPoint = z.infer<typeof PrimerPointSchema>;
+
+export const PrimerSchema = z
+  .object({
+    nodeId: NODE_ID_SCHEMA,
+    points: z.array(PrimerPointSchema).min(6).max(10),
+  })
+  .strict();
+
+export type Primer = z.infer<typeof PrimerSchema>;

@@ -6,6 +6,7 @@ import {
   LabGuideSchema,
   MatcherSchema,
   McqQuestionSchema,
+  PrimerSchema,
   QuestionSchema,
   SourceSchema,
   type Question,
@@ -228,6 +229,45 @@ describe('lab schema', () => {
       LabGuideSchema.safeParse({
         ...fixtureLab,
         tips: { html: [], css: [], js: [] },
+      }).success,
+    ).toBe(false);
+  });
+});
+
+describe('primer schema', () => {
+  const flashcard = fixtureFlashcards[0]!;
+
+  function primer(count: number) {
+    return {
+      nodeId: 'n07',
+      points: Array.from({ length: count }, (_, index) => ({
+        title: `Ponto ${index + 1}`,
+        body: 'Seletores escolhem os elementos que recebem o estilo.',
+        source: flashcard.source,
+        evidence: flashcard.evidence,
+      })),
+    };
+  }
+
+  it('PrimerSchema accepts 6 to 10 points', () => {
+    expect(PrimerSchema.safeParse(primer(6)).success).toBe(true);
+    expect(PrimerSchema.safeParse(primer(10)).success).toBe(true);
+  });
+
+  it('rejects 5 and 11 points', () => {
+    expect(PrimerSchema.safeParse(primer(5)).success).toBe(false);
+    expect(PrimerSchema.safeParse(primer(11)).success).toBe(false);
+  });
+
+  it('rejects unknown keys', () => {
+    const base = primer(6);
+    expect(PrimerSchema.safeParse({ ...base, extra: true }).success).toBe(false);
+    expect(
+      PrimerSchema.safeParse({
+        ...base,
+        points: base.points.map((point, index) =>
+          index === 0 ? { ...point, extra: true } : point,
+        ),
       }).success,
     ).toBe(false);
   });

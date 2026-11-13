@@ -3,6 +3,7 @@ import {
   ChallengeSchema,
   FlashcardSchema,
   LabGuideSchema,
+  PrimerSchema,
   QuestionSchema,
   REPO_URL_PREFIX,
   type Challenge,
@@ -162,10 +163,12 @@ export interface ValidationReport {
 
 type Classification =
   | { kind: FileKind; nodeId: NodeId }
+  | { kind: 'primer'; nodeId: NodeId }
   | { kind: 'lab'; labId: string }
   | { kind: 'unknown' };
 
 const nodeFilePattern = /(?:^|\/)n(\d{2})\/(questions|flashcards|challenges)\.json$/;
+const primerFilePattern = /(?:^|\/)n(\d{2})\/primers\.json$/;
 const labFilePattern = /(?:^|\/)labs\/([a-z0-9-]+)\.json$/;
 
 function isNodeId(value: string): value is NodeId {
@@ -183,6 +186,14 @@ function classify(path: string): Classification {
     const kind = nodeMatch[2] as FileKind;
     if (isNodeId(nodeId)) {
       return { kind, nodeId };
+    }
+    return { kind: 'unknown' };
+  }
+  const primerMatch = primerFilePattern.exec(path);
+  if (primerMatch) {
+    const nodeId = `n${primerMatch[1]}`;
+    if (isNodeId(nodeId)) {
+      return { kind: 'primer', nodeId };
     }
     return { kind: 'unknown' };
   }
@@ -268,6 +279,7 @@ export async function validateContent(
     return (
       classified.kind !== 'unknown' &&
       classified.kind !== 'lab' &&
+      classified.kind !== 'primer' &&
       classified.nodeId === only.nodeId &&
       (only.kind === undefined || classified.kind === only.kind)
     );
@@ -913,6 +925,40 @@ export async function validateContent(
       }
       parsedLabs.push(result.data);
       validateLab(result.data, file.path, labId);
+      continue;
+    }
+
+    if (classified.kind === 'primer') {
+      const { nodeId } = classified;
+      if (file.readError) {
+        addError(file.path, '-', `JSON inválido: ${file.readError}`, { nodeId });
+        continue;
+      }
+      const result = PrimerSchema.safeParse(file.data);
+      if (!result.success) {
+        addSchemaIssues(file.path, file.data, result.error, { nodeId });
+        continue;
+      }
+      if (result.data.nodeId !== nodeId) {
+        addError(
+          file.path,
+          '-',
+          `nodeId ${result.data.nodeId} não corresponde à pasta ${nodeId}`,
+          { nodeId },
+        );
+      }
+      result.data.points.forEach((point, index) => {
+        checkSource(
+          {
+            id: `${nodeId}-p${String(index + 1).padStart(2, '0')}`,
+            nodeId,
+            source: point.source,
+            evidence: point.evidence,
+          },
+          file.path,
+          nodeId,
+        );
+      });
       continue;
     }
 

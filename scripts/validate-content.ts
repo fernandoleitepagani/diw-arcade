@@ -13,7 +13,7 @@ import {
 } from './lib/validate';
 
 const NODE_DIR_PATTERN = /^n\d{2}$/;
-const NODE_FILE_PATTERN = /^(questions|flashcards|challenges)\.json$/;
+const NODE_FILE_PATTERN = /^(questions|flashcards|challenges|primers)\.json$/;
 
 function parseOnly(
   value: string | undefined,
