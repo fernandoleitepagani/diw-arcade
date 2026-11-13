@@ -231,7 +231,7 @@
     "nodeId": "n04",
     "title": "novalidate, URL e números",
     "kind": "html",
-    "goal": "Crie um formulário de perfil com novalidate, um site com type=\"url\", anos de experiência com type=\"number\", min, max e step, uma bio com maxlength e um fieldset com legend.",
+    "goal": "Crie um formulário de perfil com novalidate, um fieldset com legend \"Perfil profissional\", um site com type=\"url\" e required, anos de experiência com type=\"number\", min=\"0\", max=\"50\" e step=\"1\", uma bio com maxlength=\"120\" e os três campos com label associado por for.",
     "starter": {
       "html": "<form id=\"perfil\">\n  <p>Perfil profissional</p>\n  <p>Site</p>\n  <input type=\"text\" id=\"site\" name=\"site\">\n  <p>Anos de experiência</p>\n  <input type=\"text\" id=\"experiencia\" name=\"experiencia\">\n  <p>Bio</p>\n  <input type=\"text\" id=\"bio\" name=\"bio\">\n  <button type=\"submit\">Salvar</button>\n</form>",
       "css": "",
