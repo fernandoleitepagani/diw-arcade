@@ -1,0 +1,509 @@
+[
+  {
+    "id": "n19-q001",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime no console?",
+    "options": [
+      "microtask > início > timer",
+      "início > timer > microtask",
+      "início > microtask > timer",
+      "timer > início > microtask"
+    ],
+    "answer": 2,
+    "code": {
+      "env": "js",
+      "source": "const ordem = ['início'];\nPromise.resolve().then(() => ordem.push('microtask'));\nsetTimeout(() => {\n  ordem.push('timer');\n  console.log(ordem.join(' > '));\n}, 0);"
+    },
+    "expected": "início > microtask > timer",
+    "explanation": "O trecho síncrono registra 'início' antes de tudo. A callback de Promise.resolve().then entra na fila de microtarefas, que roda antes do setTimeout de 0 ms; por isso a ordem final é início, microtask e timer.",
+    "source": { "kind": "orientacao" },
+    "evidence": "o fluxo assíncrono das funções"
+  },
+  {
+    "id": "n19-q002",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "Considere o código a seguir. Qual é a ordem impressa no console?",
+    "options": [
+      "script > início > fim do script > depois do await",
+      "início > depois do await > script > fim do script",
+      "script > início > depois do await > fim do script",
+      "início > script > fim do script > depois do await"
+    ],
+    "answer": 0,
+    "code": {
+      "env": "js",
+      "source": "const ordem = [];\nasync function executar() {\n  ordem.push('início');\n  await Promise.resolve();\n  ordem.push('depois do await');\n}\nordem.push('script');\nexecutar();\nordem.push('fim do script');\nsetTimeout(() => console.log(ordem.join(' > ')), 0);"
+    },
+    "expected": "script > início > fim do script > depois do await",
+    "explanation": "Uma função async executa de forma síncrona até o primeiro await. Assim, 'script', 'início' e 'fim do script' entram na ordem antes de a continuação pós-await virar microtarefa e registrar 'depois do await'.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/api.js",
+      "startLine": 16,
+      "endLine": 18
+    },
+    "evidence": "export async function api(caminho, { method = \"GET\", body } = {}) {"
+  },
+  {
+    "id": "n19-q003",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "O que o encadeamento de then abaixo imprime no console?",
+    "options": [
+      "resultado: 2",
+      "resultado: 5",
+      "resultado: undefined",
+      "resultado: 6"
+    ],
+    "answer": 3,
+    "code": {
+      "env": "js",
+      "source": "Promise.resolve(2)\n  .then((valor) => valor * 3)\n  .then((valor) => console.log('resultado: ' + valor));"
+    },
+    "expected": "resultado: 6",
+    "explanation": "O retorno de cada then vira o valor recebido pelo próximo. O primeiro then recebe 2 e devolve 6; o segundo then imprime 'resultado: 6'.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/app.js",
+      "startLine": 107,
+      "endLine": 110
+    },
+    "evidence": ".then((resposta) => resposta.json())\n    .then((atualizado) => {"
+  },
+  {
+    "id": "n19-q004",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "Qual valor o código abaixo imprime no console?",
+    "options": [
+      "recuperado: undefined",
+      "recuperado: falhou",
+      "Uncaught Error: falhou",
+      "undefined"
+    ],
+    "answer": 1,
+    "code": {
+      "env": "js",
+      "source": "Promise.reject(new Error('falhou'))\n  .catch((erro) => 'recuperado: ' + erro.message)\n  .then((valor) => console.log(valor));"
+    },
+    "expected": "recuperado: falhou",
+    "explanation": "O catch trata a rejeição e o seu retorno alimenta o then seguinte. A mensagem do erro é 'falhou', então o console mostra 'recuperado: falhou'.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/app.js",
+      "startLine": 107,
+      "endLine": 112
+    },
+    "evidence": ".catch(() => alert('Erro ao salvar o favorito. O JSON Server está rodando?'));"
+  },
+  {
+    "id": "n19-q005",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "O que o console mostra depois de executar este trecho?",
+    "options": [
+      "finally executado / valor: undefined",
+      " / valor: ok",
+      "finally executado / valor: ok",
+      "finally executado / valor: finally executado"
+    ],
+    "answer": 2,
+    "code": {
+      "env": "js",
+      "source": "let marcador = '';\nPromise.resolve('ok')\n  .finally(() => { marcador = 'finally executado'; })\n  .then((valor) => console.log(marcador + ' / valor: ' + valor));"
+    },
+    "expected": "finally executado / valor: ok",
+    "explanation": "O finally roda quando a promise termina e não altera o valor encaminhado. A variável marcador guarda 'finally executado' e o then ainda recebe 'ok'.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/api.js",
+      "startLine": 31,
+      "endLine": 33
+    },
+    "evidence": "} finally {\n    clearTimeout(timer);"
+  },
+  {
+    "id": "n19-q006",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "O que o código abaixo imprime no console?",
+    "options": [
+      "[object Promise]",
+      "Promise { <pending> }",
+      "[{ \"id\": 1, \"nome\": \"Ana\" }]",
+      "undefined"
+    ],
+    "answer": 0,
+    "code": {
+      "env": "js",
+      "source": "async function carregar() {\n  const resposta = await fetch('http://localhost:3000/alunos');\n  const dados = resposta.json();\n  console.log(dados);\n}\ncarregar();",
+      "mocks": {
+        "http://localhost:3000/alunos": {
+          "status": 200,
+          "body": [{ "id": 1, "nome": "Ana" }]
+        }
+      }
+    },
+    "expected": "[object Promise]",
+    "explanation": "resposta.json() devolve uma promise, e o código esqueceu o await. Por isso o console imprime o próprio objeto promise, representado como [object Promise], e não o array de alunos.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/js/app.js",
+      "startLine": 11,
+      "endLine": 12
+    },
+    "evidence": ".then((resposta) => resposta.json())"
+  },
+  {
+    "id": "n19-q007",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "Qual é a saída do console no trecho a seguir?",
+    "options": [
+      "a > b / status 200",
+      "script > b > a / status 200",
+      "a > script > b / status 200",
+      "script > a > b / status 200"
+    ],
+    "answer": 3,
+    "code": {
+      "env": "js",
+      "source": "const eventos = [];\nasync function carregar() {\n  const r1 = await fetch('http://localhost:3000/a');\n  eventos.push('a');\n  const r2 = await fetch('http://localhost:3000/b');\n  eventos.push('b');\n  console.log(eventos.join(' > ') + ' / status ' + r2.status);\n}\ncarregar();\neventos.push('script');",
+      "mocks": {
+        "http://localhost:3000/a": { "status": 200, "body": { "id": "a" } },
+        "http://localhost:3000/b": { "status": 200, "body": { "id": "b" } }
+      }
+    },
+    "expected": "script > a > b / status 200",
+    "explanation": "Cada await suspende a função async até a requisição terminar. O push('script') acontece antes de a primeira resposta chegar, e depois as requisições concluem em sequência: a e b.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 13,
+      "endLine": 16
+    },
+    "evidence": "const resposta = await fetch(API_URL);\n    const alunos = await resposta.json();"
+  },
+  {
+    "id": "n19-q008",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "O que o console imprime ao executar este código?",
+    "options": [
+      "promise.all > script / 2",
+      "script > promise.all / 2",
+      "script > a > b / 2",
+      "script > promise.all / undefined"
+    ],
+    "answer": 1,
+    "code": {
+      "env": "js",
+      "source": "const eventos = [];\nasync function carregar() {\n  const respostas = await Promise.all([\n    fetch('http://localhost:3000/a'),\n    fetch('http://localhost:3000/b'),\n  ]);\n  eventos.push('promise.all');\n  console.log(eventos.join(' > ') + ' / ' + respostas.length);\n}\ncarregar();\neventos.push('script');",
+      "mocks": {
+        "http://localhost:3000/a": { "status": 200, "body": { "id": "a" } },
+        "http://localhost:3000/b": { "status": 200, "body": { "id": "b" } }
+      }
+    },
+    "expected": "script > promise.all / 2",
+    "explanation": "Promise.all dispara as duas buscas e resolve com um array de duas respostas. O push('script') ocorre antes de o await continuar, então a ordem é script e depois promise.all.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/pokedexRepository.js",
+      "startLine": 17,
+      "endLine": 19
+    },
+    "evidence": "const [types, pokemon, trainers] = await Promise.all([api(\"/types\"), api(\"/pokemon\"), api(\"/trainers\")]);"
+  },
+  {
+    "id": "n19-q009",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "A requisição responde com status 404. O que o console imprime?",
+    "options": [
+      "catch",
+      "status 200",
+      "status 404",
+      "nada é impresso"
+    ],
+    "answer": 2,
+    "code": {
+      "env": "js",
+      "source": "async function carregar() {\n  try {\n    const resposta = await fetch('http://localhost:3000/alunos/99');\n    console.log('status ' + resposta.status);\n  } catch (erro) {\n    console.log('catch');\n  }\n}\ncarregar();",
+      "mocks": {
+        "http://localhost:3000/alunos/99": {
+          "status": 404,
+          "body": { "erro": "não encontrado" }
+        }
+      }
+    },
+    "expected": "status 404",
+    "explanation": "O fetch só rejeita em falhas de rede. Uma resposta HTTP 404 resolve a promise com ok igual a false, então o try continua e imprime 'status 404'; o catch não é executado.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/favoriteRepository.js",
+      "startLine": 27,
+      "endLine": 35
+    },
+    "evidence": "if (e.status === 404) return false;"
+  },
+  {
+    "id": "n19-q010",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "Com a resposta mockada de status 404, qual linha o console mostra?",
+    "options": [
+      "404 / ok: false",
+      "404 / ok: true",
+      "TypeError / ok: false",
+      "200 / ok: false"
+    ],
+    "answer": 0,
+    "code": {
+      "env": "js",
+      "source": "fetch('http://localhost:3000/alunos/99')\n  .then((resposta) => console.log(resposta.status + ' / ok: ' + resposta.ok));",
+      "mocks": {
+        "http://localhost:3000/alunos/99": {
+          "status": 404,
+          "body": { "erro": "não encontrado" }
+        }
+      }
+    },
+    "expected": "404 / ok: false",
+    "explanation": "A promessa de fetch resolve normalmente com uma resposta 404: status vale 404 e a propriedade ok vale false. O then é executado e imprime '404 / ok: false'.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/api.js",
+      "startLine": 35,
+      "endLine": 37
+    },
+    "evidence": "throw new ApiError(`O json-server respondeu ${resposta.status} em ${method} ${caminho}.`, resposta.status);"
+  },
+  {
+    "id": "n19-q011",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "O que o console imprime ao consumir a resposta mockada?",
+    "options": [
+      "notícias: undefined",
+      "notícias: 1",
+      "notícias: Promise { <pending> }",
+      "notícias: 2"
+    ],
+    "answer": 3,
+    "code": {
+      "env": "js",
+      "source": "fetch('http://localhost:3000/noticias')\n  .then((resposta) => resposta.json())\n  .then((dados) => console.log('notícias: ' + dados.noticias.length));",
+      "mocks": {
+        "http://localhost:3000/noticias": {
+          "status": 200,
+          "body": {
+            "noticias": [
+              { "titulo": "Primeira notícia" },
+              { "titulo": "Segunda notícia" }
+            ]
+          }
+        }
+      }
+    },
+    "expected": "notícias: 2",
+    "explanation": "resposta.json() devolve uma promise que resolve com o corpo convertido em objeto. O then seguinte recebe esse objeto e imprime o tamanho do array noticias, que tem 2 itens.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 26,
+      "endLine": 29
+    },
+    "evidence": "const json = await resposta.json();"
+  },
+  {
+    "id": "n19-q012",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "A resposta mockada tem status 500. O que o console mostra?",
+    "options": [
+      "status 200 / erro: Servidor indisponível",
+      "status 500 / erro: Servidor indisponível",
+      "TypeError / erro: undefined",
+      "status 500 / erro: undefined"
+    ],
+    "answer": 1,
+    "code": {
+      "env": "js",
+      "source": "fetch('http://localhost:3000/alunos')\n  .then(async (resposta) => {\n    const dados = await resposta.json();\n    console.log('status ' + resposta.status + ' / erro: ' + dados.erro);\n  });",
+      "mocks": {
+        "http://localhost:3000/alunos": {
+          "status": 500,
+          "body": { "erro": "Servidor indisponível" }
+        }
+      }
+    },
+    "expected": "status 500 / erro: Servidor indisponível",
+    "explanation": "O fetch resolve mesmo com status 500, então o corpo ainda pode ser lido com await resposta.json(). O status é 500 e a propriedade erro do JSON aparece na saída.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 26,
+      "endLine": 29
+    },
+    "evidence": "if (!resposta.ok) return [];"
+  },
+  {
+    "id": "n19-q013",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "Duas requisições independentes são feitas com await em sequência. Qual mudança tende a reduzir o tempo total de espera?",
+    "options": [
+      "Usar Promise.all para disparar as duas requisições e aguardar ambas",
+      "Trocar await por then em cada requisição",
+      "Colocar as duas chamadas dentro de um try/catch",
+      "Remover o await da segunda chamada"
+    ],
+    "answer": 0,
+    "explanation": "Com awaits em sequência, a segunda requisição só começa quando a primeira termina. Promise.all inicia as duas de uma vez e resolve quando ambas terminam, reduzindo a espera total.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/pokedexRepository.js",
+      "startLine": 16,
+      "endLine": 19
+    },
+    "evidence": "const [types, pokemon, trainers] = await Promise.all"
+  },
+  {
+    "id": "n19-q014",
+    "nodeId": "n19",
+    "type": "mcq",
+    "prompt": "No json-server, qual método HTTP é usado para criar um novo recurso?",
+    "options": ["GET", "DELETE", "PATCH", "POST"],
+    "answer": 3,
+    "explanation": "O método POST cria um recurso no servidor. O GET consulta, o PUT e o PATCH atualizam e o DELETE remove.",
+    "source": { "aula": 250, "slide": 12 },
+    "evidence": "Incluir um curso CREATE POST /cursos/"
+  },
+  {
+    "id": "n19-q015",
+    "nodeId": "n19",
+    "type": "tf",
+    "prompt": "Os três estados de uma promise são: pendente, resolvida (fulfilled) e rejeitada (rejected).",
+    "answer": true,
+    "explanation": "Uma promise começa pendente e termina resolvida ou rejeitada. Esses são os três estados possíveis no fluxo assíncrono.",
+    "source": { "kind": "orientacao" },
+    "evidence": "o fluxo assíncrono das funções"
+  },
+  {
+    "id": "n19-q016",
+    "nodeId": "n19",
+    "type": "tf",
+    "prompt": "O fetch rejeita a promise automaticamente quando a resposta HTTP tem status 404.",
+    "answer": false,
+    "explanation": "O fetch resolve com qualquer resposta HTTP, inclusive 404. O código da aplicação precisa conferir a propriedade ok e tratar o erro, como faz o repositório da Pokédex.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/api.js",
+      "startLine": 35,
+      "endLine": 37
+    },
+    "evidence": "if (!resposta.ok) {\n    throw new ApiError"
+  },
+  {
+    "id": "n19-q017",
+    "nodeId": "n19",
+    "type": "tf",
+    "prompt": "O método response.json() retorna uma promise que resolve com o corpo da resposta convertido em objeto.",
+    "answer": true,
+    "explanation": "response.json() lê o corpo e devolve uma promise. Por isso o código com await resposta.json() obtém o objeto já convertido.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/repository/pokedexRepository.js",
+      "startLine": 22,
+      "endLine": 24
+    },
+    "evidence": "const dados = await resposta.json();"
+  },
+  {
+    "id": "n19-q018",
+    "nodeId": "n19",
+    "type": "tf",
+    "prompt": "No json-server, um GET pode ser usado para alterar o estado de um recurso.",
+    "answer": false,
+    "explanation": "O GET serve para recuperar um recurso e não deve alterar o estado. Criação e alteração usam POST, PUT ou PATCH, e a remoção usa DELETE.",
+    "source": { "aula": 250, "slide": 11 },
+    "evidence": "Métodos GET e parâmetros de query não devem alterar estado de recursos."
+  },
+  {
+    "id": "n19-q019",
+    "nodeId": "n19",
+    "type": "tf",
+    "prompt": "Ao enviar um objeto como corpo de um POST ao json-server, é preciso convertê-lo com JSON.stringify e informar Content-Type: application/json.",
+    "answer": true,
+    "explanation": "O corpo da requisição viaja como texto JSON, então o objeto precisa de JSON.stringify. O header Content-Type avisa o servidor que o corpo está em JSON.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 43,
+      "endLine": 47
+    },
+    "evidence": "\"Content-Type\": \"application/json\""
+  },
+  {
+    "id": "n19-q020",
+    "nodeId": "n19",
+    "type": "fill",
+    "prompt": "Em uma promise que terminou com sucesso, o estado é chamado de ____.",
+    "answers": ["fulfilled", "resolvida"],
+    "explanation": "A promise pendente passa para fulfilled (resolvida) quando conclui com sucesso, ou para rejected (rejeitada) quando falha.",
+    "source": { "kind": "orientacao" },
+    "evidence": "o fluxo assíncrono das funções"
+  },
+  {
+    "id": "n19-q021",
+    "nodeId": "n19",
+    "type": "fill",
+    "prompt": "Para remover um recurso no json-server, o método HTTP usado é ____.",
+    "answers": ["DELETE", "delete"],
+    "explanation": "O DELETE remove um recurso identificado pela URL, como DELETE /cursos/:id. O POST cria e o PATCH atualiza.",
+    "source": { "aula": 250, "slide": 11 },
+    "evidence": "DELETE – Remover um recurso (DELETE)"
+  },
+  {
+    "id": "n19-q022",
+    "nodeId": "n19",
+    "type": "fill",
+    "prompt": "Para transformar um objeto JavaScript em texto JSON antes de enviá-lo no corpo da requisição, usamos ____.",
+    "answers": ["JSON.stringify", "JSON.stringify()"],
+    "explanation": "JSON.stringify converte o objeto em uma string JSON. É esse texto que o fetch envia no campo body do POST ou do PATCH.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 43,
+      "endLine": 47
+    },
+    "evidence": "body: JSON.stringify(aluno)"
+  },
+  {
+    "id": "n19-q023",
+    "nodeId": "n19",
+    "type": "fill",
+    "prompt": "No header de uma requisição que envia JSON, o valor de Content-Type deve ser ____.",
+    "answers": ["application/json"],
+    "explanation": "O valor application/json indica ao servidor que o corpo enviado está no formato JSON. Ele acompanha o JSON.stringify no POST.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 181,
+      "endLine": 190
+    },
+    "evidence": "\"Content-Type\": \"application/json\""
+  },
+  {
+    "id": "n19-q024",
+    "nodeId": "n19",
+    "type": "fill",
+    "prompt": "No JSON de notícias apresentado na aula, a lista de notícias fica na propriedade ____.",
+    "answers": ["noticias", "\"noticias\""],
+    "explanation": "A estrutura do exemplo é um objeto com a propriedade noticias, cujo valor é um array de objetos com titulo, resumo, data, autor, fonte e texto.",
+    "source": { "kind": "tiaw", "doc": "tiaw-json", "slide": 3 },
+    "evidence": "\"noticias\": [ { \"titulo\""
+  }
+]
