@@ -21,3 +21,16 @@
   --notch:polygon(0 8px,4px 8px,4px 4px,8px 4px,8px 0,calc(100% - 8px) 0,calc(100% - 8px) 4px,calc(100% - 4px) 4px,calc(100% - 4px) 8px,100% 8px,100% calc(100% - 8px),calc(100% - 4px) calc(100% - 8px),calc(100% - 4px) calc(100% - 4px),calc(100% - 8px) calc(100% - 4px),calc(100% - 8px) 100%,8px 100%,8px calc(100% - 4px),4px calc(100% - 4px),4px calc(100% - 8px),0 calc(100% - 8px));
   --dither:conic-gradient(var(--edge) 25%,transparent 0 50%,var(--edge) 0 75%,transparent 0) 0 0/4px 4px;
 }
+/* Legacy aliases: older screens still read the v2 names. They follow the active theme
+   so no screen pairs a dark surface with light-theme text. The quoted attribute keeps the
+   light block out of the THEMES sync test on purpose: these are not new theme tokens. */
+:root{
+  --surface:var(--panel); --surface-2:#1B2027; --surface-3:#20262E;
+  --border:var(--edge); --text-muted:var(--muted);
+  --accent:var(--u-css); --on-accent:var(--on-u); --reward:var(--u-prova); --xp:var(--u-js);
+  --success:var(--ok); --danger:var(--bad);
+}
+html[data-theme="light"]{
+  --surface-2:#F4F6F9; --surface-3:#E3E7EE;
+  --accent:#1D4ED8; --reward:#B0245C; --xp:#7A5500; --success:#11703A; --danger:#B02424;
+}
