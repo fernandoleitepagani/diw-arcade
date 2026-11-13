@@ -1,15 +1,15 @@
 {
   "_measured": {
+    "entryJsGzipKb": 289.22,
+    "entryCssGzipKb": 12.78,
+    "totalJsGzipKb": 506.15
+  },
+  "_previous": {
     "entryJsGzipKb": 288.65,
     "entryCssGzipKb": 23.93,
     "totalJsGzipKb": 502.17
   },
-  "_previous": {
-    "entryJsGzipKb": 224.91,
-    "entryCssGzipKb": 23.79,
-    "totalJsGzipKb": 437.46
-  },
-  "entryJsGzipKb": 318,
-  "entryCssGzipKb": 27,
-  "totalJsGzipKb": 553
+  "entryJsGzipKb": 296,
+  "entryCssGzipKb": 14,
+  "totalJsGzipKb": 514
 }
