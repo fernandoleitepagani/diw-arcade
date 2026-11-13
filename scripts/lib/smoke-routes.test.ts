@@ -3,8 +3,11 @@ import { readFileSync } from 'node:fs';
 import {
   checkRoutePage,
   isBaselined,
+  REDIRECT_CHECKS,
   SMOKE_ROUTES,
+  THEMES,
   VIEWPORTS,
+  baselineProblems,
   type RoutePage,
 } from './smoke-routes';
 
@@ -43,13 +46,14 @@ function harness(
 }
 
 describe('rotas do smoke', () => {
-  it('cobre as 17 rotas do app', () => {
+  it('cobre as 18 rotas do app', () => {
     expect(SMOKE_ROUTES.map((route) => route.path)).toEqual([
       '/',
       '/?inicio',
       '/hoje',
       '/trilha',
       '/no/n01',
+      '/no/n01?passo=ler',
       '/no/n01/quiz',
       '/no/n01/cartas',
       '/no/n15',
@@ -62,6 +66,17 @@ describe('rotas do smoke', () => {
       '/ajustes',
       '/boas-vindas',
       '/caminho-inexistente',
+    ]);
+  });
+
+  it('sonda os dois temas', () => {
+    expect([...THEMES]).toEqual(['dark', 'light']);
+  });
+
+  it('confere os redirects das rotas antigas', () => {
+    expect([...REDIRECT_CHECKS]).toEqual([
+      { from: '/estatisticas', to: '/progresso' },
+      { from: '/laboratorios', to: '/trilha' },
     ]);
   });
 
@@ -265,5 +280,22 @@ describe('smoke-baseline.json', () => {
       expect(entry.rule).toBe('color-contrast');
       expect(entry.reason?.trim()).toBeTruthy();
     }
+  });
+});
+
+describe('baselineProblems', () => {
+  it('rejeita entrada sem motivo ou com regra diferente de color-contrast', () => {
+    expect(
+      baselineProblems([{ route: '/a', rule: 'color-contrast', reason: 'x' }]),
+    ).toEqual([]);
+    expect(
+      baselineProblems([{ route: '/a', rule: 'color-contrast' }]),
+    ).toHaveLength(1);
+    expect(
+      baselineProblems([{ route: '/a', rule: 'color-contrast', reason: ' ' }]),
+    ).toHaveLength(1);
+    expect(
+      baselineProblems([{ route: '/a', rule: 'button-name', reason: 'x' }]),
+    ).toHaveLength(1);
   });
 });
