@@ -45,20 +45,27 @@ layout does not jump when the page chunk arrives, and it needs no motion, so
 
 ### Budget ratchet
 
-Route splitting cut the entry JS from **397.09 KB gzip** to **67.46 KB gzip**
-on this branch. The build now emits **20 JS chunks** (eleven page chunks plus
-shared vendor/UI chunks). `scripts/budget.config.json` records both
-measurements and lowers `entryJsGzipKb` to **75**, which is
-`ceil(67.46 × 1.10)` — 10% headroom for future shell code. Entry CSS also fell
-from 31.13 KB to 23.76 KB gzip because page styles moved with their chunks. The
-total JS budget (463 KB) is unchanged; splitting moves bytes out of the entry
-without hiding growth elsewhere.
+Route splitting cut the entry JS from **397.09 KB gzip** to **224.91 KB gzip**
+on this branch. That after figure is the whole startup set, not just the
+`<script src>`: `scripts/lib/budget.ts` counts the entry script plus every
+`<link rel="modulepreload">` JS in the built `index.html`. The preloaded chunks
+are the bulk of it — ProgressProvider 123.03 KB, the shared chunk 29.03 KB and
+UI 5.39 KB gzip on top of the entry script's 67.46 KB. Measuring only the script
+tag would report 67.46 KB and understate the real startup cost by more than
+three times.
+
+The build now emits **20 JS chunks** (eleven page chunks plus shared vendor/UI
+chunks). `scripts/budget.config.json` records both measurements and sets
+`entryJsGzipKb` to **248**, which is `ceil(224.91 × 1.10)` — 10% headroom for
+future shell code. Entry CSS also fell from 31.13 KB to 23.79 KB gzip because
+page styles moved with their chunks. The total JS budget (463 KB) is unchanged;
+splitting moves bytes out of the entry without hiding growth elsewhere.
 
 ## Consequences
 
-- The first screen parses ~330 KB gzip less JavaScript. Shared code still
-  loads on demand; the total bundle grows slightly (427.1 → 437.51 KB gzip)
-  because small shared chunks add boundaries.
+- The first screen parses ~172 KB gzip less JavaScript (397.09 → 224.91 KB).
+  Shared code still loads on demand; the total bundle grows slightly
+  (427.1 → 437.46 KB gzip) because small shared chunks add boundaries.
 - `routes.test.tsx` proves the skeleton-then-page contract: "Carregando…" is
   visible synchronously, then the page heading appears. Route assertions await
   the heading because the page is no longer synchronous.
