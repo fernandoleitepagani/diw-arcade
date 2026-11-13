@@ -66,7 +66,7 @@ describe('QuizRound', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/2 de 2/)).toBeInTheDocument();
     expect(screen.getByText(/100%/)).toBeInTheDocument();
-    expect(screen.getByText('+30')).toBeInTheDocument();
+    expect(screen.getByText('+30 XP')).toBeInTheDocument();
     expect(dispatch).toHaveBeenCalledWith({
       type: 'quiz/roundComplete',
       nodeId: 'n07',
@@ -156,9 +156,9 @@ describe('QuizRound', () => {
     await user.keyboard('{Enter}');
     await user.keyboard('{Enter}');
 
-    expect(
-      screen.getByRole('link', { name: 'Próximo passo' }),
-    ).toHaveAttribute('href', '/no/n07');
+    const links = screen.getAllByRole('link');
+    expect(links).toHaveLength(1);
+    expect(links[0]).toHaveAttribute('href', '/no/n01?passo=praticar');
   });
 
   it('mostra a URL, o HTML de exemplo e o JavaScript acima das alternativas', () => {

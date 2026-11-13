@@ -9,17 +9,12 @@ import { Button } from "../../components/pixel/Button/Button";
 import { PixelPanel } from "../../components/pixel/PixelPanel/PixelPanel";
 import { PixelSprite } from "../../components/pixel/PixelSprite/PixelSprite";
 import { SPRITES } from "../../components/pixel/sprites";
-import {
-  NODES,
-  getChallenges,
-  getFlashcards,
-  getQuestions,
-} from "../../content";
 import { pickLine } from "../../content/copy";
 import { formatSource } from "../../content/source";
 import type { Flashcard } from "../../content/schema";
-import type { Outcome, ProgressContent } from "../../lib/progress/events";
-import { getRecommendedNodeId } from "../../lib/progress/recommend";
+import type { Outcome } from "../../lib/progress/events";
+import { STATIC_CONTENT } from "../../lib/progress/content";
+import { getNextStep } from "../../lib/progress/nextStep";
 import {
   getNewIntroducedToday,
   getReviewsDoneToday,
@@ -40,19 +35,6 @@ import { getLimitNotice } from "./limitNotice";
 import "./FlashcardSession.css";
 
 const REQUEUE_WINDOW_MS = 15 * 60_000;
-
-/** Static content for the recommended node and star calculations. */
-const SESSION_CONTENT: ProgressContent = {
-  questions: Object.fromEntries(
-    NODES.map((node) => [node.id, getQuestions(node.id)]),
-  ),
-  flashcards: Object.fromEntries(
-    NODES.map((node) => [node.id, getFlashcards(node.id)]),
-  ),
-  challenges: Object.fromEntries(
-    NODES.map((node) => [node.id, getChallenges(node.id)]),
-  ),
-};
 
 const ISOLATED_SAVE = createEmptySave(new Date(0));
 const ISOLATED_NOW = new Date(0);
@@ -215,12 +197,12 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
   const starsBefore =
     deckNodeId === undefined
       ? undefined
-      : getStars(sessionStart.save, deckNodeId, SESSION_CONTENT);
+      : getStars(sessionStart.save, deckNodeId, STATIC_CONTENT);
   const starsAfter =
     deckNodeId === undefined
       ? undefined
-      : getStars(save, deckNodeId, SESSION_CONTENT);
-  const recommendedId = getRecommendedNodeId(save, SESSION_CONTENT, now);
+      : getStars(save, deckNodeId, STATIC_CONTENT);
+  const nextStep = getNextStep(save, STATIC_CONTENT, now);
 
   const reveal = useCallback(() => setRevealed(true), []);
 
@@ -374,8 +356,7 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
             ]}
             starsBefore={starsBefore}
             starsAfter={starsAfter}
-            nextHref={`/no/${recommendedId}`}
-            mascotMood={remembered > 0 ? "happy" : "idle"}
+            next={nextStep.primary}
           />
           <p className="flashcard-session__next">
             {`Próxima revisão: ${nextLabel}`}

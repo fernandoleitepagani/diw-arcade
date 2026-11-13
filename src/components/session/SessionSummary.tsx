@@ -1,15 +1,16 @@
-import { useId } from 'react';
-import type { ReactNode } from 'react';
-import { Link } from 'react-router';
-import type { Stars } from '../../lib/progress/selectors';
-import { Mascot, type MascotMood } from '../ui';
-import { CountUp } from '../motion';
-import './SessionSummary.css';
+import { useId } from "react";
+import type { ReactNode } from "react";
+import type { Stars } from "../../lib/progress/selectors";
+import { ButtonLink } from "../pixel/Button/Button";
+import { PixelSprite } from "../pixel/PixelSprite/PixelSprite";
+import { SPRITES } from "../pixel/sprites";
+import type { NextAction } from "../../lib/progress/nextStep";
+import "./SessionSummary.css";
 
 const MODES = [
-  { key: 'quiz', label: 'quiz' },
-  { key: 'cards', label: 'cartas' },
-  { key: 'code', label: 'código' },
+  { key: "quiz", label: "quiz" },
+  { key: "cards", label: "cartas" },
+  { key: "code", label: "código" },
 ] as const;
 
 const NO_STARS: Stars = { quiz: false, cards: false, code: false };
@@ -25,10 +26,8 @@ export interface SessionSummaryProps {
   stats: SessionStat[];
   starsBefore?: Stars;
   starsAfter?: Stars;
-  nextHref: string;
-  nextLabel?: string;
+  next: Pick<NextAction, "label" | "href">;
   secondary?: ReactNode;
-  mascotMood: MascotMood;
 }
 
 function starsLabel(before: Stars, after: Stars): string {
@@ -37,8 +36,8 @@ function starsLabel(before: Stars, after: Stars): string {
   ).map((mode) => mode.label);
 
   return earned.length === 0
-    ? 'Nenhuma estrela nova nesta rodada'
-    : `Estrelas conquistadas: ${earned.join(', ')}`;
+    ? "Nenhuma estrela nova nesta rodada"
+    : `Estrelas conquistadas: ${earned.join(", ")}`;
 }
 
 export function SessionSummary({
@@ -47,28 +46,23 @@ export function SessionSummary({
   stats,
   starsBefore,
   starsAfter,
-  nextHref,
-  nextLabel = 'Próximo passo',
+  next,
   secondary,
-  mascotMood,
 }: SessionSummaryProps) {
   const titleId = useId();
   const before = starsBefore ?? NO_STARS;
 
   return (
     <section className="session-summary" aria-labelledby={titleId}>
-      <Mascot mood={mascotMood} size={80} />
+      <PixelSprite
+        rows={SPRITES.bit.rows}
+        palette={SPRITES.bit.palette}
+        scale={6}
+      />
       <h2 id={titleId} className="session-summary__title">
         {title}
       </h2>
-      <p className="session-summary__xp">
-        <CountUp
-          prefix="+"
-          value={xp}
-          className="session-summary__xp-value"
-        />
-        <span className="session-summary__xp-label">XP</span>
-      </p>
+      <p className="session-summary__xp">{`+${xp} XP`}</p>
 
       <dl className="session-summary__stats">
         {stats.map((stat, index) => (
@@ -93,16 +87,16 @@ export function SessionSummary({
               const on = starsAfter[mode.key];
               const isNew = on && !before[mode.key];
               const classes = [
-                'session-summary__star',
-                on ? 'session-summary__star--on' : '',
-                isNew ? 'session-summary__star--new' : '',
+                "session-summary__star",
+                on ? "session-summary__star--on" : "",
+                isNew ? "session-summary__star--new" : "",
               ]
                 .filter(Boolean)
-                .join(' ');
+                .join(" ");
 
               return (
                 <span key={mode.key} className={classes} aria-hidden="true">
-                  {on ? '★' : '☆'}
+                  {on ? "★" : "☆"}
                 </span>
               );
             })}
@@ -111,9 +105,9 @@ export function SessionSummary({
       ) : null}
 
       <div className="session-summary__actions">
-        <Link className="session-summary__next" to={nextHref}>
-          {nextLabel}
-        </Link>
+        <ButtonLink className="session-summary__next" to={next.href}>
+          {next.label}
+        </ButtonLink>
         {secondary}
       </div>
     </section>
