@@ -257,7 +257,7 @@ describe('checagem da página renderizada', () => {
 describe('smoke-baseline.json', () => {
   it('exige um motivo escrito e só tolera color-contrast', () => {
     const entries = JSON.parse(
-      readFileSync(new URL('../smoke-baseline.json', import.meta.url), 'utf8'),
+      readFileSync('scripts/smoke-baseline.json', 'utf8'),
     ) as { route: string; rule: string; reason?: string }[];
     for (const entry of entries) {
       expect(entry.rule).toBe('color-contrast');
