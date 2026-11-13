@@ -274,15 +274,15 @@
   {
     "id": "n14-f035",
     "nodeId": "n14",
-    "front": "O que acontece ao tentar atribuir outro valor a uma constante?",
-    "back": "O motor lança um `TypeError`: a ligação criada por `const` não pode ser reatribuída.",
+    "front": "O que a declaração `const API_URL` define no `script.js`?",
+    "back": "Define a URL base da API local: `http://localhost:3001/alunos`, endereço do JSON Server criado a partir do `db.json`.",
     "source": {
       "kind": "repo",
       "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
-      "startLine": 2,
+      "startLine": 1,
       "endLine": 2
     },
-    "evidence": "const API_URL = \"http://localhost:3001/alunos\";"
+    "evidence": "// Endereço da \"API\" criada pelo JSON Server a partir do db.json\nconst API_URL = \"http://localhost:3001/alunos\";"
   },
   {
     "id": "n14-f036",

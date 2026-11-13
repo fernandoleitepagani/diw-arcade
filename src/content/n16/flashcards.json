@@ -58,7 +58,7 @@
   {
     "id": "n16-f008",
     "nodeId": "n16",
-    "front": "No exemplo, que tipo têm `lazy` e `married`?",
+    "front": "No JSON de exemplo, de que tipo são os valores `\"lazy\": false` e `\"married\": null`?",
     "back": "`lazy` é boolean (`false`) e `married` é null.",
     "source": { "aula": 240, "slide": 10 },
     "evidence": "\"lazy\": false,\n \"married\": null"
