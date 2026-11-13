@@ -15,6 +15,20 @@ const INDEX_HTML = `<!doctype html>
 </html>
 `;
 
+const INDEX_WITH_PRELOADS = `<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <script type="module" crossorigin src="/assets/index-abc123.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/ProgressProvider-ghi789.js">
+    <link rel="modulepreload" href="/assets/shared-jkl012.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-def456.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
+`;
+
 const LIMITS: BudgetSizes = {
   entryJsGzipKb: 130,
   entryCssGzipKb: 12,
@@ -27,6 +41,24 @@ describe('findEntryAssets', () => {
       js: ['/assets/index-abc123.js'],
       css: ['/assets/index-def456.css'],
     });
+  });
+
+  it('inclui na entrada todo JS modulepreloaded pelo index.html', () => {
+    expect(findEntryAssets(INDEX_WITH_PRELOADS)).toEqual({
+      js: [
+        '/assets/index-abc123.js',
+        '/assets/ProgressProvider-ghi789.js',
+        '/assets/shared-jkl012.js',
+      ],
+      css: ['/assets/index-def456.css'],
+    });
+  });
+
+  it('não repete um módulo que aparece no script e no modulepreload', () => {
+    const html = `<script type="module" src="/assets/index-abc123.js"></script>
+      <link rel="modulepreload" href="/assets/index-abc123.js">`;
+
+    expect(findEntryAssets(html).js).toEqual(['/assets/index-abc123.js']);
   });
 });
 

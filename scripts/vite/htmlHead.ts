@@ -66,6 +66,39 @@ export function absolutizeSocialUrls(
   );
 }
 
+const HTML_ESCAPES: Record<string, string> = {
+  '&': '&amp;',
+  '"': '&quot;',
+  '<': '&lt;',
+  '>': '&gt;',
+};
+
+function escapeHtml(value: string): string {
+  return value.replace(/[&"<>]/g, (char) => HTML_ESCAPES[char] ?? char);
+}
+
+/** Meta og:url absoluta e escapada; indefinida quando não há URL do site. */
+export function ogUrlTag(siteUrl: string | undefined): string | undefined {
+  if (!siteUrl) {
+    return undefined;
+  }
+  return `<meta property="og:url" content="${escapeHtml(new URL(siteUrl).href)}" />`;
+}
+
+/** Injeta a og:url no head quando ele ainda não a declara. */
+export function withOgUrl(html: string, siteUrl: string | undefined): string {
+  if (!siteUrl) {
+    return html;
+  }
+
+  if (/<meta\b[^>]*\bproperty\s*=\s*["']og:url["']/i.test(html)) {
+    return html;
+  }
+
+  const tag = ogUrlTag(siteUrl);
+  return tag ? html.replace('</head>', `    ${tag}\n  </head>`) : html;
+}
+
 function resolveSiteUrl(env: NodeJS.ProcessEnv): string | undefined {
   const configured = env.SITE_URL?.trim();
   if (configured) {
@@ -83,9 +116,10 @@ export function htmlHead(): Plugin {
     transformIndexHtml: {
       order: 'post',
       handler(html, ctx) {
-        const withSocialUrls = absolutizeSocialUrls(
-          html,
-          resolveSiteUrl(process.env),
+        const siteUrl = resolveSiteUrl(process.env);
+        const withSocialUrls = withOgUrl(
+          absolutizeSocialUrls(html, siteUrl),
+          siteUrl,
         );
         const tags = fontPreloadTags(Object.keys(ctx.bundle ?? {}));
         if (tags.length === 0) {

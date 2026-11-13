@@ -34,7 +34,11 @@ function attribute(tag: string, name: string): string | undefined {
   return match?.[1];
 }
 
-/** Assets carregados diretamente pelo index.html do build. */
+/**
+ * Assets de inicialização carregados pelo index.html do build: scripts de
+ * entrada e chunks modulepreloaded (o JS que o navegador busca antes da
+ * primeira tela).
+ */
 export function findEntryAssets(indexHtml: string): {
   js: string[];
   css: string[];
@@ -53,6 +57,15 @@ export function findEntryAssets(indexHtml: string): {
     const tag = match[0];
     const href = attribute(tag, 'href');
     const rel = attribute(tag, 'rel')?.toLowerCase().split(/\s+/);
+    const path = href?.split(/[?#]/, 1)[0] ?? '';
+    if (
+      href &&
+      rel?.includes('modulepreload') &&
+      path.endsWith('.js') &&
+      !js.includes(href)
+    ) {
+      js.push(href);
+    }
     if (href && rel?.includes('stylesheet') && !css.includes(href)) {
       css.push(href);
     }
