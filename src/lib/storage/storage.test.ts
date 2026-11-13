@@ -248,6 +248,41 @@ describe('loadSave v1 migration', () => {
   });
 });
 
+describe('loadSave v1 migration persistence', () => {
+  const v1Raw = () => JSON.stringify({ ...minimalSave(), xpTotal: 77 });
+
+  it('writes one backup across repeated loads and loads v2 the second time', () => {
+    const store = new MemoryStorage();
+    store.setItem(SAVE_KEY, v1Raw());
+
+    const first = loadSave(store, NOW);
+    const second = loadSave(store, new Date(NOW.getTime() + 1000));
+
+    expect(first.recovered).toBe('migrated');
+    expect(second.recovered).toBe('loaded');
+    expect(second.save).toEqual(first.save);
+    expect(store.backupValues()).toEqual([v1Raw()]);
+  });
+
+  it('leaves SAVE_KEY untouched when the backup fails', () => {
+    const raw = v1Raw();
+    const writes: string[] = [];
+    const store: StorageLike = {
+      getItem: () => raw,
+      setItem: (key) => {
+        writes.push(key);
+        throw new DOMException('cheio', 'QuotaExceededError');
+      },
+      removeItem: () => {},
+    };
+
+    const result = loadSave(store, NOW);
+
+    expect(result.recovered).toBe('migrated');
+    expect(writes.includes(SAVE_KEY)).toBe(false);
+  });
+});
+
 describe('persistSave', () => {
   it('writes a save that a later load reads back', () => {
     const store = new MemoryStorage();

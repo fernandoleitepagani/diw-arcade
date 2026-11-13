@@ -7,6 +7,7 @@ import {
   getNewIntroducedToday,
   getReviewsDoneToday,
   getStars,
+  isPrimerRead,
 } from './selectors';
 
 const NOW = new Date('2026-01-05T12:00:00.000Z');
@@ -166,5 +167,11 @@ describe('getLabProgress', () => {
     };
 
     expect(getLabProgress(save, 'lab-01')).toEqual({ done: 1, total: 2 });
+  });
+});
+
+describe('isPrimerRead', () => {
+  it('ignores inherited object keys', () => {
+    expect(isPrimerRead(createEmptySave(NOW), 'constructor' as never)).toBe(false);
   });
 });
