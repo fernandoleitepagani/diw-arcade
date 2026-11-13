@@ -41,7 +41,8 @@ describe('parseImport', () => {
   });
 
   it('imports a v1 export with primersRead {} and all progress', () => {
-    const { primersRead: _drop, ...v1 } = { ...sampleSave(), schemaVersion: 1 };
+    const v1: Record<string, unknown> = { ...sampleSave(), schemaVersion: 1 };
+    delete v1.primersRead;
     const result = parseImport(
       JSON.stringify({ app: 'diw-arcade', schemaVersion: 1, exportedAt: NOW.toISOString(), save: v1 }),
     );
@@ -68,7 +69,8 @@ describe('parseImport', () => {
   });
 
   it('defaults a missing primersRead under v2', () => {
-    const { primersRead: _drop, ...v2 } = sampleSave();
+    const v2: Record<string, unknown> = { ...sampleSave() };
+    delete v2.primersRead;
     const result = parseImport(
       JSON.stringify({ ...exportSave(sampleSave(), NOW), save: v2 }),
     );
