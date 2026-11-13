@@ -1,5 +1,5 @@
 import vm from 'node:vm';
-import { parentPort } from 'node:worker_threads';
+import { parentPort, workerData } from 'node:worker_threads';
 import { JSDOM } from 'jsdom';
 
 const SCRIPT_TIMEOUT_MS = 1000;
@@ -488,3 +488,12 @@ async function run(spec) {
 parentPort.on('message', (spec) => {
   void run(spec).then((result) => parentPort.postMessage(result));
 });
+
+// Startup is reported separately from execution so the runner can bill module
+// loading to a generous startup budget instead of the snippet watchdog.
+const startupDelayMs =
+  typeof workerData?.startupDelayMs === 'number' ? workerData.startupDelayMs : 0;
+if (startupDelayMs > 0) {
+  await new Promise((resolve) => setTimeout(resolve, startupDelayMs));
+}
+parentPort.postMessage({ type: 'ready' });

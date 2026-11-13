@@ -355,6 +355,19 @@ describe('limites', () => {
     await expect(runJs("console.log('depois');")).resolves.toBe('depois');
   });
 
+  it('corta um loop de microtasks no dom pelo relógio de parede', async () => {
+    const started = Date.now();
+    const result = await runner.run({
+      env: 'dom',
+      source:
+        'function proxima() { Promise.resolve().then(proxima); } Promise.resolve().then(proxima);',
+    });
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.reason).toBe('timeout');
+    expect(Date.now() - started).toBeLessThan(3000);
+  });
+
   it('limita setInterval infinito', async () => {
     const result = await runner.run({
       env: 'js',
@@ -363,6 +376,37 @@ describe('limites', () => {
 
     expect(result.ok).toBe(false);
     if (!result.ok) expect(result.reason).toBe('limit');
+  });
+});
+
+describe('inicialização do worker', () => {
+  it('não cobra a inicialização lenta do executor do tempo de execução', async () => {
+    const slow = createSnippetRunner({ startupDelayMs: 3000, timeoutMs: 500 });
+    try {
+      await expect(
+        slow.run({ env: 'js', source: "console.log('ok')" }),
+      ).resolves.toEqual({ ok: true, output: 'ok' });
+    } finally {
+      await slow.close();
+    }
+  }, 15000);
+
+  it('reporta um erro de inicialização distinto quando o worker não fica pronto', async () => {
+    const slow = createSnippetRunner({
+      startupTimeoutMs: 100,
+      startupDelayMs: 2000,
+    });
+    try {
+      const result = await slow.run({ env: 'js', source: "console.log('ok')" });
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.reason).toBe('timeout');
+        expect(result.detail).toContain('inicialização');
+      }
+    } finally {
+      await slow.close();
+    }
   });
 });
 
