@@ -44,8 +44,8 @@ function readSave(storage: StorageLike): SaveV1 {
 }
 
 describe('OnboardingPage', () => {
-  it('redireciona uma sessão nova de / para /boas-vindas', async () => {
-    const { router } = renderApp('/', false);
+  it('redireciona uma sessão nova de /hoje para /boas-vindas', async () => {
+    const { router } = renderApp('/hoje', false);
 
     await waitFor(() => {
       expect(router.state.location.pathname).toBe('/boas-vindas');
@@ -64,7 +64,7 @@ describe('OnboardingPage', () => {
 
   it('Tab e Enter em Intenso definem a meta 100 e levam à árvore', async () => {
     const user = userEvent.setup();
-    const { router, storage } = renderApp('/', false);
+    const { router, storage } = renderApp('/hoje', false);
 
     const regular = await screen.findByRole('button', {
       name: 'Regular · 50 XP',
@@ -92,7 +92,7 @@ describe('OnboardingPage', () => {
 
   it('Esc pula a escolha e mantém a meta padrão 50', async () => {
     const user = userEvent.setup();
-    const { router, storage } = renderApp('/', false);
+    const { router, storage } = renderApp('/hoje', false);
 
     await screen.findByRole('button', { name: 'Regular · 50 XP' });
     await user.keyboard('{Escape}');
@@ -108,7 +108,7 @@ describe('OnboardingPage', () => {
 
   it('Pular conclui o onboarding sem trocar a meta', async () => {
     const user = userEvent.setup();
-    const { router, storage } = renderApp('/', false);
+    const { router, storage } = renderApp('/hoje', false);
 
     await user.click(await screen.findByRole('button', { name: 'Pular' }));
 

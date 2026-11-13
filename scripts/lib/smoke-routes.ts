@@ -11,6 +11,8 @@ export interface SmokeRoute {
 
 /** Rotas percorridas pelo smoke de navegador, na ordem em que rodam. */
 export const SMOKE_ROUTES: readonly SmokeRoute[] = [
+  { path: '/', label: 'landing', seed: 'fresh' },
+  { path: '/?inicio', label: 'landing com onboarding' },
   { path: '/hoje', label: 'hoje' },
   { path: '/trilha', label: 'trilha' },
   { path: '/no/n01', label: 'nó' },

@@ -27,7 +27,7 @@ export function Layout() {
         </a>
 
         <header className="shell__header">
-          <NavLink className="shell__brand" to="/">
+          <NavLink className="shell__brand" to="/?inicio">
             DIW Arcade
           </NavLink>
 
