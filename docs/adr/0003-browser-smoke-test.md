@@ -31,23 +31,45 @@ the same-origin error check can see it.
 
 Every app route except `/boas-vindas` runs with an onboarded save seeded in
 `localStorage`; the welcome route starts from a fresh save so it is not
-redirected away.
+redirected away. The seed is an `addInitScript`, which also runs inside the
+sandboxed preview iframe of `/desafio`; it guards with `window === window.top`
+and a `try/catch`, because `localStorage` throws on the iframe's opaque origin.
 
 ### What fails the gate
 
-For each route × viewport:
+The routes are lazy: the shell renders long before the page chunk loads, and
+the skeleton has no `main h1`. Each route therefore waits for `main h1`
+(15000 ms) *before* measuring anything; a route whose heading never appears
+fails and its skeleton is never measured.
+
+For each route × viewport, in this order:
 
 - `#root` never gets an element with visible text within 5000 ms;
-- a `console` error or an uncaught `pageerror`;
-- a same-origin response with status 4xx or 5xx;
+- `main h1` never appears within 15000 ms (lazy route never rendered);
 - `documentElement.scrollWidth` exceeds the viewport width by more than 1 px;
 - an axe violation of impact `serious` or `critical` that is not in the
-  baseline.
+  baseline;
+- an interaction probe fails: on `/no/n01/quiz` the smoke answers the current
+  question and requires the feedback panel, and on `/no/n01/cartas` it reveals
+  the card and requires the back of the card;
+- a `console` error or an uncaught `pageerror`;
+- a same-origin response with status 4xx or 5xx.
+
+The last two groups are read only at the very end, after axe and the probes, so
+errors emitted while the page is being inspected are not lost.
+
+`scripts/lib/smoke-routes.ts` owns this ordering behind `checkRoutePage()` and
+a small `RoutePage` seam. The unit tests drive the seam with an in-memory
+harness and fix the order: blank check, heading wait, overflow, axe, probe,
+error collection.
 
 `--selftest` serves `scripts/smoke-fixtures/blank/index.html` (an empty
-`#root`) and asserts the blank detector fires. A detector that never fires
-would make the selftest fail; one that always fires would make the main smoke
-fail, so the pair pins the behaviour in both directions.
+`#root`) and asserts the blank detector fires, then serves an inline overflow
+fixture (built as a string in code, styled with the
+`main h1 { min-width: 4000px; }` mutant from the review) and asserts the
+overflow detector fires. A detector that never fires makes the selftest fail;
+one that always fires makes the main smoke fail, so the pair pins the
+behaviour in both directions.
 
 ### Baseline ratchet
 
