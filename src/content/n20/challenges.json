@@ -1,0 +1,392 @@
+[
+  {
+    "id": "n20-c01",
+    "nodeId": "n20",
+    "title": "Nome obrigatório e e-mail válido",
+    "kind": "js",
+    "goal": "Ao enviar o formulário, mostre uma mensagem quando o nome estiver vazio e outra quando o e-mail não tiver um formato válido. Com os dois campos corretos, exiba a confirmação sem recarregar a página.",
+    "starter": {
+      "html": "<form id=\"form-cadastro\" novalidate>\n  <label for=\"nome\">Nome</label>\n  <input id=\"nome\" name=\"nome\" type=\"text\" required>\n  <p id=\"erro-nome\" class=\"erro\"></p>\n  <label for=\"email\">E-mail</label>\n  <input id=\"email\" name=\"email\" type=\"email\" required>\n  <p id=\"erro-email\" class=\"erro\"></p>\n  <button type=\"submit\" id=\"enviar\">Enviar</button>\n  <p id=\"sucesso\" class=\"sucesso\"></p>\n</form>",
+      "css": "form {\n  max-width: 28rem;\n  margin: 2rem auto;\n  display: grid;\n  gap: 0.4rem;\n  font-family: system-ui, sans-serif;\n}\nlabel {\n  font-weight: 600;\n}\ninput {\n  padding: 0.55rem 0.7rem;\n  border: 1px solid #475569;\n  border-radius: 0.35rem;\n  font: inherit;\n}\nbutton {\n  margin-top: 0.5rem;\n  padding: 0.6rem 1rem;\n  border: 0;\n  border-radius: 0.35rem;\n  background: #1d4ed8;\n  color: #ffffff;\n  font: inherit;\n  cursor: pointer;\n}\n.erro {\n  min-height: 1.2rem;\n  margin: 0;\n  color: #b91c1c;\n  font-size: 0.9rem;\n}\n.sucesso {\n  margin: 0;\n  color: #15803d;\n  font-weight: 600;\n}",
+      "js": "// Valide o nome e o e-mail no evento submit do formulário.\n"
+    },
+    "solution": {
+      "html": "<form id=\"form-cadastro\" novalidate>\n  <label for=\"nome\">Nome</label>\n  <input id=\"nome\" name=\"nome\" type=\"text\" required>\n  <p id=\"erro-nome\" class=\"erro\"></p>\n  <label for=\"email\">E-mail</label>\n  <input id=\"email\" name=\"email\" type=\"email\" required>\n  <p id=\"erro-email\" class=\"erro\"></p>\n  <button type=\"submit\" id=\"enviar\">Enviar</button>\n  <p id=\"sucesso\" class=\"sucesso\"></p>\n</form>",
+      "css": "form {\n  max-width: 28rem;\n  margin: 2rem auto;\n  display: grid;\n  gap: 0.4rem;\n  font-family: system-ui, sans-serif;\n}\nlabel {\n  font-weight: 600;\n}\ninput {\n  padding: 0.55rem 0.7rem;\n  border: 1px solid #475569;\n  border-radius: 0.35rem;\n  font: inherit;\n}\nbutton {\n  margin-top: 0.5rem;\n  padding: 0.6rem 1rem;\n  border: 0;\n  border-radius: 0.35rem;\n  background: #1d4ed8;\n  color: #ffffff;\n  font: inherit;\n  cursor: pointer;\n}\n.erro {\n  min-height: 1.2rem;\n  margin: 0;\n  color: #b91c1c;\n  font-size: 0.9rem;\n}\n.sucesso {\n  margin: 0;\n  color: #15803d;\n  font-weight: 600;\n}",
+      "js": "const form = document.querySelector('#form-cadastro');\nconst nome = document.querySelector('#nome');\nconst email = document.querySelector('#email');\nconst erroNome = document.querySelector('#erro-nome');\nconst erroEmail = document.querySelector('#erro-email');\nconst sucesso = document.querySelector('#sucesso');\n\nform.addEventListener('submit', (evento) => {\n  evento.preventDefault();\n\n  const nomeLimpo = nome.value.trim();\n  const emailLimpo = email.value.trim();\n  const emailValido = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(emailLimpo);\n\n  erroNome.textContent = nomeLimpo ? '' : 'Informe seu nome.';\n  erroEmail.textContent = emailValido ? '' : 'Informe um e-mail válido.';\n  sucesso.textContent =\n    nomeLimpo && emailValido ? 'Cadastro enviado com sucesso.' : '';\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "campo-nome-existe",
+        "label": "O campo #nome existe na página.",
+        "check": { "kind": "exists", "selector": "#nome" }
+      },
+      {
+        "id": "campo-email-existe",
+        "label": "O campo #email existe na página.",
+        "check": { "kind": "exists", "selector": "#email" }
+      },
+      {
+        "id": "nome-vazio",
+        "label": "Com o nome vazio, #erro-nome mostra a mensagem de nome obrigatório.",
+        "before": [
+          { "do": "input", "selector": "#nome", "value": "" },
+          { "do": "input", "selector": "#email", "value": "ana@exemplo.com" },
+          { "do": "click", "selector": "#enviar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#erro-nome",
+          "match": { "equals": "Informe seu nome." }
+        }
+      },
+      {
+        "id": "email-invalido",
+        "label": "Com um e-mail sem formato válido, #erro-email mostra a mensagem de erro.",
+        "before": [
+          { "do": "input", "selector": "#nome", "value": "Ana" },
+          { "do": "input", "selector": "#email", "value": "ana-sem-arroba" },
+          { "do": "click", "selector": "#enviar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#erro-email",
+          "match": { "equals": "Informe um e-mail válido." }
+        }
+      },
+      {
+        "id": "dados-validos",
+        "label": "Com nome e e-mail válidos, #sucesso mostra a confirmação.",
+        "before": [
+          { "do": "input", "selector": "#nome", "value": "Ana" },
+          { "do": "input", "selector": "#email", "value": "ana@exemplo.com" },
+          { "do": "click", "selector": "#enviar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#sucesso",
+          "match": { "equals": "Cadastro enviado com sucesso." }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Escute o evento `submit` do formulário e chame `evento.preventDefault()` para impedir o recarregamento.",
+      "Use `nome.value.trim()` para tratar um nome só com espaços como vazio e teste o e-mail com uma expressão regular que exija `@` e um ponto.",
+      "Escreva as mensagens em `#erro-nome` e `#erro-email`; quando os dois campos estiverem corretos, mostre a mensagem em `#sucesso`."
+    ],
+    "source": { "aula": 162, "slide": 8 },
+    "evidence": "um endereço de e-mail correto (com o caracter @ e o nome"
+  },
+  {
+    "id": "n20-c02",
+    "nodeId": "n20",
+    "title": "Confirmação de senha",
+    "kind": "js",
+    "goal": "Ao enviar o formulário, compare os campos de senha e confirmação: se forem diferentes, mostre a mensagem de erro em #erro-confirmacao; se forem iguais, mostre a confirmação em #sucesso.",
+    "starter": {
+      "html": "<form id=\"form-senha\" novalidate>\n  <label for=\"senha\">Senha</label>\n  <input id=\"senha\" name=\"senha\" type=\"password\" required>\n  <label for=\"confirmacao\">Confirme a senha</label>\n  <input id=\"confirmacao\" name=\"confirmacao\" type=\"password\" required>\n  <p id=\"erro-confirmacao\" class=\"erro\"></p>\n  <button type=\"submit\" id=\"cadastrar\">Cadastrar</button>\n  <p id=\"sucesso\" class=\"sucesso\"></p>\n</form>",
+      "css": "form {\n  max-width: 28rem;\n  margin: 2rem auto;\n  display: grid;\n  gap: 0.4rem;\n  font-family: system-ui, sans-serif;\n}\nlabel {\n  font-weight: 600;\n}\ninput {\n  padding: 0.55rem 0.7rem;\n  border: 1px solid #475569;\n  border-radius: 0.35rem;\n  font: inherit;\n}\nbutton {\n  margin-top: 0.5rem;\n  padding: 0.6rem 1rem;\n  border: 0;\n  border-radius: 0.35rem;\n  background: #0f766e;\n  color: #ffffff;\n  font: inherit;\n  cursor: pointer;\n}\n.erro {\n  min-height: 1.2rem;\n  margin: 0;\n  color: #b91c1c;\n  font-size: 0.9rem;\n}\n.sucesso {\n  margin: 0;\n  color: #15803d;\n  font-weight: 600;\n}",
+      "js": "// Compare os dois campos de senha no evento submit do formulário.\n"
+    },
+    "solution": {
+      "html": "<form id=\"form-senha\" novalidate>\n  <label for=\"senha\">Senha</label>\n  <input id=\"senha\" name=\"senha\" type=\"password\" required>\n  <label for=\"confirmacao\">Confirme a senha</label>\n  <input id=\"confirmacao\" name=\"confirmacao\" type=\"password\" required>\n  <p id=\"erro-confirmacao\" class=\"erro\"></p>\n  <button type=\"submit\" id=\"cadastrar\">Cadastrar</button>\n  <p id=\"sucesso\" class=\"sucesso\"></p>\n</form>",
+      "css": "form {\n  max-width: 28rem;\n  margin: 2rem auto;\n  display: grid;\n  gap: 0.4rem;\n  font-family: system-ui, sans-serif;\n}\nlabel {\n  font-weight: 600;\n}\ninput {\n  padding: 0.55rem 0.7rem;\n  border: 1px solid #475569;\n  border-radius: 0.35rem;\n  font: inherit;\n}\nbutton {\n  margin-top: 0.5rem;\n  padding: 0.6rem 1rem;\n  border: 0;\n  border-radius: 0.35rem;\n  background: #0f766e;\n  color: #ffffff;\n  font: inherit;\n  cursor: pointer;\n}\n.erro {\n  min-height: 1.2rem;\n  margin: 0;\n  color: #b91c1c;\n  font-size: 0.9rem;\n}\n.sucesso {\n  margin: 0;\n  color: #15803d;\n  font-weight: 600;\n}",
+      "js": "const form = document.querySelector('#form-senha');\nconst senha = document.querySelector('#senha');\nconst confirmacao = document.querySelector('#confirmacao');\nconst erro = document.querySelector('#erro-confirmacao');\nconst sucesso = document.querySelector('#sucesso');\n\nform.addEventListener('submit', (evento) => {\n  evento.preventDefault();\n\n  if (senha.value === confirmacao.value) {\n    erro.textContent = '';\n    sucesso.textContent = 'Senha cadastrada com sucesso.';\n  } else {\n    erro.textContent = 'As senhas não conferem.';\n    sucesso.textContent = '';\n  }\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "campo-senha-existe",
+        "label": "O campo #senha existe na página.",
+        "check": { "kind": "exists", "selector": "#senha" }
+      },
+      {
+        "id": "campo-confirmacao-existe",
+        "label": "O campo #confirmacao existe na página.",
+        "check": { "kind": "exists", "selector": "#confirmacao" }
+      },
+      {
+        "id": "senhas-diferentes",
+        "label": "Com senhas diferentes, #erro-confirmacao mostra o aviso.",
+        "before": [
+          { "do": "input", "selector": "#senha", "value": "segredo123" },
+          { "do": "input", "selector": "#confirmacao", "value": "segredo124" },
+          { "do": "click", "selector": "#cadastrar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#erro-confirmacao",
+          "match": { "equals": "As senhas não conferem." }
+        }
+      },
+      {
+        "id": "senhas-iguais",
+        "label": "Com senhas iguais, #sucesso mostra a confirmação.",
+        "before": [
+          { "do": "input", "selector": "#senha", "value": "segredo123" },
+          { "do": "input", "selector": "#confirmacao", "value": "segredo123" },
+          { "do": "click", "selector": "#cadastrar" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#sucesso",
+          "match": { "equals": "Senha cadastrada com sucesso." }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "No evento `submit`, chame `evento.preventDefault()` antes de qualquer validação.",
+      "Compare `senha.value` com `confirmacao.value` usando `===` para evitar coerção de tipos.",
+      "Quando os valores forem diferentes, escreva a mensagem em `#erro-confirmacao`; quando forem iguais, mostre a confirmação em `#sucesso`."
+    ],
+    "source": { "aula": 162, "slide": 3 },
+    "evidence": "<input type=\"password\" name=\"senha\" value=\"\">"
+  },
+  {
+    "id": "n20-c03",
+    "nodeId": "n20",
+    "title": "Total do pedido",
+    "kind": "js",
+    "goal": "Ao enviar o formulário, calcule quantidade × preço unitário e mostre o resultado com duas casas decimais em #total, sem recarregar a página.",
+    "starter": {
+      "html": "<form id=\"form-compra\" novalidate>\n  <label for=\"quantidade\">Quantidade</label>\n  <input id=\"quantidade\" name=\"quantidade\" type=\"number\" min=\"1\" value=\"1\">\n  <label for=\"preco\">Preço unitário</label>\n  <input id=\"preco\" name=\"preco\" type=\"number\" step=\"0.01\" min=\"0\" value=\"10\">\n  <button type=\"submit\" id=\"calcular\">Calcular</button>\n  <p id=\"total\">0.00</p>\n</form>",
+      "css": "form {\n  max-width: 28rem;\n  margin: 2rem auto;\n  display: grid;\n  gap: 0.4rem;\n  font-family: system-ui, sans-serif;\n}\nlabel {\n  font-weight: 600;\n}\ninput {\n  padding: 0.55rem 0.7rem;\n  border: 1px solid #475569;\n  border-radius: 0.35rem;\n  font: inherit;\n}\nbutton {\n  margin-top: 0.5rem;\n  padding: 0.6rem 1rem;\n  border: 0;\n  border-radius: 0.35rem;\n  background: #7c3aed;\n  color: #ffffff;\n  font: inherit;\n  cursor: pointer;\n}\n#total {\n  margin: 0.5rem 0 0;\n  font-size: 1.25rem;\n  font-weight: 700;\n}",
+      "js": "// Leia os valores, multiplique e mostre o total em #total.\n"
+    },
+    "solution": {
+      "html": "<form id=\"form-compra\" novalidate>\n  <label for=\"quantidade\">Quantidade</label>\n  <input id=\"quantidade\" name=\"quantidade\" type=\"number\" min=\"1\" value=\"1\">\n  <label for=\"preco\">Preço unitário</label>\n  <input id=\"preco\" name=\"preco\" type=\"number\" step=\"0.01\" min=\"0\" value=\"10\">\n  <button type=\"submit\" id=\"calcular\">Calcular</button>\n  <p id=\"total\">0.00</p>\n</form>",
+      "css": "form {\n  max-width: 28rem;\n  margin: 2rem auto;\n  display: grid;\n  gap: 0.4rem;\n  font-family: system-ui, sans-serif;\n}\nlabel {\n  font-weight: 600;\n}\ninput {\n  padding: 0.55rem 0.7rem;\n  border: 1px solid #475569;\n  border-radius: 0.35rem;\n  font: inherit;\n}\nbutton {\n  margin-top: 0.5rem;\n  padding: 0.6rem 1rem;\n  border: 0;\n  border-radius: 0.35rem;\n  background: #7c3aed;\n  color: #ffffff;\n  font: inherit;\n  cursor: pointer;\n}\n#total {\n  margin: 0.5rem 0 0;\n  font-size: 1.25rem;\n  font-weight: 700;\n}",
+      "js": "const form = document.querySelector('#form-compra');\nconst quantidade = document.querySelector('#quantidade');\nconst preco = document.querySelector('#preco');\nconst total = document.querySelector('#total');\n\nform.addEventListener('submit', (evento) => {\n  evento.preventDefault();\n\n  const qtd = Number(quantidade.value) || 0;\n  const valor = Number(preco.value) || 0;\n  total.textContent = (qtd * valor).toFixed(2);\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "campo-quantidade-existe",
+        "label": "O campo #quantidade existe na página.",
+        "check": { "kind": "exists", "selector": "#quantidade" }
+      },
+      {
+        "id": "campo-preco-existe",
+        "label": "O campo #preco existe na página.",
+        "check": { "kind": "exists", "selector": "#preco" }
+      },
+      {
+        "id": "total-tres-por-quatro-e-cinquenta",
+        "label": "3 unidades a 4,50 mostram 13.50 em #total.",
+        "before": [
+          { "do": "input", "selector": "#quantidade", "value": "3" },
+          { "do": "input", "selector": "#preco", "value": "4.50" },
+          { "do": "click", "selector": "#calcular" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#total",
+          "match": { "equals": "13.50" }
+        }
+      },
+      {
+        "id": "total-dois-por-dez",
+        "label": "2 unidades a 10,00 mostram 20.00 em #total.",
+        "before": [
+          { "do": "input", "selector": "#quantidade", "value": "2" },
+          { "do": "input", "selector": "#preco", "value": "10" },
+          { "do": "click", "selector": "#calcular" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#total",
+          "match": { "equals": "20.00" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Escute o `submit` do formulário e chame `evento.preventDefault()` para manter a página aberta.",
+      "O valor de um input é sempre texto: converta com `Number(quantidade.value)` e `Number(preco.value)`.",
+      "Multiplique os dois números e use `.toFixed(2)` para exibir o resultado com duas casas decimais em `#total`."
+    ],
+    "source": { "aula": 310, "slide": 10 },
+    "evidence": "Manipulação de objetos da página HTML e tratamento de eventos (DOM Document Object Model)"
+  },
+  {
+    "id": "n20-c04",
+    "nodeId": "n20",
+    "title": "Termos liberam a inscrição",
+    "kind": "js",
+    "goal": "Use a caixa #termos para liberar o envio: sem a marcação, mostre o aviso em #mensagem; com a marcação, confirme a inscrição do nome digitado.",
+    "starter": {
+      "html": "<form id=\"form-inscricao\" novalidate>\n  <label for=\"nome\">Nome</label>\n  <input id=\"nome\" name=\"nome\" type=\"text\">\n  <label>\n    <input id=\"termos\" name=\"termos\" type=\"checkbox\">\n    Li e aceito os termos\n  </label>\n  <button type=\"submit\" id=\"inscrever\">Inscrever</button>\n  <p id=\"mensagem\"></p>\n</form>",
+      "css": "form {\n  max-width: 28rem;\n  margin: 2rem auto;\n  display: grid;\n  gap: 0.6rem;\n  font-family: system-ui, sans-serif;\n}\nlabel {\n  font-weight: 600;\n}\ninput[type=\"text\"] {\n  padding: 0.55rem 0.7rem;\n  border: 1px solid #475569;\n  border-radius: 0.35rem;\n  font: inherit;\n}\nbutton {\n  justify-self: start;\n  padding: 0.6rem 1rem;\n  border: 0;\n  border-radius: 0.35rem;\n  background: #b45309;\n  color: #ffffff;\n  font: inherit;\n  cursor: pointer;\n}\n#mensagem {\n  min-height: 1.2rem;\n  margin: 0;\n  font-weight: 600;\n}",
+      "js": "// Verifique termos.checked antes de confirmar a inscrição.\n"
+    },
+    "solution": {
+      "html": "<form id=\"form-inscricao\" novalidate>\n  <label for=\"nome\">Nome</label>\n  <input id=\"nome\" name=\"nome\" type=\"text\">\n  <label>\n    <input id=\"termos\" name=\"termos\" type=\"checkbox\">\n    Li e aceito os termos\n  </label>\n  <button type=\"submit\" id=\"inscrever\">Inscrever</button>\n  <p id=\"mensagem\"></p>\n</form>",
+      "css": "form {\n  max-width: 28rem;\n  margin: 2rem auto;\n  display: grid;\n  gap: 0.6rem;\n  font-family: system-ui, sans-serif;\n}\nlabel {\n  font-weight: 600;\n}\ninput[type=\"text\"] {\n  padding: 0.55rem 0.7rem;\n  border: 1px solid #475569;\n  border-radius: 0.35rem;\n  font: inherit;\n}\nbutton {\n  justify-self: start;\n  padding: 0.6rem 1rem;\n  border: 0;\n  border-radius: 0.35rem;\n  background: #b45309;\n  color: #ffffff;\n  font: inherit;\n  cursor: pointer;\n}\n#mensagem {\n  min-height: 1.2rem;\n  margin: 0;\n  font-weight: 600;\n}",
+      "js": "const form = document.querySelector('#form-inscricao');\nconst nome = document.querySelector('#nome');\nconst termos = document.querySelector('#termos');\nconst mensagem = document.querySelector('#mensagem');\n\nform.addEventListener('submit', (evento) => {\n  evento.preventDefault();\n\n  if (!termos.checked) {\n    mensagem.textContent = 'Aceite os termos para continuar.';\n    return;\n  }\n\n  const nomeLimpo = nome.value.trim();\n  mensagem.textContent = nomeLimpo\n    ? `Inscrição de ${nomeLimpo} confirmada.`\n    : 'Inscrição confirmada.';\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "checkbox-existe",
+        "label": "A caixa de seleção #termos existe na página.",
+        "check": { "kind": "exists", "selector": "#termos" }
+      },
+      {
+        "id": "sem-aceite",
+        "label": "Sem marcar os termos, #mensagem pede o aceite.",
+        "before": [
+          { "do": "input", "selector": "#nome", "value": "Ana" },
+          { "do": "click", "selector": "#inscrever" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#mensagem",
+          "match": { "equals": "Aceite os termos para continuar." }
+        }
+      },
+      {
+        "id": "com-aceite",
+        "label": "Com os termos marcados, #mensagem confirma a inscrição de Ana.",
+        "before": [
+          { "do": "click", "selector": "#termos" },
+          { "do": "click", "selector": "#inscrever" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#mensagem",
+          "match": { "equals": "Inscrição de Ana confirmada." }
+        }
+      },
+      {
+        "id": "aceite-removido",
+        "label": "Ao desmarcar os termos, o envio volta a ser bloqueado.",
+        "before": [
+          { "do": "click", "selector": "#termos" },
+          { "do": "click", "selector": "#inscrever" }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#mensagem",
+          "match": { "equals": "Aceite os termos para continuar." }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "No evento `submit`, chame `evento.preventDefault()` antes de testar a caixa.",
+      "Leia a propriedade `termos.checked`; ela é `true` quando a caixa está marcada e `false` quando não está.",
+      "Use `return` depois de mostrar o aviso para encerrar a função sem confirmar a inscrição."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Mapa PUC Minas/index.html",
+      "startLine": 24,
+      "endLine": 26
+    },
+    "evidence": "<label class=\"filtro\"><input type=\"checkbox\" id=\"soFavoritos\"> Só favoritos</label>"
+  },
+  {
+    "id": "n20-c05",
+    "nodeId": "n20",
+    "title": "Novo contato na tabela",
+    "kind": "js",
+    "goal": "Ao enviar o formulário, acrescente uma linha com nome e e-mail ao corpo da tabela, atualize a prévia #resumo enquanto o usuário digita, limpe os campos depois do envio e não recarregue a página.",
+    "starter": {
+      "html": "<form id=\"form-contato\" novalidate>\n  <label for=\"nome\">Nome</label>\n  <input id=\"nome\" name=\"nome\" type=\"text\">\n  <label for=\"email\">E-mail</label>\n  <input id=\"email\" name=\"email\" type=\"email\">\n  <p id=\"resumo\" aria-live=\"polite\"></p>\n  <button type=\"submit\" id=\"adicionar\">Adicionar contato</button>\n</form>\n<table id=\"tabela\">\n  <thead>\n    <tr><th>Nome</th><th>E-mail</th></tr>\n  </thead>\n  <tbody id=\"corpo\"></tbody>\n</table>",
+      "css": "form {\n  max-width: 34rem;\n  margin: 2rem auto 0;\n  display: grid;\n  gap: 0.4rem;\n  font-family: system-ui, sans-serif;\n}\nlabel {\n  font-weight: 600;\n}\ninput {\n  padding: 0.55rem 0.7rem;\n  border: 1px solid #475569;\n  border-radius: 0.35rem;\n  font: inherit;\n}\nbutton {\n  justify-self: start;\n  margin-top: 0.4rem;\n  padding: 0.6rem 1rem;\n  border: 0;\n  border-radius: 0.35rem;\n  background: #0369a1;\n  color: #ffffff;\n  font: inherit;\n  cursor: pointer;\n}\n#resumo {\n  min-height: 1.2rem;\n  margin: 0;\n  color: #475569;\n  font-size: 0.9rem;\n}\ntable {\n  width: min(34rem, 100%);\n  margin: 1.5rem auto;\n  border-collapse: collapse;\n  font-family: system-ui, sans-serif;\n}\nth,\ntd {\n  padding: 0.55rem 0.7rem;\n  border-bottom: 1px solid #cbd5e1;\n  text-align: left;\n}\nth {\n  background: #e0f2fe;\n}",
+      "js": "// Adicione uma linha ao #corpo, limpe o formulário e atualize a prévia #resumo.\n"
+    },
+    "solution": {
+      "html": "<form id=\"form-contato\" novalidate>\n  <label for=\"nome\">Nome</label>\n  <input id=\"nome\" name=\"nome\" type=\"text\">\n  <label for=\"email\">E-mail</label>\n  <input id=\"email\" name=\"email\" type=\"email\">\n  <p id=\"resumo\" aria-live=\"polite\"></p>\n  <button type=\"submit\" id=\"adicionar\">Adicionar contato</button>\n</form>\n<table id=\"tabela\">\n  <thead>\n    <tr><th>Nome</th><th>E-mail</th></tr>\n  </thead>\n  <tbody id=\"corpo\"></tbody>\n</table>",
+      "css": "form {\n  max-width: 34rem;\n  margin: 2rem auto 0;\n  display: grid;\n  gap: 0.4rem;\n  font-family: system-ui, sans-serif;\n}\nlabel {\n  font-weight: 600;\n}\ninput {\n  padding: 0.55rem 0.7rem;\n  border: 1px solid #475569;\n  border-radius: 0.35rem;\n  font: inherit;\n}\nbutton {\n  justify-self: start;\n  margin-top: 0.4rem;\n  padding: 0.6rem 1rem;\n  border: 0;\n  border-radius: 0.35rem;\n  background: #0369a1;\n  color: #ffffff;\n  font: inherit;\n  cursor: pointer;\n}\n#resumo {\n  min-height: 1.2rem;\n  margin: 0;\n  color: #475569;\n  font-size: 0.9rem;\n}\ntable {\n  width: min(34rem, 100%);\n  margin: 1.5rem auto;\n  border-collapse: collapse;\n  font-family: system-ui, sans-serif;\n}\nth,\ntd {\n  padding: 0.55rem 0.7rem;\n  border-bottom: 1px solid #cbd5e1;\n  text-align: left;\n}\nth {\n  background: #e0f2fe;\n}",
+      "js": "const form = document.querySelector('#form-contato');\nconst nome = document.querySelector('#nome');\nconst email = document.querySelector('#email');\nconst corpo = document.querySelector('#corpo');\nconst resumo = document.querySelector('#resumo');\n\nfunction atualizarResumo() {\n  const nomeLimpo = nome.value.trim();\n  const emailLimpo = email.value.trim();\n  resumo.textContent =\n    nomeLimpo || emailLimpo\n      ? `Novo contato: ${nomeLimpo} <${emailLimpo}>`\n      : '';\n}\n\nnome.addEventListener('input', atualizarResumo);\nemail.addEventListener('input', atualizarResumo);\n\nform.addEventListener('submit', (evento) => {\n  evento.preventDefault();\n\n  const linha = document.createElement('tr');\n  const celulaNome = document.createElement('td');\n  celulaNome.textContent = nome.value.trim();\n  const celulaEmail = document.createElement('td');\n  celulaEmail.textContent = email.value.trim();\n\n  linha.appendChild(celulaNome);\n  linha.appendChild(celulaEmail);\n  corpo.appendChild(linha);\n\n  form.reset();\n  atualizarResumo();\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "corpo-existe",
+        "label": "O corpo da tabela #corpo existe na página.",
+        "check": { "kind": "exists", "selector": "#corpo" }
+      },
+      {
+        "id": "primeira-linha",
+        "label": "Ao enviar Ana, a tabela passa a ter uma linha.",
+        "before": [
+          { "do": "input", "selector": "#nome", "value": "Ana" },
+          { "do": "input", "selector": "#email", "value": "ana@exemplo.com" },
+          { "do": "click", "selector": "#adicionar" }
+        ],
+        "check": {
+          "kind": "count",
+          "selector": "#corpo tr",
+          "min": 1,
+          "max": 1
+        }
+      },
+      {
+        "id": "segunda-linha",
+        "label": "Ao enviar Bruno, a tabela passa a ter duas linhas.",
+        "before": [
+          { "do": "input", "selector": "#nome", "value": "Bruno" },
+          { "do": "input", "selector": "#email", "value": "bruno@exemplo.com" },
+          { "do": "click", "selector": "#adicionar" }
+        ],
+        "check": {
+          "kind": "count",
+          "selector": "#corpo tr",
+          "min": 2,
+          "max": 2
+        }
+      },
+      {
+        "id": "dados-segunda-linha",
+        "label": "A segunda linha mostra o e-mail de Bruno.",
+        "check": {
+          "kind": "text",
+          "selector": "#corpo tr:nth-child(2)",
+          "match": { "pattern": "bruno@exemplo\\.com" }
+        }
+      },
+      {
+        "id": "formulario-limpo",
+        "label": "Depois do envio, a prévia #resumo fica vazia porque os campos foram limpos.",
+        "check": {
+          "kind": "text",
+          "selector": "#resumo",
+          "match": { "equals": "" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Escute o `submit` do formulário e chame `evento.preventDefault()` para que a página não navegue.",
+      "Crie uma `<tr>` com `document.createElement('tr')`, adicione duas `<td>` e use `appendChild` para anexá-la ao `#corpo`.",
+      "Depois de inserir a linha, chame `form.reset()` e atualize a prévia `#resumo` para refletir os campos vazios."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 83,
+      "endLine": 99
+    },
+    "evidence": "evento.preventDefault(); // impede a página de recarregar"
+  }
+]
