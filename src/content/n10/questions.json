@@ -276,5 +276,222 @@
     "explanation": "O WCAG 2.1 é o Guia de Acessibilidade de Conteúdo da Web, mantido pelo W3C.",
     "source": { "aula": 210, "slide": 14 },
     "evidence": "O WCAG 2.1, o Guia de Acessibilidade de Conteúdo da Web, é provido pelo W3C"
+  },
+  {
+    "id": "n10-q021",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "A frase de Henry Ford citada na apresentação — 'um cavalo mais rápido' — ilustra qual risco de perguntar aos clientes apenas o que eles querem?",
+    "options": [
+      "Limitar a solução ao que o cliente já conhece, em vez de propor algo novo",
+      "Aumentar o escopo do projeto sem validar com os usuários",
+      "Trocar a pesquisa de campo por testes de usabilidade",
+      "Priorizar requisitos não funcionais sobre os funcionais"
+    ],
+    "answer": 0,
+    "explanation": "A frase mostra que os clientes tendem a pedir melhorias do que já conhecem; por isso o Design Thinking investiga necessidades antes de propor a solução.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-design-thinking",
+      "slide": 2
+    },
+    "evidence": "Se eu tivesse perguntado aos meus clientes o que eles queriam, eles teriam me dito: um cavalo mais rápido"
+  },
+  {
+    "id": "n10-q022",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "Segundo Arne van Oosterom, o Design Thinking é uma abordagem para inovação que combina o pensamento criativo ao de negócios para...",
+    "options": [
+      "substituir a pesquisa com usuários pela intuição do time",
+      "gerar valor e prover soluções de longo prazo",
+      "documentar requisitos funcionais e não funcionais",
+      "reduzir o custo de hospedagem da aplicação"
+    ],
+    "answer": 1,
+    "explanation": "A definição apresentada associa pensamento criativo e de negócios para gerar valor e soluções de longo prazo, com foco no ser humano.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 12
+    },
+    "evidence": "O DESIGN THINKING É UMA ABORDAGEM PARA INOVAÇÃO CENTRADA NO SER HUMANO. COMBINA O PENSAMENTO CRIATIVO AO DE NEGÓCIOS"
+  },
+  {
+    "id": "n10-q023",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "Em qual etapa do Design Thinking se busca entender as pessoas, suas necessidades, desejos, aspirações e comportamentos em relação ao tema?",
+    "options": [
+      "Prototipação",
+      "Ideação",
+      "Empatia",
+      "Teste"
+    ],
+    "answer": 2,
+    "explanation": "A empatia é a fase de imersão que busca entender as pessoas, suas necessidades, desejos, aspirações e comportamentos em relação ao tema.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 48
+    },
+    "evidence": "necessidades, desejos, aspirações e comportamentos com relação ao tema."
+  },
+  {
+    "id": "n10-q024",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "Qual é o objetivo da etapa de Ideação?",
+    "options": [
+      "Validar o protótipo com usuários finais",
+      "Documentar regras de negócio e restrições",
+      "Medir o tempo de resposta e a disponibilidade do sistema",
+      "Divergir e gerar o maior número de ideias para depois selecionar as melhores"
+    ],
+    "answer": 3,
+    "explanation": "Na ideação o grupo diverge para gerar muitas ideias e, em seguida, prioriza o que é mais significativo e viável.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 86
+    },
+    "evidence": "o objetivo é divergir e gerar o maior número de ideias, para que depois, as"
+  },
+  {
+    "id": "n10-q025",
+    "nodeId": "n10",
+    "type": "tf",
+    "prompt": "No cartão de uma história de usuário, o campo 'Eu como' deve indicar a persona que usará a funcionalidade, e não quem pediu a funcionalidade.",
+    "answer": true,
+    "explanation": "O cartão pede 'Eu como: persona que usará a funcionalidade, e não quem foi que pediu para fazer essa funcionalidade'.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-requisitos",
+      "slide": 9
+    },
+    "evidence": "Eu como: persona que usará a funcionalidade, e não quem foi que pediu"
+  },
+  {
+    "id": "n10-q026",
+    "nodeId": "n10",
+    "type": "tf",
+    "prompt": "Requisitos funcionais descrevem apenas o desempenho, a usabilidade e a segurança do sistema.",
+    "answer": false,
+    "explanation": "Essas características são requisitos não funcionais. O requisito funcional representa o que o software faz, em termos de tarefas e serviços.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-requisitos",
+      "slide": 17
+    },
+    "evidence": "O requisito funcional representa o que o software faz, em termos de tarefas e serviços."
+  },
+  {
+    "id": "n10-q027",
+    "nodeId": "n10",
+    "type": "tf",
+    "prompt": "Segundo o material de Design Thinking, personas são arquétipos fictícios criados a partir de dados coletados na pesquisa com pessoas reais.",
+    "answer": true,
+    "explanation": "Personas documentam comportamentos e necessidades identificados nas conversas com clientes reais, a partir da coleta de dados da pesquisa.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 64
+    },
+    "evidence": "são arquétipos fictícios criados a partir da coleta de dados realizada na fase de"
+  },
+  {
+    "id": "n10-q028",
+    "nodeId": "n10",
+    "type": "fill",
+    "prompt": "Os três pilares do Design Thinking são a empatia, a experimentação e a ____.",
+    "answers": [
+      "colaboração",
+      "Colaboração",
+      "colaboracao",
+      "Colaboracao"
+    ],
+    "explanation": "Os pilares do Design Thinking são a empatia, a experimentação e a colaboração.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 18
+    },
+    "evidence": "EXPERIMENTAÇÃO COLABORAÇÃO"
+  },
+  {
+    "id": "n10-q029",
+    "nodeId": "n10",
+    "type": "fill",
+    "prompt": "Requisitos que derivam da organização e restringem aspectos como leis, decisões estratégicas e obrigações contratuais são chamados de requisitos de domínio ou ____ de negócio.",
+    "answers": [
+      "regra",
+      "Regra",
+      "regras",
+      "Regras"
+    ],
+    "explanation": "A aula chama essa categoria de requisitos de domínio, regra de negócio ou restrições.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-requisitos",
+      "slide": 19
+    },
+    "evidence": "Requisitos de Domínio/Regra de negócio/Restrições"
+  },
+  {
+    "id": "n10-q030",
+    "nodeId": "n10",
+    "type": "fill",
+    "prompt": "No cartão de história de usuário, o campo 'Porque/para' explica a ____ da funcionalidade, ou seja, o que ela resolve.",
+    "answers": [
+      "utilidade",
+      "Utilidade"
+    ],
+    "explanation": "O campo 'Porque/para' descreve qual a utilidade da funcionalidade e o que ela resolve.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-requisitos",
+      "slide": 9
+    },
+    "evidence": "Porque/para: qual a utilidade, porque tal funcionalidade, o que isso resolve?"
+  },
+  {
+    "id": "n10-q031",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "Por que prototipar, segundo a aula sobre Design Thinking?",
+    "options": [
+      "Materializar a ideia, colher feedback e reduzir riscos antes de investir mais",
+      "Eliminar a necessidade de testar com usuários",
+      "Garantir que o produto final já saia pronto na primeira versão",
+      "Substituir a documentação de requisitos funcionais"
+    ],
+    "answer": 0,
+    "explanation": "Prototipar materializa a ideia, colhe feedback, reduz riscos e permite iterar desde o início.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-dtg",
+      "slide": 115
+    },
+    "evidence": "Materializa a ideia • Colher feedback • Reduz riscos, diminui investimento"
+  },
+  {
+    "id": "n10-q032",
+    "nodeId": "n10",
+    "type": "mcq",
+    "prompt": "No modelo Double Diamond, o processo alterna momentos de divergir e convergir. O que isso representa?",
+    "options": [
+      "Que cada etapa deve ser executada apenas uma vez, sem retorno",
+      "Que o time deve primeiro abrir possibilidades e depois selecionar e focar",
+      "Que a prototipação vem antes da empatia",
+      "Que os requisitos funcionais devem ser escritos antes das personas"
+    ],
+    "answer": 1,
+    "explanation": "Alternar divergir e convergir significa abrir o leque de possibilidades em uma etapa e, na seguinte, selecionar e convergir para uma direção.",
+    "source": {
+      "kind": "tiaw",
+      "doc": "tiaw-design-thinking",
+      "slide": 8
+    },
+    "evidence": "divergir convergir divergir convergir divergir convergir"
   }
 ]
