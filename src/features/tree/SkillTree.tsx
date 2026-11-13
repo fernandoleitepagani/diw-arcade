@@ -14,6 +14,7 @@ import { Tag } from '../../components/pixel/Tag/Tag';
 import '../../components/pixel/PixelPanel/PixelPanel.css';
 import type { ProgressContent } from '../../lib/progress/events';
 import type { SaveV1 } from '../../lib/storage';
+import { getLabProgress } from '../../lib/progress/selectors';
 import { NODE_STATE_LABEL, type NodeState } from './nodeState';
 import { NodeDisc, type DiscState } from './NodeDisc/NodeDisc';
 import { buildTrail } from './trailModel';
@@ -155,16 +156,34 @@ export function SkillTree({ save, now }: SkillTreeProps) {
                   <div className="skill-tree__projects">
                     <h3 className="skill-tree__projects-title">Projetos</h3>
                     <ul className="skill-tree__project-list">
-                      {entry.projects.map((labId) => (
-                        <li key={labId}>
-                          <Link
-                            className="px skill-tree__project"
-                            to={`/laboratorios/${labId}`}
-                          >
-                            {getLab(labId)?.title ?? labId}
-                          </Link>
-                        </li>
-                      ))}
+                      {entry.projects.map((labId) => {
+                        const lab = getLab(labId);
+                        const title = lab?.title ?? labId;
+                        const { done, total } = getLabProgress(save, labId, lab);
+                        const status =
+                          done === 0
+                            ? 'Não iniciado'
+                            : total > 0 && done >= total
+                              ? 'Concluído'
+                              : `${done} de ${total} passos`;
+                        return (
+                          <li key={labId}>
+                            <Link
+                              className="px skill-tree__project"
+                              to={`/laboratorios/${labId}`}
+                              aria-describedby={`project-${labId}-status`}
+                            >
+                              <span className="skill-node__title">{title}</span>
+                            </Link>
+                            <span
+                              className="skill-tree__unit-count skill-tree__project-status"
+                              id={`project-${labId}-status`}
+                            >
+                              {status}
+                            </span>
+                          </li>
+                        );
+                      })}
                     </ul>
                   </div>
                 ) : null}

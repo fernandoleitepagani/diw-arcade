@@ -52,36 +52,12 @@ describe('árvore de habilidades', () => {
     }
   });
 
-  it('mostra o herói Continuar', () => {
+  it('não repete o herói Continuar acima da trilha (Hoje cuida do próximo passo)', () => {
     renderWithProgress(<TreePage />);
 
-    const hero = within(screen.getByRole('region', { name: 'Continuar' }));
-    expect(
-      hero.getByText('Introdução à Web e tecnologias'),
-    ).toBeInTheDocument();
-    expect(hero.getByRole('link', { name: 'Continuar' })).toHaveAttribute(
-      'href',
-      '/no/n01',
-    );
-    expect(
-      hero.getByRole('progressbar', { name: 'Meta diária' }),
-    ).toBeInTheDocument();
-    expect(hero.queryByRole('link', { name: /^Revisar/ })).not.toBeInTheDocument();
-  });
-
-  it('oferece revisar as cartas devidas pelo herói', () => {
-    const cards = dueCards(
-      Array.from({ length: 10 }, (_, index) =>
-        `n09-f${String(index + 1).padStart(3, '0')}`,
-      ),
-    );
-
-    renderWithProgress(<TreePage />, { save: { cards } });
-
-    const hero = within(screen.getByRole('region', { name: 'Continuar' }));
-    expect(
-      hero.getByRole('link', { name: 'Revisar 10 cartas' }),
-    ).toHaveAttribute('href', '/revisao');
+    expect(screen.queryByRole('region', { name: 'Continuar' })).toBeNull();
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+    expect(document.getElementById('unit-u1')).not.toBeNull();
   });
 
   it('mantém o título da página só para leitores de tela', () => {

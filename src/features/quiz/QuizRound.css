@@ -126,10 +126,36 @@
 
 .quiz-round__option input {
   flex: none;
+  appearance: none;
+  display: grid;
+  place-items: center;
   width: 1.05rem;
   height: 1.05rem;
   margin: 0;
-  accent-color: var(--accent);
+  border: 2px solid var(--muted);
+  border-radius: 50%;
+  background: transparent;
+  cursor: inherit;
+}
+
+.quiz-round__option input:checked {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.quiz-round__option input:checked::after {
+  content: '';
+  width: 0.4rem;
+  height: 0.22rem;
+  margin-top: -0.06rem;
+  border-inline-start: 2px solid var(--on-accent, var(--bg));
+  border-block-end: 2px solid var(--on-accent, var(--bg));
+  transform: rotate(-45deg);
+}
+
+.quiz-round__option input:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .quiz-round__key {
