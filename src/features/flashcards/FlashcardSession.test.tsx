@@ -136,9 +136,9 @@ describe('FlashcardSession', () => {
     expect(screen.getByText('Lembradas')).toBeInTheDocument();
     expect(screen.getByText('1 de 1')).toBeInTheDocument();
     expect(screen.getByText('1 carta revisada')).toBeInTheDocument();
-    expect(screen.getByText('+5')).toBeInTheDocument();
+    expect(screen.getAllByText('+5 XP').length).toBeGreaterThan(0);
     expect(
-      screen.getByRole('link', { name: 'Próximo passo' }),
+      screen.getByRole('link', { name: /Ler o resumo|Praticar|Fixar|Construir|Revisar|Abrir a trilha|Rever/ }),
     ).toBeInTheDocument();
     expect(screen.getByText(/Próxima revisão: em/)).toBeInTheDocument();
   });

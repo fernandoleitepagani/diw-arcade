@@ -6,13 +6,17 @@ import {
 } from '../../components/session';
 import { PixelSprite } from '../../components/pixel/PixelSprite/PixelSprite';
 import { SPRITES } from '../../components/pixel/sprites';
-import { Button } from '../../components/ui';
+import { Button } from '../../components/pixel/Button/Button';
 import { pickLine } from '../../content/copy';
 import { formatSource } from '../../content/source';
 import type { NodeId } from '../../content/tree';
 import type { Question, QuestionCode } from '../../content/schema';
+import { useProgress } from '../../app/ProgressProvider';
 import { quizAnswerXp } from '../../lib/game/xp';
+import { createEmptySave } from '../../lib/storage';
+import { STATIC_CONTENT } from '../../lib/progress/content';
 import type { ProgressEvent } from '../../lib/progress/events';
+import { getNextStep } from '../../lib/progress/nextStep';
 import { isFillCorrect } from './grade';
 import {
   answer,
@@ -110,6 +114,18 @@ function QuestionCode({ code, id }: { code: QuestionCode; id: string }) {
   );
 }
 
+const ISOLATED_SAVE = createEmptySave(new Date(0));
+const ISOLATED_NOW = new Date(0);
+
+/** Route smoke tests render the round without ProgressProvider. */
+function useOptionalProgress() {
+  try {
+    return useProgress();
+  } catch {
+    return null;
+  }
+}
+
 export function QuizRound({
   nodeId,
   questions,
@@ -127,6 +143,7 @@ export function QuizRound({
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [finished, setFinished] = useState(false);
   const [xpEarned, setXpEarned] = useState(0);
+  const progress = useOptionalProgress();
 
   const continueRef = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -262,6 +279,12 @@ export function QuizRound({
     const firstTry = firstTryCount(session);
     const accuracy = total === 0 ? 0 : Math.round((firstTry / total) * 100);
 
+    const nextStep = getNextStep(
+      progress?.save ?? ISOLATED_SAVE,
+      STATIC_CONTENT,
+      progress?.now ?? ISOLATED_NOW,
+    );
+
     return (
       <section
         className="quiz-round quiz-round__summary"
@@ -276,12 +299,11 @@ export function QuizRound({
               value: `${firstTry} de ${total} (${accuracy}%)`,
             },
           ]}
-          nextHref={`/no/${nodeId}`}
-          mascotMood={accuracy >= 60 ? 'happy' : 'sad'}
+          next={nextStep.primary}
           secondary={
             <>
-              <Button onClick={onRestart}>Nova rodada</Button>
-              <Button variant="secondary" onClick={onExit}>
+              <Button variant="quiet" onClick={onRestart}>Nova rodada</Button>
+              <Button variant="quiet" onClick={onExit}>
                 Voltar ao nó
               </Button>
             </>

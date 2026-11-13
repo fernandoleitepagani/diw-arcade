@@ -6,12 +6,7 @@ import { SessionSummary } from '../../components/session/SessionSummary';
 import { Button } from '../../components/pixel/Button/Button';
 import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
 import { FeedbackBar } from '../../components/session/FeedbackBar';
-import {
-  NODES,
-  getChallenges,
-  getFlashcards,
-  getQuestions,
-} from '../../content';
+import { getChallenges } from '../../content';
 import type { Challenge, CodeFiles } from '../../content/schema';
 import type {
   HintTier,
@@ -19,7 +14,8 @@ import type {
   ProgressContent,
   ProgressEvent,
 } from '../../lib/progress/events';
-import { getRecommendedNodeId } from '../../lib/progress/recommend';
+import { STATIC_CONTENT } from '../../lib/progress/content';
+import { getNextStep, type NextAction } from '../../lib/progress/nextStep';
 import { getStars, type Stars } from '../../lib/progress/selectors';
 import type { SaveV1 } from '../../lib/storage/schema';
 import { SandboxFrame } from '../runner/SandboxFrame';
@@ -66,19 +62,6 @@ const SAVE_DEBOUNCE_MS = 600;
 const FAILURES_TO_UNLOCK = 3;
 const NO_STARS: Stars = { quiz: false, cards: false, code: false };
 
-/** Static content for the star and recommendation selectors. */
-const CHALLENGE_CONTENT: ProgressContent = {
-  questions: Object.fromEntries(
-    NODES.map((node) => [node.id, getQuestions(node.id)]),
-  ),
-  flashcards: Object.fromEntries(
-    NODES.map((node) => [node.id, getFlashcards(node.id)]),
-  ),
-  challenges: Object.fromEntries(
-    NODES.map((node) => [node.id, getChallenges(node.id)]),
-  ),
-};
-
 /**
  * The "Próximo passo" target after a passing run: the first challenge of the
  * same node that is still unpassed, else the node recommended by progress.
@@ -86,7 +69,7 @@ const CHALLENGE_CONTENT: ProgressContent = {
 export function getChallengeNextHref(
   challenge: Pick<Challenge, 'id' | 'nodeId'>,
   save: SaveV1 | undefined,
-  content: ProgressContent = CHALLENGE_CONTENT,
+  content: ProgressContent = STATIC_CONTENT,
   now: Date = new Date(),
 ): string {
   const next = getChallenges(challenge.nodeId).find(
@@ -97,9 +80,24 @@ export function getChallengeNextHref(
 
   if (next) return `/desafio/${next.id}`;
 
-  return `/no/${
-    save ? getRecommendedNodeId(save, content, now) : challenge.nodeId
-  }`;
+  return save
+    ? getNextStep(withChallengePassed(save, challenge.id), content, now)
+        .primary.href
+    : `/no/${challenge.nodeId}`;
+}
+
+function getChallengeNext(
+  challenge: Pick<Challenge, 'id' | 'nodeId'>,
+  save: SaveV1 | undefined,
+  content: ProgressContent,
+  now: Date,
+): NextAction {
+  const href = getChallengeNextHref(challenge, save, content, now);
+  if (href.startsWith('/desafio/')) return { label: 'Próximo desafio', href };
+  if (!save) return { label: 'Abrir a trilha', href: '/trilha' };
+
+  return getNextStep(withChallengePassed(save, challenge.id), content, now)
+    .primary;
 }
 
 /** A copy of the save with the just-passed challenge marked as passed. */
@@ -151,7 +149,7 @@ export function ChallengeView({
     xp: number;
     starsBefore: Stars;
     starsAfter: Stars;
-    nextHref: string;
+    next: NextAction;
   } | null>(null);
 
   const passed = (state?.passed ?? false) || localPassed;
@@ -255,21 +253,16 @@ export function ChallengeView({
       setSummary({
         xp: outcome?.xpGained ?? 0,
         starsBefore: save
-          ? getStars(save, challenge.nodeId, CHALLENGE_CONTENT)
+          ? getStars(save, challenge.nodeId, STATIC_CONTENT)
           : NO_STARS,
         starsAfter: save
           ? getStars(
               withChallengePassed(save, challenge.id),
               challenge.nodeId,
-              CHALLENGE_CONTENT,
+              STATIC_CONTENT,
             )
           : NO_STARS,
-        nextHref: getChallengeNextHref(
-          challenge,
-          save,
-          CHALLENGE_CONTENT,
-          now,
-        ),
+        next: getChallengeNext(challenge, save, STATIC_CONTENT, now),
       });
     }
 
@@ -507,8 +500,7 @@ export function ChallengeView({
             ]}
             starsBefore={summary.starsBefore}
             starsAfter={summary.starsAfter}
-            nextHref={summary.nextHref}
-            mascotMood="happy"
+            next={summary.next}
             secondary={
               <Button variant="quiet" onClick={() => setSummary(null)}>
                 Continuar editando

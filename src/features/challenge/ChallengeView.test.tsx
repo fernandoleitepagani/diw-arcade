@@ -204,7 +204,7 @@ describe('ChallengeView', () => {
     );
 
     const dialog = await screen.findByRole('dialog');
-    expect(within(dialog).getByText('Próximo passo')).toBeInTheDocument();
+    expect(within(dialog).getByRole('link', { name: /\S/ })).toBeInTheDocument();
     expect(
       within(dialog).getByRole('button', { name: 'Continuar editando' }),
     ).toBeInTheDocument();
@@ -394,7 +394,7 @@ describe('ChallengeView pass summary', () => {
     await user.click(screen.getByRole('button', { name: 'Executar testes' }));
 
     const dialog = await screen.findByRole('dialog');
-    expect(within(dialog).getByText('+30')).toBeInTheDocument();
+    expect(within(dialog).getByText('+30 XP')).toBeInTheDocument();
     expect(within(dialog).getByText('Estrelas conquistadas')).toBeInTheDocument();
     expect(
       within(dialog).getByRole('img', {
@@ -402,7 +402,7 @@ describe('ChallengeView pass summary', () => {
       }),
     ).toBeInTheDocument();
     expect(
-      within(dialog).getByRole('link', { name: 'Próximo passo' }),
+      within(dialog).getByRole('link', { name: 'Próximo desafio' }),
     ).toHaveAttribute('href', '/desafio/n07-c02');
   });
 
@@ -451,8 +451,8 @@ describe('ChallengeView pass summary', () => {
 
     const dialog = await screen.findByRole('dialog');
     expect(
-      within(dialog).getByRole('link', { name: 'Próximo passo' }),
-    ).toHaveAttribute('href', '/no/n01');
+      within(dialog).getByRole('link', { name: /\S/ }),
+    ).toHaveAttribute('href', '/no/n01?passo=praticar');
   });
 });
 
@@ -490,6 +490,6 @@ describe('getChallengeNextHref', () => {
         content,
         new Date('2026-01-01T12:00:00Z'),
       ),
-    ).toBe('/no/n01');
+    ).toBe('/no/n01?passo=praticar');
   });
 });
