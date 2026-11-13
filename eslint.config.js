@@ -18,7 +18,7 @@ const restrictedGlobals = [
 ];
 
 export default tseslint.config(
-  { ignores: ['dist/**', 'coverage/**', 'node_modules/**', 'docs/prototype-ref/**'] },
+  { ignores: ['dist/**', 'coverage/**', 'node_modules/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
