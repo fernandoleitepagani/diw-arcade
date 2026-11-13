@@ -24,23 +24,23 @@ describe('formatSource', () => {
   const cases: ReadonlyArray<readonly [string, Source, string]> = [
     [
       'aula',
-      { aula: 172, slide: 2 },
-      'Fonte: aula-172, slide 2',
+      { aula: 174, slide: 3 },
+      'Fonte: aula 174, slide 3',
     ],
     [
       'tiaw',
-      { kind: 'tiaw', doc: 'tiaw-json', slide: 3 },
-      'Fonte: TIAW · Estruturas de Dados e JSON, slide 3',
+      { kind: 'tiaw', doc: 'tiaw-design-thinking', slide: 4 },
+      'Fonte: TIAW, Design Thinking, slide 4',
     ],
     [
       'repo',
       {
         kind: 'repo',
-        path: 'PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/script.js',
-        startLine: 10,
-        endLine: 24,
+        path: 'PROJETOS/exemplos/app.js',
+        startLine: 3,
+        endLine: 9,
       },
-      'Fonte: repositório da disciplina · JSONServer/Projeto JSON Server - Pokedex/public/script.js, linhas 10–24',
+      'Fonte: repositório da disciplina, exemplos/app.js, linhas 3 a 9',
     ],
     [
       'orientacao',

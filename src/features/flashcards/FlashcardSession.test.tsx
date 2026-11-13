@@ -61,7 +61,7 @@ describe('FlashcardSession', () => {
     await user.keyboard(' ');
 
     expect(screen.getByText(card.back)).toBeInTheDocument();
-    expect(screen.getByText('Fonte: aula-172, slide 2')).toBeInTheDocument();
+    expect(screen.getByText('Fonte: aula 172, slide 2')).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Mostrar resposta' }),
     ).not.toBeInTheDocument();

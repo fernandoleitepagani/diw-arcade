@@ -92,7 +92,7 @@ describe('QuizRound', () => {
         'A propriedade color atua diretamente na cor do texto.',
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText('Fonte: aula-172, slide 2')).toBeInTheDocument();
+    expect(screen.getByText('Fonte: aula 172, slide 2')).toBeInTheDocument();
   });
 
   it('usa uma fala do Bit no feedback de acerto', async () => {
