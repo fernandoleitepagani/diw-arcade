@@ -2,7 +2,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
-import { getChallenges, getFlashcards, NODES, type NodeId } from '../../content';
+import { getChallenges, getFlashcards, getLab, NODES, type NodeId } from '../../content';
 import { newCard } from '../../lib/srs/fsrs';
 import {
   SaveV1Schema,
@@ -121,6 +121,17 @@ describe('SkillTree', () => {
       '/laboratorios/jsonserver',
     ]);
     expect(screen.getAllByRole('heading', { level: 3, name: 'Projetos' })).toHaveLength(2);
+  });
+
+  it('names each Projetos link by its lab title and shows progress as text', () => {
+    renderTree();
+
+    for (const labId of ['lab-01', 'lab-02', 'lab-03', 'jsonserver'] as const) {
+      const title = getLab(labId)!.title;
+      const link = screen.getByRole('link', { name: title });
+      expect(link).toHaveAttribute('href', `/laboratorios/${labId}`);
+      expect(link).toHaveTextContent(/Não iniciado|passos?|Concluído/);
+    }
   });
 
   it('collapses a finished unit into one button that toggles with the keyboard', async () => {
