@@ -86,8 +86,8 @@ const LabStepProgressSchema = z.object({
   xpAwarded: z.boolean(),
 });
 
-export const SaveV1Schema = z.object({
-  schemaVersion: z.literal(1),
+export const SaveV2Schema = z.object({
+  schemaVersion: z.literal(2),
   createdAt: isoDateTime,
   onboarded: z.boolean().default(false),
   xpTotal: z.number().int().nonnegative(),
@@ -102,7 +102,13 @@ export const SaveV1Schema = z.object({
     .record(z.string(), z.record(z.string(), LabStepProgressSchema))
     .default({}),
   achievements: z.record(z.string(), isoDateTime).default({}),
+  primersRead: z.record(z.string(), isoDateTime).default({}),
 });
 
+/** Alias kept so existing call sites compile; validates the current (v2) shape. */
+export const SaveV1Schema = SaveV2Schema;
+
 export type SrsCard = z.infer<typeof SrsCardSchema>;
-export type SaveV1 = z.infer<typeof SaveV1Schema>;
+/** Expand-contract: the name stays SaveV1 but describes the stored (v2) shape. */
+export type SaveV1 = z.infer<typeof SaveV2Schema>;
+export type SaveV2 = SaveV1;

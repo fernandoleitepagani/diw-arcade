@@ -52,6 +52,7 @@ export type ProgressEvent =
     }
   | { type: 'challenge/saveCode'; challengeId: string; code: CodeFiles }
   | { type: 'lab/step'; labId: LabId; stepId: string; done: boolean }
+  | { type: 'primer/read'; nodeId: NodeId }
   | { type: 'settings/update'; patch: Partial<SaveV1['settings']> }
   | { type: 'save/replace'; save: SaveV1 }
   | { type: 'save/reset' };

@@ -46,6 +46,7 @@ function cloneSave(save: SaveV1): SaveV1 {
     challenges: { ...save.challenges },
     labs,
     achievements: { ...save.achievements },
+    primersRead: { ...save.primersRead },
   };
 }
 
@@ -145,6 +146,11 @@ export function applyEvent(
   let xpGained = 0;
 
   switch (event.type) {
+    case 'primer/read': {
+      draft.primersRead[event.nodeId] ??= now.toISOString();
+      break;
+    }
+
     case 'onboarding/complete': {
       draft.onboarded = true;
       if (event.dailyGoal !== undefined) {

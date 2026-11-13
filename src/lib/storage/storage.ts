@@ -1,5 +1,5 @@
 import { MIGRATIONS, migrate, type Migrations } from './migrate';
-import { SaveV1Schema, type SaveV1 } from './schema';
+import { SaveV2Schema, type SaveV1 } from './schema';
 
 export const SAVE_KEY = 'diw-arcade:save';
 export const BACKUP_PREFIX = 'diw-arcade:save:backup:';
@@ -26,8 +26,8 @@ export function backupKey(now: Date): string {
 }
 
 export function createEmptySave(now: Date): SaveV1 {
-  return SaveV1Schema.parse({
-    schemaVersion: 1,
+  return SaveV2Schema.parse({
+    schemaVersion: 2,
     createdAt: now.toISOString(),
     xpTotal: 0,
   });
@@ -82,10 +82,13 @@ export function loadSave(
     return { save: createEmptySave(now), recovered: result.reason };
   }
 
-  return {
-    save: result.save,
-    recovered: result.migrated ? 'migrated' : 'loaded',
-  };
+  if (result.migrated) {
+    // Best effort: keep the pre-migration JSON; SAVE_KEY is never removed here.
+    backUp(store, raw, now);
+    return { save: result.save, recovered: 'migrated' };
+  }
+
+  return { save: result.save, recovered: 'loaded' };
 }
 
 export function persistSave(store: StorageLike, save: SaveV1): PersistResult {
