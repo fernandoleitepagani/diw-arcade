@@ -1,0 +1,400 @@
+[
+  {
+    "id": "n16-q001",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "Qual é a saída do código a seguir?",
+    "options": ["object", "null", "undefined", "number"],
+    "answer": 0,
+    "code": {
+      "env": "js",
+      "source": "console.log(typeof null);"
+    },
+    "expected": "object",
+    "explanation": "Apesar de null representar a ausência de valor, typeof null retorna a string \"object\" por uma peculiaridade histórica da linguagem.",
+    "source": { "aula": 310, "slide": 8 },
+    "evidence": "Oferece tipagem dinâmica, tipos de variáveis não são definidos previamente"
+  },
+  {
+    "id": "n16-q002",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "O que o código a seguir imprime no console?",
+    "options": ["undefined", "number", "NaN", "object"],
+    "answer": 1,
+    "code": {
+      "env": "js",
+      "source": "console.log(typeof NaN);"
+    },
+    "expected": "number",
+    "explanation": "NaN significa Not a Number, mas o valor continua sendo do tipo numérico; por isso typeof NaN retorna a string \"number\".",
+    "source": { "aula": 240, "slide": 7 },
+    "evidence": "Dados numéricos: inteiro, real"
+  },
+  {
+    "id": "n16-q003",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "O que o código a seguir imprime?",
+    "options": ["object true", "array true", "object false", "array false"],
+    "answer": 0,
+    "code": {
+      "env": "js",
+      "source": "console.log(typeof [], Array.isArray([]));"
+    },
+    "expected": "object true",
+    "explanation": "typeof [] retorna \"object\" porque arrays são objetos em JavaScript, mas Array.isArray([]) retorna true porque identifica um array de verdade.",
+    "source": { "aula": 240, "slide": 7 },
+    "evidence": "Dados Compostos                   {"
+  },
+  {
+    "id": "n16-q004",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "Qual é o resultado da comparação `'5' == 5`?",
+    "options": [
+      "false, pois os tipos são diferentes",
+      "Um erro de tipo é lançado",
+      "true, pois o operador == converte o texto em número",
+      "undefined, pois a comparação não é válida"
+    ],
+    "answer": 2,
+    "explanation": "O operador == faz igualdade ampla: ele converte a string '5' para o número 5 antes de comparar, então o resultado é true.",
+    "source": { "kind": "orientacao" },
+    "evidence": "a diferença entre igualdade estrita e ampla"
+  },
+  {
+    "id": "n16-q005",
+    "nodeId": "n16",
+    "type": "tf",
+    "prompt": "A expressão `'5' === 5` é avaliada como true.",
+    "answer": false,
+    "explanation": "O operador === compara tipo e valor ao mesmo tempo; como '5' é string e 5 é number, o resultado é false.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/index.html",
+      "startLine": 23,
+      "endLine": 27
+    },
+    "evidence": "if (salvo === \"light\" || salvo === \"dark\") tema = salvo;"
+  },
+  {
+    "id": "n16-q006",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "Qual é o valor da expressão `0 == ''`?",
+    "options": [
+      "false, porque tipos diferentes nunca são iguais",
+      "Um erro de execução",
+      "NaN",
+      "true, pois a string vazia é convertida em 0"
+    ],
+    "answer": 3,
+    "explanation": "Na igualdade ampla, a string vazia '' é convertida para o número 0; por isso a expressão 0 == '' resulta em true.",
+    "source": { "kind": "orientacao" },
+    "evidence": "a diferença entre igualdade estrita e ampla"
+  },
+  {
+    "id": "n16-q007",
+    "nodeId": "n16",
+    "type": "tf",
+    "prompt": "A expressão `null == undefined` é avaliada como true.",
+    "answer": true,
+    "explanation": "Na comparação ampla, null e undefined são tratados como equivalentes; por isso null == undefined é true, enquanto null === undefined é false.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/utils/dom.js",
+      "startLine": 19,
+      "endLine": 22
+    },
+    "evidence": ".filter(([, v]) => v != null)"
+  },
+  {
+    "id": "n16-q008",
+    "nodeId": "n16",
+    "type": "tf",
+    "prompt": "A expressão `null === undefined` é avaliada como true.",
+    "answer": false,
+    "explanation": "A igualdade estrita exige o mesmo tipo; null e undefined são valores de tipos diferentes, então null === undefined retorna false.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/utils/text.js",
+      "startLine": 18,
+      "endLine": 18
+    },
+    "evidence": "/** n === 1 ? singular : plural */"
+  },
+  {
+    "id": "n16-q009",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "O que o código a seguir imprime?",
+    "options": ["true", "false", "NaN", "undefined"],
+    "answer": 1,
+    "code": {
+      "env": "js",
+      "source": "console.log(NaN === NaN);"
+    },
+    "expected": "false",
+    "explanation": "NaN não é igual a nenhum valor, nem a si mesmo; por isso a comparação NaN === NaN resulta em false.",
+    "source": { "aula": 240, "slide": 7 },
+    "evidence": "Dados numéricos: inteiro, real"
+  },
+  {
+    "id": "n16-q010",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "O que o código a seguir imprime?",
+    "options": ["true", "false", "NaN", "undefined"],
+    "answer": 0,
+    "code": {
+      "env": "js",
+      "source": "console.log(Object.is(NaN, NaN));"
+    },
+    "expected": "true",
+    "explanation": "Object.is usa a comparação SameValue, que considera NaN igual a NaN; por isso a saída é true, diferente de NaN === NaN.",
+    "source": { "kind": "orientacao" },
+    "evidence": "observem atentamente os tipos de dados"
+  },
+  {
+    "id": "n16-q011",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "O que o código a seguir imprime?",
+    "options": ["true", "0", "false", "-0"],
+    "answer": 2,
+    "code": {
+      "env": "js",
+      "source": "console.log(Object.is(0, -0));"
+    },
+    "expected": "false",
+    "explanation": "Object.is distingue 0 de -0; por isso Object.is(0, -0) retorna false, ao contrário da comparação 0 === -0, que retorna true.",
+    "source": { "kind": "orientacao" },
+    "evidence": "a diferença entre igualdade estrita e ampla"
+  },
+  {
+    "id": "n16-q012",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "Qual destes valores é tratado como verdadeiro (truthy) em uma condição JavaScript?",
+    "options": ["0", "'' (string vazia)", "NaN", "'0' (string com zero)"],
+    "answer": 3,
+    "explanation": "A string '0' não é vazia e por isso é truthy; já o número 0, a string vazia e NaN são valores falsy.",
+    "source": { "kind": "orientacao" },
+    "evidence": "identificam bugs e compreendem a execução do motor JS"
+  },
+  {
+    "id": "n16-q013",
+    "nodeId": "n16",
+    "type": "fill",
+    "prompt": "Complete a saída do código: o console imprime ____.",
+    "answers": ["101"],
+    "code": {
+      "env": "js",
+      "source": "console.log('10' + 1);"
+    },
+    "expected": "101",
+    "explanation": "O operador + com uma string faz concatenação: '10' + 1 vira a string '101', e não o número 11.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 86,
+      "endLine": 89
+    },
+    "evidence": "nome: inputNome.value.trim(),"
+  },
+  {
+    "id": "n16-q014",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "O que o código a seguir imprime?",
+    "options": ["'10-1'", "9", "NaN", "1"],
+    "answer": 1,
+    "code": {
+      "env": "js",
+      "source": "console.log('10' - 1);"
+    },
+    "expected": "9",
+    "explanation": "O operador - só existe para números, então a string '10' é convertida em 10 e a subtração resulta em 9.",
+    "source": { "aula": 240, "slide": 7 },
+    "evidence": "Dados numéricos: inteiro, real"
+  },
+  {
+    "id": "n16-q015",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "O que o código a seguir imprime?",
+    "options": ["'62'", "8", "12", "NaN"],
+    "answer": 2,
+    "code": {
+      "env": "js",
+      "source": "console.log('6' * '2');"
+    },
+    "expected": "12",
+    "explanation": "O operador * converte os dois textos em números antes da multiplicação; por isso 6 * 2 resulta em 12.",
+    "source": { "aula": 240, "slide": 7 },
+    "evidence": "Dados textuais: caracteres, strings"
+  },
+  {
+    "id": "n16-q016",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "O que o código a seguir imprime?",
+    "options": ["NaN", "12px", "'12'", "12"],
+    "answer": 3,
+    "code": {
+      "env": "js",
+      "source": "console.log(parseInt('12px'));"
+    },
+    "expected": "12",
+    "explanation": "parseInt lê os dígitos iniciais e para no primeiro caractere não numérico; por isso '12px' vira o número 12.",
+    "source": { "kind": "orientacao" },
+    "evidence": "observem atentamente os tipos de dados"
+  },
+  {
+    "id": "n16-q017",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "O que o código a seguir imprime?",
+    "options": ["NaN", "12", "0", "undefined"],
+    "answer": 0,
+    "code": {
+      "env": "js",
+      "source": "console.log(Number('12px'));"
+    },
+    "expected": "NaN",
+    "explanation": "Number exige que o texto inteiro seja numérico; como '12px' tem letras, a conversão falha e retorna NaN.",
+    "source": { "kind": "orientacao" },
+    "evidence": "observem atentamente os tipos de dados"
+  },
+  {
+    "id": "n16-q018",
+    "nodeId": "n16",
+    "type": "fill",
+    "prompt": "Complete a saída do código: o console imprime ____.",
+    "answers": ["7"],
+    "code": {
+      "env": "js",
+      "source": "console.log(+' 7 ');"
+    },
+    "expected": "7",
+    "explanation": "O operador unário + converte o texto em número e ignora os espaços ao redor; por isso a saída é o número 7.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/main.js",
+      "startLine": 681,
+      "endLine": 681
+    },
+    "evidence": "const treinador = TREINADORES.find((t) => t.id === Number(alvo.dataset.trainer));"
+  },
+  {
+    "id": "n16-q019",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "O que o código a seguir imprime?",
+    "options": ["false true", "true false", "true true", "false false"],
+    "answer": 1,
+    "code": {
+      "env": "js",
+      "source": "const a = { id: 1 };\nconst b = a;\nconsole.log(a === b, a === { id: 1 });"
+    },
+    "expected": "true false",
+    "explanation": "Objetos são comparados por referência: a e b apontam para o mesmo objeto, mas o segundo literal é outra referência, então a saída é true false.",
+    "source": { "aula": 240, "slide": 7 },
+    "evidence": "Dados Compostos                   {"
+  },
+  {
+    "id": "n16-q020",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "O que o código a seguir imprime?",
+    "options": ["string number", "number number", "object number", "object string"],
+    "answer": 2,
+    "code": {
+      "env": "js",
+      "source": "const dados = JSON.parse('{\"id\": 1, \"nome\": \"Ana\"}');\nconsole.log(typeof dados, typeof dados.id);"
+    },
+    "expected": "object number",
+    "explanation": "JSON.parse devolve um objeto; como o campo id aparece sem aspas no JSON, ele é number, e a saída é object number.",
+    "source": { "aula": 240, "slide": 10 },
+    "evidence": "\"lazy\": false, \"married\": null"
+  },
+  {
+    "id": "n16-q021",
+    "nodeId": "n16",
+    "type": "fill",
+    "prompt": "Complete a saída: ao abrir a página, o console imprime ____.",
+    "answers": ["101"],
+    "code": {
+      "env": "dom",
+      "html": "<input id=\"qtd\" type=\"text\" value=\"10\">",
+      "source": "const campo = document.getElementById('qtd');\nconsole.log(campo.value + 1);"
+    },
+    "expected": "101",
+    "explanation": "O value de um input é sempre uma string; ao somar com +, o JavaScript concatena e produz a string '101'.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 86,
+      "endLine": 89
+    },
+    "evidence": "nome: inputNome.value.trim(),"
+  },
+  {
+    "id": "n16-q022",
+    "nodeId": "n16",
+    "type": "mcq",
+    "prompt": "A página é aberta em `?id=7`. O que o código a seguir imprime?",
+    "options": ["true true", "true false", "false true", "false false"],
+    "answer": 2,
+    "code": {
+      "env": "dom",
+      "url": "https://exemplo.local/?id=7",
+      "source": "const params = new URLSearchParams(location.search);\nconst id = params.get('id');\nconsole.log(id === 7, Number(id) === 7);"
+    },
+    "expected": "false true",
+    "explanation": "params.get devolve a string '7', então id === 7 é false; depois de Number(id), a comparação estrita com o número 7 é true.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 76,
+      "endLine": 76
+    },
+    "evidence": "if (numero) return pokemon.id === Number(numero[1]);"
+  },
+  {
+    "id": "n16-q023",
+    "nodeId": "n16",
+    "type": "fill",
+    "prompt": "Complete a saída: o console imprime ____.",
+    "answers": ["number"],
+    "code": {
+      "env": "js",
+      "source": "console.log(typeof JSON.parse('{\"id\": 45}').id);"
+    },
+    "expected": "number",
+    "explanation": "JSON.parse mantém o valor 45 sem aspas como number; por isso o typeof do campo id retorna a string number.",
+    "source": { "aula": 240, "slide": 7 },
+    "evidence": "Dados numéricos: inteiro, real"
+  },
+  {
+    "id": "n16-q024",
+    "nodeId": "n16",
+    "type": "tf",
+    "prompt": "Em JavaScript, `typeof function () {}` retorna a string 'function'.",
+    "answer": true,
+    "explanation": "Funções têm um tipo próprio na linguagem; por isso typeof de uma função retorna a string 'function'.",
+    "source": { "aula": 310, "slide": 8 },
+    "evidence": "Oferece tipagem dinâmica, tipos de variáveis não são definidos previamente"
+  },
+  {
+    "id": "n16-q025",
+    "nodeId": "n16",
+    "type": "fill",
+    "prompt": "O operador `typeof` aplicado a uma variável declarada sem valor retorna a string ____.",
+    "answers": ["undefined"],
+    "explanation": "Uma variável declarada sem valor recebe undefined; por isso typeof dessa variável retorna a string 'undefined'.",
+    "source": { "aula": 310, "slide": 8 },
+    "evidence": "Oferece tipagem dinâmica, tipos de variáveis não são definidos previamente"
+  }
+]
