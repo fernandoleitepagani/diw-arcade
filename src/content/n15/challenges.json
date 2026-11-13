@@ -1,0 +1,204 @@
+[
+  {
+    "id": "n15-c01",
+    "nodeId": "n15",
+    "title": "Contador que não zera",
+    "kind": "js",
+    "goal": "Corrija o contador: o parágrafo #contador deve começar em 0 e somar 1 a cada clique no botão #botao, sem voltar ao valor anterior.",
+    "starter": {
+      "html": "<button id=\"botao\" type=\"button\">Clique</button>\n<p id=\"contador\">0</p>",
+      "css": "#contador { font-weight: bold; }",
+      "js": "const botao = document.querySelector('#botao');\nconst contador = document.querySelector('#contador');\n\nbotao.addEventListener('click', function () {\n  var total = 0;\n  total += 1;\n  contador.textContent = total;\n});\n"
+    },
+    "solution": {
+      "html": "<button id=\"botao\" type=\"button\">Clique</button>\n<p id=\"contador\">0</p>",
+      "css": "#contador { font-weight: bold; }",
+      "js": "const botao = document.querySelector('#botao');\nconst contador = document.querySelector('#contador');\n\nlet total = 0;\n\nbotao.addEventListener('click', function () {\n  total += 1;\n  contador.textContent = total;\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "botao-existe",
+        "label": "O botão #botao existe na página.",
+        "check": { "kind": "exists", "selector": "#botao" }
+      },
+      {
+        "id": "contador-inicial",
+        "label": "O contador #contador começa em 0.",
+        "check": {
+          "kind": "text",
+          "selector": "#contador",
+          "match": { "equals": "0" }
+        }
+      },
+      {
+        "id": "primeiro-clique",
+        "label": "Após o primeiro clique, #contador mostra 1.",
+        "before": [{ "do": "click", "selector": "#botao" }],
+        "check": {
+          "kind": "text",
+          "selector": "#contador",
+          "match": { "equals": "1" }
+        }
+      },
+      {
+        "id": "segundo-clique",
+        "label": "Após o segundo clique, #contador mostra 2.",
+        "before": [{ "do": "click", "selector": "#botao" }],
+        "check": {
+          "kind": "text",
+          "selector": "#contador",
+          "match": { "equals": "2" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "O `var total = 0` está dentro do callback: a cada clique a variável é criada de novo e o valor anterior se perde.",
+      "Mova a declaração para fora do listener, usando `let total = 0;` no escopo do script.",
+      "Dentro do callback apenas some 1 a `total` e atribua o resultado a `contador.textContent`."
+    ],
+    "source": { "aula": 310, "slide": 6 },
+    "evidence": "Classes, Modules, Arrow Functions, Const e Let,"
+  },
+  {
+    "id": "n15-c02",
+    "nodeId": "n15",
+    "title": "Lista de aprovados",
+    "kind": "js",
+    "goal": "Complete a função filtrarAprovados para devolver somente os alunos com nota maior ou igual a 7 e renderize os nomes na lista #aprovados.",
+    "starter": {
+      "html": "<h2>Aprovados</h2>\n<ul id=\"aprovados\"></ul>",
+      "css": "#aprovados li { font-weight: bold; }",
+      "js": "const alunos = [\n  { nome: 'Ana', nota: 9 },\n  { nome: 'Bia', nota: 5 },\n  { nome: 'Caio', nota: 7 },\n  { nome: 'Dudu', nota: 6 },\n];\n\nfunction filtrarAprovados(lista) {\n  // TODO: devolva apenas os alunos com nota maior ou igual a 7.\n  return lista;\n}\n\nconst aprovados = document.querySelector('#aprovados');\n\nfiltrarAprovados(alunos).forEach(function (aluno) {\n  const item = document.createElement('li');\n  item.textContent = aluno.nome;\n  aprovados.appendChild(item);\n});\n"
+    },
+    "solution": {
+      "html": "<h2>Aprovados</h2>\n<ul id=\"aprovados\"></ul>",
+      "css": "#aprovados li { font-weight: bold; }",
+      "js": "const alunos = [\n  { nome: 'Ana', nota: 9 },\n  { nome: 'Bia', nota: 5 },\n  { nome: 'Caio', nota: 7 },\n  { nome: 'Dudu', nota: 6 },\n];\n\nfunction filtrarAprovados(lista) {\n  return lista.filter(function (aluno) {\n    return aluno.nota >= 7;\n  });\n}\n\nconst aprovados = document.querySelector('#aprovados');\n\nfiltrarAprovados(alunos).forEach(function (aluno) {\n  const item = document.createElement('li');\n  item.textContent = aluno.nome;\n  aprovados.appendChild(item);\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "lista-existe",
+        "label": "A lista #aprovados existe na página.",
+        "check": { "kind": "exists", "selector": "#aprovados" }
+      },
+      {
+        "id": "duas-linhas",
+        "label": "A lista #aprovados tem exatamente 2 itens.",
+        "check": { "kind": "count", "selector": "#aprovados li", "min": 2, "max": 2 }
+      },
+      {
+        "id": "primeiro-nome",
+        "label": "O primeiro item da lista é Ana.",
+        "check": {
+          "kind": "text",
+          "selector": "#aprovados li:first-child",
+          "match": { "equals": "Ana" }
+        }
+      },
+      {
+        "id": "ultimo-nome",
+        "label": "O último item da lista é Caio.",
+        "check": {
+          "kind": "text",
+          "selector": "#aprovados li:last-child",
+          "match": { "equals": "Caio" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Dentro de `filtrarAprovados`, use `lista.filter(...)` em vez de devolver a lista inteira.",
+      "O callback recebe cada aluno e deve devolver `true` somente quando `aluno.nota >= 7`.",
+      "Mantenha o `forEach` que cria os `li`: ele já renderiza na lista o que a função devolver."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 68,
+      "endLine": 79
+    },
+    "evidence": "return lista.filter((pokemon) => {"
+  },
+  {
+    "id": "n15-c03",
+    "nodeId": "n15",
+    "title": "Gerador de IDs com closure",
+    "kind": "js",
+    "goal": "Ajuste criarGerador para que a função devolvida lembre o último valor e gere id-1, id-2 e id-3, nesta ordem, na lista #ids.",
+    "starter": {
+      "html": "<h2>IDs gerados</h2>\n<ul id=\"ids\"></ul>",
+      "css": "#ids li { font-family: monospace; }",
+      "js": "function criarGerador() {\n  return function () {\n    let proximo = 0;\n    proximo += 1;\n    return 'id-' + proximo;\n  };\n}\n\nconst gerarId = criarGerador();\nconst lista = document.querySelector('#ids');\n\nfor (let i = 0; i < 3; i += 1) {\n  const item = document.createElement('li');\n  item.textContent = gerarId();\n  lista.appendChild(item);\n}\n"
+    },
+    "solution": {
+      "html": "<h2>IDs gerados</h2>\n<ul id=\"ids\"></ul>",
+      "css": "#ids li { font-family: monospace; }",
+      "js": "function criarGerador() {\n  let proximo = 0;\n  return function () {\n    proximo += 1;\n    return 'id-' + proximo;\n  };\n}\n\nconst gerarId = criarGerador();\nconst lista = document.querySelector('#ids');\n\nfor (let i = 0; i < 3; i += 1) {\n  const item = document.createElement('li');\n  item.textContent = gerarId();\n  lista.appendChild(item);\n}\n"
+    },
+    "requirements": [
+      {
+        "id": "lista-existe",
+        "label": "A lista #ids existe na página.",
+        "check": { "kind": "exists", "selector": "#ids" }
+      },
+      {
+        "id": "tres-itens",
+        "label": "A lista #ids tem 3 itens.",
+        "check": { "kind": "count", "selector": "#ids li", "min": 3, "max": 3 }
+      },
+      {
+        "id": "primeiro-id",
+        "label": "O primeiro item mostra id-1.",
+        "check": {
+          "kind": "text",
+          "selector": "#ids li:nth-child(1)",
+          "match": { "equals": "id-1" }
+        }
+      },
+      {
+        "id": "segundo-id",
+        "label": "O segundo item mostra id-2.",
+        "check": {
+          "kind": "text",
+          "selector": "#ids li:nth-child(2)",
+          "match": { "equals": "id-2" }
+        }
+      },
+      {
+        "id": "terceiro-id",
+        "label": "O terceiro item mostra id-3.",
+        "check": {
+          "kind": "text",
+          "selector": "#ids li:nth-child(3)",
+          "match": { "equals": "id-3" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Hoje `let proximo = 0` nasce dentro da função devolvida, então cada chamada começa do zero.",
+      "Mova `let proximo = 0;` para dentro de `criarGerador`, antes do `return function () { ... }`.",
+      "A função interna continua enxergando `proximo` depois do retorno: é esse closure que preserva o contador entre as chamadas."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokedex/public/js/services/pokedexService.js",
+      "startLine": 17,
+      "endLine": 22
+    },
+    "evidence": "TREINADORES = (dados.trainers ?? []).map((t) => createTrainer(t, (id) => POR_ID.get(id)));"
+  }
+]
