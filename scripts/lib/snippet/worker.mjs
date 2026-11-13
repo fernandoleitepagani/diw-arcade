@@ -6,6 +6,41 @@ const SCRIPT_TIMEOUT_MS = 1000;
 const MAX_CALLBACKS = 1000;
 const MAX_VIRTUAL_MS = 60000;
 
+// jsdom builds its interfaces in the host realm, so a dom snippet can reach
+// the host Function constructor through `window.constructor.constructor` and
+// the host global through `window._globalObject`. The ban is defense in depth
+// on top of the sandbox: any match refuses to run the snippet at all.
+const DOM_BANNED_IDENTIFIERS = [
+  { name: 'constructor', pattern: /\bconstructor\b/ },
+  { name: '__proto__', pattern: /\b__proto__\b/ },
+  { name: 'getPrototypeOf', pattern: /\bgetPrototypeOf\b/ },
+  { name: '_globalObject', pattern: /\b_globalObject\b/ },
+  { name: '__lookupGetter__', pattern: /\b__lookupGetter__\b/ },
+  { name: '__defineGetter__', pattern: /\b__defineGetter__\b/ },
+  { name: 'globalThis', pattern: /\bglobalThis\b/ },
+  { name: 'process', pattern: /\bprocess\b/ },
+  { name: 'require', pattern: /\brequire\b/ },
+  { name: 'import(', pattern: /\bimport\s*\(/ },
+];
+
+function findBannedDomIdentifier(source) {
+  for (const entry of DOM_BANNED_IDENTIFIERS) {
+    if (entry.pattern.test(source)) return entry.name;
+  }
+  return null;
+}
+
+function blockedDomResult(identifier) {
+  return {
+    ok: false,
+    reason: 'crash',
+    detail:
+      'código bloqueado no ambiente dom: o identificador "' +
+      identifier +
+      '" não é permitido',
+  };
+}
+
 // A rejected promise in the snippet must not take down the worker; the
 // execution model appends nothing for them.
 process.on('unhandledRejection', () => {});
@@ -327,8 +362,12 @@ function readOutput(context) {
 }
 
 function runJs(spec) {
+  // A plain `{}` sandbox hands the global a host Object.prototype, so
+  // `this.hasOwnProperty.constructor` would reach the host Function and bypass
+  // codeGeneration. A null-prototype sandbox keeps the realm intrinsics (and
+  // their constructors) inside the context.
   const context = vm.createContext(
-    {},
+    Object.create(null),
     {
       codeGeneration: { strings: false, wasm: false },
       microtaskMode: 'afterEvaluate',
@@ -336,9 +375,8 @@ function runJs(spec) {
   );
 
   installPrelude(context, spec.mocks);
-  // The context global inherits a host Object.prototype. Replacing its
-  // `constructor` keeps `this.constructor.constructor` inside the realm, so
-  // the blocked code generation applies to it.
+  // Defense in depth: pin the global's own `constructor` to the realm's
+  // Object, so `this.constructor.constructor` can never reach a host Function.
   new vm.Script(
     'Object.defineProperty(globalThis, "constructor", { value: Object, configurable: false, writable: false });',
   ).runInContext(context, { timeout: SCRIPT_TIMEOUT_MS });
@@ -382,6 +420,9 @@ function drainMicrotasks() {
 }
 
 async function runDom(spec) {
+  const banned = findBannedDomIdentifier(spec.source);
+  if (banned !== null) return blockedDomResult(banned);
+
   const body = spec.html ?? '';
   const dom = new JSDOM(
     '<!doctype html><html><head></head><body>' + body + '</body></html>',
