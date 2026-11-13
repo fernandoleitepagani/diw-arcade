@@ -194,6 +194,13 @@ export function ProgressProvider({
       setSave(next);
       setNow(at);
 
+      // Importing or resetting a save is not activity: never replay rewards
+      // (unit celebration, XP, level-up, achievements) for progress that
+      // already existed in the imported file.
+      if (event.type === 'save/replace' || event.type === 'save/reset') {
+        return outcome;
+      }
+
       if (outcome.xpGained > 0) {
         showToast(`+${outcome.xpGained} XP`, { tone: 'reward' });
       }
