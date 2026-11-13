@@ -4,6 +4,12 @@ import { htmlHead } from './scripts/vite/htmlHead.js';
 
 export default defineConfig({
   plugins: [react(), htmlHead()],
+  build: {
+    // Keep font files as separate hashed assets. Small woff2 subsets would
+    // otherwise be base64-inlined into the entry CSS and blow its budget.
+    assetsInlineLimit: (filePath) =>
+      filePath.endsWith('.woff2') ? false : undefined,
+  },
   test: {
     environment: 'jsdom',
     setupFiles: './src/test/setup.ts',
