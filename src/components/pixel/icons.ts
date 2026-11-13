@@ -1,4 +1,4 @@
-// Icon grids copied from docs/prototype-ref/build.mjs (R). Each filled cell
+// Icon grids copied from the removed design prototype (R). Each filled cell
 // is "X", drawn in currentColor by PixelIcon.
 export const ICON_ROWS = {
   prompt: [

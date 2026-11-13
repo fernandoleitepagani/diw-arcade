@@ -6,7 +6,7 @@ import { SessionSummary } from '../../components/session/SessionSummary';
 import { Button } from '../../components/pixel/Button/Button';
 import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
 import { FeedbackBar } from '../../components/session/FeedbackBar';
-import { getChallenges } from '../../content';
+import { getChallenges, getNode } from '../../content';
 import type { Challenge, CodeFiles } from '../../content/schema';
 import type {
   HintTier,
@@ -325,7 +325,7 @@ export function ChallengeView({
           <p className="challenge-view__goal">{challenge.goal}</p>
         </div>
         <Link className="challenge-view__node-link" to={`/no/${challenge.nodeId}`}>
-          Ver nó {challenge.nodeId}
+          Ver nó: {getNode(challenge.nodeId)?.title ?? challenge.nodeId}
         </Link>
       </header>
 

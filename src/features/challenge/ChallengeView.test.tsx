@@ -79,6 +79,13 @@ beforeEach(() => {
 });
 
 describe('ChallengeView', () => {
+  it('names the node link by the node title, not its raw id', () => {
+    renderView(vi.fn());
+    const link = screen.getByRole('link', { name: /^Ver nó: / });
+    expect(link).toHaveAttribute('href', `/no/${fixtureChallenge.nodeId}`);
+    expect(link.textContent).not.toMatch(/\bn\d\d\b/);
+  });
+
   it('fills the checklist and the live summary, then dispatches challenge/run', async () => {
     const user = userEvent.setup();
     const dispatch = vi.fn();

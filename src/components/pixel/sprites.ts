@@ -1,4 +1,4 @@
-// Sprite grids copied from docs/prototype-ref/build.mjs. "." is transparent;
+// Sprite grids copied from the removed design prototype. "." is transparent;
 // every other cell must be a key of its palette.
 const CURRENT = { X: 'currentColor' };
 
