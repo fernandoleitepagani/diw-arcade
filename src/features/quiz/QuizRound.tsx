@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { SessionSummary, useSessionBar } from '../../components/session';
 import { Button, Mascot } from '../../components/ui';
 import { pickLine } from '../../content/copy';
+import { formatSource } from '../../content/source';
 import type { NodeId } from '../../content/tree';
 import type { Question } from '../../content/schema';
 import { quizAnswerXp } from '../../lib/game/xp';
@@ -51,11 +52,6 @@ function correctOptionIndex(question: Question): number {
   if (question.type === 'mcq') return question.answer;
   if (question.type === 'tf') return question.answer ? 0 : 1;
   return -1;
-}
-
-function sourceLabel(question: Question): string {
-  const aula = String(question.source.aula).padStart(3, '0');
-  return `Fonte: aula-${aula}, slide ${question.source.slide}`;
 }
 
 export function QuizRound({
@@ -405,7 +401,9 @@ export function QuizRound({
           <p className="quiz-round__explanation">
             {feedback.question.explanation}
           </p>
-          <p className="quiz-round__source">{sourceLabel(feedback.question)}</p>
+          <p className="quiz-round__source">
+            {formatSource(feedback.question.source)}
+          </p>
           <Mascot
             mood={feedback.correct ? 'happy' : 'sad'}
             line={pickLine(

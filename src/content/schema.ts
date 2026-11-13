@@ -1,19 +1,66 @@
 import { z } from 'zod';
-import { LAB_IDS, NODE_IDS } from './tree';
+import { LAB_IDS, NODE_IDS, TIAW_DOCS } from './tree';
 
 export const NODE_ID_SCHEMA = z.enum(NODE_IDS);
 export const LAB_ID_SCHEMA = z.enum(LAB_IDS);
 
-export const SourceSchema = z.object({
-  /** One of the node's aulas. */
-  aula: z.number().int().positive(),
-  slide: z.number().int().min(1),
-});
+/** `PROJETOS/` path with safe segments ending in a source extension. */
+export const SAFE_REPO_PATH =
+  /^(?!.*\.\.)PROJETOS\/(?:(?!\.)[^/\\]+\/)*(?!\.)[^/\\]+\.(?:js|html|css|json)$/;
+
+/** Legacy form: one of the node's aulas. */
+export const AulaSourceSchema = z
+  .object({
+    aula: z.number().int().positive(),
+    slide: z.number().int().min(1),
+  })
+  .strict();
+
+export const TiawSourceSchema = z
+  .object({
+    kind: z.literal('tiaw'),
+    doc: z.enum(TIAW_DOCS),
+    slide: z.number().int().min(1),
+  })
+  .strict();
+
+export const RepoSourceSchema = z
+  .object({
+    kind: z.literal('repo'),
+    path: z.string().regex(SAFE_REPO_PATH, 'caminho de repositório inválido'),
+    startLine: z.number().int().min(1),
+    endLine: z.number().int().min(1),
+  })
+  .strict()
+  .refine((source) => source.endLine >= source.startLine, {
+    message: 'endLine deve ser maior ou igual a startLine',
+    path: ['endLine'],
+  })
+  .refine((source) => source.endLine - source.startLine <= 80, {
+    message: 'o intervalo de linhas não pode passar de 80',
+    path: ['endLine'],
+  });
+
+export const OrientacaoSourceSchema = z
+  .object({
+    kind: z.literal('orientacao'),
+  })
+  .strict();
+
+export const SourceSchema = z.union([
+  AulaSourceSchema,
+  z.discriminatedUnion('kind', [
+    TiawSourceSchema,
+    RepoSourceSchema,
+    OrientacaoSourceSchema,
+  ]),
+]);
 
 /** Verbatim excerpt from the cited slide (whitespace may differ). */
 export const EvidenceSchema = z.string().min(20).max(300);
 
 export type Source = z.infer<typeof SourceSchema>;
+export type AulaSource = z.infer<typeof AulaSourceSchema>;
 export type Evidence = z.infer<typeof EvidenceSchema>;
 
 function countMatcherKeys(value: { equals?: string; oneOf?: string[]; pattern?: string }): number {

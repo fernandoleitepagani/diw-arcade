@@ -20,6 +20,29 @@ export const fixtureAulaSlides: readonly string[] = [
   ].join(' '),
 ];
 
+/** Slide 1 is the cover; slide 2 carries the TIAW evidence excerpt. */
+export const fixtureTiawSlides: readonly string[] = [
+  'TIAW — Estruturas de Dados e JSON',
+  [
+    'JSON é um formato de texto para troca de dados entre sistemas.',
+    'Um objeto JSON usa chaves e valores separados por dois-pontos.',
+  ].join(' '),
+];
+
+/** One slide: the orientation file has no form feeds. */
+export const fixtureOrientacaoText = [
+  'Prova 2 — orientações',
+  'A prova tem questões de leitura de código e questões práticas.',
+].join(' ');
+
+/** Repo source lines for the line-range evidence tests. */
+export const fixtureRepoLines: readonly string[] = [
+  'const total = 0;',
+  'total += 1;',
+  'console.log(total);',
+  'const outro = 2;',
+];
+
 /** Slide 2 holds the rubric sentences quoted by the lab requirements. */
 export const fixtureLabSlides: readonly string[] = [
   'Laboratório 01 — Página de tarefas',
