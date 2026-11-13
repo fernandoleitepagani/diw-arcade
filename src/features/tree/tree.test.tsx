@@ -223,7 +223,7 @@ describe('página do nó', () => {
         {
           passed: true,
           failedRuns: 0,
-          hintsUsed: 0,
+          hintsUsed: 0 as const,
           xpAwarded: 0,
           code: null,
         },
@@ -233,8 +233,11 @@ describe('página do nó', () => {
       save: {
         cards,
         challenges,
-        quiz: { rounds: { n07: { best: 100 } } },
-      } as never,
+        quiz: {
+          answers: {},
+          rounds: { n07: { best: 100, count: 1, perfect: true } },
+        },
+      },
     });
 
     expect(screen.getByText('Nó concluído')).toBeInTheDocument();
@@ -261,9 +264,11 @@ describe('página do nó', () => {
     expect(
       await screen.findByText(`${deckSize} cartas adicionadas`),
     ).toBeInTheDocument();
-    expect(screen.getByRole('status')).toHaveTextContent(
-      `${deckSize} cartas adicionadas`,
-    );
+    expect(
+      screen
+        .getAllByRole('status')
+        .some((el) => el.textContent === `${deckSize} cartas adicionadas`),
+    ).toBe(true);
 
     const saved = JSON.parse(storage.getItem(SAVE_KEY) ?? '{}') as SaveV1;
     expect(Object.keys(saved.cards)).toHaveLength(deckSize);
