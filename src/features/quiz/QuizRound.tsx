@@ -56,19 +56,16 @@ function correctOptionIndex(question: Question): number {
 
 /** The page URL, the HTML fixture and the JS snippet a question asks about. */
 function QuestionCode({ code, id }: { code: QuestionCode; id: string }) {
-  const captionId = `${id}-caption`;
   const htmlLabelId = `${id}-html`;
+  const jsLabelId = `${id}-js`;
 
   return (
     <figure
       className="quiz-round__code"
       id={id}
       role="region"
-      aria-labelledby={captionId}
+      aria-labelledby={jsLabelId}
     >
-      <figcaption id={captionId} className="quiz-round__code-caption">
-        Código JavaScript
-      </figcaption>
       {code.url === undefined ? null : (
         <p className="quiz-round__code-url">URL da página: {code.url}</p>
       )}
@@ -83,15 +80,25 @@ function QuestionCode({ code, id }: { code: QuestionCode; id: string }) {
           </p>
           {/* Scrollable code stays reachable for keyboard users. */}
           {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-          <pre className="quiz-round__code-block" tabIndex={0}>
+          <pre className="quiz-round__code-block" tabIndex={0} aria-label="HTML de exemplo">
             <code>{code.html}</code>
           </pre>
         </div>
       )}
-      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-      <pre className="quiz-round__code-block" tabIndex={0}>
-        <code>{code.source}</code>
-      </pre>
+      <div
+        className="quiz-round__code-example"
+        role="group"
+        aria-labelledby={jsLabelId}
+      >
+        <p id={jsLabelId} className="quiz-round__code-caption">
+          Código JavaScript
+        </p>
+        {/* Scrollable code stays reachable for keyboard users. */}
+        {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+        <pre className="quiz-round__code-block" tabIndex={0} aria-label="Código JavaScript">
+          <code>{code.source}</code>
+        </pre>
+      </div>
     </figure>
   );
 }
