@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
 import { BIT_LINES } from '../../content/copy';
-import type { McqQuestion } from '../../content/schema';
+import type { McqQuestion, Question } from '../../content/schema';
 import { fixtureQuestions } from '../../test/fixtures';
 import { QuizRound } from './QuizRound';
 
@@ -11,7 +11,9 @@ const mcqQuestions = fixtureQuestions.filter(
   (question): question is McqQuestion => question.type === 'mcq',
 );
 
-function renderRound(questions = mcqQuestions.slice(0, 2)) {
+function renderRound(
+  questions: readonly Question[] = mcqQuestions.slice(0, 2),
+) {
   const dispatch = vi.fn();
   const onRestart = vi.fn();
   const onExit = vi.fn();
