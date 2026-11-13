@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
 import {
   checkRoutePage,
   isBaselined,
@@ -250,5 +251,17 @@ describe('checagem da página renderizada', () => {
     expect(result.failures).toEqual([
       { kind: 'axe', detail: expect.stringContaining('button-name') },
     ]);
+  });
+});
+
+describe('smoke-baseline.json', () => {
+  it('exige um motivo escrito e só tolera color-contrast', () => {
+    const entries = JSON.parse(
+      readFileSync('scripts/smoke-baseline.json', 'utf8'),
+    ) as { route: string; rule: string; reason?: string }[];
+    for (const entry of entries) {
+      expect(entry.rule).toBe('color-contrast');
+      expect(entry.reason?.trim()).toBeTruthy();
+    }
   });
 });
