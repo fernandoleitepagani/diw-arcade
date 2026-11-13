@@ -1,10 +1,5 @@
 [
   {
-    "route": "/",
-    "rule": "color-contrast",
-    "reason": "temporário: UI antiga com os tokens novos; removida na W7"
-  },
-  {
     "route": "/ajustes",
     "rule": "color-contrast",
     "reason": "temporário: UI antiga com os tokens novos; removida na W7"
@@ -30,12 +25,7 @@
     "reason": "temporário: UI antiga com os tokens novos; removida na W7"
   },
   {
-    "route": "/estatisticas",
-    "rule": "color-contrast",
-    "reason": "temporário: UI antiga com os tokens novos; removida na W7"
-  },
-  {
-    "route": "/laboratorios",
+    "route": "/hoje",
     "rule": "color-contrast",
     "reason": "temporário: UI antiga com os tokens novos; removida na W7"
   },
@@ -70,7 +60,17 @@
     "reason": "temporário: UI antiga com os tokens novos; removida na W7"
   },
   {
+    "route": "/progresso",
+    "rule": "color-contrast",
+    "reason": "temporário: UI antiga com os tokens novos; removida na W7"
+  },
+  {
     "route": "/revisao",
+    "rule": "color-contrast",
+    "reason": "temporário: UI antiga com os tokens novos; removida na W7"
+  },
+  {
+    "route": "/trilha",
     "rule": "color-contrast",
     "reason": "temporário: UI antiga com os tokens novos; removida na W7"
   }
