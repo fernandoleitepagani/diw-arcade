@@ -79,10 +79,10 @@ describe('OnboardingPage', () => {
     await user.keyboard('{Enter}');
 
     await waitFor(() => {
-      expect(router.state.location.pathname).toBe('/');
+      expect(router.state.location.pathname).toBe('/hoje');
     });
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'DIW Arcade' }),
+      await screen.findByRole('heading', { level: 1, name: 'Hoje' }),
     ).toBeInTheDocument();
 
     const save = readSave(storage);
@@ -98,7 +98,7 @@ describe('OnboardingPage', () => {
     await user.keyboard('{Escape}');
 
     await waitFor(() => {
-      expect(router.state.location.pathname).toBe('/');
+      expect(router.state.location.pathname).toBe('/hoje');
     });
 
     const save = readSave(storage);
@@ -113,7 +113,7 @@ describe('OnboardingPage', () => {
     await user.click(await screen.findByRole('button', { name: 'Pular' }));
 
     await waitFor(() => {
-      expect(router.state.location.pathname).toBe('/');
+      expect(router.state.location.pathname).toBe('/hoje');
     });
 
     const save = readSave(storage);
@@ -125,10 +125,10 @@ describe('OnboardingPage', () => {
     const { router } = renderApp('/boas-vindas', true);
 
     await waitFor(() => {
-      expect(router.state.location.pathname).toBe('/');
+      expect(router.state.location.pathname).toBe('/hoje');
     });
     expect(
-      screen.getByRole('heading', { level: 1, name: 'DIW Arcade' }),
+      await screen.findByRole('heading', { level: 1, name: 'Hoje' }),
     ).toBeInTheDocument();
   });
 });

@@ -32,7 +32,12 @@ function renderApp(path: string, storage: StorageLike) {
 }
 
 const pages = [
-  { path: '/', heading: 'DIW Arcade', content: 'Introdução à Web e tecnologias' },
+  { path: '/hoje', heading: 'Hoje' },
+  {
+    path: '/trilha',
+    heading: 'DIW Arcade',
+    content: 'Introdução à Web e tecnologias',
+  },
   { path: '/no/n07', heading: 'Propriedades CSS' },
   { path: '/no/n07/quiz', heading: 'Quiz' },
   { path: '/no/n07/cartas', heading: 'Cartas', content: 'Propriedades CSS' },
@@ -42,16 +47,11 @@ const pages = [
     heading: 'Caixa com margem, borda e preenchimento',
   },
   {
-    path: '/laboratorios',
-    heading: 'Laboratórios',
-    content: 'Laboratório 01 — Portfólio Profissional',
-  },
-  {
     path: '/laboratorios/lab-01',
     heading: 'Laboratório',
     content: 'Laboratório 01 — Portfólio Profissional',
   },
-  { path: '/estatisticas', heading: 'Estatísticas' },
+  { path: '/progresso', heading: 'Progresso' },
   { path: '/ajustes', heading: 'Ajustes' },
 ] as const;
 
