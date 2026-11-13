@@ -1,0 +1,128 @@
+.lesson {
+  display: grid;
+  gap: var(--space-5, 24px);
+  padding: var(--space-5, 24px) 0;
+}
+
+.lesson__header {
+  display: grid;
+  gap: 12px;
+  padding: 24px;
+}
+
+.lesson__title {
+  margin: 0;
+  font-family: var(--font-pixel), sans-serif;
+  font-size: 1.5rem;
+}
+
+.lesson__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+}
+
+.lesson__mastery {
+  display: grid;
+  gap: 4px;
+  max-width: 16rem;
+}
+
+.lesson__back:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.lesson__body {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.lesson__main {
+  display: grid;
+  gap: 16px;
+}
+
+.lesson__stage,
+.lesson__aside {
+  padding: 24px;
+}
+
+.lesson__continue {
+  justify-self: start;
+}
+
+.lesson-panel {
+  display: grid;
+  gap: 12px;
+  justify-items: start;
+}
+
+.lesson-panel__title {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.lesson-panel__meta,
+.lesson-panel__note {
+  margin: 0;
+  color: var(--muted);
+}
+
+.lesson-panel__secondary {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  padding-top: 12px;
+}
+
+.lesson-panel__status {
+  margin: 0;
+  font-weight: 600;
+}
+
+.lesson-panel__challenges {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lesson-panel__challenge {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 2px solid var(--edge);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.lesson-panel__challenge:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -6px;
+}
+
+.lesson-panel__challenge-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.lesson-panel__kind,
+.lesson-panel__state {
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+}
+
+@media (max-width: 48rem) {
+  .lesson__body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
