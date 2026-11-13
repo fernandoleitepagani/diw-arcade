@@ -11,6 +11,7 @@
 }
 
 .hud__level {
+  color: var(--u-prova);
   font-family: var(--font-display), monospace;
   font-size: 0.625rem;
   letter-spacing: 0;

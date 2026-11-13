@@ -1,5 +1,7 @@
 import { Link } from 'react-router';
-import { Card, Mascot, ProgressRing } from '../../components/ui';
+import { Bit } from '../../components/pixel/Bit/Bit';
+import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
+import { SegBar } from '../../components/pixel/SegBar/SegBar';
 import {
   NODES,
   UNITS,
@@ -61,11 +63,10 @@ export function ContinueCard({ save, now }: ContinueCardProps) {
   const streak = getStreak(save, now);
 
   return (
-    <Card
+    <PixelPanel
       as="section"
       aria-label="Continuar"
       className="continue-card"
-      tone="accent"
     >
       <span className="continue-card__index" aria-hidden="true">
         {node.id.slice(1)}
@@ -100,16 +101,12 @@ export function ContinueCard({ save, now }: ContinueCardProps) {
           <dt>Meta diária</dt>
           <dd>
             <span className="continue-card__goal">
-              <ProgressRing
+              <SegBar
                 label="Meta diária"
-                max={goal}
-                size={48}
-                stroke={5}
-                tone={goalMet ? 'success' : 'accent'}
-                value={todayXp}
-              >
-                <span aria-hidden="true">{todayXp}</span>
-              </ProgressRing>
+                on={Math.min(10, Math.round((todayXp / goal) * 10))}
+                total={10}
+                color={goalMet ? 'var(--ok)' : undefined}
+              />
               <span className="continue-card__goal-value">
                 {todayXp}/{goal} XP hoje
               </span>
@@ -139,9 +136,9 @@ export function ContinueCard({ save, now }: ContinueCardProps) {
       </dl>
 
       <div className="continue-card__bit">
-        <Mascot mood="idle" size={56} />
+        <Bit scale={7} />
         <p className="continue-card__bit-line">{pickLine('welcome', 3)}</p>
       </div>
-    </Card>
+    </PixelPanel>
   );
 }

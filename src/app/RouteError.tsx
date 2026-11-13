@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router';
-import { Button, Card, Mascot } from '../components/ui';
+import { Bit } from '../components/pixel/Bit/Bit';
+import { PixelPanel } from '../components/pixel/PixelPanel/PixelPanel';
+import { Button } from '../components/ui';
 import './RouteError.css';
 
 /**
@@ -18,11 +20,10 @@ export function RouteError() {
   }, []);
 
   return (
-    <Card as="section" tone="accent" className="route-error" role="alert">
-      <Mascot
-        mood="sad"
+    <PixelPanel as="section" className="route-error" role="alert">
+      <Bit
         line="Deu um curto no meu circuito. Bora tentar mais uma vez?"
-        size={112}
+        scale={14}
       />
       <h1 ref={headingRef} tabIndex={-1}>
         Não foi possível carregar esta página
@@ -37,6 +38,6 @@ export function RouteError() {
           Voltar para a trilha
         </Link>
       </div>
-    </Card>
+    </PixelPanel>
   );
 }

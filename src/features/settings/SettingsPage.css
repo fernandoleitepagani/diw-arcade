@@ -13,6 +13,7 @@
 }
 
 .settings__group {
+  padding: var(--space-5);
   display: grid;
   align-content: start;
   gap: var(--space-3);

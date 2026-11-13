@@ -2,7 +2,9 @@ import { useCallback, useEffect, useRef } from 'react';
 import { Navigate, useNavigate } from 'react-router';
 import { useProgress } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
-import { Button, Card, Mascot } from '../../components/ui';
+import { Bit } from '../../components/pixel/Bit/Bit';
+import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
+import { Button } from '../../components/ui';
 import { pickLine } from '../../content/copy';
 import type { DailyGoal } from '../../lib/progress/events';
 import './OnboardingPage.css';
@@ -57,12 +59,12 @@ export function OnboardingPage() {
 
   return (
     <main className="onboarding">
-      <Card
+      <PixelPanel
         as="section"
         className="onboarding__card"
         aria-labelledby="onboarding-title"
       >
-        <Mascot mood="happy" line={pickLine('welcome', 0)} size={128} />
+        <Bit line={pickLine('welcome', 0)} scale={16} />
 
         <div className="onboarding__intro">
           <h1 className="onboarding__brand" id="onboarding-title">
@@ -96,7 +98,7 @@ export function OnboardingPage() {
         >
           Pular
         </Button>
-      </Card>
+      </PixelPanel>
     </main>
   );
 }

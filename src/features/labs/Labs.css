@@ -40,6 +40,7 @@
 }
 
 .labs-card {
+  padding: var(--space-5);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: var(--space-3);
@@ -65,10 +66,9 @@
 }
 
 .labs-card__ring {
-  justify-self: end;
-}
-
-.labs-card__ring .ui-ring__content {
+  display: grid;
+  justify-items: end;
+  gap: var(--space-1);
   font-family: var(--font-mono), monospace;
   font-size: 0.7rem;
 }
@@ -129,7 +129,22 @@
 
 /* The rubric is taller than the viewport, so it flows with the page instead
    of becoming a scroll region only a pointer user can reach. */
+.labs-guide__count {
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--edge);
+  color: var(--muted);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.labs-guide__count--done {
+  border-color: var(--ok);
+  color: var(--ok);
+}
+
 .labs-guide__aside {
+  padding: 1.25rem;
   display: grid;
   gap: var(--space-5);
 }
