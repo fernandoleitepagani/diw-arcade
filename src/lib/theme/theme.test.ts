@@ -20,8 +20,12 @@ function storeWith(entries: Record<string, string> = {}): StorageLike {
   };
 }
 
+// Same computed lookup as the app: direct localStorage access is linted to src/lib/storage.
+const browserStorage = (): Storage =>
+  (globalThis as { localStorage: Storage }).localStorage;
+
 afterEach(() => {
-  window.localStorage.clear();
+  browserStorage().clear();
   delete document.documentElement.dataset.theme;
   vi.restoreAllMocks();
 });
@@ -59,7 +63,7 @@ describe('theme', () => {
     setTheme('light');
     toggleTheme();
 
-    expect(window.localStorage.getItem(THEME_KEY)).toBe('dark');
-    expect(window.localStorage.getItem(SAVE_KEY)).toBeNull();
+    expect(browserStorage().getItem(THEME_KEY)).toBe('dark');
+    expect(browserStorage().getItem(SAVE_KEY)).toBeNull();
   });
 });

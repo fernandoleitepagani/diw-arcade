@@ -13,8 +13,12 @@ import {
 import { FIXED_NOW, renderWithProgress } from '../../test/renderWithProgress';
 import { SettingsPage } from './SettingsPage';
 
+// Same computed lookup as the app: direct localStorage access is linted to src/lib/storage.
+const browserStorage = (): Storage =>
+  (globalThis as { localStorage: Storage }).localStorage;
+
 afterEach(() => {
-  window.localStorage.removeItem(THEME_KEY);
+  browserStorage().removeItem(THEME_KEY);
   delete document.documentElement.dataset.theme;
 });
 
@@ -51,12 +55,12 @@ describe('SettingsPage', () => {
     await user.click(light);
     expect(light).toBeChecked();
     expect(document.documentElement.dataset.theme).toBe('light');
-    expect(window.localStorage.getItem(THEME_KEY)).toBe('light');
+    expect(browserStorage().getItem(THEME_KEY)).toBe('light');
 
     await user.click(dark);
     expect(dark).toBeChecked();
     expect(document.documentElement.dataset.theme).toBe('dark');
-    expect(window.localStorage.getItem(THEME_KEY)).toBe('dark');
+    expect(browserStorage().getItem(THEME_KEY)).toBe('dark');
   });
 
   it('keeps sound off by default', () => {

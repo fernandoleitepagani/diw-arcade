@@ -6,6 +6,7 @@ import { Button, Card, PageHeader } from '../../components/ui';
 import { toDayKey } from '../../lib/game/days';
 import { createSfx } from '../../lib/sound/sfx';
 import { exportSave, parseImport, type SaveV1 } from '../../lib/storage';
+import { setTheme, useTheme, type Theme } from '../../lib/theme/theme';
 import './SettingsPage.css';
 
 const GOALS = [
@@ -13,6 +14,11 @@ const GOALS = [
   { value: 50, label: 'Regular (50 XP)' },
   { value: 100, label: 'Intenso (100 XP)' },
 ] as const;
+
+const THEMES: readonly { value: Theme; label: string }[] = [
+  { value: 'dark', label: 'Escuro' },
+  { value: 'light', label: 'Claro' },
+];
 
 const NEW_CARD_CAPS = [10, 20, 30, 50] as const;
 const REVIEW_CAPS = [50, 100, 200, 500] as const;
@@ -91,6 +97,7 @@ function SettingsContent() {
   const [pendingImport, setPendingImport] = useState<SaveV1 | null>(null);
   const [resetWord, setResetWord] = useState('');
   const [notice, setNotice] = useState<string | null>(null);
+  const theme = useTheme();
 
   function updateSettings(patch: Partial<SaveV1['settings']>) {
     dispatch({ type: 'settings/update', patch });
@@ -161,6 +168,29 @@ function SettingsContent() {
       />
 
       <div className="settings__groups">
+        <Card
+          as="section"
+          className="settings__group"
+          aria-labelledby="settings-appearance"
+        >
+          <h2 id="settings-appearance">Aparência</h2>
+          <fieldset className="settings__goals settings__themes">
+            <legend className="settings__sr-only">Aparência</legend>
+            {THEMES.map(({ value, label }) => (
+              <label className="settings__goal" key={value}>
+                <input
+                  type="radio"
+                  name="theme"
+                  value={value}
+                  checked={theme === value}
+                  onChange={() => setTheme(value)}
+                />
+                <span>{label}</span>
+              </label>
+            ))}
+          </fieldset>
+        </Card>
+
         <Card
           as="section"
           tone="accent"

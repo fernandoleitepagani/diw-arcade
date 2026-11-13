@@ -63,6 +63,10 @@
   border: 0;
 }
 
+.settings__themes {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .settings__goal {
   display: flex;
   align-items: center;

@@ -11,6 +11,7 @@ import '@fontsource/press-start-2p';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './app/App';
+import { initTheme } from './lib/theme/theme';
 import './styles/tokens.css';
 import './styles/theme.css';
 import './styles/global.css';
@@ -20,6 +21,8 @@ const root = document.getElementById('root');
 if (!root) {
   throw new Error('Elemento #root não encontrado.');
 }
+
+initTheme();
 
 createRoot(root).render(
   <StrictMode>
