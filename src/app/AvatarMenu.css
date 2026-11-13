@@ -1,0 +1,53 @@
+.avatar-menu {
+  position: relative;
+  flex: none;
+}
+
+.avatar-menu__trigger {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.avatar-menu__trigger:focus-visible,
+.avatar-menu__item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+}
+
+.avatar-menu__icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.avatar-menu__list {
+  position: absolute;
+  inset-block-start: calc(100% + var(--space-2));
+  inset-inline-end: 0;
+  z-index: calc(var(--z-nav) + 1);
+  display: grid;
+  min-width: 10rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.avatar-menu__item {
+  display: block;
+  min-height: 44px;
+  padding: var(--space-3) var(--space-4);
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .avatar-menu__item:hover {
+    background: var(--surface-2);
+  }
+}

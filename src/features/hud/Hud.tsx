@@ -1,6 +1,6 @@
 import { Component, type ReactNode } from 'react';
 import { useProgress } from '../../app/ProgressProvider';
-import { Badge, ProgressRing } from '../../components/ui';
+import { Badge } from '../../components/ui';
 import {
   getLevelProgress,
   getStreak,
@@ -50,16 +50,9 @@ function HudContent() {
         Nv {level.level}
       </Badge>
 
-      <div className="hud__xp">
-        <ProgressRing
-          label="XP para o próximo nível"
-          max={level.xpForNextLevel}
-          size={56}
-          stroke={6}
-          tone="xp"
-          value={level.xpInLevel}
-        />
-      </div>
+      <span className="hud__xp">
+        {level.xpInLevel}/{level.xpForNextLevel} XP
+      </span>
 
       <span className="hud__streak">
         <FlameIcon />
@@ -70,14 +63,6 @@ function HudContent() {
         className={goalMet ? 'hud__today hud__today--met' : 'hud__today'}
         data-met={goalMet ? 'true' : 'false'}
       >
-        <ProgressRing
-          label="Meta diária"
-          max={goal}
-          size={30}
-          stroke={4}
-          tone={goalMet ? 'success' : 'accent'}
-          value={todayXp}
-        />
         <span className="hud__today-value">
           {todayXp}/{goal} XP hoje
         </span>

@@ -22,7 +22,7 @@ describe('Layout', () => {
       name: 'Navegação principal',
     });
     expect(navs).toHaveLength(1);
-    const links = within(navs[0]).getAllByRole('link');
+    const links = within(navs[0]!).getAllByRole('link');
     expect(links.map((link) => link.textContent)).toEqual([
       'Hoje',
       'Trilha',

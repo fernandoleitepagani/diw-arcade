@@ -1,9 +1,9 @@
 .hud {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
-  gap: var(--space-2) var(--space-3);
-  width: 100%;
+  gap: var(--space-3);
+  margin-inline-start: auto;
   min-width: 0;
   color: var(--text-muted);
   font-size: var(--font-size-xs);
@@ -18,8 +18,8 @@
 }
 
 .hud__xp {
-  display: flex;
   flex: none;
+  white-space: nowrap;
 }
 
 .hud__streak {
@@ -40,10 +40,9 @@
 
 .hud__today {
   display: inline-flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-1);
-  min-width: 0;
+  white-space: nowrap;
 }
 
 .hud__today--met {
@@ -61,6 +60,11 @@
 
 @media (max-width: 767px) {
   .hud {
-    gap: var(--space-1) var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .hud__xp,
+  .hud__today {
+    display: none;
   }
 }

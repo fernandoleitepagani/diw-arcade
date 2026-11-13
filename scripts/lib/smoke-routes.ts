@@ -11,7 +11,8 @@ export interface SmokeRoute {
 
 /** Rotas percorridas pelo smoke de navegador, na ordem em que rodam. */
 export const SMOKE_ROUTES: readonly SmokeRoute[] = [
-  { path: '/', label: 'árvore' },
+  { path: '/hoje', label: 'hoje' },
+  { path: '/trilha', label: 'trilha' },
   { path: '/no/n01', label: 'nó' },
   { path: '/no/n01/quiz', label: 'quiz', probe: 'quiz' },
   { path: '/no/n01/cartas', label: 'cartas do nó', probe: 'flashcard' },
@@ -20,9 +21,8 @@ export const SMOKE_ROUTES: readonly SmokeRoute[] = [
   { path: '/desafio/n19-c01', label: 'desafio fetch' },
   { path: '/revisao', label: 'revisão' },
   { path: '/desafio/n01-c01', label: 'desafio' },
-  { path: '/laboratorios', label: 'laboratórios' },
   { path: '/laboratorios/lab-01', label: 'laboratório' },
-  { path: '/estatisticas', label: 'estatísticas' },
+  { path: '/progresso', label: 'progresso' },
   { path: '/ajustes', label: 'ajustes' },
   { path: '/boas-vindas', label: 'boas-vindas', seed: 'fresh' },
   { path: '/caminho-inexistente', label: 'não encontrada' },

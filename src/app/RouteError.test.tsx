@@ -67,7 +67,7 @@ describe('RouteError', () => {
     expect(
       screen.getByRole('navigation', { name: 'Navegação principal' }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Árvore' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Trilha' })).toBeInTheDocument();
 
     expect(screen.queryByText(/Unexpected Application Error/i)).toBeNull();
     expect(screen.queryByText(/Hey developer/i)).toBeNull();
