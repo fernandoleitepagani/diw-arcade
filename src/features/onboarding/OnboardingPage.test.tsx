@@ -128,7 +128,7 @@ describe('OnboardingPage', () => {
       expect(router.state.location.pathname).toBe('/hoje');
     });
     expect(
-      screen.getByRole('heading', { level: 1, name: 'DIW Arcade' }),
+      await screen.findByRole('heading', { level: 1, name: 'Hoje' }),
     ).toBeInTheDocument();
   });
 });
