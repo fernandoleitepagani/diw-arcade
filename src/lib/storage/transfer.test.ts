@@ -24,7 +24,7 @@ describe('exportSave', () => {
 
     expect(exportSave(save, NOW)).toEqual({
       app: 'diw-arcade',
-      schemaVersion: 1,
+      schemaVersion: 2,
       exportedAt: NOW.toISOString(),
       save,
     });
@@ -38,6 +38,42 @@ describe('parseImport', () => {
     const result = parseImport(JSON.stringify(exportSave(save, NOW)));
 
     expect(result).toEqual({ ok: true, save });
+  });
+
+  it('imports a v1 export with primersRead {} and all progress', () => {
+    const { primersRead: _drop, ...v1 } = { ...sampleSave(), schemaVersion: 1 };
+    const result = parseImport(
+      JSON.stringify({ app: 'diw-arcade', schemaVersion: 1, exportedAt: NOW.toISOString(), save: v1 }),
+    );
+
+    expect(result).toEqual({
+      ok: true,
+      save: { ...v1, schemaVersion: 2, primersRead: {} },
+    });
+  });
+
+  it('round-trips a non-empty primersRead', () => {
+    const save = { ...sampleSave(), primersRead: { n01: NOW.toISOString() } };
+
+    expect(parseImport(JSON.stringify(exportSave(save, NOW)))).toEqual({ ok: true, save });
+  });
+
+  it('rejects a future schema version', () => {
+    const save = { ...sampleSave(), schemaVersion: 3 };
+    const result = parseImport(JSON.stringify({ ...exportSave(sampleSave(), NOW), save }));
+
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.error).toContain('corrompido');
+  });
+
+  it('defaults a missing primersRead under v2', () => {
+    const { primersRead: _drop, ...v2 } = sampleSave();
+    const result = parseImport(
+      JSON.stringify({ ...exportSave(sampleSave(), NOW), save: v2 }),
+    );
+
+    expect(result.ok && result.save.primersRead).toEqual({});
   });
 
   it('rejects invalid JSON with a PT-BR message', () => {
