@@ -262,5 +262,136 @@
     "back": "Informações sobre a página corrente e uma linha de comando para testes de expressões JavaScript.",
     "source": { "aula": 310, "slide": 11 },
     "evidence": "Mostra informações sobre a página corrente Inclui uma linha de comando para testes de expressões Javascript"
+  },
+  {
+    "id": "n14-f034",
+    "nodeId": "n14",
+    "front": "Qual é a diferença entre declarar uma variável com `let` e com `const`?",
+    "back": "`let` permite reatribuir o valor; `const` não permite reatribuir a mesma ligação.",
+    "source": { "aula": 310, "slide": 6 },
+    "evidence": "Classes, Modules, Arrow Functions, Const e Let, Template Literals, Promises"
+  },
+  {
+    "id": "n14-f035",
+    "nodeId": "n14",
+    "front": "O que acontece ao tentar atribuir outro valor a uma constante?",
+    "back": "O motor lança um `TypeError`: a ligação criada por `const` não pode ser reatribuída.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 2,
+      "endLine": 2
+    },
+    "evidence": "const API_URL = \"http://localhost:3001/alunos\";"
+  },
+  {
+    "id": "n14-f036",
+    "nodeId": "n14",
+    "front": "O que `typeof` devolve para um texto e para um número?",
+    "back": "Devolve `\"string\"` para textos e `\"number\"` para números.",
+    "source": { "aula": 310, "slide": 8 },
+    "evidence": "Oferece tipagem dinâmica, tipos de variáveis não são definidos previamente"
+  },
+  {
+    "id": "n14-f037",
+    "nodeId": "n14",
+    "front": "Como um template literal insere o valor de uma variável no texto?",
+    "back": "Use crases para delimitar o texto e `${expressao}` para inserir o valor.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 21,
+      "endLine": 24
+    },
+    "evidence": "li.innerHTML = ` <span> <strong>${aluno.nome}</strong>"
+  },
+  {
+    "id": "n14-f038",
+    "nodeId": "n14",
+    "front": "O que a palavra-chave `return` faz dentro de uma função?",
+    "back": "Encerra a execução da função e devolve o valor indicado para quem a chamou.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Pokemon/public/script.js",
+      "startLine": 18,
+      "endLine": 20
+    },
+    "evidence": "return API_KEY ? { \"X-Api-Key\": API_KEY } : {};"
+  },
+  {
+    "id": "n14-f039",
+    "nodeId": "n14",
+    "front": "O que acontece com os argumentos passados em uma chamada de função?",
+    "back": "Eles são associados aos parâmetros declarados e o corpo da função executa com esses valores.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 67,
+      "endLine": 68
+    },
+    "evidence": "function prepararEdicao(aluno) { inputId.value = aluno.id;"
+  },
+  {
+    "id": "n14-f040",
+    "nodeId": "n14",
+    "front": "Como acessar o primeiro item de um array e saber quantos itens ele tem?",
+    "back": "`lista[0]` acessa o primeiro item e `lista.length` informa a quantidade de itens.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto base de exemplo - Mapa PUC Minas/js/app.js",
+      "startLine": 1,
+      "endLine": 1
+    },
+    "evidence": "const centralLatLong = [-43.9397233, -19.9332786];"
+  },
+  {
+    "id": "n14-f041",
+    "nodeId": "n14",
+    "front": "Como percorrer todos os itens de um array com um laço `for`?",
+    "back": "Comece em `i = 0`, repita enquanto `i < lista.length` e acesse cada item com `lista[i]`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto base de exemplo - Mapa PUC Minas/js/app.js",
+      "startLine": 3,
+      "endLine": 5
+    },
+    "evidence": "const locais = [ { \"id\": 1,"
+  },
+  {
+    "id": "n14-f042",
+    "nodeId": "n14",
+    "front": "Para que serve o `console.log` no desenvolvimento?",
+    "back": "Imprime valores no console do navegador para inspecionar dados e depurar o código.",
+    "source": { "aula": 310, "slide": 11 },
+    "evidence": "Inclui uma linha de comando para testes de expressões Javascript"
+  },
+  {
+    "id": "n14-f043",
+    "nodeId": "n14",
+    "front": "Qual método do console registra uma mensagem de erro?",
+    "back": "`console.error(...)` registra a mensagem de erro no console.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 37,
+      "endLine": 37
+    },
+    "evidence": "console.error(erro);"
+  },
+  {
+    "id": "n14-f044",
+    "nodeId": "n14",
+    "front": "No exemplo da aula, em qual parte do documento ficam as tags script?",
+    "back": "Ficam dentro do `<head>`, depois do `<title>`, em uma seção carregada antes do `<body>`.",
+    "source": { "aula": 310, "slide": 9 },
+    "evidence": "<title>Exemplo Javascript</title> <script type=\"text/javascript\" src=\"script.js\"></script>"
+  },
+  {
+    "id": "n14-f045",
+    "nodeId": "n14",
+    "front": "O que o atributo `src` indica na tag script?",
+    "back": "Indica o caminho do arquivo JavaScript externo que o navegador deve carregar.",
+    "source": { "aula": 310, "slide": 9 },
+    "evidence": "<script type=\"text/javascript\" src=\"script.js\"></script>"
   }
 ]
