@@ -2,7 +2,7 @@ import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
-import { NODES, type NodeId } from '../../content';
+import { getChallenges, getFlashcards, NODES, type NodeId } from '../../content';
 import { newCard } from '../../lib/srs/fsrs';
 import {
   SaveV1Schema,
@@ -31,8 +31,29 @@ function renderTree(save: SaveV1 = saveWith()) {
 const mastered = (ids: readonly NodeId[]) => {
   const base = createEmptySave(FIXED_NOW);
   const rounds: SaveV1['quiz']['rounds'] = {};
-  for (const id of ids) rounds[id] = { best: 100, count: 1, perfect: true };
-  return saveWith({ quiz: { ...base.quiz, rounds } });
+  const cards: SaveV1['cards'] = {};
+  const challenges: SaveV1['challenges'] = {};
+  for (const id of ids) {
+    rounds[id] = { best: 100, count: 1, perfect: true };
+    for (const flashcard of getFlashcards(id)) {
+      cards[flashcard.id] = {
+        ...newCard(FIXED_NOW),
+        due: '2099-01-01T00:00:00.000Z',
+        reps: 1,
+        state: 2,
+      };
+    }
+    for (const challenge of getChallenges(id)) {
+      challenges[challenge.id] = {
+        passed: true,
+        failedRuns: 0,
+        hintsUsed: 0,
+        xpAwarded: 0,
+        code: null,
+      };
+    }
+  }
+  return saveWith({ quiz: { ...base.quiz, rounds }, cards, challenges });
 };
 
 describe('SkillTree', () => {
