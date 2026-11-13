@@ -1,0 +1,55 @@
+.route-error {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  width: min(100%, 34rem);
+  margin-block: clamp(2rem, 8vh, 5rem);
+  margin-inline: auto;
+  padding: clamp(2rem, 5vw, 3rem);
+  text-align: center;
+}
+
+.route-error h1:focus-visible {
+  outline-offset: 6px;
+}
+
+.route-error__text {
+  max-width: 42ch;
+  color: var(--text-muted);
+}
+
+.route-error__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3) var(--space-4);
+}
+
+.route-error__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: var(--space-3) var(--space-5);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+  transition-property: background-color, border-color;
+  transition-duration: var(--dur-fast);
+  transition-timing-function: ease;
+}
+
+@media (hover: hover) {
+  .route-error__link:hover {
+    background: var(--surface-2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-error__link {
+    transition: none;
+  }
+}
