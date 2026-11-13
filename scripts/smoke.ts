@@ -7,9 +7,13 @@ import { fileURLToPath } from 'node:url';
 import AxeBuilder from '@axe-core/playwright';
 import { chromium, type Browser, type LaunchOptions, type Page } from 'playwright';
 import {
-  isBaselined,
+  checkRoutePage,
   SMOKE_ROUTES,
   VIEWPORTS,
+  type Finding,
+  type ProbeKind,
+  type RoutePage,
+  type RouteCheckResult,
   type SmokeRoute,
   type SmokeViolation,
   type Viewport,
@@ -25,6 +29,30 @@ const BASELINE = JSON.parse(
 
 const SAVE_KEY = 'diw-arcade:save';
 const ROOT_WAIT_MS = 5000;
+/** Rotas lazy: o chunk do `main h1` pode demorar sob carga. */
+const HEADING_WAIT_MS = 15_000;
+const PROBE_WAIT_MS = 10_000;
+
+/**
+ * Fixture inline do selftest: o mesmo mutante do achado de review
+ * (`main h1{min-width:4000px}`) que antes passava pelo smoke.
+ */
+const OVERFLOW_FIXTURE = `<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Página com overflow</title>
+    <style>main h1 { min-width: 4000px; }</style>
+  </head>
+  <body>
+    <div id="root">
+      <main>
+        <h1>Overflow de teste</h1>
+      </main>
+    </div>
+  </body>
+</html>`;
 
 const MIME_TYPES: Record<string, string> = {
   '.css': 'text/css; charset=utf-8',
@@ -44,17 +72,10 @@ interface StaticServer {
   close(): Promise<void>;
 }
 
-interface Finding {
-  kind: 'root-vazio' | 'console' | 'pageerror' | 'http' | 'overflow' | 'axe';
-  detail: string;
-}
-
-interface RouteResult {
-  failures: Finding[];
-  baselined: number;
-}
-
-function serve(rootDir: string): Promise<StaticServer> {
+function serve(
+  rootDir: string,
+  inlinePages: Readonly<Record<string, string>> = {},
+): Promise<StaticServer> {
   const server = createServer(async (request, response) => {
     const url = new URL(request.url ?? '/', 'http://127.0.0.1');
     let pathname: string;
@@ -63,6 +84,13 @@ function serve(rootDir: string): Promise<StaticServer> {
     } catch {
       response.writeHead(400);
       response.end('bad request');
+      return;
+    }
+
+    const inlineBody = inlinePages[pathname];
+    if (inlineBody !== undefined) {
+      response.writeHead(200, { 'content-type': MIME_TYPES['.html'] });
+      response.end(inlineBody);
       return;
     }
 
@@ -155,19 +183,155 @@ async function isRootBlank(page: Page): Promise<boolean> {
   }
 }
 
-function seedScript(route: SmokeRoute): string {
-  if (route.seed === 'fresh') {
-    return `localStorage.removeItem(${JSON.stringify(SAVE_KEY)});`;
+/** O esqueleto de carregamento não tem h1; a rota só conta depois que ele aparece. */
+async function waitForHeading(page: Page): Promise<boolean> {
+  try {
+    await page.waitForSelector('main h1', {
+      state: 'attached',
+      timeout: HEADING_WAIT_MS,
+    });
+    return true;
+  } catch {
+    return false;
   }
-  const save = {
-    schemaVersion: 1,
-    createdAt: new Date().toISOString(),
-    onboarded: true,
-    xpTotal: 0,
+}
+
+function errorMessage(error: unknown): string {
+  const message = error instanceof Error ? error.message : String(error);
+  return message.split('\n')[0] ?? message;
+}
+
+/**
+ * Interage com a pergunta atual do quiz e exige o feedback. A rodada sorteia
+ * perguntas de múltipla escolha, verdadeiro/falso e preenchimento; as duas
+ * primeiras têm opções e a última precisa de texto, mas todas levam ao mesmo
+ * painel de feedback.
+ */
+async function probeQuiz(page: Page): Promise<string | null> {
+  try {
+    const option = page.locator('input[name="quiz-option"]').first();
+    if ((await option.count()) > 0) {
+      await option.check({ timeout: PROBE_WAIT_MS });
+    } else {
+      await page
+        .locator('.quiz-round__fill input[type="text"]')
+        .fill('resposta do smoke', { timeout: PROBE_WAIT_MS });
+    }
+
+    await page
+      .getByRole('button', { name: 'Responder' })
+      .click({ timeout: PROBE_WAIT_MS });
+    await page
+      .locator('.quiz-round__feedback')
+      .waitFor({ state: 'visible', timeout: PROBE_WAIT_MS });
+    return null;
+  } catch (error) {
+    return `quiz não mostrou feedback após responder: ${errorMessage(error)}`;
+  }
+}
+
+/** Revela a carta atual e exige a resposta no verso. */
+async function probeFlashcard(page: Page): Promise<string | null> {
+  try {
+    await page
+      .locator('.flashcard-session__reveal')
+      .click({ timeout: PROBE_WAIT_MS });
+    await page
+      .locator('.flashcard-session__back')
+      .waitFor({ state: 'visible', timeout: PROBE_WAIT_MS });
+    return null;
+  } catch (error) {
+    return `carta não revelou a resposta: ${errorMessage(error)}`;
+  }
+}
+
+function probeInteraction(page: Page, kind: ProbeKind): Promise<string | null> {
+  return kind === 'quiz' ? probeQuiz(page) : probeFlashcard(page);
+}
+
+/**
+ * Liga os ouvintes antes da navegação e expõe a página para a checagem
+ * compartilhada. Os erros ficam acumulando até `collectErrors`, já no fim.
+ */
+function watchPage(page: Page, origin: string): RoutePage {
+  const consoleErrors: string[] = [];
+  const pageErrors: string[] = [];
+  const httpErrors: string[] = [];
+
+  page.on('console', (message) => {
+    if (message.type() === 'error') {
+      consoleErrors.push(message.text());
+    }
+  });
+  page.on('pageerror', (error) => {
+    pageErrors.push(error.message);
+  });
+  page.on('response', (response) => {
+    const url = new URL(response.url());
+    if (url.origin !== origin || response.status() < 400) {
+      return;
+    }
+    httpErrors.push(
+      `${response.status()} ${response.request().method()} ${url.pathname}`,
+    );
+  });
+
+  return {
+    isRootBlank: () => isRootBlank(page),
+    waitForHeading: () => waitForHeading(page),
+    measureOverflow: () =>
+      page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+      })),
+    runAxe: async () => {
+      const axe = await new AxeBuilder({ page }).analyze();
+      return axe.violations.map((violation) => ({
+        id: violation.id,
+        impact: violation.impact ?? null,
+        help: violation.help,
+        nodes: violation.nodes.length,
+      }));
+    },
+    probeInteraction: (kind) => probeInteraction(page, kind),
+    collectErrors: async () => {
+      const findings: Finding[] = [];
+      for (const detail of consoleErrors) {
+        findings.push({ kind: 'console', detail });
+      }
+      for (const detail of pageErrors) {
+        findings.push({ kind: 'pageerror', detail });
+      }
+      for (const detail of httpErrors) {
+        findings.push({ kind: 'http', detail });
+      }
+      return findings;
+    },
   };
-  return `localStorage.setItem(${JSON.stringify(SAVE_KEY)}, ${JSON.stringify(
-    JSON.stringify(save),
-  )});`;
+}
+
+function seedScript(route: SmokeRoute): string {
+  const action =
+    route.seed === 'fresh'
+      ? `localStorage.removeItem(${JSON.stringify(SAVE_KEY)});`
+      : `localStorage.setItem(${JSON.stringify(SAVE_KEY)}, ${JSON.stringify(
+          JSON.stringify({
+            schemaVersion: 1,
+            createdAt: new Date().toISOString(),
+            onboarded: true,
+            xpTotal: 0,
+          }),
+        )});`;
+
+  // O addInitScript também roda no iframe sandbox da prévia de /desafio, onde
+  // localStorage lança SecurityError por causa da origem opaca.
+  return `if (window === window.top) {
+  try {
+    ${action}
+  } catch {
+    // localStorage indisponível: a rota decide o estado inicial.
+  }
+}`;
 }
 
 async function checkRoute(
@@ -175,7 +339,7 @@ async function checkRoute(
   baseUrl: string,
   route: SmokeRoute,
   viewport: Viewport,
-): Promise<RouteResult> {
+): Promise<RouteCheckResult> {
   const context = await browser.newContext({
     viewport: { width: viewport.width, height: viewport.height },
     reducedMotion: 'reduce',
@@ -183,82 +347,12 @@ async function checkRoute(
 
   try {
     const page = await context.newPage();
-    const failures: Finding[] = [];
-    const consoleErrors: string[] = [];
-    const pageErrors: string[] = [];
-    const httpErrors: string[] = [];
-    const origin = new URL(baseUrl).origin;
-
-    page.on('console', (message) => {
-      if (message.type() === 'error') {
-        consoleErrors.push(message.text());
-      }
-    });
-    page.on('pageerror', (error) => {
-      pageErrors.push(error.message);
-    });
-    page.on('response', (response) => {
-      const url = new URL(response.url());
-      if (url.origin !== origin || response.status() < 400) {
-        return;
-      }
-      httpErrors.push(
-        `${response.status()} ${response.request().method()} ${url.pathname}`,
-      );
-    });
+    const routePage = watchPage(page, new URL(baseUrl).origin);
 
     await context.addInitScript(seedScript(route));
     await page.goto(`${baseUrl}${route.path}`, { waitUntil: 'load' });
 
-    const blank = await isRootBlank(page);
-    if (blank) {
-      failures.push({
-        kind: 'root-vazio',
-        detail: '#root sem conteúdo renderizado',
-      });
-    }
-
-    if (!blank) {
-      const overflow = await page.evaluate(() => ({
-        scrollWidth: document.documentElement.scrollWidth,
-        clientWidth: document.documentElement.clientWidth,
-      }));
-      if (overflow.scrollWidth > overflow.clientWidth + 1) {
-        failures.push({
-          kind: 'overflow',
-          detail: `${overflow.scrollWidth}px de largura para ${overflow.clientWidth}px de viewport`,
-        });
-      }
-    }
-
-    for (const message of consoleErrors) {
-      failures.push({ kind: 'console', detail: message });
-    }
-    for (const message of pageErrors) {
-      failures.push({ kind: 'pageerror', detail: message });
-    }
-    for (const message of httpErrors) {
-      failures.push({ kind: 'http', detail: message });
-    }
-
-    let baselined = 0;
-    const axe = await new AxeBuilder({ page }).analyze();
-    for (const violation of axe.violations) {
-      if (violation.impact !== 'serious' && violation.impact !== 'critical') {
-        continue;
-      }
-      const known = { route: route.path, rule: violation.id };
-      if (isBaselined(known, BASELINE)) {
-        baselined += 1;
-        continue;
-      }
-      failures.push({
-        kind: 'axe',
-        detail: `${violation.id} (${violation.impact}) — ${violation.help} em ${violation.nodes.length} nó(s)`,
-      });
-    }
-
-    return { failures, baselined };
+    return await checkRoutePage(route, routePage, BASELINE);
   } finally {
     await context.close();
   }
@@ -325,7 +419,9 @@ async function runSelftest(): Promise<number> {
     return 1;
   }
 
-  const server = await serve(BLANK_FIXTURE);
+  const server = await serve(BLANK_FIXTURE, {
+    '/overflow.html': OVERFLOW_FIXTURE,
+  });
   let browser: Browser | undefined;
 
   try {
@@ -336,18 +432,49 @@ async function runSelftest(): Promise<number> {
     });
 
     try {
-      const page = await context.newPage();
-      await page.goto(`${server.url}/`, { waitUntil: 'load' });
-      if (await isRootBlank(page)) {
+      const failures: string[] = [];
+
+      const blankPage = await context.newPage();
+      const blankHarness = watchPage(blankPage, server.url);
+      await blankPage.goto(`${server.url}/`, { waitUntil: 'load' });
+      const blank = await checkRoutePage(
+        { path: '/', label: 'em branco' },
+        blankHarness,
+        [],
+      );
+      if (blank.failures.some((finding) => finding.kind === 'root-vazio')) {
         console.log('selftest OK: bundle em branco detectado');
-        return 0;
+      } else {
+        failures.push('selftest FALHOU: bundle em branco não foi detectado');
       }
+
+      const overflowPage = await context.newPage();
+      const overflowHarness = watchPage(overflowPage, server.url);
+      await overflowPage.goto(`${server.url}/overflow.html`, {
+        waitUntil: 'load',
+      });
+      const overflow = await checkRoutePage(
+        { path: '/overflow.html', label: 'overflow' },
+        overflowHarness,
+        [],
+      );
+      const overflowFinding = overflow.failures.find(
+        (finding) => finding.kind === 'overflow',
+      );
+      if (overflowFinding !== undefined) {
+        console.log(`selftest OK: overflow detectado (${overflowFinding.detail})`);
+      } else {
+        failures.push('selftest FALHOU: overflow não foi detectado');
+      }
+
+      if (failures.length > 0) {
+        console.error(failures.join('\n'));
+        return 1;
+      }
+      return 0;
     } finally {
       await context.close();
     }
-
-    console.error('selftest FALHOU: bundle em branco não foi detectado');
-    return 1;
   } finally {
     await browser?.close();
     await server.close();
