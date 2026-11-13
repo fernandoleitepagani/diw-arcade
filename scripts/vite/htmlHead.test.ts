@@ -16,21 +16,21 @@ const HEAD_HTML = `<!doctype html>
 </html>`;
 
 describe('fontPreloadTags', () => {
-  it('pré-carrega Inter latin 400 e Press Start 2P latin 400', () => {
+  it('pré-carrega Hanken Grotesk latin 400 e Pixelify Sans latin 600', () => {
     const files = [
-      'assets/inter-latin-400-normal-C38fXH4l.woff2',
-      'assets/inter-latin-600-normal-LgqL8muc.woff2',
-      'assets/inter-latin-400-normal-77YHD8bZ.woff',
-      'assets/press-start-2p-latin-400-normal-_wFEWmAB.woff2',
-      'assets/press-start-2p-latin-ext-400-normal-DpfYvR5A.woff2',
+      'assets/hanken-grotesk-latin-400-normal-C38fXH4l.woff2',
+      'assets/hanken-grotesk-latin-600-normal-LgqL8muc.woff2',
+      'assets/hanken-grotesk-latin-400-normal-77YHD8bZ.woff',
+      'assets/pixelify-sans-latin-600-normal-_wFEWmAB.woff2',
+      'assets/pixelify-sans-latin-ext-600-normal-DpfYvR5A.woff2',
       'assets/jetbrains-mono-latin-400-normal-abc123.woff2',
     ];
 
     const tags = fontPreloadTags(files);
 
     expect(tags).toEqual([
-      '<link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/inter-latin-400-normal-C38fXH4l.woff2">',
-      '<link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/press-start-2p-latin-400-normal-_wFEWmAB.woff2">',
+      '<link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/hanken-grotesk-latin-400-normal-C38fXH4l.woff2">',
+      '<link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/pixelify-sans-latin-600-normal-_wFEWmAB.woff2">',
     ]);
   });
 

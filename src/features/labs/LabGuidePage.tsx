@@ -5,7 +5,8 @@ import {
   type ProgressContextValue,
 } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
-import { Badge, Button, PageHeader, Panel } from '../../components/ui';
+import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
+import { Button, PageHeader } from '../../components/ui';
 import {
   LAB_IDS,
   REPO_URL_PREFIX,
@@ -190,9 +191,11 @@ export function LabGuidePage({ lab: givenLab }: LabGuidePageProps = {}) {
         eyebrow="Guia de projeto"
         title="Laboratório"
         actions={
-          <Badge tone={complete ? 'success' : 'xp'}>
+          <span
+            className={complete ? 'labs-guide__count labs-guide__count--done' : 'labs-guide__count'}
+          >
             {done} de {total} passos
-          </Badge>
+          </span>
         }
       />
 
@@ -218,7 +221,7 @@ export function LabGuidePage({ lab: givenLab }: LabGuidePageProps = {}) {
           </section>
         </div>
 
-        <Panel
+        <PixelPanel
           as="aside"
           className="labs-guide__aside"
           aria-label="Rubrica e dicas"
@@ -248,7 +251,7 @@ export function LabGuidePage({ lab: givenLab }: LabGuidePageProps = {}) {
               <TipsList title="JS" tips={lab.tips.js} />
             </div>
           </section>
-        </Panel>
+        </PixelPanel>
       </div>
     </section>
   );

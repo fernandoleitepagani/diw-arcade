@@ -1,5 +1,6 @@
 import { Dialog } from '../session/Dialog';
-import { Button, Mascot } from '../ui';
+import { Bit } from '../pixel/Bit/Bit';
+import { Button } from '../ui';
 import './rewards.css';
 
 export interface LevelUpTakeoverProps {
@@ -16,7 +17,7 @@ export function LevelUpTakeover({ level, line, onClose }: LevelUpTakeoverProps) 
   return (
     <Dialog open title={`Nível ${level}!`} onClose={onClose}>
       <div className="level-up">
-        <Mascot mood="happy" line={line} size={128} />
+        <Bit line={line} scale={16} />
         <Button className="level-up__continue" onClick={onClose}>
           Continuar
         </Button>

@@ -1,6 +1,5 @@
 import { Component, type ReactNode } from 'react';
 import { useProgress } from '../../app/ProgressProvider';
-import { Badge } from '../../components/ui';
 import {
   getLevelProgress,
   getStreak,
@@ -46,9 +45,7 @@ function HudContent() {
 
   return (
     <aside className="hud" aria-label="Status do jogador">
-      <Badge className="hud__level" tone="reward">
-        Nv {level.level}
-      </Badge>
+      <span className="hud__level">Nv {level.level}</span>
 
       <span className="hud__xp">
         {level.xpInLevel}/{level.xpForNextLevel} XP

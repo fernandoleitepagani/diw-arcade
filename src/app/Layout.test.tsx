@@ -43,7 +43,7 @@ describe('Layout', () => {
     ).toHaveAttribute('href', '#conteudo');
   });
 
-  it('drops the Aurora and ClickSpark effects', () => {
+  it('drops the ambient background and spark effects', () => {
     const { container } = renderLayout();
 
     expect(container.querySelector('.aurora')).toBeNull();

@@ -59,7 +59,7 @@ async function renderOg(browser: Browser): Promise<void> {
     });
 
     const fontsLoaded = await page.evaluate(() =>
-      ['400 80px "Press Start 2P"', '400 25px "Inter"', '600 22px "Inter"'].every(
+      ['400 80px "Pixelify Sans"', '400 25px "Hanken Grotesk"', '600 22px "Hanken Grotesk"'].every(
         (font) => document.fonts.check(font),
       ),
     );

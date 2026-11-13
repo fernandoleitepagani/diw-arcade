@@ -2,7 +2,8 @@ import { Component, useState } from 'react';
 import type { ChangeEvent, ReactNode } from 'react';
 import { useProgress } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
-import { Button, Card, PageHeader } from '../../components/ui';
+import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
+import { Button, PageHeader } from '../../components/ui';
 import { toDayKey } from '../../lib/game/days';
 import { createSfx } from '../../lib/sound/sfx';
 import { exportSave, parseImport, type SaveV1 } from '../../lib/storage';
@@ -70,9 +71,9 @@ class SettingsBoundary extends Component<
       return (
         <section className="page settings">
           <PageHeader title="Ajustes" />
-          <Card as="section" className="settings__group">
+          <PixelPanel as="section" className="settings__group">
             <p>O progresso não está disponível neste momento.</p>
-          </Card>
+          </PixelPanel>
         </section>
       );
     }
@@ -168,7 +169,7 @@ function SettingsContent() {
       />
 
       <div className="settings__groups">
-        <Card
+        <PixelPanel
           as="section"
           className="settings__group"
           aria-labelledby="settings-appearance"
@@ -189,11 +190,10 @@ function SettingsContent() {
               </label>
             ))}
           </fieldset>
-        </Card>
+        </PixelPanel>
 
-        <Card
+        <PixelPanel
           as="section"
-          tone="accent"
           className="settings__group"
           aria-labelledby="settings-goal"
         >
@@ -217,9 +217,9 @@ function SettingsContent() {
               </label>
             ))}
           </fieldset>
-        </Card>
+        </PixelPanel>
 
-        <Card
+        <PixelPanel
           as="section"
           className="settings__group"
           aria-labelledby="settings-cards"
@@ -263,9 +263,9 @@ function SettingsContent() {
               </select>
             </div>
           </div>
-        </Card>
+        </PixelPanel>
 
-        <Card
+        <PixelPanel
           as="section"
           className="settings__group"
           aria-labelledby="settings-sound"
@@ -293,9 +293,9 @@ function SettingsContent() {
               Testar som
             </Button>
           </div>
-        </Card>
+        </PixelPanel>
 
-        <Card
+        <PixelPanel
           as="section"
           className="settings__group"
           aria-labelledby="settings-data"
@@ -392,7 +392,7 @@ function SettingsContent() {
               </Button>
             </div>
           </div>
-        </Card>
+        </PixelPanel>
       </div>
 
       <p className="settings__notice" role="status">

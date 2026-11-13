@@ -3,7 +3,9 @@ import {
   type ProgressContextValue,
 } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
-import { Card, Mascot, PageHeader } from '../../components/ui';
+import { Bit } from '../../components/pixel/Bit/Bit';
+import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
+import { PageHeader } from '../../components/ui';
 import {
   NODES,
   NODE_IDS,
@@ -164,14 +166,14 @@ export function StatsPage({ content = DEFAULT_CONTENT }: StatsPageProps = {}) {
       />
 
       {fresh ? (
-        <Card
+        <PixelPanel
           as="section"
           aria-label="Sem atividade ainda"
           className="stats__empty"
         >
-          <Mascot mood="idle" line={pickLine('empty', totals.xpTotal)} />
+          <Bit line={pickLine('empty', totals.xpTotal)} scale={12} />
           <p>Seu painel aparece aqui depois da primeira atividade.</p>
-        </Card>
+        </PixelPanel>
       ) : null}
 
       <section className="stats__section" aria-labelledby="stats-totals">
