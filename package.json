@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "smoke": "tsx scripts/smoke.ts",
+    "screenshots": "tsx scripts/screenshots.ts",
     "budget": "tsx scripts/budget.ts",
     "validate:content": "tsx scripts/validate-content.ts --require-all"
   },
