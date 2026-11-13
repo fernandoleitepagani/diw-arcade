@@ -4,7 +4,7 @@ import { Button, Mascot } from '../../components/ui';
 import { pickLine } from '../../content/copy';
 import { formatSource } from '../../content/source';
 import type { NodeId } from '../../content/tree';
-import type { Question } from '../../content/schema';
+import type { Question, QuestionCode } from '../../content/schema';
 import { quizAnswerXp } from '../../lib/game/xp';
 import type { ProgressEvent } from '../../lib/progress/events';
 import { isFillCorrect } from './grade';
@@ -52,6 +52,48 @@ function correctOptionIndex(question: Question): number {
   if (question.type === 'mcq') return question.answer;
   if (question.type === 'tf') return question.answer ? 0 : 1;
   return -1;
+}
+
+/** The page URL, the HTML fixture and the JS snippet a question asks about. */
+function QuestionCode({ code, id }: { code: QuestionCode; id: string }) {
+  const captionId = `${id}-caption`;
+  const htmlLabelId = `${id}-html`;
+
+  return (
+    <figure
+      className="quiz-round__code"
+      id={id}
+      role="region"
+      aria-labelledby={captionId}
+    >
+      <figcaption id={captionId} className="quiz-round__code-caption">
+        Código JavaScript
+      </figcaption>
+      {code.url === undefined ? null : (
+        <p className="quiz-round__code-url">URL da página: {code.url}</p>
+      )}
+      {code.html === undefined ? null : (
+        <div
+          className="quiz-round__code-example"
+          role="group"
+          aria-labelledby={htmlLabelId}
+        >
+          <p id={htmlLabelId} className="quiz-round__code-caption">
+            HTML de exemplo
+          </p>
+          {/* Scrollable code stays reachable for keyboard users. */}
+          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+          <pre className="quiz-round__code-block" tabIndex={0}>
+            <code>{code.html}</code>
+          </pre>
+        </div>
+      )}
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+      <pre className="quiz-round__code-block" tabIndex={0}>
+        <code>{code.source}</code>
+      </pre>
+    </figure>
+  );
 }
 
 export function QuizRound({
@@ -244,8 +286,21 @@ export function QuizRound({
           }}
         >
           {active.type === 'mcq' ? (
-            <fieldset className="quiz-round__options">
+            <fieldset
+              className="quiz-round__options"
+              aria-describedby={
+                active.code === undefined
+                  ? undefined
+                  : `quiz-code-${active.id}`
+              }
+            >
               <legend className="quiz-round__prompt">{active.prompt}</legend>
+              {active.code === undefined ? null : (
+                <QuestionCode
+                  id={`quiz-code-${active.id}`}
+                  code={active.code}
+                />
+              )}
               {active.options.map((option, index) => {
                 const picked = locked && selected === index;
                 const correct = locked && index === correctOptionIndex(active);
@@ -345,6 +400,12 @@ export function QuizRound({
               <p id={`quiz-prompt-${active.id}`} className="quiz-round__prompt">
                 {active.prompt}
               </p>
+              {active.code === undefined ? null : (
+                <QuestionCode
+                  id={`quiz-code-${active.id}`}
+                  code={active.code}
+                />
+              )}
               <label htmlFor={`quiz-fill-${active.id}`}>Sua resposta</label>
               <input
                 id={`quiz-fill-${active.id}`}
@@ -353,7 +414,11 @@ export function QuizRound({
                 value={fillValue}
                 disabled={locked}
                 readOnly={locked}
-                aria-describedby={`quiz-prompt-${active.id}`}
+                aria-describedby={
+                  active.code === undefined
+                    ? `quiz-prompt-${active.id}`
+                    : `quiz-prompt-${active.id} quiz-code-${active.id}`
+                }
                 onChange={(event) => setFillValue(event.target.value)}
               />
               {locked ? (
