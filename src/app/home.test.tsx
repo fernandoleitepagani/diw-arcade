@@ -67,8 +67,8 @@ describe('home route', () => {
     renderAt('/hoje', true);
     await user.click(await screen.findByRole('link', { name: 'DIW Arcade' }));
     expect(
-      await screen.findByRole('link', { name: /Começar/ }),
-    ).toBeInTheDocument();
+      (await screen.findAllByRole('link', { name: /Começar/ })).length,
+    ).toBeGreaterThan(0);
   });
 
   it('fresh /hoje still goes to /boas-vindas', async () => {

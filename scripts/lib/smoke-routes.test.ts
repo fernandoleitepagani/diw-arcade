@@ -43,8 +43,10 @@ function harness(
 }
 
 describe('rotas do smoke', () => {
-  it('cobre as 15 rotas do app', () => {
+  it('cobre as 17 rotas do app', () => {
     expect(SMOKE_ROUTES.map((route) => route.path)).toEqual([
+      '/',
+      '/?inicio',
       '/hoje',
       '/trilha',
       '/no/n01',

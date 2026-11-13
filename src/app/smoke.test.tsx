@@ -82,7 +82,7 @@ describe('smoke do app', () => {
   });
 
   it('redirects a fresh save to /boas-vindas', async () => {
-    const router = renderApp('/', createMemoryStorage());
+    const router = renderApp('/hoje', createMemoryStorage());
 
     await waitFor(() => {
       expect(router.state.location.pathname).toBe('/boas-vindas');

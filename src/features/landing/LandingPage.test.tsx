@@ -53,7 +53,6 @@ describe('LandingPage', () => {
   it('is PT-BR without middle dots or em dashes', () => {
     const { container } = renderLanding();
     expect(container.textContent).not.toMatch(/[·—]/);
-    expect(document.documentElement.lang === '' || true).toBe(true);
     expect(container.textContent).toMatch(/trilha/i);
   });
 });

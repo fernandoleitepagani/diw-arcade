@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Navigate, type RouteObject } from 'react-router';
 import { PageSkeleton } from '../components/ui';
+import { HomeRoute } from '../features/landing/HomeRoute';
 import { Layout } from './Layout';
 import { RequireOnboarding } from './RequireOnboarding';
 import { RouteError } from './RouteError';
@@ -74,6 +75,7 @@ export const routes: RouteObject[] = [
     ),
     errorElement: routeError,
   },
+  { path: '/', element: <HomeRoute />, errorElement: routeError },
   {
     element: <RequireOnboarding />,
     children: [
@@ -81,7 +83,6 @@ export const routes: RouteObject[] = [
         path: '/',
         element: <Layout />,
         children: [
-          { index: true, element: <Navigate to="/hoje" replace /> },
           { path: 'hoje', element: <TodayPage />, errorElement: routeError },
           { path: 'trilha', element: <TreePage />, errorElement: routeError },
           { path: 'no/:nodeId', element: <NodePage />, errorElement: routeError },
