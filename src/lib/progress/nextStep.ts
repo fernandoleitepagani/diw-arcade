@@ -1,3 +1,4 @@
+import { hasPrimer } from '../../content/primers';
 import { NODES, type NodeId, type UnitId } from '../../content/tree';
 import type { SaveV1 } from '../storage/schema';
 import type { ProgressContent } from './events';
@@ -7,7 +8,7 @@ import {
   type LessonStepId,
 } from './lessonSteps';
 import { getRecommendedNodeId } from './recommend';
-import { getDueCountByNode } from './selectors';
+import { getDueCountByNode, getPrimersRead } from './selectors';
 
 export interface NextAction {
   label: string;
@@ -69,8 +70,8 @@ export function getNextStep(
     unitId: node.unitId,
   };
   const steps = getLessonSteps(save, nodeId, content, {
-    hasPrimer: false,
-    primersRead: new Set<NodeId>(),
+    hasPrimer: hasPrimer(nodeId),
+    primersRead: getPrimersRead(save) as ReadonlySet<NodeId>,
   });
   const stepActions: NextAction[] = LESSON_STEP_IDS.filter(
     (id) => steps[id] === 'pendente',

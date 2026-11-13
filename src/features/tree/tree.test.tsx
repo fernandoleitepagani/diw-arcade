@@ -180,7 +180,7 @@ describe('página do nó', () => {
     unmount();
 
     const second = renderNode('/no/n07?passo=ler');
-    expect(screen.getByText('Em breve')).toBeInTheDocument();
+    expect(screen.getByText('Resumo ainda não disponível')).toBeInTheDocument();
     second.unmount();
 
     renderNode('/no/n07?passo=xyz');

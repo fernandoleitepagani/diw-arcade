@@ -33,10 +33,10 @@ describe('PrimerView', () => {
   it('renders every point with a source line, code display-only', () => {
     render(<PrimerView primer={fixture(8)} />);
     expect(screen.getAllByRole('listitem')).toHaveLength(8);
-    expect(screen.getByText('Fonte: aula 174, slide 3')).toBeInTheDocument();
-    expect(screen.getByText(/^Fonte: TIAW/)).toBeInTheDocument();
-    expect(screen.getByText(/^Fonte: repositório/)).toBeInTheDocument();
-    expect(screen.getByText('Fonte: orientações da Prova 2')).toBeInTheDocument();
+    expect(screen.getAllByText('Fonte: aula 174, slide 3').length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/^Fonte: TIAW/)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/^Fonte: repositório/)[0]).toBeInTheDocument();
+    expect(screen.getAllByText('Fonte: orientações da Prova 2').length).toBeGreaterThan(0);
     const code = screen.getByText('<div>oi</div>');
     expect(code.closest('pre')).not.toBeNull();
     expect(document.body.textContent).not.toContain('·');
