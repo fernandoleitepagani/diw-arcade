@@ -1,0 +1,369 @@
+[
+  {
+    "id": "n19-c01",
+    "nodeId": "n19",
+    "title": "Listar alunos da API",
+    "kind": "js",
+    "goal": "Busque a lista em http://localhost:3000/alunos com fetch e mostre um item por aluno dentro de #lista-alunos.",
+    "starter": {
+      "html": "<h2>Alunos</h2>\n<ul id=\"lista-alunos\"></ul>",
+      "css": "#lista-alunos { line-height: 1.6; }",
+      "js": "// Busque os alunos com fetch e crie um <li> com o nome de cada um.\n"
+    },
+    "solution": {
+      "html": "<h2>Alunos</h2>\n<ul id=\"lista-alunos\"></ul>",
+      "css": "#lista-alunos { line-height: 1.6; }",
+      "js": "const lista = document.querySelector('#lista-alunos');\n\nfetch('http://localhost:3000/alunos')\n  .then((resposta) => resposta.json())\n  .then((alunos) => {\n    for (const aluno of alunos) {\n      const li = document.createElement('li');\n      li.textContent = aluno.nome;\n      lista.appendChild(li);\n    }\n  });\n"
+    },
+    "requirements": [
+      {
+        "id": "lista-existe",
+        "label": "A página tem a lista #lista-alunos.",
+        "check": { "kind": "exists", "selector": "#lista-alunos" }
+      },
+      {
+        "id": "quatro-itens",
+        "label": "A lista mostra exatamente quatro alunos.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": {
+          "kind": "count",
+          "selector": "#lista-alunos li",
+          "min": 4,
+          "max": 4
+        }
+      },
+      {
+        "id": "primeiro-aluno",
+        "label": "O primeiro item mostra Ana.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": {
+          "kind": "text",
+          "selector": "#lista-alunos li:first-child",
+          "match": { "equals": "Ana" }
+        }
+      },
+      {
+        "id": "ultimo-aluno",
+        "label": "O último item mostra Davi.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": {
+          "kind": "text",
+          "selector": "#lista-alunos li:last-child",
+          "match": { "equals": "Davi" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Comece com `const lista = document.querySelector('#lista-alunos');` e chame `fetch('http://localhost:3000/alunos')`.",
+      "Use `.then((resposta) => resposta.json())` para converter a resposta em um array de alunos.",
+      "No segundo `.then`, percorra o array com `for...of`, defina `li.textContent = aluno.nome` e chame `lista.appendChild(li)`."
+    ],
+    "mocks": {
+      "http://localhost:3000/alunos": [
+        { "id": "1", "nome": "Ana", "curso": "ADS" },
+        { "id": "2", "nome": "Bruno", "curso": "Engenharia de Software" },
+        { "id": "3", "nome": "Carla", "curso": "Sistemas de Informação" },
+        { "id": "4", "nome": "Davi", "curso": "ADS" }
+      ]
+    },
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 12,
+      "endLine": 16
+    },
+    "evidence": "// READ (GET) - busca todos os alunos e mostra na tela\nasync function carregarAlunos() {\n  try {\n    const resposta = await fetch(API_URL);\n    const alunos = await resposta.json();"
+  },
+  {
+    "id": "n19-c02",
+    "nodeId": "n19",
+    "title": "Carregando e depois os dados",
+    "kind": "js",
+    "goal": "Mantenha o texto Carregando… em #status e, quando o fetch de http://localhost:3000/alunos terminar, esconda o aviso com o atributo hidden e liste os alunos em #lista-alunos.",
+    "starter": {
+      "html": "<h2>Alunos</h2>\n<p id=\"status\">Carregando…</p>\n<ul id=\"lista-alunos\"></ul>",
+      "css": "#status { color: #555; }",
+      "js": "// Busque os alunos, monte a lista e esconda #status quando terminar.\n"
+    },
+    "solution": {
+      "html": "<h2>Alunos</h2>\n<p id=\"status\">Carregando…</p>\n<ul id=\"lista-alunos\"></ul>",
+      "css": "#status { color: #555; }",
+      "js": "const status = document.querySelector('#status');\nconst lista = document.querySelector('#lista-alunos');\n\nasync function carregarAlunos() {\n  try {\n    const resposta = await fetch('http://localhost:3000/alunos');\n    const alunos = await resposta.json();\n\n    for (const aluno of alunos) {\n      const li = document.createElement('li');\n      li.textContent = aluno.nome + ' — ' + aluno.curso;\n      lista.appendChild(li);\n    }\n  } catch (erro) {\n    status.textContent = 'Não foi possível carregar os alunos.';\n  } finally {\n    status.hidden = true;\n  }\n}\n\ncarregarAlunos();\n"
+    },
+    "requirements": [
+      {
+        "id": "status-carregando",
+        "label": "O aviso #status mostra Carregando….",
+        "check": {
+          "kind": "text",
+          "selector": "#status",
+          "match": { "equals": "Carregando…" }
+        }
+      },
+      {
+        "id": "status-oculto",
+        "label": "Quando os dados chegam, #status recebe o atributo hidden.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": { "kind": "attr", "selector": "#status", "name": "hidden" }
+      },
+      {
+        "id": "tres-itens",
+        "label": "A lista mostra exatamente três alunos.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": {
+          "kind": "count",
+          "selector": "#lista-alunos li",
+          "min": 3,
+          "max": 3
+        }
+      },
+      {
+        "id": "primeiro-item",
+        "label": "O primeiro item mostra nome e curso: Ana — ADS.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": {
+          "kind": "text",
+          "selector": "#lista-alunos li:first-child",
+          "match": { "equals": "Ana — ADS" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "O parágrafo #status já começa com o texto Carregando… no HTML; o JavaScript só precisa escondê-lo no fim.",
+      "Use `async function carregarAlunos()` com `await fetch('http://localhost:3000/alunos')` e `await resposta.json()`.",
+      "Depois de montar a lista, marque `status.hidden = true;` para tirar o aviso da tela."
+    ],
+    "mocks": {
+      "http://localhost:3000/alunos": [
+        { "id": "1", "nome": "Ana", "curso": "ADS" },
+        { "id": "2", "nome": "Bruno", "curso": "Engenharia de Software" },
+        { "id": "3", "nome": "Carla", "curso": "Sistemas de Informação" }
+      ]
+    },
+    "source": { "kind": "orientacao" },
+    "evidence": "Mão na Massa: Revisem os conceitos de manipulação dinâmica de elementos no DOM e consumo de rotas assíncronas, pois a etapa prática exige a implementação de funções completas."
+  },
+  {
+    "id": "n19-c03",
+    "nodeId": "n19",
+    "title": "Falha ao consultar a API",
+    "kind": "js",
+    "goal": "Consulte http://localhost:3000/alunos, que não responde neste desafio, trate a rejeição do fetch com try/catch e mostre a mensagem de erro em #erro, sem criar itens na lista.",
+    "starter": {
+      "html": "<h2>Alunos</h2>\n<p id=\"erro\" hidden></p>\n<ul id=\"lista-alunos\"></ul>",
+      "css": "#erro { color: #a00; font-weight: bold; }",
+      "js": "// Trate a rejeição do fetch e mostre a mensagem em #erro.\n"
+    },
+    "solution": {
+      "html": "<h2>Alunos</h2>\n<p id=\"erro\" hidden></p>\n<ul id=\"lista-alunos\"></ul>",
+      "css": "#erro { color: #a00; font-weight: bold; }",
+      "js": "const erro = document.querySelector('#erro');\nconst lista = document.querySelector('#lista-alunos');\n\nasync function carregarAlunos() {\n  try {\n    const resposta = await fetch('http://localhost:3000/alunos');\n    const alunos = await resposta.json();\n\n    for (const aluno of alunos) {\n      const li = document.createElement('li');\n      li.textContent = aluno.nome;\n      lista.appendChild(li);\n    }\n  } catch (problema) {\n    erro.textContent = 'Não foi possível carregar os alunos. O JSON Server está rodando?';\n    erro.hidden = false;\n  }\n}\n\ncarregarAlunos();\n"
+    },
+    "requirements": [
+      {
+        "id": "erro-existe",
+        "label": "A página tem o parágrafo #erro.",
+        "check": { "kind": "exists", "selector": "#erro" }
+      },
+      {
+        "id": "erro-mensagem",
+        "label": "Após a falha, #erro mostra uma mensagem de erro.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": {
+          "kind": "text",
+          "selector": "#erro",
+          "match": { "pattern": "não foi possível carregar" }
+        }
+      },
+      {
+        "id": "lista-vazia",
+        "label": "A lista permanece vazia quando o fetch falha.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": {
+          "kind": "count",
+          "selector": "#lista-alunos li",
+          "min": 0,
+          "max": 0
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "A rejeição é tratada e o código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Envolva o `fetch('http://localhost:3000/alunos')` em um bloco `try` e trate a falha no `catch`.",
+      "No `catch`, escreva a mensagem com `erro.textContent` e torne o aviso visível com `erro.hidden = false;`.",
+      "Sem o `catch`, a promise rejeitada fica sem tratamento e a mensagem nunca aparece."
+    ],
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 35,
+      "endLine": 36
+    },
+    "evidence": "} catch (erro) {\n    lista.innerHTML = `<li class=\"erro\">Não foi possível conectar. O JSON Server está rodando?</li>`;"
+  },
+  {
+    "id": "n19-c04",
+    "nodeId": "n19",
+    "title": "Cadastrar aluno com POST",
+    "kind": "js",
+    "goal": "No envio do #form-aluno, impeça o recarregamento com preventDefault, envie nome e curso com POST para http://localhost:3000/alunos e mostre o objeto devolvido em #resultado.",
+    "starter": {
+      "html": "<h2>Novo aluno</h2>\n<form id=\"form-aluno\">\n  <label for=\"nome\">Nome</label>\n  <input id=\"nome\" type=\"text\" required>\n  <label for=\"curso\">Curso</label>\n  <input id=\"curso\" type=\"text\" required>\n  <button id=\"enviar\" type=\"submit\">Cadastrar</button>\n</form>\n<p id=\"resultado\"></p>",
+      "css": "#resultado { font-weight: bold; }",
+      "js": "// Escute o submit, envie os dados com POST e mostre a resposta em #resultado.\n"
+    },
+    "solution": {
+      "html": "<h2>Novo aluno</h2>\n<form id=\"form-aluno\">\n  <label for=\"nome\">Nome</label>\n  <input id=\"nome\" type=\"text\" required>\n  <label for=\"curso\">Curso</label>\n  <input id=\"curso\" type=\"text\" required>\n  <button id=\"enviar\" type=\"submit\">Cadastrar</button>\n</form>\n<p id=\"resultado\"></p>",
+      "css": "#resultado { font-weight: bold; }",
+      "js": "const form = document.querySelector('#form-aluno');\nconst nome = document.querySelector('#nome');\nconst curso = document.querySelector('#curso');\nconst resultado = document.querySelector('#resultado');\n\nform.addEventListener('submit', async (evento) => {\n  evento.preventDefault();\n\n  const resposta = await fetch('http://localhost:3000/alunos', {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify({ nome: nome.value, curso: curso.value }),\n  });\n  const aluno = await resposta.json();\n\n  resultado.textContent = 'Aluno ' + aluno.id + ': ' + aluno.nome + ' — ' + aluno.curso;\n});\n"
+    },
+    "requirements": [
+      {
+        "id": "form-existe",
+        "label": "A página tem o formulário #form-aluno.",
+        "check": { "kind": "exists", "selector": "#form-aluno" }
+      },
+      {
+        "id": "campo-nome",
+        "label": "O formulário tem o campo #nome.",
+        "check": { "kind": "exists", "selector": "#nome" }
+      },
+      {
+        "id": "campo-curso",
+        "label": "O formulário tem o campo #curso.",
+        "check": { "kind": "exists", "selector": "#curso" }
+      },
+      {
+        "id": "envio-resultado",
+        "label": "Ao enviar Davi (ADS), #resultado mostra Aluno 7: Davi — ADS.",
+        "before": [
+          { "do": "input", "selector": "#nome", "value": "Davi" },
+          { "do": "input", "selector": "#curso", "value": "ADS" },
+          { "do": "click", "selector": "#enviar" },
+          { "do": "wait", "ms": 150 }
+        ],
+        "check": {
+          "kind": "text",
+          "selector": "#resultado",
+          "match": { "equals": "Aluno 7: Davi — ADS" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Registre `form.addEventListener('submit', async (evento) => { ... })` e chame `evento.preventDefault();` na primeira linha.",
+      "Monte a requisição com `fetch('http://localhost:3000/alunos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ nome: nome.value, curso: curso.value }) })`.",
+      "Leia a resposta com `const aluno = await resposta.json();` e escreva os campos em `resultado.textContent`."
+    ],
+    "mocks": {
+      "http://localhost:3000/alunos": {
+        "id": "7",
+        "nome": "Davi",
+        "curso": "ADS"
+      }
+    },
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/script.js",
+      "startLine": 42,
+      "endLine": 47
+    },
+    "evidence": "async function criarAluno(aluno) {\n  await fetch(API_URL, {\n    method: \"POST\",\n    headers: { \"Content-Type\": \"application/json\" },\n    body: JSON.stringify(aluno),\n  });"
+  },
+  {
+    "id": "n19-c05",
+    "nodeId": "n19",
+    "title": "Alunos e cursos com Promise.all",
+    "kind": "js",
+    "goal": "Busque http://localhost:3000/alunos e http://localhost:3000/cursos ao mesmo tempo com Promise.all e liste cada aluno com o nome do seu curso.",
+    "starter": {
+      "html": "<h2>Alunos e cursos</h2>\n<ul id=\"lista-alunos\"></ul>",
+      "css": "#lista-alunos { line-height: 1.6; }",
+      "js": "// Busque alunos e cursos com Promise.all e cruze os dados pelo cursoId.\n"
+    },
+    "solution": {
+      "html": "<h2>Alunos e cursos</h2>\n<ul id=\"lista-alunos\"></ul>",
+      "css": "#lista-alunos { line-height: 1.6; }",
+      "js": "const lista = document.querySelector('#lista-alunos');\n\nasync function carregarTudo() {\n  const [respostaAlunos, respostaCursos] = await Promise.all([\n    fetch('http://localhost:3000/alunos'),\n    fetch('http://localhost:3000/cursos'),\n  ]);\n\n  const alunos = await respostaAlunos.json();\n  const cursos = await respostaCursos.json();\n\n  for (const aluno of alunos) {\n    const curso = cursos.find((item) => item.id === aluno.cursoId);\n    const li = document.createElement('li');\n    li.textContent = aluno.nome + ' — ' + curso.nome;\n    lista.appendChild(li);\n  }\n}\n\ncarregarTudo();\n"
+    },
+    "requirements": [
+      {
+        "id": "lista-existe",
+        "label": "A página tem a lista #lista-alunos.",
+        "check": { "kind": "exists", "selector": "#lista-alunos" }
+      },
+      {
+        "id": "tres-itens",
+        "label": "A lista mostra exatamente três alunos.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": {
+          "kind": "count",
+          "selector": "#lista-alunos li",
+          "min": 3,
+          "max": 3
+        }
+      },
+      {
+        "id": "primeiro-item",
+        "label": "O primeiro item mostra Ana — ADS.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": {
+          "kind": "text",
+          "selector": "#lista-alunos li:first-child",
+          "match": { "equals": "Ana — ADS" }
+        }
+      },
+      {
+        "id": "ultimo-item",
+        "label": "O último item mostra Carla — ADS.",
+        "before": [{ "do": "wait", "ms": 150 }],
+        "check": {
+          "kind": "text",
+          "selector": "#lista-alunos li:last-child",
+          "match": { "equals": "Carla — ADS" }
+        }
+      },
+      {
+        "id": "sem-erros",
+        "label": "O código executa sem erros.",
+        "check": { "kind": "noErrors" }
+      }
+    ],
+    "hints": [
+      "Chame `await Promise.all([fetch(urlAlunos), fetch(urlCursos)])` e desestruture as duas respostas.",
+      "Converta cada resposta em JSON antes de cruzar os dados: `await respostaAlunos.json()` e `await respostaCursos.json()`.",
+      "Para cada aluno, encontre o curso com `cursos.find((item) => item.id === aluno.cursoId)` e monte o texto do item."
+    ],
+    "mocks": {
+      "http://localhost:3000/alunos": [
+        { "id": "1", "nome": "Ana", "cursoId": "10" },
+        { "id": "2", "nome": "Bruno", "cursoId": "20" },
+        { "id": "3", "nome": "Carla", "cursoId": "10" }
+      ],
+      "http://localhost:3000/cursos": [
+        { "id": "10", "nome": "ADS" },
+        { "id": "20", "nome": "Engenharia de Software" }
+      ]
+    },
+    "source": { "aula": 250, "slide": 10 },
+    "evidence": "O cliente se preocupa com a apresentação para o cliente e o estado da aplicação"
+  }
+]
