@@ -1,4 +1,4 @@
-import { Button } from '../../components/ui';
+import { Button } from '../../components/pixel/Button/Button';
 import type { HintTier } from '../../lib/progress/events';
 
 export interface HintPanelProps {
@@ -27,7 +27,7 @@ export function HintPanel({ hints, hintsUsed, onReveal }: HintPanelProps) {
           {visible.map((hint, index) => (
             <li className="hint-panel__item" key={`${index}-${hint}`}>
               <span className="hint-panel__label">
-                Dica {index + 1} · −5 XP
+                Dica {index + 1}, −5 XP
               </span>
               <p className="hint-panel__text">{hint}</p>
             </li>
@@ -35,7 +35,7 @@ export function HintPanel({ hints, hintsUsed, onReveal }: HintPanelProps) {
         </ol>
       ) : null}
       {revealed < MAX_HINTS ? (
-        <Button variant="secondary" onClick={() => onReveal(nextTier)}>
+        <Button variant="quiet" onClick={() => onReveal(nextTier)}>
           Ver dica {nextTier} (−5 XP)
         </Button>
       ) : (

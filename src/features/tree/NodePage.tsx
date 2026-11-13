@@ -16,6 +16,7 @@ import {
   UNITS,
   type NodeId,
 } from '../../content';
+import { hasPrimer } from '../../content/primers';
 import {
   firstUnfinishedStep,
   getLessonSteps,
@@ -23,8 +24,13 @@ import {
   type LessonStepId,
 } from '../../lib/progress/lessonSteps';
 import type { Outcome } from '../../lib/progress/events';
-import { getDueCountByNode, getStars } from '../../lib/progress/selectors';
+import {
+  getDueCountByNode,
+  getPrimersRead,
+  getStars,
+} from '../../lib/progress/selectors';
 import { createEmptySave } from '../../lib/storage';
+import { usePrimer } from '../lesson/usePrimer';
 import { Domina } from '../lesson/Domina';
 import { LessonStepper, STEP_LABEL } from '../lesson/LessonStepper';
 import { getCardMastery, getMasteryStars } from '../lesson/masteryState';
@@ -39,7 +45,6 @@ import { getNodeState, NODE_STATE_LABEL } from './nodeState';
 
 const ISOLATED_SAVE = createEmptySave(new Date(0));
 const ISOLATED_NOW = new Date(0);
-const NO_PRIMERS: ReadonlySet<NodeId> = new Set();
 const NO_OUTCOME: Outcome = {
   xpGained: 0,
   levelUp: null,
@@ -69,6 +74,7 @@ export function NodePage() {
   const [searchParams] = useSearchParams();
   const node = rawNodeId ? getNode(rawNodeId as NodeId) : undefined;
   usePageTitle(node ? node.title : 'Nó');
+  const primer = usePrimer(node?.id);
   const progress = useOptionalProgress();
   const save = progress?.save ?? ISOLATED_SAVE;
   const dispatch = progress?.dispatch ?? NOOP_DISPATCH;
@@ -106,8 +112,8 @@ export function NodePage() {
   const mastery = getMasteryStars(stars);
   const state = getNodeState(save, nodeId, content);
   const steps = getLessonSteps(save, nodeId, content, {
-    hasPrimer: false,
-    primersRead: NO_PRIMERS,
+    hasPrimer: hasPrimer(nodeId),
+    primersRead: getPrimersRead(save) as ReadonlySet<NodeId>,
   });
   const next = firstUnfinishedStep(steps);
   const requested = searchParams.get('passo');
@@ -165,7 +171,13 @@ export function NodePage() {
               className="lesson__stage"
               aria-label={STEP_LABEL[current]}
             >
-              {current === 'ler' ? <LerPanel /> : null}
+              {current === 'ler' ? (
+                <LerPanel
+                  primer={primer}
+                  read={steps.ler === 'feito'}
+                  onRead={() => dispatch({ type: 'primer/read', nodeId })}
+                />
+              ) : null}
               {current === 'praticar' ? (
                 <PraticarPanel
                   nodeId={nodeId}

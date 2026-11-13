@@ -126,3 +126,41 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.primer {
+  list-style: none;
+  margin: 0 0 var(--space-4, 16px);
+  padding: 0;
+  display: grid;
+  gap: var(--space-3, 12px);
+}
+
+.primer__title {
+  margin: 0 0 4px;
+}
+
+.primer__body {
+  margin: 0 0 8px;
+}
+
+.primer__code {
+  margin: 0 0 8px;
+}
+
+.primer__code pre {
+  margin: 0;
+  padding: 8px 12px;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.primer__code pre:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -2px;
+}
+
+.primer__source {
+  margin: 0;
+  font-size: 0.85em;
+  opacity: 0.8;
+}

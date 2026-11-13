@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import type { Challenge, NodeId } from '../../content';
+import type { Challenge, NodeId, Primer } from '../../content';
 import { Button, ButtonLink } from '../../components/pixel/Button/Button';
+import { PrimerView } from './PrimerView';
 
 const DECK_RULE =
   'Introduz agora todas as cartas novas deste nó, além do limite diário. Elas contam no total de novas de hoje.';
@@ -16,11 +17,39 @@ export function plural(count: number, one: string, many: string): string {
   return `${count} ${count === 1 ? one : many}`;
 }
 
-export function LerPanel() {
+export function LerPanel({
+  primer,
+  read,
+  onRead,
+}: {
+  primer: Primer | undefined;
+  read: boolean;
+  onRead: () => void;
+}) {
+  const [clicked, setClicked] = useState(false);
+  const done = read || clicked;
   return (
     <div className="lesson-panel">
       <h2 className="lesson-panel__title">Ler</h2>
-      <p className="lesson-panel__note">Em breve</p>
+      {primer === undefined ? (
+        <p className="lesson-panel__note">Resumo ainda não disponível</p>
+      ) : (
+        <>
+          <PrimerView primer={primer} />
+          {done ? (
+            <p className="lesson-panel__note">Leitura concluída</p>
+          ) : (
+            <Button
+              onClick={() => {
+                setClicked(true);
+                onRead();
+              }}
+            >
+              Concluir leitura
+            </Button>
+          )}
+        </>
+      )}
     </div>
   );
 }
