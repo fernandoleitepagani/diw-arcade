@@ -240,5 +240,124 @@
     "explanation": "Em textarea, rows e cols definem o número de linhas e colunas do controle.",
     "source": { "aula": 162, "slide": 14 },
     "evidence": "O atributo rows e cols definem o número de linhas e colunas para a apresentação do controle."
+  },
+  {
+    "id": "n04-q019",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "Qual atributo de validação recebe uma expressão regular que o valor do campo precisa satisfazer para ser aceito?",
+    "options": ["pattern", "placeholder", "maxlength", "autofocus"],
+    "answer": 0,
+    "explanation": "O atributo pattern recebe uma expressão regular e só considera válido o valor que casar com ela; placeholder apenas exibe uma dica e maxlength limita o tamanho.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "o usuário submeta o formulário com o campo vazio."
+  },
+  {
+    "id": "n04-q020",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "Em um input do tipo number, o que o atributo step determina?",
+    "options": [
+      "A quantidade máxima de caracteres aceita no campo.",
+      "O intervalo entre os valores considerados válidos.",
+      "O valor inicial exibido quando a página carrega.",
+      "O texto de ajuda mostrado dentro do campo."
+    ],
+    "answer": 1,
+    "explanation": "O step define o incremento entre os valores válidos do campo numérico, como step=\"0.01\" para aceitar centavos; os limites ficam em min e max.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "O atributo type identifica o tipo do campo: text, password, submit, etc."
+  },
+  {
+    "id": "n04-q021",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "O que o campo type=\"url\" verifica antes de permitir o envio do formulário?",
+    "options": [
+      "Se o endereço já está cadastrado no servidor.",
+      "Se o campo foi preenchido apenas com letras.",
+      "Se o valor tem o formato de uma URL válida.",
+      "Se o site responde com o status 200."
+    ],
+    "answer": 2,
+    "explanation": "Assim como o type=\"email\", o type=\"url\" faz validação nativa de formato; ele não consulta o servidor nem verifica se o site está no ar.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "O atributo type identifica o tipo do campo: text, password, submit, etc."
+  },
+  {
+    "id": "n04-q022",
+    "nodeId": "n04",
+    "type": "mcq",
+    "prompt": "Em um input do tipo number, qual par de atributos define os valores mínimo e máximo aceitos?",
+    "options": ["step e pattern", "minlength e maxlength", "required e novalidate", "min e max"],
+    "answer": 3,
+    "explanation": "min e max delimitam o intervalo aceito no campo numérico; fora dele o navegador marca o campo como inválido. O step define o incremento, não os limites.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "o usuário submeta o formulário com o campo vazio."
+  },
+  {
+    "id": "n04-q023",
+    "nodeId": "n04",
+    "type": "tf",
+    "prompt": "O atributo novalidate, colocado no elemento form, desliga a validação nativa do navegador no envio.",
+    "answer": true,
+    "explanation": "Com novalidate no form, o navegador não bloqueia o envio por causa de required, pattern ou type; a validação precisa ser feita pelo próprio código.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "o usuário submeta o formulário com o campo vazio."
+  },
+  {
+    "id": "n04-q024",
+    "nodeId": "n04",
+    "type": "tf",
+    "prompt": "Para associar um label a um campo, o atributo for do label deve receber o id desse campo.",
+    "answer": true,
+    "explanation": "Com for igual ao id do input, clicar no texto do label leva o foco ao campo e o leitor de tela anuncia o rótulo correto para o usuário.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/index.html",
+      "startLine": 17,
+      "endLine": 18
+    },
+    "evidence": "id=\"nome\" placeholder=\"Nome do aluno\""
+  },
+  {
+    "id": "n04-q025",
+    "nodeId": "n04",
+    "type": "tf",
+    "prompt": "O elemento legend precisa ficar fora do fieldset para titular o grupo de campos.",
+    "answer": false,
+    "explanation": "O legend é filho do fieldset e é justamente ele que informa o título do grupo; fora do fieldset ele deixa de rotular os campos.",
+    "source": { "aula": 162, "slide": 13 },
+    "evidence": "A tag filha legend informa o título do fieldset."
+  },
+  {
+    "id": "n04-q026",
+    "nodeId": "n04",
+    "type": "fill",
+    "prompt": "Para exigir que o usuário digite pelo menos 8 caracteres em um campo de texto, usa-se o atributo ____=\"8\".",
+    "answers": ["minlength"],
+    "explanation": "minlength define o mínimo de caracteres; com menos que isso o campo fica inválido e a validação nativa impede o envio do formulário.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "o usuário submeta o formulário com o campo vazio."
+  },
+  {
+    "id": "n04-q027",
+    "nodeId": "n04",
+    "type": "fill",
+    "prompt": "Para impedir que o usuário digite mais de 14 caracteres em um campo, usa-se o atributo ____=\"14\".",
+    "answers": ["maxlength"],
+    "explanation": "maxlength limita a quantidade máxima de caracteres digitados; a aula usa exatamente maxlength=\"14\" como exemplo.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "O atributo maxlength permite limitar a quantidade de caracteres a serem digitados pelo usuário."
+  },
+  {
+    "id": "n04-q028",
+    "nodeId": "n04",
+    "type": "fill",
+    "prompt": "Para impedir que o formulário seja enviado com um campo vazio, adiciona-se o atributo ____ ao input.",
+    "answers": ["required"],
+    "explanation": "required ativa a validação automática do campo: enquanto ele estiver vazio, o navegador impede o envio do formulário.",
+    "source": { "aula": 162, "slide": 6 },
+    "evidence": "Nome: <input type=\"text\" name=\"nome\" required><br>"
   }
 ]

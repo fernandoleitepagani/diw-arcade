@@ -198,5 +198,106 @@
     "back": "Um conjunto de opções disponíveis para outro campo de input.",
     "source": { "aula": 162, "slide": 16 },
     "evidence": "A tag datalist permite definir um conjunto de opções que estarão disponíveis para um outro campo de input."
+  },
+  {
+    "id": "n04-f026",
+    "nodeId": "n04",
+    "front": "Qual atributo de um campo HTML recebe uma expressão regular de validação?",
+    "back": "O atributo `pattern`; o valor digitado precisa casar com a expressão para o campo ser válido.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "o usuário submeta o formulário com o campo vazio."
+  },
+  {
+    "id": "n04-f027",
+    "nodeId": "n04",
+    "front": "O que o atributo `novalidate` faz no elemento form?",
+    "back": "Desliga a validação nativa do navegador, então o envio não é bloqueado por `required` ou `pattern`.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "o usuário submeta o formulário com o campo vazio."
+  },
+  {
+    "id": "n04-f028",
+    "nodeId": "n04",
+    "front": "O que o atributo `min` define em um campo numérico?",
+    "back": "O menor valor aceito; abaixo dele o campo fica inválido e o navegador bloqueia o envio.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "o usuário submeta o formulário com o campo vazio."
+  },
+  {
+    "id": "n04-f029",
+    "nodeId": "n04",
+    "front": "O que o atributo `max` define em um campo numérico?",
+    "back": "O maior valor aceito; acima dele o campo fica inválido para a validação nativa.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "o usuário submeta o formulário com o campo vazio."
+  },
+  {
+    "id": "n04-f030",
+    "nodeId": "n04",
+    "front": "O que o atributo `step` define em um campo numérico?",
+    "back": "O intervalo entre valores válidos, como `step=\"0.01\"` para aceitar centavos.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "O atributo type identifica o tipo do campo: text, password, submit, etc."
+  },
+  {
+    "id": "n04-f031",
+    "nodeId": "n04",
+    "front": "Qual atributo exige um número mínimo de caracteres digitados?",
+    "back": "`minlength`, como em `minlength=\"8\"`; com menos caracteres o campo fica inválido.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "O atributo maxlength permite limitar a quantidade de caracteres a serem digitados pelo usuário."
+  },
+  {
+    "id": "n04-f032",
+    "nodeId": "n04",
+    "front": "Qual atributo limita o número máximo de caracteres digitados?",
+    "back": "`maxlength`; a aula exemplifica com `maxlength=\"14\"` para limitar a digitação.",
+    "source": { "aula": 162, "slide": 7 },
+    "evidence": "O atributo maxlength permite limitar a quantidade de caracteres a serem digitados pelo usuário."
+  },
+  {
+    "id": "n04-f033",
+    "nodeId": "n04",
+    "front": "O que o campo `type=\"number\"` aceita?",
+    "back": "Valores numéricos; o navegador pode exibir incrementos e recusar texto na validação.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "O atributo type identifica o tipo do campo: text, password, submit, etc."
+  },
+  {
+    "id": "n04-f034",
+    "nodeId": "n04",
+    "front": "O que o campo `type=\"url\"` valida antes do envio?",
+    "back": "Se o valor informado tem o formato de uma URL, sem consultar se o endereço existe.",
+    "source": { "aula": 162, "slide": 5 },
+    "evidence": "O atributo type identifica o tipo do campo: text, password, submit, etc."
+  },
+  {
+    "id": "n04-f035",
+    "nodeId": "n04",
+    "front": "Como um `label` é associado ao campo que descreve?",
+    "back": "O atributo `for` do label recebe o `id` do campo, como `<label for=\"email\">`.",
+    "source": {
+      "kind": "repo",
+      "path": "PROJETOS/JSONServer/Projeto JSON Server - Cadastro de alunos/public/index.html",
+      "startLine": 17,
+      "endLine": 18
+    },
+    "evidence": "id=\"nome\" placeholder=\"Nome do aluno\""
+  },
+  {
+    "id": "n04-f036",
+    "nodeId": "n04",
+    "front": "Para que servem os elementos `fieldset` e `legend`?",
+    "back": "O `fieldset` agrupa campos e o `legend` informa o título do grupo.",
+    "source": { "aula": 162, "slide": 13 },
+    "evidence": "Utilize as tags fieldset para organizar os campos do formulário."
+  },
+  {
+    "id": "n04-f037",
+    "nodeId": "n04",
+    "front": "O que o atributo `required` impede?",
+    "back": "Impede o envio do formulário enquanto o campo obrigatório estiver vazio.",
+    "source": { "aula": 162, "slide": 6 },
+    "evidence": "Nome: <input type=\"text\" name=\"nome\" required><br>"
   }
 ]
