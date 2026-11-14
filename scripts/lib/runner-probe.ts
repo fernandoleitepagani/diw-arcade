@@ -38,6 +38,10 @@ const SETTLE_MS = 400;
 /** Janela de observação dos sinais de ciclo de vida e limite do AC4. */
 const NAVIGATION_WINDOW_MS = 2500;
 const NAVIGATION_LIMIT_MS = 1500;
+/** Latência da navegação relativa `slow.html`: o diw:survived (30 ms) sai antes de a resposta chegar. */
+const SLOW_NAVIGATION_DELAY_MS = 150;
+/** Navegação lenta termina pelo timer total (3 s) do runner; margem para máquina carregada. */
+const SLOW_NAVIGATION_LIMIT_MS = 5000;
 const SAVE_KEY = 'diw-arcade:save';
 const E2E_ID = 'n20-c02';
 /** Teto de espera pelos resultados na página real (o timeout do runner é maior que o limite). */
@@ -434,6 +438,29 @@ async function runHashProbe(env: ProbeEnv): Promise<string | null> {
 }
 
 /**
+ * Navegação relativa cuja resposta demora (`location.href = 'slow.html'`): o
+ * diw:survived sai enquanto o pedido está em voo e o frame só é trocado depois.
+ * Aqui só se prova o cenário (diw:unload, nenhum resultado, harness único); o
+ * veredito NAVEGAÇÃO do pai é provado no e2e e nos testes unitários do runner.
+ */
+async function runSlowNavigationProbe(
+  env: ProbeEnv,
+): Promise<{ problem: string | null; note: string }> {
+  const outcome = await runLifecycle(env, {
+    files: { html: '<p id="alvo">oi</p>', css: '', js: "location.href = 'slow.html';" },
+    requirements: [exists('alvo-existe', '#alvo')],
+  });
+  const note = `started=${outcome.startedCount}, unload=${outcome.unloadCount}, survived=${outcome.survivedCount}, resultados=${outcome.results}`;
+  if (outcome.unloadCount < 1) {
+    return { problem: `nenhum diw:unload na navegação lenta (${note})`, note };
+  }
+  if (outcome.results > 0 || outcome.startedCount !== 1) {
+    return { problem: `a navegação lenta não interrompeu a correção (${note})`, note };
+  }
+  return { problem: null, note };
+}
+
+/**
  * `beforeunload` também dispara para navegações que não descarregam a página
  * (mailto:, tel:). O sinal de descarregamento é provisório: o harness avisa
  * com diw:survived e a correção segue normalmente, sem NAVEGAÇÃO.
@@ -532,9 +559,13 @@ async function runE2e(
   origin: string,
   challenge: Challenge,
   code: CodeFiles,
+  slowNavigation = false,
 ): Promise<E2eOutcome> {
   const context = await browser.newContext({ reducedMotion: 'reduce' });
   try {
+    if (slowNavigation) {
+      await routeSlowNavigation(context);
+    }
     const save = {
       schemaVersion: 2,
       createdAt: new Date().toISOString(),
@@ -647,11 +678,15 @@ async function e2eReload(
   origin: string,
   challenge: Challenge,
   js = 'location.reload();',
+  { limitMs = NAVIGATION_LIMIT_MS, slow = false } = {},
 ): Promise<{ problem: string | null; elapsedMs: number }> {
-  const outcome = await runE2e(browser, origin, challenge, {
-    ...challenge.starter,
-    js,
-  });
+  const outcome = await runE2e(
+    browser,
+    origin,
+    challenge,
+    { ...challenge.starter, js },
+    slow,
+  );
   const elapsedMs = outcome.elapsedMs;
   if (outcome.loopTextOnPage) {
     return { problem: `"${TIMEOUT_MESSAGE}" apareceu na página (${elapsedMs} ms)`, elapsedMs };
@@ -659,8 +694,8 @@ async function e2eReload(
   if (outcome.timedOut) {
     return { problem: `sem resultado em ${E2E_CAP_MS} ms`, elapsedMs };
   }
-  if (elapsedMs > NAVIGATION_LIMIT_MS) {
-    return { problem: `resultado após ${elapsedMs} ms (limite ${NAVIGATION_LIMIT_MS} ms)`, elapsedMs };
+  if (elapsedMs > limitMs) {
+    return { problem: `resultado após ${elapsedMs} ms (limite ${limitMs} ms)`, elapsedMs };
   }
   if (outcome.items.length !== challenge.requirements.length) {
     return { problem: `${outcome.items.length} requisitos na página (esperado ${challenge.requirements.length})`, elapsedMs };
@@ -673,6 +708,20 @@ async function e2eReload(
     };
   }
   return { problem: null, elapsedMs };
+}
+
+/** `slow.html` responde uma página trivial após uma latência fixa (o servidor da sonda cairia no index). */
+async function routeSlowNavigation(context: BrowserContext): Promise<void> {
+  await context.route('**/slow.html', async (route) => {
+    await pause(SLOW_NAVIGATION_DELAY_MS);
+    await route
+      .fulfill({
+        status: 200,
+        contentType: 'text/html; charset=utf-8',
+        body: '<!doctype html><title>lenta</title><p>lenta</p>',
+      })
+      .catch(() => undefined);
+  });
 }
 
 async function pause(ms: number): Promise<void> {
@@ -757,6 +806,7 @@ export async function runRunnerProbe(
     // tsx (esbuild keepNames) injeta `__name(...)` nas funções serializadas
     // para o evaluate; a página não o define.
     await context.addInitScript('window.__name = (target) => target;');
+    await routeSlowNavigation(context);
     const page = await context.newPage();
     context.on('page', (popup) => {
       popups.push(popup.url());
@@ -785,6 +835,9 @@ export async function runRunnerProbe(
       );
     }
     record('hash', await runHashProbe(env), 'runner: sonda hash OK');
+    const slow = await runSlowNavigationProbe(env);
+    record('navegacao-lenta', slow.problem, 'runner: sonda navegacao-lenta OK');
+    console.log(`runner: navegacao-lenta sinais ${slow.note}`);
     for (const probe of SURVIVING_PROBES) {
       record(
         probe.name,
@@ -856,6 +909,19 @@ export async function runRunnerProbe(
         `runner: e2e ${E2E_ID} about:blank OK`,
       );
       console.log(`runner: e2e ${E2E_ID} about:blank medido em ${blank.elapsedMs} ms`);
+      const lenta = await e2eReload(
+        browser,
+        origin,
+        e2eChallenge,
+        "location.href = 'slow.html';",
+        { limitMs: SLOW_NAVIGATION_LIMIT_MS, slow: true },
+      );
+      record(
+        `e2e ${E2E_ID} navegacao lenta`,
+        lenta.problem,
+        `runner: e2e ${E2E_ID} navegacao lenta OK`,
+      );
+      console.log(`runner: e2e ${E2E_ID} navegacao lenta medido em ${lenta.elapsedMs} ms`);
       const mailto = await e2eSolution(
         browser,
         origin,
