@@ -29,7 +29,7 @@ import {
   startSession,
   type QuizAnswers,
 } from './session';
-import { QuizOption } from './QuizOption';
+import { QuizOption, inlineCode } from './QuizOption';
 import './QuizRound.css';
 
 export interface QuizRoundProps {
@@ -129,11 +129,15 @@ function bitLine(slips: number): string {
   return `Boa. Só ${countWord(slips)} ${slips === 1 ? 'deslize' : 'deslizes'}.`;
 }
 
+function capitalize(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
 function proseFor(slips: number, newCards: number): string {
   const head =
     slips === 0
       ? 'Nenhum erro de primeira.'
-      : `${slips === 1 ? 'Um erro' : `${countWord(slips)} erros`} de primeira, refeito${slips === 1 ? '' : 's'} na rodada.`;
+      : `${capitalize(countWord(slips))} ${slips === 1 ? 'erro' : 'erros'} de primeira, refeito${slips === 1 ? '' : 's'} na rodada.`;
   return newCards > 0
     ? `${head} Vamos fixar com ${newCards} ${newCards === 1 ? 'carta' : 'cartas'}?`
     : head;
@@ -484,7 +488,7 @@ export function QuizRound({
                 A resposta é <code>{correctAnswer(feedback.question)}</code>.{' '}
               </>
             )}
-            {feedback.question.explanation}
+            {inlineCode(feedback.question.explanation)}
           </p>
           <p className="quiz-round__source">
             <PixelIcon name="book" scale={2} />

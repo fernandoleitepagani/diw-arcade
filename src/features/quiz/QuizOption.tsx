@@ -1,4 +1,18 @@
+import type { ReactNode } from 'react';
 import { PixelIcon } from '../../components/pixel/PixelIcon/PixelIcon';
+
+/**
+ * Content writes inline code with backticks; show it as <code>. Used for the
+ * explanation only: the screenshot harness matches prompts and option labels
+ * by their literal text.
+ */
+export function inlineCode(text: string): ReactNode {
+  const parts = text.split(/`([^`\n]+)`/);
+  if (parts.length === 1) return text;
+  return parts.map((part, index) =>
+    index % 2 === 1 ? <code key={index}>{part}</code> : part,
+  );
+}
 
 export interface QuizOptionProps {
   label: string;

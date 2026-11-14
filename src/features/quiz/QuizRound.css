@@ -9,7 +9,7 @@
   min-width: 0;
 }
 
-.quiz-round__prompt {
+.quiz-round .quiz-round__prompt {
   max-width: 28em;
   margin-bottom: 32px;
   color: var(--text);
@@ -215,19 +215,23 @@
   gap: 12px 16px;
 }
 
-.quiz-round__hint {
+.quiz-round .quiz-round__hint {
   margin-top: 20px;
   color: var(--muted);
   font-size: 13px;
 }
 
-.quiz-round__actions .quiz-round__hint {
+.quiz-round .quiz-round__actions .quiz-round__hint {
   margin-top: 0;
 }
 
-.quiz-round__explanation {
+.quiz-round .quiz-round__explanation {
   max-width: 62ch;
   color: var(--text);
+}
+
+.quiz-round__prompt code {
+  font-size: 0.8em;
 }
 
 .quiz-round__explanation code {
@@ -243,7 +247,7 @@
   padding-top: 2px;
 }
 
-.quiz-round__source {
+.quiz-round .quiz-round__source {
   display: flex;
   align-items: center;
   gap: 8px;
