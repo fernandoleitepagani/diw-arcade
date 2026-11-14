@@ -7,14 +7,24 @@ import {
 import { buildSrcdoc, SANDBOX_FLAGS, type SrcdocConfig } from './srcdoc';
 
 export const TIMEOUT_MESSAGE = 'Tempo esgotado (loop infinito?)';
+export const NAVIGATION_MESSAGE =
+  'O código recarregou ou navegou a página (location.reload / location.href).';
+export const START_FAILED_MESSAGE =
+  'O ambiente de testes não iniciou. Tente executar de novo.';
 
 export interface RunInIframeOptions {
   mode: 'preview' | 'test';
   requirements?: readonly Requirement[];
   mocks?: Record<string, JsonValue>;
   libs?: readonly 'bootstrap'[];
-  /** A timeout also catches synchronous infinite loops in the iframe. */
+  /**
+   * Total budget from srcdoc assignment to the answer. It catches async
+   * stalls; a synchronous loop only when the browser isolates the sandboxed
+   * frame in its own process (see ADR-0001).
+   */
   timeoutMs?: number;
+  /** Max wait for `diw:started`; capped by `timeoutMs`. */
+  startTimeoutMs?: number;
 }
 
 export interface RunResult {
@@ -39,8 +49,8 @@ async function loadLibCss(
 
 /**
  * Runs user code in a fresh, sandboxed iframe and resolves with the harness
- * result. The parent page owns the timeout, so a synchronous loop in the
- * frame cannot block the app.
+ * result. The parent owns two timers and the lifecycle state machine
+ * (loading, running, settled); see ADR-0001 "Timeout policy".
  */
 export function runInIframe(
   container: HTMLElement,
@@ -62,19 +72,30 @@ export function runInIframe(
   };
 
   const result = new Promise<RunResult>((resolve) => {
-    let settled = false;
-    let timer: number | undefined;
+    type Phase = 'loading' | 'running' | 'settled';
+    let phase: Phase = 'loading';
+    let startTimer: number | undefined;
+    let totalTimer: number | undefined;
 
-    function finish(value: RunResult): void {
-      if (settled) {
-        return;
-      }
-      settled = true;
-      if (timer !== undefined) {
-        window.clearTimeout(timer);
-      }
+    function settle(value: RunResult): void {
+      phase = 'settled';
+      window.clearTimeout(startTimer);
+      window.clearTimeout(totalTimer);
       window.removeEventListener('message', onMessage);
       resolve(value);
+    }
+
+    function fail(message: string): void {
+      iframe.remove();
+      settle({
+        status: 'timeout',
+        requirements: requirements.map((requirement) => ({
+          id: requirement.id,
+          passed: false,
+          message,
+        })),
+        errors: [message],
+      });
     }
 
     function onMessage(event: MessageEvent): void {
@@ -85,33 +106,46 @@ export function runInIframe(
       if (!parsed.success || parsed.data.nonce !== nonce) {
         return;
       }
-      finish({
-        status: 'ok',
-        requirements:
-          parsed.data.type === 'diw:result' ? parsed.data.requirements : [],
-        errors: parsed.data.errors,
-      });
+      const message = parsed.data;
+      switch (message.type) {
+        case 'diw:started':
+          if (phase === 'loading') {
+            phase = 'running';
+            window.clearTimeout(startTimer);
+          } else {
+            fail(NAVIGATION_MESSAGE);
+          }
+          return;
+        case 'diw:unload':
+          fail(NAVIGATION_MESSAGE);
+          return;
+        case 'diw:ready':
+        case 'diw:result':
+          settle({
+            status: 'ok',
+            requirements:
+              message.type === 'diw:result' ? message.requirements : [],
+            errors: message.errors,
+          });
+          return;
+      }
     }
 
     window.addEventListener('message', onMessage);
 
     void loadLibCss(options.libs).then((libCss) => {
-      if (settled) {
+      if (phase === 'settled') {
         return;
       }
+      const totalMs = options.timeoutMs ?? 3000;
+      const startMs = Math.min(options.startTimeoutMs ?? 1000, totalMs);
       iframe.srcdoc = buildSrcdoc(files, config, harnessSource, libCss);
-      timer = window.setTimeout(() => {
-        iframe.remove();
-        finish({
-          status: 'timeout',
-          requirements: requirements.map((requirement) => ({
-            id: requirement.id,
-            passed: false,
-            message: TIMEOUT_MESSAGE,
-          })),
-          errors: [],
-        });
-      }, options.timeoutMs ?? 3000);
+      startTimer = window.setTimeout(() => fail(START_FAILED_MESSAGE), startMs);
+      totalTimer = window.setTimeout(() => {
+        if (phase === 'running') {
+          fail(TIMEOUT_MESSAGE);
+        }
+      }, totalMs);
     });
   });
 
