@@ -118,12 +118,42 @@ Known differences:
 
 ### Timeout policy
 
-`runInIframe` starts a 3000 ms timer when it assigns the srcdoc, after any
-library CSS has loaded. On timeout it removes the iframe from the DOM and
-resolves `{ status: "timeout" }` with every requirement failed and the message
-"Tempo esgotado (loop infinito?)". The listener is removed and the timer is
-cleared on the first accepted message. `runInJsdom` uses the same 3000 ms for
-asynchronous stalls.
+`runInIframe` starts two timers when it assigns the srcdoc, after any library
+CSS has loaded: a start timer (`startTimeoutMs`, default 1000 ms, capped by the
+total) and a total timer (`timeoutMs`, default 3000 ms). The harness posts
+`diw:started` synchronously before student code runs and `diw:unload` on
+`pagehide`. The parent accepts each message only when `event.source` is the
+iframe window, the nonce matches and the zod schema parses. States:
+
+- loading, `diw:started` -> running; start timer fires -> fail with
+  "O ambiente de testes não iniciou. Tente executar de novo.";
+- running, a second `diw:started` or `diw:unload` -> fail with
+  "O código recarregou ou navegou a página (location.reload / location.href).";
+  `diw:unload` while loading is the same failure;
+- running, total timer fires -> fail with "Tempo esgotado (loop infinito?)";
+- `diw:result` (test) or `diw:ready` (preview) -> ok. After settling the
+  listener is gone, so later `diw:unload` messages are ignored.
+
+A failure removes the iframe and resolves `{ status: "timeout" }` with every
+requirement failed with that message and `errors` set to `[message]`; the
+preview lists the same text. Inside the harness, `describeError` is total, and
+`runRequirements` records results as it goes: a throw outside the
+per-requirement try/catch still posts a `diw:result` with every missing
+requirement failed ("Erro interno ao avaliar os requisitos.").
+
+Limits. A synchronous infinite loop in the frame is only interrupted when the
+browser runs the sandboxed (opaque-origin) frame in its own process; without
+that isolation the loop blocks the page, the parent's timers cannot fire and
+no message arrives. The timers cover asynchronous stalls and a harness that
+never starts. A Worker-based grader that could stop such loops is out of scope.
+`runInJsdom` uses the same 3000 ms for asynchronous stalls and cannot detect
+navigation. `form.submit()` fires no `submit` event and reloads a sandboxed
+srcdoc even with `form-action 'none'`, so the harness replaces
+`HTMLFormElement.prototype.submit` with a no-op; `location.reload()` and
+`location.href` are not neutralised and are reported through the signals
+above. `npm run smoke -- --runner` proves reload, `href = 'about:blank'` (a
+signal within 1500 ms) and `location.hash` (no signal, graded normally) in
+real Chromium.
 
 ### Forms in the sandbox
 

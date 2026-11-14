@@ -26,11 +26,16 @@
    */
   HTMLFormElement.prototype.submit = function () {};
 
+  /** Total: a hostile error object must not break the reporting path. */
   function describeError(value) {
-    if (value && typeof value.message === 'string') {
-      return value.message;
+    try {
+      if (value && typeof value.message === 'string') {
+        return value.message;
+      }
+      return String(value);
+    } catch {
+      return 'Erro desconhecido';
     }
-    return String(value);
   }
 
   window.addEventListener('error', function (event) {
@@ -362,11 +367,13 @@
     throw new Error('Ação desconhecida');
   }
 
-  async function runRequirements() {
+  var INTERNAL_ERROR_MESSAGE = 'Erro interno ao avaliar os requisitos.';
+
+  /** Records each result into `results` as it goes, so a throw keeps them. */
+  async function runRequirements(results) {
     var requirements = Array.isArray(config.requirements)
       ? config.requirements
       : [];
-    var results = [];
 
     for (var i = 0; i < requirements.length; i += 1) {
       var requirement = requirements[i];
@@ -390,8 +397,6 @@
       }
       results.push(result);
     }
-
-    return results;
   }
 
   function post(message) {
@@ -402,22 +407,62 @@
     }
   }
 
+  /** Every requirement gets a result, even after an unexpected throw. */
+  function completeResults(results) {
+    var requirements = Array.isArray(config.requirements)
+      ? config.requirements
+      : [];
+    var done = results.map(function (result) {
+      return result.id;
+    });
+    requirements.forEach(function (requirement) {
+      if (done.indexOf(requirement.id) === -1) {
+        results.push({
+          id: requirement.id,
+          passed: false,
+          message: INTERNAL_ERROR_MESSAGE,
+        });
+      }
+    });
+    return results;
+  }
+
   function start() {
     setTimeout(function () {
       if (config.mode === 'test') {
-        runRequirements().then(function (requirements) {
-          post({
-            type: 'diw:result',
-            nonce: nonce,
-            requirements: requirements,
-            errors: errors,
+        var results = [];
+        runRequirements(results)
+          .catch(function (error) {
+            errors.push(describeError(error));
+          })
+          .then(function () {
+            post({
+              type: 'diw:result',
+              nonce: nonce,
+              requirements: completeResults(results),
+              errors: errors,
+            });
           });
-        });
       } else {
         post({ type: 'diw:ready', nonce: nonce, errors: errors });
       }
     }, 100);
   }
+
+  /*
+   * `pagehide` alone is not enough: for location.href = 'about:blank' Chromium
+   * detaches the frame before its postMessage is delivered, while
+   * `beforeunload` still arrives. Both post the same message; the parent
+   * acts on the first one and ignores the rest.
+   */
+  function postUnload() {
+    post({ type: 'diw:unload', nonce: nonce });
+  }
+  window.addEventListener('pagehide', postUnload);
+  window.addEventListener('beforeunload', postUnload);
+
+  /* Before student code runs: tells the parent this harness is alive. */
+  post({ type: 'diw:started', nonce: nonce });
 
   if (document.readyState === 'complete') {
     start();

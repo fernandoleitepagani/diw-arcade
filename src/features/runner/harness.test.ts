@@ -511,13 +511,18 @@ describe('harness checks', () => {
     });
   });
 
-  it('still posts diw:result when describeError itself is hit by a hostile error', async () => {
+  it('still posts diw:result when something throws outside the per-requirement try/catch', async () => {
     const message = await runTest({
       html: '<p id="a"></p>',
       js: [
         'var hostile = { get message() { throw new Error("getter"); } };',
-        'window.__DIW__.requirements.forEach(function (r) {',
-        '  Object.defineProperty(r, "before", { get: function () { throw hostile; } });',
+        'var reads = 0;',
+        'Object.defineProperty(window.__DIW__.requirements[0], "id", {',
+        '  get: function () {',
+        '    reads += 1;',
+        '    if (reads === 1) { throw hostile; }',
+        '    return "um";',
+        '  },',
         '});',
       ].join('\n'),
       requirements: [
@@ -527,7 +532,10 @@ describe('harness checks', () => {
     });
 
     expect(message.type).toBe('diw:result');
-    expect(message.requirements.map((result) => result.id)).toEqual(['um', 'dois']);
-    expect(message.errors.length).toBeGreaterThan(0);
+    expect(message.requirements).toEqual([
+      { id: 'um', passed: false, message: 'Erro interno ao avaliar os requisitos.' },
+      { id: 'dois', passed: false, message: 'Erro interno ao avaliar os requisitos.' },
+    ]);
+    expect(message.errors).toEqual(['Erro desconhecido']);
   });
 });
