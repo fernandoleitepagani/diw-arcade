@@ -82,7 +82,8 @@
   color: var(--muted);
 }
 
-.skill-node__n {
+.skill-node__lbl::before {
+  content: attr(data-n);
   margin-right: 8px;
   font: 400 12px var(--font-code);
   color: var(--muted);

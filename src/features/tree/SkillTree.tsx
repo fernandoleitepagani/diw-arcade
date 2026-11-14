@@ -101,17 +101,20 @@ export function SkillTree({ save, now }: SkillTreeProps) {
                 className={`skill-node skill-node--${item.state}`}
                 to={`/no/${item.id}`}
                 data-node-id={item.id}
+                aria-current={here ? 'location' : undefined}
                 aria-label={`${node.title}, ${NODE_STATE_LABEL[item.state]}`}
                 style={
                   { top: place.top, '--c': color, '--f': place.f } as CSSProperties
                 }
               >
                 <NodeDisc state={disc} />
-                <span className="skill-node__lbl">
-                  <span className="skill-node__n">{item.number}</span>
+                {/* The number is drawn by CSS from data-n so the visible text is only the
+                    title (axe label-content-name-mismatch); the sr-only copy keeps it in the DOM. */}
+                <span className="skill-node__lbl" data-n={item.number}>
+                  <span className="sr-only">{item.number}</span>
                   {node.title}
                   {here ? (
-                    <span className="skill-node__sub">
+                    <span className="skill-node__sub" aria-hidden="true">
                       <PixelIcon name="cursor" />
                       Você está aqui, {getStepsDone(save, item.id, TREE_CONTENT)} de 4 passos
                     </span>
