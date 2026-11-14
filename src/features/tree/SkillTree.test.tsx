@@ -150,7 +150,7 @@ describe('SkillTree', () => {
     renderTree();
 
     const link = screen.getByRole('link', { name: /Introdução à Web/ });
-    expect(within(link).getByText('01').closest('.lbl')).not.toBeNull();
-    expect(link.querySelector('.disc svg[aria-hidden="true"]')).not.toBeNull();
+    expect(within(link).getByText('01').closest('.skill-node__lbl')).not.toBeNull();
+    expect(link.querySelector('.node-disc svg[aria-hidden="true"]')).not.toBeNull();
   });
 });

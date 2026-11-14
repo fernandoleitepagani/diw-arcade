@@ -1,39 +1,16 @@
 .skill-tree {
-  display: grid;
-  gap: var(--space-6);
-  width: 100%;
-  max-width: 40rem;
-  margin-inline: auto;
-}
-
-.skill-tree__unit {
-  display: grid;
-  gap: var(--space-3);
-}
-
-.skill-tree__unit-title {
-  margin: 0;
-  font-family: var(--font-px);
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.skill-tree__unit-title .tag {
-  font: inherit;
-  color: inherit;
-  gap: 10px;
-}
-
-.skill-tree__nodes {
+  --pw: 200px;
   position: relative;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
 }
 
 .skill-tree__path {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  left: 0;
+  top: 0;
+  width: var(--pw);
   overflow: visible;
   pointer-events: none;
 }
@@ -43,117 +20,108 @@
   stroke: var(--faint);
   stroke-width: 3;
   stroke-dasharray: 3 9;
+  stroke-linecap: butt;
   vector-effect: non-scaling-stroke;
 }
 
-.skill-tree__item {
-  position: relative;
-}
-
-.skill-tree__nodes,
-.skill-tree__project-list {
-  display: grid;
-  gap: var(--space-3);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.skill-tree__item {
-  padding-inline-start: min(var(--offset, 0), 40vw);
-  border-inline-start: 0;
-}
-
-.skill-node,
-.skill-tree__toggle,
-.skill-tree__project {
+.skill-tree__unit {
+  position: absolute;
+  left: calc(var(--pw) + 28px);
+  right: 0;
+  height: 32px;
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  min-height: 44px;
-  padding: var(--space-3) var(--space-4);
+  gap: 10px;
+  white-space: nowrap;
+  font-family: var(--font-px);
+  font-weight: 600;
+  font-size: 22px;
+  scroll-margin-block-start: var(--space-5);
+}
+
+.skill-tree__dot {
+  position: absolute;
+  left: -22px;
+  width: 12px;
+  height: 12px;
+  background: var(--c);
+}
+
+.skill-tree__unit small {
+  margin-left: 4px;
+  font: 400 13px var(--font-code);
+  color: var(--muted);
+}
+
+.skill-node {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 56px;
+  display: flex;
+  align-items: center;
   color: var(--text);
   text-decoration: none;
-  text-align: start;
-  font: inherit;
-  border: 0;
-  cursor: pointer;
 }
 
-.skill-tree__toggle {
-  width: 100%;
-  background: var(--edge);
+.skill-node:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -2px;
 }
 
-.skill-node__body,
-.skill-tree__toggle-text {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
+.skill-node__lbl {
+  position: absolute;
+  left: calc(var(--pw) + 28px);
+  right: 0;
+  padding-right: 8px;
+  font-weight: 500;
+  line-height: 1.3;
 }
 
-.skill-node__title,
-.skill-tree__unit-name {
-  font-weight: 600;
-  font-family: var(--font-body);
-  font-size: 16px;
+.skill-node--nova .skill-node__lbl {
+  color: var(--muted);
 }
 
-.skill-node__status {
+.skill-node__n {
+  margin-right: 8px;
+  font: 400 12px var(--font-code);
+  color: var(--muted);
+}
+
+.skill-node__sub {
   display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-  font-size: 14px;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+  font: 400 13px var(--font-code);
   color: var(--muted);
 }
 
-.skill-tree__unit-count {
-  font: 400 14px var(--font-code);
-  color: var(--muted);
+.skill-node__boss {
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: middle;
 }
 
-.skill-node__tag {
-  color: var(--text);
-  font-weight: 600;
-}
-
-.skill-node--em-progresso .skill-node__state,
-.skill-node--dominada .skill-node__state {
-  color: var(--text);
-}
-
-.skill-tree__projects {
-  display: grid;
-  gap: var(--space-2);
-  margin-top: var(--space-4);
-}
-
-.skill-tree__projects-title {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--muted);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .skill-node,
-  .skill-tree__project,
-  .skill-tree__toggle {
-    transition: transform 80ms ease-out;
-  }
-
-  .skill-node:active,
-  .skill-tree__project:active,
-  .skill-tree__toggle:active {
-    transform: translateY(2px);
+@media (hover: hover) {
+  .skill-node:hover .skill-node__lbl {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
   }
 }
 
-.skill-tree__project-list > li {
-  display: grid;
-  gap: var(--space-2);
-}
+@media (max-width: 720px) {
+  .skill-tree {
+    --pw: 96px;
+    max-width: none;
+  }
 
-.skill-tree__project-status {
-  padding-inline: var(--space-4);
+  .skill-tree__unit {
+    font-size: 19px;
+  }
+
+  .skill-tree__unit small {
+    display: none;
+  }
 }

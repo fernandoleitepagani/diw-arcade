@@ -27,7 +27,8 @@ function renderAt(path: string) {
 
 const pages = [
   { path: '/hoje', heading: 'Hoje' },
-  { path: '/trilha', heading: 'DIW Arcade' },
+  // v4: Trilha has a visible h1 "Trilha" instead of the sr-only one.
+  { path: '/trilha', heading: 'Trilha' },
   { path: '/progresso', heading: 'Progresso' },
   { path: '/no/n01', heading: 'Introdução à Web e tecnologias' },
   { path: '/no/n01/quiz', heading: 'Quiz' },
