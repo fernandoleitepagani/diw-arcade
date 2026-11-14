@@ -1,7 +1,8 @@
 .ui-toasts {
   position: fixed;
   inset-inline-end: 1rem;
-  bottom: 1rem;
+  /* --feedback-bar-h is set by FeedbackBar while it is mounted. */
+  bottom: calc(1rem + var(--feedback-bar-h, 0px));
   z-index: 1000;
   display: flex;
   flex-direction: column;

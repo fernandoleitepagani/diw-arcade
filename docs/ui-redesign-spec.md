@@ -9,7 +9,7 @@ Reference: the approved prototype, `~/Projects/DIW-Gameplay-ui/prototype/ui-rede
 - **Dark and light themes** from v1. Light has its own unit-color variants.
 - **"Ler" primers ship in v1**: 6 to 10 sourced key points per node.
 - **Homepage** (public landing) where the trail is the layout.
-- Unit colors stay as in the prototype, keyed by unit id (`u1` to `u6`) in the UI token map, since `tree.ts` has no color field. Fundamentos da Web is neutral gray; Dados e JavaScript uses the JavaScript yellow; the Dados teal stays unused.
+- Unit colors stay as in the prototype, keyed by unit id (`u1` to `u6`) in the UI token map, since `tree.ts` has no color field. Fundamentos is neutral gray; Dados e JavaScript uses the JavaScript yellow; the Dados teal stays unused.
 - Progresso keeps the existing stats, restyled; unimplemented parts read "Ainda não implementado" (decision 1).
 - Information architecture: three destinations (Hoje, Trilha, Progresso), avatar menu for Ajustes, four-step lesson per node (Ler, Praticar, Fixar, Construir).
 

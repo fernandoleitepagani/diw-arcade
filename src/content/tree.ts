@@ -93,7 +93,7 @@ export function resolveMinimums(node: TreeNode): Required<NodeMinimums> {
 }
 
 export const UNITS: readonly Unit[] = [
-  { id: 'u1', title: 'Fundamentos da Web', nodes: ['n01', 'n02'] },
+  { id: 'u1', title: 'Fundamentos', nodes: ['n01', 'n02'] },
   { id: 'u2', title: 'HTML', nodes: ['n03', 'n04', 'n05'] },
   { id: 'u3', title: 'CSS', nodes: ['n06', 'n07', 'n08', 'n09'] },
   { id: 'u4', title: 'Design e Mobile', nodes: ['n10', 'n11', 'n12'] },
