@@ -6,8 +6,9 @@ describe('App', () => {
   it('renders the landing heading', async () => {
     render(<App />);
 
+    // v4: landing h1 now ends with a period
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Aprenda interfaces web zerando a trilha' }),
+      await screen.findByRole('heading', { level: 1, name: 'Aprenda interfaces web zerando a trilha.' }),
     ).toBeInTheDocument();
   });
 });
