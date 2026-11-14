@@ -3,9 +3,13 @@ import {
   useProgress,
   type ProgressContextValue,
 } from '../../app/ProgressProvider';
-import { UNITS } from '../../content';
+import { NODE_BY_ID } from '../../content';
+import { PixelSprite } from '../../components/pixel/PixelSprite/PixelSprite';
+import { SPRITES } from '../../components/pixel/sprites';
 import { createEmptySave } from '../../lib/storage';
-import { SkillTree } from './SkillTree';
+import { Link } from 'react-router';
+import { SkillTree, TREE_CONTENT } from './SkillTree';
+import { buildTrail } from './trailModel';
 import './TreePage.css';
 
 const ISOLATED_SAVE = createEmptySave(new Date(0));
@@ -30,33 +34,32 @@ export function TreePage() {
   const save = progress?.save ?? ISOLATED_SAVE;
   const now = progress?.now ?? ISOLATED_NOW;
 
+  const nodes = buildTrail(save, TREE_CONTENT, now).flatMap((unit) => unit.nodes);
+  const done = nodes.filter((node) => node.state === 'dominada').length;
+  const here = done < nodes.length ? nodes.find((node) => node.recommended) : undefined;
+  const title = here ? NODE_BY_ID[here.id].title : null;
+
   return (
     <section className="page tree-page">
-      <h1 className="sr-only">DIW Arcade</h1>
-
-      <div className="tree-page__layout">
-        <section className="tree-page__trail" aria-label="Trilha">
-          <SkillTree save={save} now={now} />
-        </section>
-
-        <aside className="tree-page__units" aria-labelledby="tree-units-title">
-          <h2 className="tree-page__units-title" id="tree-units-title">
-            Unidades
-          </h2>
-          <ol className="tree-page__unit-list">
-            {UNITS.map((unit) => (
-              <li key={unit.id}>
-                <a href={`#unit-${unit.id}`}>
-                  <span>{unit.title}</span>
-                  <span className="tree-page__unit-count">
-                    {unit.nodes.length}
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ol>
-        </aside>
+      <div className="tree-page__head">
+        <div>
+          <h1>Trilha</h1>
+          <p className="tree-page__summary">
+            {done} de {nodes.length} nós concluídos.
+            {title ? ` Você está em ${title}.` : ''}
+          </p>
+        </div>
+        {here && title ? (
+          <Link className="btn primary" to={`/no/${here.id}`}>
+            Continuar {title}
+            <PixelSprite {...SPRITES.play} scale={2} />
+          </Link>
+        ) : null}
       </div>
+
+      <section className="tree-page__trail" aria-label="Trilha">
+        <SkillTree save={save} now={now} />
+      </section>
     </section>
   );
 }
