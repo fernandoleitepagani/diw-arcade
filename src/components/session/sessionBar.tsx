@@ -17,6 +17,8 @@ export interface SessionBarConfig {
   max: number;
   exitTo: string;
   confirmExit?: SessionExitConfirm | null;
+  /** Counter noun: "n de m requisitos". Omitted for plain "n de m". */
+  unit?: string;
 }
 
 export interface SessionBarState {
@@ -24,6 +26,7 @@ export interface SessionBarState {
   max: number;
   exitTo: string;
   confirmExit: SessionExitConfirm | null;
+  unit?: string;
 }
 
 const DEFAULT_STATE: SessionBarState = {
@@ -60,6 +63,7 @@ export function useSessionBar({
   max,
   exitTo,
   confirmExit,
+  unit,
 }: SessionBarConfig): void {
   const context = useContext(SessionBarContext);
   const setState = context?.setState;
@@ -73,12 +77,13 @@ export function useSessionBar({
       value,
       max,
       exitTo,
+      unit,
       confirmExit:
         confirmTitle !== null && confirmMessage !== null
           ? { title: confirmTitle, message: confirmMessage }
           : null,
     });
-  }, [confirmMessage, confirmTitle, exitTo, max, setState, value]);
+  }, [confirmMessage, confirmTitle, exitTo, max, setState, unit, value]);
 }
 
 export function useSessionBarState(): SessionBarState {

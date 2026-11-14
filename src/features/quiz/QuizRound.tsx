@@ -4,10 +4,10 @@ import {
   SessionSummary,
   useSessionBar,
 } from '../../components/session';
+import { PixelIcon } from '../../components/pixel/PixelIcon/PixelIcon';
 import { PixelSprite } from '../../components/pixel/PixelSprite/PixelSprite';
 import { SPRITES } from '../../components/pixel/sprites';
 import { Button } from '../../components/pixel/Button/Button';
-import { pickLine } from '../../content/copy';
 import { formatSource } from '../../content/source';
 import type { NodeId } from '../../content/tree';
 import type { Question, QuestionCode } from '../../content/schema';
@@ -17,6 +17,7 @@ import { createEmptySave } from '../../lib/storage';
 import { STATIC_CONTENT } from '../../lib/progress/content';
 import type { ProgressEvent } from '../../lib/progress/events';
 import { getNextStep } from '../../lib/progress/nextStep';
+import { getLevelProgress, getStreak } from '../../lib/progress/selectors';
 import { isFillCorrect } from './grade';
 import {
   answer,
@@ -28,7 +29,7 @@ import {
   startSession,
   type QuizAnswers,
 } from './session';
-import { QuizOption } from './QuizOption';
+import { QuizOption, inlineCode } from './QuizOption';
 import './QuizRound.css';
 
 export interface QuizRoundProps {
@@ -114,6 +115,34 @@ function QuestionCode({ code, id }: { code: QuestionCode; id: string }) {
   );
 }
 
+const LEVEL_SEGMENTS = 10;
+
+const COUNT_WORDS = ['nenhum', 'um', 'dois', 'três', 'quatro', 'cinco'];
+
+function countWord(count: number): string {
+  return COUNT_WORDS[count] ?? String(count);
+}
+
+/** The Bit's one-liner above the score, in the prototype's short voice. */
+function bitLine(slips: number): string {
+  if (slips === 0) return 'Rodada limpa.';
+  return `Boa. Só ${countWord(slips)} ${slips === 1 ? 'deslize' : 'deslizes'}.`;
+}
+
+function capitalize(text: string): string {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+function proseFor(slips: number, newCards: number): string {
+  const head =
+    slips === 0
+      ? 'Nenhum erro de primeira.'
+      : `${capitalize(countWord(slips))} ${slips === 1 ? 'erro' : 'erros'} de primeira, refeito${slips === 1 ? '' : 's'} na rodada.`;
+  return newCards > 0
+    ? `${head} Vamos fixar com ${newCards} ${newCards === 1 ? 'carta' : 'cartas'}?`
+    : head;
+}
+
 const ISOLATED_SAVE = createEmptySave(new Date(0));
 const ISOLATED_NOW = new Date(0);
 
@@ -146,14 +175,13 @@ export function QuizRound({
   const progress = useOptionalProgress();
 
   const continueRef = useRef<HTMLButtonElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+  const questionRef = useRef<HTMLDivElement>(null);
   const submitting = useRef(false);
   const reported = useRef(false);
 
   const question = currentQuestion(session);
-  const canSubmit =
-    question !== undefined &&
-    (question.type === 'fill' ? fillValue.trim().length > 0 : selected !== null);
+  const canSubmitFill =
+    question?.type === 'fill' && fillValue.trim().length > 0;
 
   const answered = session.asked.size;
   const progressNumber = feedback ? feedback.number : questionNumber(session);
@@ -172,25 +200,28 @@ export function QuizRound({
         : null,
   });
 
-  function isCorrect(current: Question): boolean {
-    if (current.type === 'mcq') {
-      return selected !== null && selected === current.answer;
-    }
+  function isCorrect(current: Question, optionIndex?: number): boolean {
+    if (current.type === 'mcq') return optionIndex === current.answer;
     if (current.type === 'tf') {
-      return selected !== null && (selected === 0) === current.answer;
+      return optionIndex !== undefined && (optionIndex === 0) === current.answer;
     }
     return isFillCorrect(current, fillValue);
   }
 
-  function submit(): void {
-    if (feedback || finished || submitting.current || !canSubmit) return;
+  /** Options answer with their index; fill answers from the typed text. */
+  function submit(optionIndex?: number): void {
+    if (feedback || finished || submitting.current) return;
     const current = currentQuestion(session);
     if (!current) return;
+    if (current.type === 'fill' ? !canSubmitFill : optionIndex === undefined) {
+      return;
+    }
 
     submitting.current = true;
-    const correct = isCorrect(current);
+    const correct = isCorrect(current, optionIndex);
     const result = answer(session, correct);
 
+    if (optionIndex !== undefined) setSelected(optionIndex);
     setSession(result.session);
     setFeedback({
       question: current,
@@ -221,10 +252,12 @@ export function QuizRound({
 
   useEffect(() => {
     if (feedback || finished) return;
-    formRef.current
-      ?.querySelector<HTMLElement>('input, textarea, button')
+    // Options are not focused on purpose: Enter on a focused option would
+    // answer it. The group takes focus so Tab reaches A first.
+    questionRef.current
+      ?.querySelector<HTMLElement>('input, textarea, [data-quiz-group]')
       ?.focus();
-  }, [feedback, finished]);
+  }, [feedback, finished, question]);
 
   useEffect(() => {
     if (!finished || reported.current) return;
@@ -241,7 +274,16 @@ export function QuizRound({
     function onKeyDown(event: KeyboardEvent): void {
       if (event.defaultPrevented) return;
       if (event.altKey || event.ctrlKey || event.metaKey) return;
-      if (feedback || finished) return;
+      if (finished) return;
+
+      if (feedback) {
+        // Continuar is focused after an answer and handles Enter natively.
+        if (event.key === 'Enter' && event.target !== continueRef.current) {
+          event.preventDefault();
+          continueRound();
+        }
+        return;
+      }
 
       const current = currentQuestion(session);
       if (!current) return;
@@ -249,7 +291,7 @@ export function QuizRound({
       const target = event.target;
       const typing =
         target instanceof HTMLTextAreaElement ||
-        (target instanceof HTMLInputElement && target.type !== 'radio');
+        target instanceof HTMLInputElement;
 
       if (!typing && current.type !== 'fill') {
         const count = current.type === 'mcq' ? 4 : 2;
@@ -258,13 +300,13 @@ export function QuizRound({
           ? Number(key) - 1
           : 'abcd'.indexOf(key);
         if (key.length === 1 && index >= 0 && index < count) {
-          setSelected(index);
           event.preventDefault();
-          return;
+          submit(index);
         }
+        return;
       }
 
-      if (event.key === 'Enter' && canSubmit) {
+      if (event.key === 'Enter' && canSubmitFill) {
         event.preventDefault();
         submit();
       }
@@ -277,13 +319,16 @@ export function QuizRound({
   if (finished) {
     const total = session.total;
     const firstTry = firstTryCount(session);
-    const accuracy = total === 0 ? 0 : Math.round((firstTry / total) * 100);
+    const slips = total - firstTry;
 
-    const nextStep = getNextStep(
-      progress?.save ?? ISOLATED_SAVE,
-      STATIC_CONTENT,
-      progress?.now ?? ISOLATED_NOW,
-    );
+    const save = progress?.save ?? ISOLATED_SAVE;
+    const now = progress?.now ?? ISOLATED_NOW;
+    const nextStep = getNextStep(save, STATIC_CONTENT, now);
+    const newCards = (STATIC_CONTENT.flashcards?.[nodeId] ?? []).filter(
+      (card) => save.cards[card.id] === undefined,
+    ).length;
+    const levelState = getLevelProgress(save);
+    const fixLabel = `Fixar com ${newCards} ${newCards === 1 ? 'carta' : 'cartas'}`;
 
     return (
       <section
@@ -293,13 +338,30 @@ export function QuizRound({
         <SessionSummary
           title="Rodada concluída"
           xp={xpEarned}
-          stats={[
+          stats={[]}
+          bitLine={bitLine(slips)}
+          score={{ right: firstTry, total }}
+          facts={[
+            { label: 'XP', value: `+${xpEarned}`, sprite: 'coin' },
+            { label: 'cartas novas', value: newCards },
             {
-              label: 'Acertos de primeira',
-              value: `${firstTry} de ${total} (${accuracy}%)`,
+              label: 'dias de sequência',
+              value: getStreak(save, now),
+              sprite: 'flame',
             },
           ]}
-          next={nextStep.primary}
+          level={{
+            missing: levelState.xpForNextLevel - levelState.xpInLevel,
+            next: levelState.level + 1,
+            on: Math.floor(levelState.progress * LEVEL_SEGMENTS),
+            total: LEVEL_SEGMENTS,
+          }}
+          prose={proseFor(slips, newCards)}
+          next={
+            newCards > 0
+              ? { label: fixLabel, href: `/no/${nodeId}/cartas` }
+              : nextStep.primary
+          }
           secondary={
             <>
               <Button variant="quiet" onClick={onRestart}>Nova rodada</Button>
@@ -315,78 +377,57 @@ export function QuizRound({
 
   const active = feedback ? feedback.question : question;
   const locked = feedback !== null;
+  const promptId = active ? `quiz-prompt-${active.id}` : undefined;
+  const codeId = active?.code === undefined ? undefined : `quiz-code-${active.id}`;
+
+  function renderOptions(labels: readonly string[], current: Question) {
+    return (
+      <div
+        className="quiz-round__options"
+        role="group"
+        aria-labelledby={promptId}
+        aria-describedby={codeId}
+        tabIndex={-1}
+        data-quiz-group=""
+      >
+        {labels.map((option, index) => (
+          <QuizOption
+            key={option}
+            label={option}
+            index={index}
+            locked={locked}
+            picked={locked && selected === index}
+            correct={locked && index === correctOptionIndex(current)}
+            onSelect={submit}
+          />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <section className="quiz-round" aria-label="Rodada do quiz">
-      <div className="quiz-round__progress">
-        <p className="quiz-round__progress-text">
-          Questão {progressNumber} de {session.total}
-        </p>
-      </div>
-
       {active ? (
-        <form
-          ref={formRef}
-          className="quiz-round__form"
-          onSubmit={(event) => {
-            event.preventDefault();
-            submit();
-          }}
-        >
+        <div ref={questionRef} className="quiz-round__question">
+          <p id={promptId} className="quiz-round__prompt">
+            {active.prompt}
+          </p>
+          {active.code === undefined ? null : (
+            <QuestionCode id={`quiz-code-${active.id}`} code={active.code} />
+          )}
+
           {active.type === 'mcq' ? (
-            <fieldset
-              className="quiz-round__options"
-              aria-describedby={
-                active.code === undefined
-                  ? undefined
-                  : `quiz-code-${active.id}`
-              }
-            >
-              <legend className="quiz-round__prompt">{active.prompt}</legend>
-              {active.code === undefined ? null : (
-                <QuestionCode
-                  id={`quiz-code-${active.id}`}
-                  code={active.code}
-                />
-              )}
-              {active.options.map((option, index) => (
-                <QuizOption
-                  key={option}
-                  label={option}
-                  index={index}
-                  selected={selected === index}
-                  locked={locked}
-                  correct={locked && index === correctOptionIndex(active)}
-                  onSelect={setSelected}
-                />
-              ))}
-            </fieldset>
+            renderOptions(active.options, active)
           ) : active.type === 'tf' ? (
-            <fieldset className="quiz-round__options">
-              <legend className="quiz-round__prompt">{active.prompt}</legend>
-              {['Verdadeiro', 'Falso'].map((option, index) => (
-                <QuizOption
-                  key={option}
-                  label={option}
-                  index={index}
-                  selected={selected === index}
-                  locked={locked}
-                  correct={locked && index === correctOptionIndex(active)}
-                  onSelect={setSelected}
-                />
-              ))}
-            </fieldset>
+            renderOptions(['Verdadeiro', 'Falso'], active)
           ) : (
-            <div className="quiz-round__fill">
-              <p id={`quiz-prompt-${active.id}`} className="quiz-round__prompt">
-                {active.prompt}
-              </p>
-              {active.code === undefined ? null : (
-                <QuestionCode
-                  id={`quiz-code-${active.id}`}
-                  code={active.code}
-                />
-              )}
+            <form
+              className="quiz-round__fill"
+              onSubmit={(event) => {
+                event.preventDefault();
+                submit();
+              }}
+            >
               <label htmlFor={`quiz-fill-${active.id}`}>Sua resposta</label>
               <input
                 id={`quiz-fill-${active.id}`}
@@ -396,9 +437,7 @@ export function QuizRound({
                 disabled={locked}
                 readOnly={locked}
                 aria-describedby={
-                  active.code === undefined
-                    ? `quiz-prompt-${active.id}`
-                    : `quiz-prompt-${active.id} quiz-code-${active.id}`
+                  codeId === undefined ? promptId : `${promptId} ${codeId}`
                 }
                 onChange={(event) => setFillValue(event.target.value)}
               />
@@ -406,23 +445,23 @@ export function QuizRound({
                 <p className="quiz-round__fill-answer">
                   Sua resposta: <strong>{fillValue}</strong>
                 </p>
-              ) : null}
-            </div>
+              ) : (
+                <div className="quiz-round__actions">
+                  <Button type="submit" disabled={!canSubmitFill}>
+                    Responder
+                  </Button>
+                  <span className="quiz-round__hint">Enter responde.</span>
+                </div>
+              )}
+            </form>
           )}
 
-          {locked ? null : (
-            <div className="quiz-round__actions">
-              <Button type="submit" disabled={!canSubmit}>
-                Responder
-              </Button>
-              <span className="quiz-round__hint">
-                {active.type === 'fill'
-                  ? 'Enter responde.'
-                  : 'Teclas A a D escolhem; Enter responde.'}
-              </span>
-            </div>
+          {active.type === 'fill' ? null : (
+            <p className="quiz-round__hint">
+              Dica: as teclas A a D escolhem a resposta e Enter continua.
+            </p>
           )}
-        </form>
+        </div>
       ) : (
         <p className="quiz-round__empty">Conteúdo em breve</p>
       )}
@@ -433,33 +472,27 @@ export function QuizRound({
           className="quiz-round__feedback"
           verdict={feedback.correct ? 'correct' : 'wrong'}
           onContinue={continueRound}
-        >
-          {feedback.question.type === 'fill' ? (
-            <p className="quiz-round__answer">
-              Resposta correta:{' '}
-              <strong>{correctAnswer(feedback.question)}</strong>
-            </p>
-          ) : null}
-          <p className="quiz-round__explanation">
-            {feedback.question.explanation}
-          </p>
-          <p className="quiz-round__source">
-            {formatSource(feedback.question.source)}
-          </p>
-          <p className="quiz-round__bit">
+          mark={
             <span className="quiz-round__sprite">
               <PixelSprite
                 rows={SPRITES.bit.rows}
                 palette={SPRITES.bit.palette}
-                scale={4}
+                scale={3}
               />
             </span>
-            <span>
-              {pickLine(
-                feedback.correct ? 'correct' : 'wrong',
-                feedback.number,
-              )}
-            </span>
+          }
+        >
+          <p className="quiz-round__explanation">
+            {feedback.correct ? null : (
+              <>
+                A resposta é <code>{correctAnswer(feedback.question)}</code>.{' '}
+              </>
+            )}
+            {inlineCode(feedback.question.explanation)}
+          </p>
+          <p className="quiz-round__source">
+            <PixelIcon name="book" scale={2} />
+            {formatSource(feedback.question.source)}
           </p>
         </FeedbackBar>
       ) : null}

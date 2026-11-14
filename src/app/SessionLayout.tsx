@@ -6,7 +6,6 @@ import {
   useSessionBarState,
 } from '../components/session/sessionBar';
 import { PageSkeleton } from '../components/ui';
-import { Button } from '../components/pixel/Button/Button';
 import { PixelIcon } from '../components/pixel/PixelIcon/PixelIcon';
 import { SegBar } from '../components/pixel/SegBar/SegBar';
 import './SessionLayout.css';
@@ -14,7 +13,7 @@ import './SessionLayout.css';
 const DEFAULT_EXIT = '/';
 
 function SessionChrome() {
-  const { value, max, exitTo, confirmExit } = useSessionBarState();
+  const { value, max, exitTo, confirmExit, unit } = useSessionBarState();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const mainRef = useRef<HTMLElement>(null);
@@ -45,14 +44,14 @@ function SessionChrome() {
       </a>
 
       <header className="session-layout__bar">
-        <Button
-          variant="quiet"
+        <button
+          type="button"
           className="session-layout__close"
           aria-label="Sair da sessão"
           onClick={leave}
         >
           <PixelIcon name="x" scale={2} />
-        </Button>
+        </button>
         <div className="session-layout__progress">
           <SegBar
             on={Math.min(value, max)}
@@ -60,6 +59,9 @@ function SessionChrome() {
             label="Progresso da sessão"
           />
         </div>
+        <span className="session-layout__count">
+          {`${Math.min(value, max)} de ${max}${unit ? ` ${unit}` : ''}`}
+        </span>
       </header>
 
       <main

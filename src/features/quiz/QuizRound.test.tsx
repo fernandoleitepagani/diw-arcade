@@ -1,9 +1,9 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter, createMemoryRouter, RouterProvider } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
-import { BIT_LINES } from '../../content/copy';
 import type { McqQuestion, Question } from '../../content/schema';
+import { SessionLayout } from '../../app/SessionLayout';
 import { fixtureQuestions } from '../../test/fixtures';
 import { QuizRound } from './QuizRound';
 
@@ -34,39 +34,68 @@ function renderRound(
   return { dispatch, onRestart, onExit };
 }
 
+/** Renders the round under the session layout so the bar counter is visible. */
+function renderInSession(questions: readonly Question[]) {
+  const dispatch = vi.fn();
+  const router = createMemoryRouter(
+    [
+      {
+        element: <SessionLayout />,
+        children: [
+          {
+            path: '/',
+            element: (
+              <QuizRound
+                nodeId="n07"
+                questions={questions}
+                dispatch={dispatch}
+                rng={() => 0.999}
+                onRestart={vi.fn()}
+                onExit={vi.fn()}
+              />
+            ),
+          },
+        ],
+      },
+    ],
+    { initialEntries: ['/'] },
+  );
+  render(<RouterProvider router={router} />);
+  return { dispatch };
+}
+
+function tenQuestions(): Question[] {
+  const base = mcqQuestions[0] as McqQuestion;
+  return Array.from({ length: 10 }, (_, index) => ({
+    ...base,
+    id: `n07-q${String(100 + index)}`,
+  }));
+}
+
 describe('QuizRound', () => {
+  // v4: options are buttons that answer on click or A-D/1-4; there is no
+  // Responder step and the counter lives in the session bar ("n de m").
   it('completa uma rodada só com o teclado', async () => {
     const user = userEvent.setup();
     const { dispatch } = renderRound();
 
-    expect(screen.getByText('Questão 1 de 2')).toBeInTheDocument();
-
     await user.keyboard('1');
-    expect(screen.getByRole('radio', { name: 'color' })).toBeChecked();
-
-    await user.keyboard('{Enter}');
-    expect(screen.getByText('Correto!')).toBeInTheDocument();
+    expect(screen.getByText('Correto.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Continuar' })).toHaveFocus();
 
     await user.keyboard('{Enter}');
-    expect(screen.getByText('Questão 2 de 2')).toBeInTheDocument();
+    expect(screen.queryByText('Correto.')).not.toBeInTheDocument();
 
     await user.keyboard('2');
-    expect(
-      screen.getByRole('radio', { name: 'background-color' }),
-    ).toBeChecked();
-
-    await user.keyboard('{Enter}');
-    expect(screen.getByText('Correto!')).toBeInTheDocument();
+    expect(screen.getByText('Correto.')).toBeInTheDocument();
 
     await user.keyboard('{Enter}');
 
     expect(
       screen.getByRole('heading', { name: 'Rodada concluída' }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/2 de 2/)).toBeInTheDocument();
-    expect(screen.getByText(/100%/)).toBeInTheDocument();
-    expect(screen.getByText('+30 XP')).toBeInTheDocument();
+    expect(screen.getByText('2 de 2')).toBeInTheDocument();
+    expect(screen.getByText('+30')).toBeInTheDocument();
     expect(dispatch).toHaveBeenCalledWith({
       type: 'quiz/roundComplete',
       nodeId: 'n07',
@@ -75,11 +104,84 @@ describe('QuizRound', () => {
     });
   });
 
-  it('keeps the question counter without a second progress bar', () => {
-    renderRound();
+  // v4: clicking an option answers at once; the payload is unchanged.
+  it('clicar na alternativa B responde com o mesmo evento de antes', async () => {
+    const user = userEvent.setup();
+    const { dispatch } = renderRound([mcqQuestions[0] as McqQuestion]);
 
-    expect(screen.getByText('Questão 1 de 2')).toBeInTheDocument();
-    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'background-color' }));
+
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'quiz/answer',
+      nodeId: 'n07',
+      questionId: 'n07-q001',
+      correct: false,
+      firstTry: false,
+    });
+  });
+
+  it('a tecla c responde com a terceira alternativa', async () => {
+    const user = userEvent.setup();
+    const { dispatch } = renderRound([mcqQuestions[0] as McqQuestion]);
+
+    await user.keyboard('c');
+
+    expect(dispatch).toHaveBeenCalledWith({
+      type: 'quiz/answer',
+      nodeId: 'n07',
+      questionId: 'n07-q001',
+      correct: false,
+      firstTry: false,
+    });
+  });
+
+  it('não há botão Responder em múltipla escolha', () => {
+    renderRound([mcqQuestions[0] as McqQuestion]);
+
+    expect(
+      screen.queryByRole('button', { name: 'Responder' }),
+    ).not.toBeInTheDocument();
+  });
+
+  it('o erro mostra "Quase." e "A resposta é" a certa', async () => {
+    const user = userEvent.setup();
+    renderRound([mcqQuestions[0] as McqQuestion]);
+
+    await user.keyboard('b');
+
+    const bar = screen.getByRole('status');
+    expect(within(bar).getByText('Quase.')).toBeInTheDocument();
+    expect(within(bar).getByText(/A resposta é/)).toBeInTheDocument();
+    expect(within(bar).getByText('color')).toBeInTheDocument();
+  });
+
+  it('a barra da sessão mostra "1 de 10"', async () => {
+    renderInSession(tenQuestions());
+
+    expect(await screen.findByText('1 de 10')).toBeInTheDocument();
+  });
+
+  it('o resumo mostra "Você acertou" com os acertos de primeira e Fixar com N cartas', async () => {
+    const user = userEvent.setup();
+    renderRound(tenQuestions());
+
+    // two wrong first tries (retried later), then every question right.
+    await user.keyboard('b');
+    await user.keyboard('{Enter}');
+    await user.keyboard('b');
+    await user.keyboard('{Enter}');
+    for (let i = 0; i < 10; i += 1) {
+      await user.keyboard('a');
+      await user.keyboard('{Enter}');
+    }
+
+    expect(screen.getByText('Você acertou')).toBeInTheDocument();
+    expect(screen.getByText('8 de 10')).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /Fixar com \d+ cartas/ }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Nova rodada' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Voltar ao nó' })).toBeInTheDocument();
   });
 
   it('mostra a fonte do slide junto da explicação', async () => {
@@ -87,7 +189,6 @@ describe('QuizRound', () => {
     renderRound([mcqQuestions[0] as McqQuestion]);
 
     await user.keyboard('1');
-    await user.keyboard('{Enter}');
 
     expect(
       screen.getByText(
@@ -97,29 +198,17 @@ describe('QuizRound', () => {
     expect(screen.getByText('Fonte: aula 172, slide 2')).toBeInTheDocument();
   });
 
-  it('usa uma fala do Bit no feedback de acerto', async () => {
-    const user = userEvent.setup();
-    renderRound([mcqQuestions[0] as McqQuestion]);
-
-    await user.keyboard('1');
-    await user.keyboard('{Enter}');
-
-    expect(
-      BIT_LINES.correct.some((line) => screen.queryByText(line) !== null),
-    ).toBe(true);
-  });
-
-  it('usa uma fala do Bit no feedback de erro', async () => {
+  // v4: the feedback bar carries the Bit sprite and the "Quase." title; the
+  // pickLine Bit lines now live only in the summary.
+  it('o feedback de erro usa o título "Quase." e o sprite do Bit', async () => {
     const user = userEvent.setup();
     renderRound([mcqQuestions[0] as McqQuestion]);
 
     await user.keyboard('2');
-    await user.keyboard('{Enter}');
 
-    expect(screen.getByText('Incorreto')).toBeInTheDocument();
-    expect(
-      BIT_LINES.wrong.some((line) => screen.queryByText(line) !== null),
-    ).toBe(true);
+    expect(screen.getByText('Quase.')).toBeInTheDocument();
+    expect(screen.queryByText('Incorreto')).not.toBeInTheDocument();
+    expect(document.querySelector('.quiz-round__sprite svg')).not.toBeNull();
   });
 
   it('mantém a pergunta e marca a resposta dada e a correta', async () => {
@@ -128,23 +217,25 @@ describe('QuizRound', () => {
     renderRound([question]);
 
     await user.keyboard('2');
-    await user.keyboard('{Enter}');
 
     expect(screen.getByText(question.prompt)).toBeInTheDocument();
 
-    const picked = screen.getByText('background-color').closest('label');
-    const correct = screen.getByText('color').closest('label');
-    expect(picked).not.toBeNull();
-    expect(correct).not.toBeNull();
+    // v4: options are aria-disabled buttons, not disabled radios.
+    const picked = screen.getByRole('button', { name: /background-color/ });
+    const correct = screen.getByRole('button', { name: /^color/ });
     expect(
-      within(picked as HTMLElement).getByText('Sua resposta'),
+      within(picked).getByText('Sua resposta'),
     ).toBeInTheDocument();
     expect(
-      within(correct as HTMLElement).getByText('Resposta correta'),
+      within(correct).getByText('Resposta correta'),
     ).toBeInTheDocument();
+    expect(picked).toHaveClass('bad');
+    expect(correct).toHaveClass('ok');
 
-    for (const radio of screen.getAllByRole('radio')) {
-      expect(radio).toBeDisabled();
+    const group = screen.getByRole('group', { name: question.prompt });
+    for (const option of within(group).getAllByRole('button')) {
+      expect(option).toHaveAttribute('aria-disabled', 'true');
+      expect(option).not.toBeDisabled();
     }
   });
 
@@ -154,11 +245,11 @@ describe('QuizRound', () => {
 
     await user.keyboard('1');
     await user.keyboard('{Enter}');
-    await user.keyboard('{Enter}');
 
+    // v4: the primary CTA is "Fixar com N cartas" while the node has new cards.
     const links = screen.getAllByRole('link');
     expect(links).toHaveLength(1);
-    expect(links[0]).toHaveAttribute('href', '/no/n01?passo=praticar');
+    expect(links[0]).toHaveAttribute('href', '/no/n07/cartas');
   });
 
   it('mostra a URL, o HTML de exemplo e o JavaScript acima das alternativas', () => {
@@ -289,48 +380,88 @@ describe('QuizRound atalhos e feedback', () => {
   const tf = fixtureQuestions.filter((q) => q.type === 'tf').slice(0, 1);
   const fill = fixtureQuestions.filter((q) => q.type === 'fill').slice(0, 1);
 
-  it('letras A a D escolhem as alternativas 1 a 4 no mcq', async () => {
+  // v4: a letter key answers at once, so each key is checked on its own round.
+  it.each([
+    ['b', 1],
+    ['D', 3],
+    ['a', 0],
+    ['3', 2],
+  ])('a tecla %s responde com a alternativa %i no mcq', async (key, index) => {
     const user = userEvent.setup();
-    renderRound([mcqQuestions[0] as McqQuestion]);
+    const dispatch = vi.fn();
+    render(
+      <MemoryRouter>
+        <QuizRound
+          nodeId="n07"
+          questions={[mcqQuestions[0] as McqQuestion]}
+          dispatch={dispatch}
+          rng={() => 0.999}
+          onRestart={vi.fn()}
+          onExit={vi.fn()}
+        />
+      </MemoryRouter>,
+    );
 
-    await user.keyboard('b');
-    expect(screen.getAllByRole('radio')[1]).toBeChecked();
-    await user.keyboard('D');
-    expect(screen.getAllByRole('radio')[3]).toBeChecked();
-    await user.keyboard('a');
-    expect(screen.getAllByRole('radio')[0]).toBeChecked();
+    await user.keyboard(key);
+    expect(dispatch).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: 'quiz/answer',
+        correct: index === (mcqQuestions[0] as McqQuestion).answer,
+      }),
+    );
   });
 
-  it('em verdadeiro ou falso só A e B escolhem', async () => {
+  // v4: C and D do nothing in true/false; A and B answer at once.
+  it('em verdadeiro ou falso só A e B respondem', async () => {
     const user = userEvent.setup();
-    renderRound(tf);
+    const { dispatch } = renderRound(tf);
 
-    await user.keyboard('b');
-    expect(screen.getAllByRole('radio')[1]).toBeChecked();
     await user.keyboard('c');
-    expect(screen.getAllByRole('radio')[1]).toBeChecked();
-    await user.keyboard('a');
-    expect(screen.getAllByRole('radio')[0]).toBeChecked();
-    await user.keyboard('2');
-    expect(screen.getAllByRole('radio')[1]).toBeChecked();
+    await user.keyboard('4');
+    expect(dispatch).not.toHaveBeenCalled();
+    expect(
+      screen.queryByRole('button', { name: 'Responder' }),
+    ).not.toBeInTheDocument();
+    await user.keyboard('b');
+    expect(dispatch).toHaveBeenCalledTimes(1);
   });
 
   it('não dispara atalhos ao digitar em um campo de texto', async () => {
     const user = userEvent.setup();
-    renderRound(fill);
+    const { dispatch } = renderRound(fill);
 
     const input = screen.getByRole('textbox', { name: 'Sua resposta' });
     await user.type(input, 'abcd1');
     expect(input).toHaveValue('abcd1');
     expect(screen.queryAllByRole('radio')).toHaveLength(0);
+    expect(dispatch).not.toHaveBeenCalled();
   });
 
+  // v4: the hint copy follows the prototype; fill keeps Responder.
   it('mostra a dica em português', () => {
     renderRound([mcqQuestions[0] as McqQuestion]);
 
     expect(
-      screen.getByText('Teclas A a D escolhem; Enter responde.'),
+      screen.getByText(
+        'Dica: as teclas A a D escolhem a resposta e Enter continua.',
+      ),
     ).toBeInTheDocument();
+  });
+
+  // v4: fill questions keep the input and a Responder button; Enter submits.
+  it('pergunta de preencher mantém o campo, o botão Responder e o Enter', async () => {
+    const user = userEvent.setup();
+    const { dispatch } = renderRound(fill);
+
+    expect(screen.getByRole('button', { name: 'Responder' })).toBeDisabled();
+    await user.type(
+      screen.getByRole('textbox', { name: 'Sua resposta' }),
+      'x{Enter}',
+    );
+
+    expect(dispatch).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'quiz/answer', correct: false }),
+    );
   });
 
   it('o feedback fica numa barra de status com veredito, explicação e fonte', async () => {
@@ -338,10 +469,9 @@ describe('QuizRound atalhos e feedback', () => {
     renderRound([mcqQuestions[0] as McqQuestion]);
 
     await user.keyboard('a');
-    await user.keyboard('{Enter}');
 
     const bar = screen.getByRole('status');
-    expect(within(bar).getByText('Correto!')).toBeInTheDocument();
+    expect(within(bar).getByText('Correto.')).toBeInTheDocument();
     expect(within(bar).getByText('Fonte: aula 172, slide 2')).toBeInTheDocument();
     expect(
       within(bar).getByRole('button', { name: 'Continuar' }),
@@ -353,7 +483,6 @@ describe('QuizRound atalhos e feedback', () => {
     renderRound([mcqQuestions[0] as McqQuestion]);
 
     await user.keyboard('a');
-    await user.keyboard('{Enter}');
 
     expect(document.querySelector('.mascot')).toBeNull();
     expect(document.querySelector('.quiz-round__sprite svg')).not.toBeNull();

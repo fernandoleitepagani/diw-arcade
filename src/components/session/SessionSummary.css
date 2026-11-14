@@ -13,10 +13,116 @@
   margin: 0;
 }
 
+.session-summary__bit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.session-summary .session-summary__bit-line {
+  margin: 0;
+  color: var(--muted);
+}
+
+.session-summary--score {
+  justify-items: stretch;
+  gap: 32px;
+  max-width: 560px;
+  padding: 24px 24px 64px;
+  text-align: left;
+}
+
+.session-summary--score .session-summary__bit {
+  justify-self: start;
+}
+
+.session-summary .session-summary__score p {
+  margin: 0;
+}
+
+.session-summary .session-summary__lead {
+  color: var(--muted);
+}
+
+.session-summary .session-summary__big {
+  color: var(--text);
+  font-family: var(--font-px);
+  font-size: 72px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.session-summary__facts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 16px;
+  margin: 0;
+  border-block: 2px solid var(--edge);
+}
+
+.session-summary__facts > div {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 16px 0;
+}
+
+.session-summary__facts dt {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.session-summary__facts dd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: var(--font-px);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.session-summary .session-summary__level p {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.session-summary .session-summary__prose {
+  margin: 0;
+  color: var(--text);
+}
+
+.session-summary--score .session-summary__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: stretch;
+  margin-top: 0;
+}
+
+.session-summary--score .session-summary__next {
+  grid-column: 1 / -1;
+  order: -1;
+}
+
+@media (max-width: 720px) {
+  .session-summary--score {
+    padding: 32px 16px;
+  }
+
+  .session-summary__facts dd {
+    font-size: 24px;
+  }
+
+  .session-summary .session-summary__big {
+    font-size: 56px;
+  }
+}
+
 .session-summary__xp {
   margin: 0;
   color: var(--xp, #ffc23d);
-  font-family: var(--font-display, monospace);
+  font-family: var(--font-px);
   font-size: 1.25rem;
   line-height: var(--line-height-display, 1.6);
 }

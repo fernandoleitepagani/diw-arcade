@@ -23,11 +23,12 @@ describe('FeedbackBar', () => {
     const { container, rerender } = render(
       <FeedbackBar verdict="correct" onContinue={() => {}} />,
     );
-    expect(screen.getByText('Correto!')).toBeInTheDocument();
+    // v4: titles are "Correto." and "Quase." (was "Correto!"/"Incorreto").
+    expect(screen.getByText('Correto.')).toBeInTheDocument();
     expect(container.querySelector('svg')).not.toBeNull();
 
     rerender(<FeedbackBar verdict="wrong" onContinue={() => {}} />);
-    expect(screen.getByText('Incorreto')).toBeInTheDocument();
+    expect(screen.getByText('Quase.')).toBeInTheDocument();
     expect(container.querySelector('svg')).not.toBeNull();
   });
 
