@@ -17,7 +17,8 @@ describe('getNodeState', () => {
     const save = createEmptySave(NOW);
 
     expect(getNodeState(save, 'n01', CONTENT)).toBe('nova');
-    expect(NODE_STATE_LABEL.nova).toBe('Nova');
+    // v4: state copy follows the prototype.
+    expect(NODE_STATE_LABEL.nova).toBe('Não iniciado');
   });
 
   it('labels a node with one quiz answer as em progresso', () => {
@@ -29,7 +30,8 @@ describe('getNodeState', () => {
     };
 
     expect(getNodeState(save, 'n01', CONTENT)).toBe('em-progresso');
-    expect(NODE_STATE_LABEL['em-progresso']).toBe('Em progresso');
+    // v4: state copy follows the prototype.
+    expect(NODE_STATE_LABEL['em-progresso']).toBe('Em andamento');
   });
 
   it('labels a node with all three stars as dominada', () => {
@@ -45,6 +47,7 @@ describe('getNodeState', () => {
     };
 
     expect(getNodeState(save, 'n01', CONTENT)).toBe('dominada');
-    expect(NODE_STATE_LABEL.dominada).toBe('Dominada');
+    // v4: state copy follows the prototype.
+    expect(NODE_STATE_LABEL.dominada).toBe('Concluído');
   });
 });
