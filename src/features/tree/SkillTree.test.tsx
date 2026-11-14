@@ -139,7 +139,8 @@ describe('SkillTree', () => {
     renderTree(mastered(['n01', 'n02']));
 
     const button = screen.getByRole('button', {
-      name: /Fundamentos da Web.*2 de 2 nós, concluída/,
+      // v4: unit renamed to match prototype
+      name: /Fundamentos.*2 de 2 nós, concluída/,
     });
     expect(button).toHaveAttribute('aria-expanded', 'false');
     expect(screen.queryByRole('link', { name: /Introdução à Web/ })).not.toBeInTheDocument();
