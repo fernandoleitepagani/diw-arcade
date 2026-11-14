@@ -432,4 +432,25 @@ describe('harness checks', () => {
     expect(message.type).toBe('diw:result');
     expect(message.requirements.map((result) => result.passed)).toEqual([true]);
   });
+
+  it('turns form.submit() into a no-op so the frame cannot reload', async () => {
+    const message = await runTest({
+      html: '<form id="f"></form>',
+      js: [
+        "document.getElementById('f').submit();",
+        "document.body.setAttribute('data-depois', 'sim');",
+      ].join('\n'),
+      requirements: [
+        requirement('seguiu', {
+          kind: 'attr',
+          selector: 'body',
+          name: 'data-depois',
+          match: { equals: 'sim' },
+        }),
+      ],
+    });
+
+    expect(message.requirements.map((result) => result.passed)).toEqual([true]);
+    expect(message.errors).toEqual([]);
+  });
 });
