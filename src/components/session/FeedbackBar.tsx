@@ -2,20 +2,33 @@ import { forwardRef } from "react";
 import type { ReactNode } from "react";
 import { Button } from "../pixel/Button/Button";
 import { PixelIcon } from "../pixel/PixelIcon/PixelIcon";
+import { PixelSprite } from "../pixel/PixelSprite/PixelSprite";
 import "./FeedbackBar.css";
+
+const PLAY_ROWS = ["X...", "XX..", "XXX.", "XXXX", "XXX.", "XX..", "X..."];
+const PLAY_PALETTE = { X: "currentColor" };
 
 export interface FeedbackBarProps {
   verdict: "correct" | "wrong";
   onContinue: () => void;
   continueLabel?: string;
   className?: string;
+  /** Sprite shown left of the title; without it the title carries an icon. */
+  mark?: ReactNode;
   children?: ReactNode;
 }
 
-/** Bottom bar announced politely after an answer; verdict is text plus icon. */
+/** Bottom bar announced politely after an answer; verdict is text plus mark. */
 export const FeedbackBar = forwardRef<HTMLButtonElement, FeedbackBarProps>(
   function FeedbackBar(
-    { verdict, onContinue, continueLabel = "Continuar", className, children },
+    {
+      verdict,
+      onContinue,
+      continueLabel = "Continuar",
+      className,
+      mark,
+      children,
+    },
     ref,
   ) {
     const correct = verdict === "correct";
@@ -28,16 +41,24 @@ export const FeedbackBar = forwardRef<HTMLButtonElement, FeedbackBarProps>(
         role="status"
         aria-live="polite"
       >
-        <div className="feedback-bar__body">
-          <p className="feedback-bar__verdict">
-            <PixelIcon name={correct ? "check" : "x"} scale={2} />
-            <span>{correct ? "Correto!" : "Incorreto"}</span>
-          </p>
-          {children}
+        <div className="feedback-bar__inner">
+          <div className="feedback-bar__content">
+            {mark}
+            <div className="feedback-bar__body">
+              <h3 className="feedback-bar__verdict">
+                {mark ? null : (
+                  <PixelIcon name={correct ? "check" : "x"} scale={2} />
+                )}
+                <span>{correct ? "Correto." : "Quase."}</span>
+              </h3>
+              {children}
+            </div>
+          </div>
+          <Button ref={ref} onClick={onContinue}>
+            {continueLabel}
+            <PixelSprite rows={PLAY_ROWS} palette={PLAY_PALETTE} scale={2} />
+          </Button>
         </div>
-        <Button ref={ref} onClick={onContinue}>
-          {continueLabel}
-        </Button>
       </div>
     );
   },
