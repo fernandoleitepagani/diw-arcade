@@ -16,4 +16,16 @@ describe('Row', () => {
     expect(link.getAttribute('href')).toBe('/licao/n1');
     expect(screen.getByText('Flexbox')).toBeTruthy();
   });
+
+  it('uses a distinct accessible name when given, keeping the label visible', () => {
+    render(
+      <MemoryRouter>
+        <Row icon="book" action={{ label: 'Abrir', ariaLabel: 'Abrir Flexbox', to: '/x' }}>
+          Flexbox
+        </Row>
+      </MemoryRouter>,
+    );
+    const link = screen.getByRole('link', { name: 'Abrir Flexbox' });
+    expect(link).toHaveTextContent('Abrir');
+  });
 });
