@@ -100,9 +100,10 @@
   color: var(--muted);
 }
 
-.landing__day p .px-i {
-  margin-left: 6px;
-  vertical-align: -3px;
+.landing__day p:last-child {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .landing__score {
@@ -194,7 +195,6 @@
 }
 
 .landing__box {
-  max-width: 520px;
   padding: 2px;
 }
 
@@ -251,7 +251,6 @@
 }
 
 .landing__miniq {
-  max-width: 520px;
   padding: 20px 22px;
   display: flex;
   flex-direction: column;
@@ -275,7 +274,6 @@
 }
 
 .landing__card {
-  max-width: 520px;
   padding: 22px;
   display: flex;
   flex-direction: column;
