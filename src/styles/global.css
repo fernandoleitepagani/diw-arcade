@@ -127,7 +127,7 @@ textarea {
   }
 }
 
-/* Runner CSS still names the retired --font-mono; this keeps its report box in the code font. */
-.sandbox-frame__report {
+/* Runner CSS still names the retired --font-mono and loads later at (0,1,0); two classes win. */
+.sandbox-frame .sandbox-frame__report {
   font-family: var(--font-code);
 }

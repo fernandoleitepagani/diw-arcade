@@ -490,7 +490,7 @@ Run `ui-refactor-to-prototype-v4`. Every screen was rebuilt to match the static 
 - Hoje rows carry a trailing route icon the prototype does not have.
 - Some Continuar buttons lack the play icon (`ButtonLink` TODO).
 - `BIT_LINES` keys `correct`, `wrong` and `sessionDone` are dead copy, left in place.
-- `src/features/runner/SandboxFrame.css` still reads `--font-mono`. The runner is frozen, so a one-rule override in `src/styles/global.css` supplies the code font; remove both when the runner may change.
+- `src/features/runner/SandboxFrame.css` still reads `--font-mono`. The runner is frozen, so a one-rule (0,2,0) override of the runner box in `src/styles/global.css` (`.sandbox-frame .sandbox-frame__report`) supplies the code font; it must out-rank the runner's (0,1,0) rule, which loads later. AC15 is waived for that one line. Remove both when the runner may change.
 - The legacy v2 aliases in `theme.css` (`--surface`, `--border`, `--text-muted`, `--accent` and the rest) are all still referenced, so none were removed.
 
 ## Screenshot harness
