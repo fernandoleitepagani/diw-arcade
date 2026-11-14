@@ -12,11 +12,19 @@ function setup() {
 }
 
 describe('AvatarMenu', () => {
-  it('shows the player initial in a 36px badge inside the 44px trigger', () => {
+  // v4: the badge shows a pixel gear (settings) icon instead of the player initial.
+  it('shows a gear icon in the 36px badge inside the 44px trigger', () => {
     const { trigger } = setup();
 
-    expect(trigger).toHaveTextContent('A');
-    expect(trigger.querySelector('.avatar-menu__badge')).not.toBeNull();
+    const badge = trigger.querySelector('.avatar-menu__badge');
+    expect(badge).not.toBeNull();
+    const icon = badge?.querySelector('svg.px-i');
+    expect(icon).not.toBeNull();
+    expect(icon).toHaveAttribute('aria-hidden', 'true');
+    expect(icon).toHaveAttribute('width', '24');
+    expect(icon).toHaveAttribute('height', '24');
+    expect(trigger).not.toHaveTextContent('A');
+    expect(trigger).toHaveTextContent('');
   });
 
   it('starts closed with a collapsed trigger', () => {
