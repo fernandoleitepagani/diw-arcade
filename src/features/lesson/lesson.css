@@ -294,4 +294,8 @@
   .lesson__stage .btn {
     align-self: stretch;
   }
+
+  .lesson-panel > .btn {
+    justify-self: stretch;
+  }
 }
