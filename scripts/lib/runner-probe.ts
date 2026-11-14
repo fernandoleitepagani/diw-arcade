@@ -34,6 +34,9 @@ const BOOTSTRAP_CSS = readFileSync(
 const CASE_CAP_MS = 5000;
 /** Tempo para uma navegação indevida do pai ou um popup aparecerem. */
 const SETTLE_MS = 400;
+/** Janela de observação dos sinais de ciclo de vida e limite do AC4. */
+const NAVIGATION_WINDOW_MS = 2500;
+const NAVIGATION_LIMIT_MS = 1500;
 
 interface CaseInput {
   files: CodeFiles;
@@ -292,6 +295,121 @@ const ISOLATION_PROBE: Probe = {
   },
 };
 
+/**
+ * Sinais de ciclo de vida: mede, no pai, quanto tempo depois do início do
+ * harness chega diw:unload ou um segundo diw:started (carimbos do pai).
+ * Sem while(true) síncrono: congela o Chromium headless.
+ */
+interface LifecycleOutcome {
+  startedCount: number;
+  unloadCount: number;
+  /** ms desde o primeiro diw:started até o primeiro sinal de navegação. */
+  signalAfterMs: number | null;
+  results: number;
+  failed: string[];
+}
+
+async function runLifecycle(env: ProbeEnv, input: CaseInput): Promise<LifecycleOutcome> {
+  const nonce = randomUUID();
+  const config: SrcdocConfig = {
+    nonce,
+    mode: 'test',
+    parentOrigin: env.origin,
+    requirements: input.requirements,
+  };
+  const srcdoc = buildSrcdoc(input.files, config, HARNESS);
+  return env.page.evaluate(
+    ({ srcdoc, nonce, sandbox, windowMs }) =>
+      new Promise<LifecycleOutcome>((resolve) => {
+        const iframe = document.createElement('iframe');
+        iframe.setAttribute('sandbox', sandbox);
+        let firstStartedAt: number | null = null;
+        const out: LifecycleOutcome = {
+          startedCount: 0,
+          unloadCount: 0,
+          signalAfterMs: null,
+          results: 0,
+          failed: [],
+        };
+        function onMessage(event: MessageEvent) {
+          const data = event.data as {
+            type?: string;
+            nonce?: string;
+            requirements?: { id: string; passed: boolean }[];
+          } | null;
+          if (event.source !== iframe.contentWindow || !data || data.nonce !== nonce) {
+            return;
+          }
+          const now = performance.now();
+          if (data.type === 'diw:started') {
+            out.startedCount += 1;
+            if (firstStartedAt === null) {
+              firstStartedAt = now;
+            } else if (out.signalAfterMs === null) {
+              out.signalAfterMs = Math.round(now - firstStartedAt);
+            }
+          } else if (data.type === 'diw:unload') {
+            out.unloadCount += 1;
+            if (out.signalAfterMs === null && firstStartedAt !== null) {
+              out.signalAfterMs = Math.round(now - firstStartedAt);
+            }
+          } else if (data.type === 'diw:result') {
+            out.results += 1;
+            out.failed = (data.requirements ?? [])
+              .filter((requirement) => !requirement.passed)
+              .map((requirement) => requirement.id);
+          }
+        }
+        window.addEventListener('message', onMessage);
+        window.setTimeout(() => {
+          window.removeEventListener('message', onMessage);
+          iframe.remove();
+          resolve(out);
+        }, windowMs);
+        document.body.appendChild(iframe);
+        iframe.srcdoc = srcdoc;
+      }),
+    { srcdoc, nonce, sandbox: SANDBOX_FLAGS, windowMs: NAVIGATION_WINDOW_MS },
+  );
+}
+
+const NAVIGATION_PROBES: { name: string; js: string }[] = [
+  { name: 'reload', js: 'location.reload();' },
+  { name: 'href-about-blank', js: "location.href = 'about:blank';" },
+];
+
+async function runNavigationProbe(
+  env: ProbeEnv,
+  name: string,
+  js: string,
+): Promise<string | null> {
+  const outcome = await runLifecycle(env, {
+    files: { html: '<p id="alvo">oi</p>', css: '', js },
+    requirements: [exists('alvo-existe', '#alvo')],
+  });
+  if (outcome.signalAfterMs === null) {
+    return `nenhum diw:unload nem segundo diw:started em ${NAVIGATION_WINDOW_MS} ms (${name})`;
+  }
+  if (outcome.signalAfterMs > NAVIGATION_LIMIT_MS) {
+    return `sinal chegou após ${outcome.signalAfterMs} ms (limite ${NAVIGATION_LIMIT_MS} ms)`;
+  }
+  return null;
+}
+
+async function runHashProbe(env: ProbeEnv): Promise<string | null> {
+  const outcome = await runLifecycle(env, {
+    files: { html: '<p id="alvo">oi</p>', css: '', js: "location.hash = '#x';" },
+    requirements: [exists('alvo-existe', '#alvo')],
+  });
+  if (outcome.unloadCount > 0 || outcome.startedCount !== 1) {
+    return `hash gerou sinal de navegação (started=${outcome.startedCount}, unload=${outcome.unloadCount})`;
+  }
+  if (outcome.results !== 1 || outcome.failed.length > 0) {
+    return `hash não foi corrigido normalmente (resultados=${outcome.results}, falhas=${outcome.failed.join(',')})`;
+  }
+  return null;
+}
+
 async function pause(ms: number): Promise<void> {
   await new Promise((resolveTimer) => setTimeout(resolveTimer, ms));
 }
@@ -364,6 +482,15 @@ export async function runRunnerProbe(
       await runIsolation(env, popups),
       'runner: sonda isolamento OK',
     );
+
+    for (const probe of NAVIGATION_PROBES) {
+      record(
+        probe.name,
+        await runNavigationProbe(env, probe.name, probe.js),
+        `runner: sonda ${probe.name} OK`,
+      );
+    }
+    record('hash', await runHashProbe(env), 'runner: sonda hash OK');
 
     const challenges = loadChallenges();
     let passed = 0;

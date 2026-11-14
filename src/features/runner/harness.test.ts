@@ -75,6 +75,10 @@ async function runHarness(
       if (!parsed.success || parsed.data.nonce !== nonce) {
         return;
       }
+      // Lifecycle signals are not the answer; keep waiting for it.
+      if (parsed.data.type === 'diw:started' || parsed.data.type === 'diw:unload') {
+        return;
+      }
       clearTimeout(timer);
       dom.window.close();
       resolve(parsed.data);
@@ -452,5 +456,78 @@ describe('harness checks', () => {
 
     expect(message.requirements.map((result) => result.passed)).toEqual([true]);
     expect(message.errors).toEqual([]);
+  });
+
+  describe('lifecycle', () => {
+    async function collect(options: HarnessOptions): Promise<string[]> {
+      const nonce = 'ciclo-vida';
+      const srcdoc = buildSrcdoc(
+        { html: options.html ?? '', css: '', js: options.js ?? '' },
+        {
+          nonce,
+          mode: options.mode ?? 'test',
+          parentOrigin: ORIGIN,
+          requirements: options.requirements ?? [],
+        },
+        harnessSource,
+      );
+      const dom = new JSDOM(srcdoc, {
+        runScripts: 'dangerously',
+        url: ORIGIN,
+        pretendToBeVisual: true,
+        virtualConsole: new VirtualConsole(),
+      });
+      const seen: string[] = [];
+      dom.window.addEventListener('message', (event) => {
+        const parsed = RunnerMessageSchema.safeParse(event.data);
+        if (parsed.success && parsed.data.nonce === nonce) {
+          seen.push(parsed.data.type);
+        }
+      });
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      dom.window.close();
+      return seen;
+    }
+
+    // v4: AC8(a) diw:started is posted before student code runs, both modes.
+    it.each(['test', 'preview'] as const)(
+      'posts diw:started before the student script in %s mode',
+      async (mode) => {
+        const seen = await collect({
+          mode,
+          js: "window.parent.postMessage({ type: 'diw:unload', nonce: 'ciclo-vida' }, '*');",
+          requirements: [requirement('r', { kind: 'exists', selector: 'body' })],
+        });
+
+        expect(seen.slice(0, 2)).toEqual(['diw:started', 'diw:unload']);
+        expect(seen).toContain(mode === 'test' ? 'diw:result' : 'diw:ready');
+      },
+    );
+
+    it('posts diw:started synchronously, even when student code throws', async () => {
+      const seen = await collect({ js: 'throw new Error("boom");' });
+
+      expect(seen[0]).toBe('diw:started');
+    });
+  });
+
+  it('still posts diw:result when describeError itself is hit by a hostile error', async () => {
+    const message = await runTest({
+      html: '<p id="a"></p>',
+      js: [
+        'var hostile = { get message() { throw new Error("getter"); } };',
+        'window.__DIW__.requirements.forEach(function (r) {',
+        '  Object.defineProperty(r, "before", { get: function () { throw hostile; } });',
+        '});',
+      ].join('\n'),
+      requirements: [
+        requirement('um', { kind: 'exists', selector: '#a' }),
+        requirement('dois', { kind: 'exists', selector: '#a' }),
+      ],
+    });
+
+    expect(message.type).toBe('diw:result');
+    expect(message.requirements.map((result) => result.id)).toEqual(['um', 'dois']);
+    expect(message.errors.length).toBeGreaterThan(0);
   });
 });
