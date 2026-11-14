@@ -37,7 +37,7 @@
 }
 
 .labs-guide__head h1 {
-  font-family: var(--font-display);
+  font-family: var(--font-px);
   font-weight: 600;
   font-size: clamp(32px, 5vw, 48px);
   line-height: 1.15;
@@ -104,7 +104,7 @@
   display: grid;
   justify-items: end;
   gap: var(--space-1);
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-code);
   font-size: 0.7rem;
 }
 
@@ -127,7 +127,7 @@
   border: 1px solid rgb(255 194 61 / 0.45);
   border-radius: var(--radius-full);
   color: var(--xp);
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-code);
   font-size: 0.8rem;
   font-variant-numeric: tabular-nums;
   line-height: 1.4;
@@ -169,7 +169,7 @@
   padding: 0.2rem 0.55rem;
   border: 2px solid var(--edge);
   color: var(--muted);
-  font: 400 13px var(--font-mono), monospace;
+  font: 400 13px var(--font-code);
   white-space: nowrap;
 }
 
@@ -226,7 +226,7 @@
 .labs-page .labs-rubric .labs-source {
   margin-block-start: var(--space-1);
   color: var(--muted);
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-code);
   font-size: 0.75rem;
   line-height: 1.4;
 }
@@ -246,7 +246,7 @@
 .labs-tips__group h3 {
   margin-bottom: var(--space-2);
   color: var(--muted);
-  font: 400 13px var(--font-mono), monospace;
+  font: 400 13px var(--font-code);
   letter-spacing: 0.08em;
 }
 
@@ -316,7 +316,7 @@
   height: 28px;
   background: var(--edge-color);
   color: var(--muted);
-  font: 400 13px var(--font-mono), monospace;
+  font: 400 13px var(--font-code);
 }
 
 .labs-step[data-done="true"] {
@@ -353,7 +353,7 @@
   border: 2px solid var(--edge);
   background: var(--panel);
   color: var(--on-u);
-  font: 400 13px var(--font-mono), monospace;
+  font: 400 13px var(--font-code);
   cursor: pointer;
 }
 
@@ -431,7 +431,7 @@
 
 .labs-code__lang {
   color: var(--muted);
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-code);
   font-size: 0.75rem;
 }
 
@@ -447,7 +447,7 @@
   margin: 0;
   padding: var(--space-3);
   color: var(--text);
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-code);
   font-size: 0.85rem;
   line-height: 1.6;
   overflow-wrap: anywhere;
@@ -463,7 +463,7 @@
 
 .labs-step__repo a {
   color: var(--text);
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-code);
   text-underline-offset: 3px;
 }
 

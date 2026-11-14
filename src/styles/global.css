@@ -126,3 +126,8 @@ textarea {
     scroll-behavior: auto !important;
   }
 }
+
+/* Runner CSS still names the retired --font-mono; this keeps its report box in the code font. */
+.sandbox-frame__report {
+  font-family: var(--font-code);
+}

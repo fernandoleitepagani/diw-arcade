@@ -23,7 +23,7 @@
 
 .onboarding__brand {
   color: var(--text);
-  font-family: var(--font-display);
+  font-family: var(--font-px);
   font-weight: 600;
   font-size: clamp(32px, 5vw, 48px);
   line-height: 1.15;
