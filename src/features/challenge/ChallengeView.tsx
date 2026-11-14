@@ -4,8 +4,10 @@ import { Link } from 'react-router';
 import { Dialog } from '../../components/session/Dialog';
 import { SessionSummary } from '../../components/session/SessionSummary';
 import { Button } from '../../components/pixel/Button/Button';
-import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
+import { Tag } from '../../components/pixel/Tag/Tag';
+import { ThemeToggle } from '../../components/pixel/ThemeToggle/ThemeToggle';
 import { FeedbackBar } from '../../components/session/FeedbackBar';
+import { useSessionBar } from '../../components/session/sessionBar';
 import { getChallenges, getNode } from '../../content';
 import type { Challenge, CodeFiles } from '../../content/schema';
 import type {
@@ -312,29 +314,36 @@ export function ChallengeView({
     [],
   );
 
+  const unitId = getNode(challenge.nodeId)?.unitId;
+  const passedCount = challenge.requirements.filter((requirement) =>
+    results?.some((result) => result.id === requirement.id && result.passed),
+  ).length;
+  const terminalLines = challenge.requirements.flatMap((requirement) => {
+    const result = results?.find((entry) => entry.id === requirement.id);
+    return result
+      ? [{ id: requirement.id, label: requirement.label, passed: result.passed }]
+      : [];
+  });
+
+  useSessionBar({
+    value: passedCount,
+    max: challenge.requirements.length,
+    unit: 'requisitos',
+    exitTo: `/no/${challenge.nodeId}`,
+  });
+
   const solutionUnlocked = passed || failedRuns >= FAILURES_TO_UNLOCK;
 
   return (
     <article className="challenge-view session-page session-page--wide">
       <header className="challenge-view__header">
-        <div className="challenge-view__heading">
-          <p className="challenge-view__eyebrow">
-            Desafio de {KIND_LABELS[challenge.kind]}
-          </p>
-          <h1 className="challenge-view__title">{challenge.title}</h1>
-          <p className="challenge-view__goal">{challenge.goal}</p>
-        </div>
-        <Link className="challenge-view__node-link" to={`/no/${challenge.nodeId}`}>
-          Ver nó: {getNode(challenge.nodeId)?.title ?? challenge.nodeId}
-        </Link>
+        <h1 className="challenge-view__title">{challenge.title}</h1>
+        {unitId ? <Tag unit={unitId}>{KIND_LABELS[challenge.kind]}</Tag> : null}
+        <ThemeToggle />
       </header>
 
       <div className="challenge-view__grid">
-        <PixelPanel
-          as="section"
-          className="challenge-view__editor"
-          aria-label="Editor de código"
-        >
+        <section className="challenge-view__editor" aria-label="Editor de código">
           <div
             className="challenge-view__tabs"
             role="tablist"
@@ -383,13 +392,36 @@ export function ChallengeView({
             Esc e depois Tab sai do editor. Ctrl+Enter executa os testes.
           </p>
 
-          <div className="challenge-view__actions">
+          <div
+            className="challenge-view__term"
+            role="log"
+            aria-label="Terminal de testes"
+          >
+            <div>$ executar testes</div>
+            {terminalLines.map((line) => (
+              <div key={line.id}>
+                <span className={line.passed ? 'ok' : 'bad'}>
+                  {line.passed ? 'passou' : 'falhou'}
+                </span>{' '}
+                {line.label}
+              </div>
+            ))}
+          </div>
+
+          <div className="challenge-view__run">
             <Button onClick={() => void handleRun()} disabled={running}>
               {running ? 'Executando…' : 'Executar testes'}
             </Button>
             <Button variant="quiet" onClick={handleReset}>
               Restaurar código inicial
             </Button>
+            <span className="challenge-view__count" aria-live="polite">
+              {results === null
+                ? running
+                  ? 'Executando testes…'
+                  : 'Nenhum teste executado ainda'
+                : `${passedCount} de ${challenge.requirements.length} requisitos`}
+            </span>
           </div>
 
           {runError ? (
@@ -397,31 +429,32 @@ export function ChallengeView({
               {runError}
             </p>
           ) : null}
-        </PixelPanel>
+        </section>
 
-        <section className="challenge-view__preview" aria-label="Prévia">
-          <div className="challenge-view__device">
-            <div className="challenge-view__device-bar" aria-hidden="true">
-              <span className="challenge-view__device-label">
-                Prévia ao vivo
-              </span>
-            </div>
-            <div className="challenge-view__device-screen">
-              <SandboxFrame
-                files={files}
-                libs={challenge.libs}
-                mocks={challenge.mocks}
-                title="Prévia do desafio"
-              />
+        <section className="challenge-view__preview" aria-label="Pré-visualização">
+          <div className="challenge-view__pad">
+            <h2>Pré-visualização</h2>
+            <div className="challenge-view__device">
+              <div className="challenge-view__chrome" aria-hidden="true">
+                localhost
+              </div>
+              <div className="challenge-view__page">
+                <SandboxFrame
+                  files={files}
+                  libs={challenge.libs}
+                  mocks={challenge.mocks}
+                  title="Prévia do desafio"
+                />
+              </div>
             </div>
           </div>
         </section>
 
-        <aside className="challenge-view__sidebar">
+        <aside className="challenge-view__sidebar" aria-label="Requisitos">
+          <p className="challenge-view__goal">{challenge.goal}</p>
           <RequirementList
             requirements={challenge.requirements}
             results={results}
-            running={running}
           />
 
           <HintPanel
@@ -465,6 +498,12 @@ export function ChallengeView({
             </div>
           </details>
 
+          <Link
+            className="challenge-view__node-link"
+            to={`/no/${challenge.nodeId}`}
+          >
+            Ver nó: {getNode(challenge.nodeId)?.title ?? challenge.nodeId}
+          </Link>
         </aside>
       </div>
 
