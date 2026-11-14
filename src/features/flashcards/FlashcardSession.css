@@ -24,7 +24,7 @@
 
 .flashcard-session .flashcard-session__remaining {
   color: var(--text);
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-code);
   font-size: 0.8125rem;
 }
 
@@ -42,17 +42,15 @@
 .flashcard-session__card {
   display: grid;
   align-content: center;
-  gap: var(--space-4);
+  gap: var(--space-5);
   min-height: clamp(15rem, 40vh, 22rem);
   padding: clamp(1.25rem, 4vw, 2.25rem);
 }
 
 .flashcard-session .flashcard-session__front {
-  max-width: 62ch;
+  max-width: 28em;
   color: var(--text);
-  font-size: clamp(1.05rem, 2.6vw, 1.45rem);
-  font-weight: 700;
-  line-height: 1.45;
+  font: 600 clamp(22px, 4vw, 28px) / 1.25 var(--font-body);
   overflow-wrap: anywhere;
 }
 
@@ -78,7 +76,7 @@
 
 .flashcard-session .flashcard-session__source {
   color: var(--text-muted);
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-code);
   font-size: 0.75rem;
   line-height: 1.5;
 }
@@ -99,42 +97,73 @@
   gap: var(--space-2);
 }
 
+/* Same notched answer button as the quiz options (prototype .opt). */
 .flashcard-session .flashcard-session__grade {
+  --edge-color: var(--edge);
+  position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-areas:
-    'label key'
-    'interval key';
-  grid-template-columns: minmax(0, 1fr) auto;
+    'key label'
+    'key interval';
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   justify-items: start;
-  gap: 0.1rem var(--space-2);
-  min-height: 3.25rem;
+  gap: 0.1rem var(--space-3);
+  min-height: 64px;
+  padding: 10px 16px;
+  border: 0;
+  background: var(--edge-color);
+  clip-path: var(--notch);
+  color: var(--text);
+  font: 500 16px/1.35 var(--font-body);
   text-align: left;
+  cursor: pointer;
+}
+
+.flashcard-session__grade::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  z-index: -1;
+  background: var(--panel);
+  clip-path: var(--notch);
+}
+
+.flashcard-session__grade:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -6px;
+}
+
+@media (hover: hover) {
+  .flashcard-session__grade:hover {
+    --edge-color: var(--muted);
+  }
 }
 
 .flashcard-session__grade-label {
   grid-area: label;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.2;
 }
 
 .flashcard-session__grade-interval {
   grid-area: interval;
-  font-family: var(--font-mono), monospace;
+  color: var(--muted);
+  font-family: var(--font-code);
   font-size: 0.75rem;
   line-height: 1.3;
 }
 
 .flashcard-session__grade-key {
   grid-area: key;
-  display: inline-grid;
+  display: grid;
   place-items: center;
-  width: 1.5rem;
-  height: 1.5rem;
-  border: 2px solid currentColor;
-  font-family: var(--font-mono), monospace;
-  font-size: 0.75rem;
-  line-height: 1;
+  width: 28px;
+  height: 28px;
+  background: var(--edge-color);
+  color: var(--muted);
+  font: 400 13px var(--font-code);
 }
 
 .flashcard-session__empty {
@@ -142,7 +171,6 @@
   justify-items: center;
   gap: var(--space-3);
   padding: clamp(1.5rem, 5vw, 2.5rem) var(--space-4);
-  border: 2px dashed var(--border);
   text-align: center;
 }
 
@@ -166,10 +194,7 @@
 
 .flashcard-session__empty h2 {
   color: var(--text);
-  font-family: var(--font-display), monospace;
-  font-size: 1.5rem;
-  font-weight: 400;
-  line-height: 1.3;
+  font: 600 20px/1.2 var(--font-body);
 }
 
 .flashcard-session .flashcard-session__next {

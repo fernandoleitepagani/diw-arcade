@@ -1,8 +1,7 @@
-import { render, screen, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
-import { getChallenges, getFlashcards, getLab, NODES, type NodeId } from '../../content';
+import { getChallenges, getFlashcards, NODES, UNITS, type NodeId } from '../../content';
 import { newCard } from '../../lib/srs/fsrs';
 import {
   SaveV1Schema,
@@ -57,11 +56,41 @@ const mastered = (ids: readonly NodeId[]) => {
 };
 
 describe('SkillTree', () => {
-  it('shows every fresh node as Nova, as text, and never as Em dia', () => {
+  it('names every fresh node link by its title and Não iniciado, never Em dia', () => {
     renderTree();
 
-    expect(screen.getAllByText('Nova')).toHaveLength(NODES.length);
+    // v4: the state is the end of the link name, not visible text.
+    const links = screen
+      .getAllByRole('link')
+      .filter((link) => /^\/no\//.test(link.getAttribute('href') ?? ''));
+    expect(links).toHaveLength(NODES.length);
+    for (const [index, link] of links.entries()) {
+      // v4: the current node's name also carries the "você está aqui" suffix.
+      expect(link.getAttribute('aria-label')).toMatch(
+        new RegExp(`^${NODES[index]!.title}, Não iniciado(, você está aqui, 0 de 4 passos)?$`),
+      );
+    }
     expect(screen.queryByText('Em dia')).not.toBeInTheDocument();
+  });
+
+  it('names a mid-progress node "<título>, Em andamento" and a done one "Concluído"', () => {
+    const base = mastered(['n01', 'n02', 'n03', 'n04', 'n05', 'n06', 'n07', 'n08']);
+    renderTree(
+      saveWith({
+        ...base,
+        cards: {
+          ...base.cards,
+          'n09-f001': { ...newCard(FIXED_NOW), due: '2099-01-01T00:00:00.000Z' },
+        },
+      }),
+    );
+
+    expect(screen.getByRole('link', { name: /^Flexbox e Grid, Em andamento/ })).toHaveAttribute(
+      'href',
+      '/no/n09',
+    );
+    expect(screen.getByRole('link', { name: 'Propriedades CSS, Concluído' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Bootstrap, Não iniciado' })).toBeInTheDocument();
   });
 
   it('numbers the nodes 01 to 20 and links each to its lesson', () => {
@@ -72,92 +101,65 @@ describe('SkillTree', () => {
       .filter((link) => /^\/no\//.test(link.getAttribute('href') ?? ''));
     expect(links).toHaveLength(20);
     expect(links[0]).toHaveAttribute('href', '/no/n01');
-    expect(links[0]).toHaveTextContent('01');
+    // v4: the number is drawn by CSS from data-n.
+    expect(links[0]!.querySelector('.skill-node__lbl')).toHaveAttribute('data-n', '01');
     expect(links[19]).toHaveAttribute('href', '/no/n20');
-    expect(links[19]).toHaveTextContent('20');
+    expect(links[19]!.querySelector('.skill-node__lbl')).toHaveAttribute('data-n', '20');
   });
 
-  it('shows the Prova 2 unit heading', () => {
+  it('shows the Prova 2 unit heading with its x de y count', () => {
     renderTree();
 
     expect(
       screen.getByRole('heading', { level: 2, name: /Prova 2/ }),
-    ).toBeInTheDocument();
+    ).toHaveTextContent('Prova 2');
+    expect(screen.getByRole('heading', { level: 2, name: /Prova 2.*0 de 6/ })).toBeInTheDocument();
   });
 
-  it('shows how many cards are due only on the node that has them', () => {
-    const cards = Object.fromEntries(
-      ['n05-f001', 'n05-f002', 'n05-f003'].map((id) => [
-        id,
-        newCard(FIXED_NOW),
-      ]),
-    );
+  it('counts the finished nodes of each unit in its header', () => {
+    renderTree(mastered(['n01', 'n02', 'n03']));
 
-    renderTree(saveWith({ cards }));
-
-    const due = screen.getByText('3 cartas para revisar');
-    expect(due.closest('a')).toHaveAttribute('href', '/no/n05');
-    expect(screen.getAllByText(/cartas? para revisar/)).toHaveLength(1);
+    expect(screen.getByRole('heading', { level: 2, name: /Fundamentos.*2 de 2/ })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: /HTML.*1 de 3/ })).toBeInTheDocument();
   });
 
-  it('tags the recommended node', () => {
+  it('marks exactly one node with "Você está aqui, k de 4 passos"', () => {
     renderTree();
 
-    const tag = screen.getByText('Recomendado');
-    expect(tag.closest('a')).toHaveAttribute('href', '/no/n01');
-  });
-
-  it('puts the lab guides at the end of their unit under Projetos', () => {
-    renderTree();
-
-    const hrefs = screen
-      .getAllByRole('link')
-      .map((link) => link.getAttribute('href'))
-      .filter((href) => href?.startsWith('/laboratorios/'));
-    expect(hrefs).toEqual([
-      '/laboratorios/lab-01',
-      '/laboratorios/lab-02',
-      '/laboratorios/lab-03',
-      '/laboratorios/jsonserver',
-    ]);
-    expect(screen.getAllByRole('heading', { level: 3, name: 'Projetos' })).toHaveLength(2);
-  });
-
-  it('names each Projetos link by its lab title and shows progress as text', () => {
-    renderTree();
-
-    for (const labId of ['lab-01', 'lab-02', 'lab-03', 'jsonserver'] as const) {
-      const title = getLab(labId)!.title;
-      const link = screen.getByRole('link', { name: title });
-      expect(link).toHaveAttribute('href', `/laboratorios/${labId}`);
-      expect(link.closest('li')).toHaveTextContent(/Não iniciado|passos?|Concluído/);
-    }
-  });
-
-  it('collapses a finished unit into one button that toggles with the keyboard', async () => {
-    const user = userEvent.setup();
-    renderTree(mastered(['n01', 'n02']));
-
-    const button = screen.getByRole('button', {
-      name: /Fundamentos da Web.*2 de 2 nós, concluída/,
+    // v4: the marker lives in the link's accessible name, not in sr-only text.
+    const marker = screen.getByRole('link', {
+      name: new RegExp(`^${NODES[0]!.title}, Não iniciado, você está aqui, 0 de 4 passos$`),
     });
-    expect(button).toHaveAttribute('aria-expanded', 'false');
-    expect(screen.queryByRole('link', { name: /Introdução à Web/ })).not.toBeInTheDocument();
-
-    button.focus();
-    await user.keyboard('{Enter}');
-    expect(button).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByRole('link', { name: /Introdução à Web/ })).toBeInTheDocument();
-    expect(within(button.closest('section')!).getAllByText('Dominada')).toHaveLength(2);
-
-    await user.keyboard(' ');
-    expect(button).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.getAllByRole('link', { name: /você está aqui/ })).toHaveLength(1);
+    expect(marker).toHaveAttribute('href', '/no/n01');
   });
 
-  it('keeps unfinished units open without a toggle button', () => {
+  it('counts the finished lesson steps in the marker', () => {
     renderTree(mastered(['n01', 'n02']));
 
-    expect(screen.getAllByRole('button')).toHaveLength(1);
+    // v4: the marker lives in the link's accessible name, not in sr-only text.
+    const marker = screen.getByRole('link', { name: /você está aqui, 0 de 4 passos$/ });
+    expect(marker).toHaveAttribute('href', '/no/n03');
+  });
+
+  it('keeps every unit expanded, with no buttons and no Projetos block', () => {
+    renderTree(mastered(['n01', 'n02']));
+
+    expect(screen.queryAllByRole('button')).toHaveLength(0);
+    expect(screen.queryByText('Projetos')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(UNITS.length);
+    // v4: a finished unit still lists its nodes.
+    expect(screen.getByRole('link', { name: /Introdução à Web/ })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Sintaxe e elementos HTML/ })).toBeInTheDocument();
+  });
+
+  it('gives each node a disc inside the link, hidden from assistive tech', () => {
+    renderTree();
+
+    const link = screen.getByRole('link', { name: /Introdução à Web/ });
+    // v4: the number is drawn by CSS from data-n; no duplicate sr-only copy.
+    expect(link.querySelector('.skill-node__lbl')).toHaveAttribute('data-n', '01');
+    expect(link.querySelector('.sr-only')).toBeNull();
+    expect(link.querySelector('.node-disc svg[aria-hidden="true"]')).not.toBeNull();
   });
 });

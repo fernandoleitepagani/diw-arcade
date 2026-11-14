@@ -212,18 +212,18 @@ function errorMessage(error: unknown): string {
  */
 async function probeQuiz(page: Page): Promise<string | null> {
   try {
-    const option = page.locator('input[name="quiz-option"]').first();
+    // v4: options are buttons that answer on click; only fill keeps Responder.
+    const option = page.locator('button.quiz-round__option').first();
     if ((await option.count()) > 0) {
-      await option.check({ timeout: PROBE_WAIT_MS });
+      await option.click({ timeout: PROBE_WAIT_MS });
     } else {
       await page
         .locator('.quiz-round__fill input[type="text"]')
         .fill('resposta do smoke', { timeout: PROBE_WAIT_MS });
+      await page
+        .getByRole('button', { name: 'Responder' })
+        .click({ timeout: PROBE_WAIT_MS });
     }
-
-    await page
-      .getByRole('button', { name: 'Responder' })
-      .click({ timeout: PROBE_WAIT_MS });
     await page
       .locator('.quiz-round__feedback')
       .waitFor({ state: 'visible', timeout: PROBE_WAIT_MS });

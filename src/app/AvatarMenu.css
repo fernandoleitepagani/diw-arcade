@@ -9,21 +9,30 @@
   width: 44px;
   height: 44px;
   padding: 0;
-  border: 1px solid var(--border);
-  background: var(--surface-2);
+  border: 0;
+  background: transparent;
   color: var(--text);
   cursor: pointer;
 }
 
-.avatar-menu__trigger:focus-visible,
-.avatar-menu__item:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: -4px;
+.avatar-menu__badge {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  font-family: var(--font-px);
+  font-size: 20px;
+  font-weight: 700;
 }
 
-.avatar-menu__icon {
-  width: 1.5rem;
-  height: 1.5rem;
+.avatar-menu__badge::before {
+  inset: 2px;
+}
+
+.avatar-menu__trigger:focus-visible,
+.avatar-menu__item:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: -2px;
 }
 
 .avatar-menu__list {
@@ -33,8 +42,8 @@
   z-index: calc(var(--z-nav) + 1);
   display: grid;
   min-width: 10rem;
-  border: 1px solid var(--border);
-  background: var(--surface);
+  border: 2px solid var(--edge);
+  background: var(--bg);
 }
 
 .avatar-menu__item {
@@ -48,6 +57,6 @@
 
 @media (hover: hover) {
   .avatar-menu__item:hover {
-    background: var(--surface-2);
+    background: var(--panel);
   }
 }

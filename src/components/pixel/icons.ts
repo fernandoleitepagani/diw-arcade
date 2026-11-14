@@ -130,6 +130,18 @@ export const ICON_ROWS = {
     'X......X',
     'XXXXXXXX',
   ],
+  cursor: [
+    'X.......',
+    'XX......',
+    'XXX.....',
+    'XXXX....',
+    'XXXXX...',
+    'XXXXXX..',
+    'XXXX....',
+    'XX.XX...',
+    'X..XX...',
+    '....X...',
+  ],
 } as const satisfies Record<string, readonly string[]>;
 
 export type IconName = keyof typeof ICON_ROWS;

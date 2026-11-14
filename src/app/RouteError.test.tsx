@@ -64,8 +64,9 @@ describe('RouteError', () => {
       screen.getByRole('link', { name: 'Voltar para a trilha' }),
     ).toHaveAttribute('href', '/');
 
+    // v4: nav is now named Principal
     expect(
-      screen.getByRole('navigation', { name: 'Navegação principal' }),
+      screen.getByRole('navigation', { name: 'Principal' }),
     ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Trilha' })).toBeInTheDocument();
 

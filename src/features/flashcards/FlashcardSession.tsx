@@ -110,10 +110,6 @@ function formatNextDue(next: number | null, now: Date): string {
   return `em ${years} ${years === 1 ? "ano" : "anos"}`;
 }
 
-function gradeVariant(grade: Grade): "primary" | "quiet" {
-  return grade === 3 ? "primary" : "quiet";
-}
-
 export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
   const progress = useOptionalProgress();
   const save = progress?.save ?? ISOLATED_SAVE;
@@ -188,7 +184,7 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
   );
 
   useSessionBar({
-    value: completed,
+    value: current ? completed + 1 : completed,
     max: completed + queue.length,
     exitTo: deckNodeId === undefined ? "/" : `/no/${deckNodeId}`,
   });
@@ -322,7 +318,7 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
       ) : null}
 
       {isEmpty ? (
-        <div className="flashcard-session__empty">
+        <PixelPanel as="div" className="flashcard-session__empty">
           <h2>Nada para revisar agora</h2>
           <p className="flashcard-session__next">
             {`Próxima revisão: ${nextLabel}`}
@@ -336,7 +332,7 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
             />
             <span>{pickLine("empty", save.xpTotal)}</span>
           </p>
-        </div>
+        </PixelPanel>
       ) : isFinished ? (
         <div className="flashcard-session__done">
           <SessionSummary
@@ -395,20 +391,20 @@ export function FlashcardSession({ flashcards }: FlashcardSessionProps) {
             aria-label="Avaliar carta"
           >
             {GRADES.map((value, index) => (
-              <Button
+              <button
                 key={value}
+                type="button"
                 className="flashcard-session__grade"
-                variant={gradeVariant(value)}
                 onClick={() => grade(value)}
               >
+                <kbd className="flashcard-session__grade-key">{value}</kbd>
                 <span className="flashcard-session__grade-label">
                   {GRADE_LABELS[value]}
                 </span>
                 <span className="flashcard-session__grade-interval">
                   {intervals[index]}
                 </span>
-                <kbd className="flashcard-session__grade-key">{value}</kbd>
-              </Button>
+              </button>
             ))}
           </div>
         </div>

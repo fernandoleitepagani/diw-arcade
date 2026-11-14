@@ -1,4 +1,6 @@
 import { Link } from 'react-router';
+import type { CSSProperties } from 'react';
+import { PixelIcon } from '../../components/pixel/PixelIcon/PixelIcon';
 import type { NodeId } from '../../content';
 import {
   LESSON_STEP_IDS,
@@ -25,11 +27,22 @@ export interface LessonStepperProps {
   nodeId: NodeId;
   steps: LessonSteps;
   current: LessonStepId;
+  /** One caption per step, shown under its name. */
+  counts?: Readonly<Record<LessonStepId, string>>;
+  /** Unit color for finished steps. */
+  color?: string;
 }
 
-export function LessonStepper({ nodeId, steps, current }: LessonStepperProps) {
+export function LessonStepper({
+  nodeId,
+  steps,
+  current,
+  counts,
+  color,
+}: LessonStepperProps) {
+  const style = color ? ({ '--c': color } as CSSProperties) : undefined;
   return (
-    <ol className="lesson-stepper">
+    <ol className="lesson-stepper" aria-label="Passos da lição" style={style}>
       {LESSON_STEP_IDS.map((id, index) => (
         <li
           key={id}
@@ -41,11 +54,22 @@ export function LessonStepper({ nodeId, steps, current }: LessonStepperProps) {
             to={`/no/${nodeId}?passo=${id}`}
           >
             <span className="lesson-stepper__num" aria-hidden="true">
-              {steps[id] === 'feito' ? '✓' : index + 1}
+              {steps[id] === 'feito' ? (
+                <PixelIcon name="check" />
+              ) : (
+                index + 1
+              )}
             </span>
             <span className="lesson-stepper__label">{STEP_LABEL[id]}</span>
             <span className="lesson-stepper__status">
-              {STATUS_TEXT[steps[id]]}
+              {counts ? (
+                <>
+                  {counts[id]}
+                  <span className="sr-only">, {STATUS_TEXT[steps[id]]}</span>
+                </>
+              ) : (
+                STATUS_TEXT[steps[id]]
+              )}
             </span>
           </Link>
         </li>

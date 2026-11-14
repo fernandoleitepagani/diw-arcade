@@ -24,21 +24,35 @@ function saveWithStreak(xpTotal: number, todayXp: number): Partial<SaveV1> {
 }
 
 describe('Hud', () => {
-  it('shows the level, XP progress, streak and daily goal on one line', () => {
+  it('shows the level, a 10-segment XP bar, the streak and the daily goal', () => {
     renderWithProgress(<Hud />, { save: saveWithStreak(120, 20) });
 
-    expect(screen.getByText('Nv 2')).toBeInTheDocument();
+    // v4: "nível N" replaces "Nv N"; the XP text became a 10-segment bar
+    expect(screen.getByText('nível 2')).toBeInTheDocument();
 
-    expect(screen.getByText('20/150 XP')).toBeInTheDocument();
+    const bar = screen.getByRole('progressbar');
+    expect(bar.querySelectorAll('i')).toHaveLength(10);
+    expect(bar).toHaveAttribute('aria-valuenow', '1');
+    expect(bar).toHaveAttribute('aria-valuemax', '10');
 
-    expect(screen.getByText('3 dias')).toBeInTheDocument();
-    expect(screen.getByText('20/50 XP hoje')).toBeInTheDocument();
+    // v4: the streak is a flame chip labelled "Sequência de N dias"
+    expect(screen.getByLabelText('Sequência de 3 dias')).toHaveTextContent('3');
+    // v4: the goal chip shows "x/50" next to a coin
+    expect(screen.getByText('20/50')).toBeInTheDocument();
+  });
+
+  it('uses the singular for a one-day streak', () => {
+    renderWithProgress(<Hud />, {
+      save: { days: { [TODAY]: activeDay(10) } },
+    });
+
+    expect(screen.getByLabelText('Sequência de 1 dia')).toBeInTheDocument();
   });
 
   it('marks the daily goal as met once the target is reached', () => {
     renderWithProgress(<Hud />, { save: saveWithStreak(120, 60) });
 
-    const goal = screen.getByText('60/50 XP hoje').closest('.hud__today');
+    const goal = screen.getByText('60/50').closest('.hud__today');
     expect(goal).toHaveAttribute('data-met', 'true');
     expect(goal).toHaveClass('hud__today--met');
   });
@@ -46,7 +60,7 @@ describe('Hud', () => {
   it('keeps the goal unmarked below the target', () => {
     renderWithProgress(<Hud />, { save: saveWithStreak(120, 20) });
 
-    const goal = screen.getByText('20/50 XP hoje').closest('.hud__today');
+    const goal = screen.getByText('20/50').closest('.hud__today');
     expect(goal).toHaveAttribute('data-met', 'false');
     expect(goal).not.toHaveClass('hud__today--met');
   });

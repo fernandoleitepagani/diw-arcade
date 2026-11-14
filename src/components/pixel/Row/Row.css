@@ -1,0 +1,42 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 64px;
+  padding: 8px 4px;
+  border-top: 2px solid var(--edge);
+}
+
+.row:last-child {
+  border-bottom: 2px solid var(--edge);
+}
+
+.row__ic {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  color: var(--text);
+  flex: none;
+}
+
+.row__t {
+  flex: 1;
+}
+
+.row__go {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 4px;
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.row:hover .row__go {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 2px;
+}

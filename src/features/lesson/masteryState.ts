@@ -27,5 +27,5 @@ export interface MasteryStars {
 
 export function getMasteryStars(stars: Stars): MasteryStars {
   const on = Number(stars.quiz) + Number(stars.cards) + Number(stars.code);
-  return { on, total: 3, text: `${on} de 3 estrelas` };
+  return { on, total: 3, text: `${on} de 3 pontos de domínio` };
 }

@@ -257,7 +257,7 @@ Reference: the approved prototype, `~/Projects/DIW-Gameplay-ui/prototype/ui-rede
 - **Dark and light themes** from v1. Light has its own unit-color variants.
 - **"Ler" primers ship in v1**: 6 to 10 sourced key points per node.
 - **Homepage** (public landing) where the trail is the layout.
-- Unit colors stay as in the prototype, keyed by unit id (`u1` to `u6`) in the UI token map, since `tree.ts` has no color field. Fundamentos da Web is neutral gray; Dados e JavaScript uses the JavaScript yellow; the Dados teal stays unused.
+- Unit colors stay as in the prototype, keyed by unit id (`u1` to `u6`) in the UI token map, since `tree.ts` has no color field. Fundamentos is neutral gray; Dados e JavaScript uses the JavaScript yellow; the Dados teal stays unused.
 - Progresso keeps the existing stats, restyled; unimplemented parts read "Ainda não implementado" (decision 1).
 - Information architecture: three destinations (Hoje, Trilha, Progresso), avatar menu for Ajustes, four-step lesson per node (Ler, Praticar, Fixar, Construir).
 
@@ -448,7 +448,9 @@ Sensors: `scripts/check` (npm ci, lint, typecheck, vitest, `validate:content`, b
 ## Prototype
 The approved static prototype (v4) is HTML and CSS only, never merged. It lives on the local scratch branch `proto/ui-redesign` under `prototype/ui-redesign/` (index.html, app.css, tokens.css, theme.js, NOTES.md and screenshots at 1280x800 and 375x812 in both themes). A copy used as the build reference is on the run branch under `docs/prototype-ref/` and is deleted by the cleanup tasks.
 
-## Status (2026-11-13)
+## Status (2026-11-13, superseded by Part 5)
+The run described here was paused. The redesign was rebuilt as the v4 run on `feat/ui-refactor-v4`; see Part 5 for what shipped. The list below is the state at the pause.
+
 - Run branch: `feat/ui-redesign`, paused on request. Merged so far: tasks 1 (tokens, fonts, pixel-font floor), 2 (pixel sprites and icons), 3 (panel and button primitives) and 8 (source label copy), plus a lint-ignore for the prototype reference copy.
 - Stopped mid-work, branches intact: tasks 4 (theme module), 5 (segmented bar, tag, unit colors) and 12 (primer schema). Their final checks had not finished.
 - Not started: the other 45 tasks, including task 10 (storage with `primersRead`, high risk).
@@ -459,3 +461,37 @@ The approved static prototype (v4) is HTML and CSS only, never merged. It lives 
 - Builders: up to three at a time. Reviewers: one review per round after `maestro check` passes. Fix rounds: at most two per task.
 - Primer content tasks need the slide texts and the course repository outside this repo (`DIW_SOURCES`, `DIW_REPO`); course PDFs and Canvas data are never committed.
 - Quality bar for every task: lint, typecheck, tests, `validate:content`, build, smoke, axe at zero and the bundle budget stay green; PT-BR copy; keyboard navigation; `prefers-reduced-motion` honored.
+
+# Part 5. v4 delta: build to the prototype
+
+Run `ui-refactor-to-prototype-v4`. Every screen was rebuilt to match the static prototype at `~/Projects/ui-redesign` (its `shots/` folder is the visual reference). Behavior, storage, the reducer, SRS, XP math, the runner and routes did not change.
+
+## Decisions
+- Fonts: tokens are `--font-px` (Pixelify Sans, 20px and up), `--font-body` and `--font-code`. The `--font-display` and `--font-mono` aliases are gone, and `tokens.test.ts` asserts they stay undefined. `pixelFont.test.ts` still guards the 20px floor.
+- Theme: `ThemeToggle` is the only theme control (44px, label "Alternar tema claro e escuro"). The only storage key is `diw-theme`.
+- Shell: one `nav aria-label="Principal"` (Hoje, Trilha, Progresso); a tab bar below 720px. Nav stays active on `/no/*`.
+- Unit rename: "Fundamentos da Web" is now "Fundamentos" (user decision).
+- Lab placement: lab links left the Trilha. Each lab shows as a "Projetos da unidade" row in the Construir panel of every node in the lab's unit (lab-01 on CSS; lab-02, lab-03 and jsonserver on unit 5). A test checks every `LAB_ID` stays reachable.
+- Toast offset: `Toast` sits above the feedback bar through `--feedback-bar-h`; its close button has a 44px hit area.
+- Fill-in questions keep a "Responder" submit button; Enter also submits.
+- Touch targets: the harness fails any target under 44px.
+
+## Accepted deviations from `shots/`
+1. Real content and numbers instead of mock data.
+2. Trilha shows every unit expanded; there is no collapsed "concluida" line.
+3. Desafio keeps a session bar above the title and is not full-bleed.
+4. Desafio uses a dark editor in the light theme, a deliberate fix for axe contrast.
+5. Resumo shows the first-try score, not the prototype's "10 de 10" label.
+6. The HUD keeps a daily-goal chip the prototype lacks.
+7. The avatar is a real menu.
+8. Screens the prototype lacks (Progresso, Ajustes, 404, RouteError, Flashcards, Onboarding, Lab guide) are extrapolated from its tokens and primitives.
+
+## Known deviations and loose ends
+- Hoje rows carry a trailing route icon the prototype does not have.
+- Some Continuar buttons lack the play icon (`ButtonLink` TODO).
+- `BIT_LINES` keys `correct`, `wrong` and `sessionDone` are dead copy, left in place.
+- `src/features/runner/SandboxFrame.css` still reads `--font-mono`. The runner is frozen, so a one-rule (0,2,0) override of the runner box in `src/styles/global.css` (`.sandbox-frame .sandbox-frame__report`) supplies the code font; it must out-rank the runner's (0,1,0) rule, which loads later. AC15 is waived for that one line. Remove both when the runner may change.
+- The legacy v2 aliases in `theme.css` (`--surface`, `--border`, `--text-muted`, `--accent` and the rest) are all still referenced, so none were removed.
+
+## Screenshot harness
+`npm run build && npm run screenshots -- --proto` writes 72 prototype-named PNGs (9 screens, desktop and phone, both themes, plus quiz states) to `SHOTS_DIR`. Use `--only <screen>` for one screen, and run one screen per run. The run also prints a touch-target scan; every `alvos<44px` line must be 0.

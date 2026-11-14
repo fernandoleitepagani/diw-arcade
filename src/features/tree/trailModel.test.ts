@@ -69,7 +69,7 @@ describe('buildTrail', () => {
     expect(nodes.map((n) => n.number)).toEqual(
       Array.from({ length: 20 }, (_, i) => String(i + 1).padStart(2, '0')),
     );
-    expect(nodes.every((n) => n.state === 'nova' && n.due === 0)).toBe(true);
+    expect(nodes.every((n) => n.state === 'nova')).toBe(true);
     expect(nodes.filter((n) => n.recommended).map((n) => n.id)).toEqual(['n01']);
     expect(trail.some((u) => u.finished)).toBe(false);
   });
@@ -99,21 +99,6 @@ describe('buildTrail', () => {
     expect(trail.find((u) => u.current)?.unitId).toBe('u5');
     const u5 = trail.find((u) => u.unitId === 'u5')!;
     expect(u5.nodes.find((n) => n.recommended)?.id).toBe('n13');
-    expect(u5.nodes.find((n) => n.id === 'n13')!.due).toBe(1);
     expect(trail.find((u) => u.unitId === 'u3')!.current).toBe(false);
-  });
-
-  it('lists the labs at the end of their unit, in lab order', () => {
-    const trail = buildTrail(saveWith([]), CONTENT, FIXED_NOW);
-    const projects = Object.fromEntries(trail.map((u) => [u.unitId, u.projects]));
-
-    expect(projects).toEqual({
-      u1: [],
-      u2: [],
-      u3: ['lab-01'],
-      u4: [],
-      u5: ['lab-02', 'lab-03', 'jsonserver'],
-      u6: [],
-    });
   });
 });

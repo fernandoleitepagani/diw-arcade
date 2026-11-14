@@ -183,7 +183,11 @@ export function StatsPage({ content = DEFAULT_CONTENT }: StatsPageProps = {}) {
         </div>
         <dl className="stats__totals l-grid">
           {tiles.map((tile) => (
-            <div className="stats__total" data-tone={tile.tone} key={tile.label}>
+            <div
+              className="stats__total"
+              data-tone={tile.tone}
+              key={tile.label}
+            >
               <dt>{tile.label}</dt>
               <dd>{tile.value}</dd>
             </div>
@@ -192,7 +196,8 @@ export function StatsPage({ content = DEFAULT_CONTENT }: StatsPageProps = {}) {
       </section>
 
       <div className="stats__columns">
-        <section
+        <PixelPanel
+          as="section"
           className="stats__panel"
           aria-labelledby="stats-accuracy"
         >
@@ -211,9 +216,10 @@ export function StatsPage({ content = DEFAULT_CONTENT }: StatsPageProps = {}) {
               </li>
             ))}
           </ul>
-        </section>
+        </PixelPanel>
 
-        <section
+        <PixelPanel
+          as="section"
           className="stats__panel stats__forecast"
           aria-labelledby="stats-forecast"
         >
@@ -238,10 +244,14 @@ export function StatsPage({ content = DEFAULT_CONTENT }: StatsPageProps = {}) {
               <dd>{forecastTotal}</dd>
             </div>
           </dl>
-        </section>
+        </PixelPanel>
       </div>
 
-      <section className="stats__panel" aria-labelledby="stats-heatmap">
+      <PixelPanel
+        as="section"
+        className="stats__panel"
+        aria-labelledby="stats-heatmap"
+      >
         <div className="stats__section-head">
           <h2 id="stats-heatmap">Mapa de pontos fracos</h2>
           <p className="stats__hint">
@@ -251,9 +261,13 @@ export function StatsPage({ content = DEFAULT_CONTENT }: StatsPageProps = {}) {
         <div className="stats__scroll">
           <Heatmap rows={rows} />
         </div>
-      </section>
+      </PixelPanel>
 
-      <section className="stats__panel" aria-labelledby="stats-achievements">
+      <PixelPanel
+        as="section"
+        className="stats__panel"
+        aria-labelledby="stats-achievements"
+      >
         <div className="stats__section-head">
           <h2 id="stats-achievements">Conquistas</h2>
           <p className="stats__hint">
@@ -261,7 +275,7 @@ export function StatsPage({ content = DEFAULT_CONTENT }: StatsPageProps = {}) {
           </p>
         </div>
         <AchievementGrid unlocked={save.achievements} />
-      </section>
+      </PixelPanel>
     </section>
   );
 }

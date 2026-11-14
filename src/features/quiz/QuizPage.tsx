@@ -39,8 +39,9 @@ export function QuizPage() {
 
   return (
     <section className="page session-page">
-      <h1>Quiz</h1>
-      {node ? <p>{node.title}</p> : null}
+      {/* The question is the visible heading; the page name stays for readers. */}
+      <h1 className="sr-only">Quiz</h1>
+      {node ? <p className="sr-only">{node.title}</p> : null}
       {nodeId && questions.length > 0 ? (
         <QuizRound
           key={round}

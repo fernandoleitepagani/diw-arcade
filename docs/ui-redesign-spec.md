@@ -1,6 +1,7 @@
 # DIW Arcade UI redesign: spec and order of work
 
 Status: approved by the user on 2026-11-13; updated the same day for the new `main` (section 10). Supersedes sections 4 to 9 of `ui-redesign-plan.md`; the diagnosis there still stands.
+Superseded in part by Part 5 of `docs/ui-redesign.md` (v4 run: build to the prototype at `~/Projects/ui-redesign`, accepted deviations, harness usage).
 Reference: the approved prototype, `~/Projects/DIW-Gameplay-ui/prototype/ui-redesign/` (branch `proto/ui-redesign`, scratch, never merged). Its `NOTES.md` has tokens, contrast numbers and known issues. Screens to match are in `shots/`.
 
 ## 1. Decisions already made
@@ -9,7 +10,7 @@ Reference: the approved prototype, `~/Projects/DIW-Gameplay-ui/prototype/ui-rede
 - **Dark and light themes** from v1. Light has its own unit-color variants.
 - **"Ler" primers ship in v1**: 6 to 10 sourced key points per node.
 - **Homepage** (public landing) where the trail is the layout.
-- Unit colors stay as in the prototype, keyed by unit id (`u1` to `u6`) in the UI token map, since `tree.ts` has no color field. Fundamentos da Web is neutral gray; Dados e JavaScript uses the JavaScript yellow; the Dados teal stays unused.
+- Unit colors stay as in the prototype, keyed by unit id (`u1` to `u6`) in the UI token map, since `tree.ts` has no color field. Fundamentos is neutral gray; Dados e JavaScript uses the JavaScript yellow; the Dados teal stays unused.
 - Progresso keeps the existing stats, restyled; unimplemented parts read "Ainda não implementado" (decision 1).
 - Information architecture: three destinations (Hoje, Trilha, Progresso), avatar menu for Ajustes, four-step lesson per node (Ler, Praticar, Fixar, Construir).
 

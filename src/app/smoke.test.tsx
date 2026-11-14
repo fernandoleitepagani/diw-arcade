@@ -32,10 +32,12 @@ function renderApp(path: string, storage: StorageLike) {
 }
 
 const pages = [
-  { path: '/hoje', heading: 'Hoje' },
+  // v4: Hoje h1 is the prototype greeting
+  { path: '/hoje', heading: 'Bom te ver de volta.' },
   {
     path: '/trilha',
-    heading: 'DIW Arcade',
+    // v4: Trilha has a visible h1 "Trilha" instead of the sr-only one.
+    heading: 'Trilha',
     content: 'Introdução à Web e tecnologias',
   },
   { path: '/no/n07', heading: 'Propriedades CSS' },

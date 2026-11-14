@@ -1,23 +1,24 @@
 .domina__title {
-  margin: 0 0 var(--space-3, 12px);
-  font-size: 1rem;
+  margin: 0;
 }
 
 .domina__list {
   display: grid;
-  gap: 6px;
-  margin: 0;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 48px;
+  width: 100%;
+  margin: 16px 0 0;
   padding: 0;
   list-style: none;
 }
 
 .domina__row {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding-block: 4px;
-  border-bottom: 1px solid var(--edge);
+  min-height: 56px;
+  border-top: 2px solid var(--edge);
 }
 
 .domina__front {
@@ -26,18 +27,24 @@
 }
 
 .domina__state {
+  display: inline-flex;
   flex: none;
+  align-items: center;
+  gap: 8px;
   color: var(--muted);
-  font-family: var(--font-mono), monospace;
-  font-size: 12px;
+  font-size: 14px;
 }
 
-.domina__state--dominada {
-  color: var(--text);
-  font-weight: 600;
+.domina__state--ok {
+  color: var(--ok);
 }
 
 .domina__empty {
-  margin: 0;
-  color: var(--muted);
+  margin: 16px 0 0;
+}
+
+@media (max-width: 720px) {
+  .domina__list {
+    grid-template-columns: 1fr;
+  }
 }

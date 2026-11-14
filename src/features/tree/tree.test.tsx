@@ -29,6 +29,22 @@ function renderNode(
   );
 }
 
+function midSave(): Partial<SaveV1> {
+  const rounds: SaveV1['quiz']['rounds'] = {};
+  const cards: SaveV1['cards'] = {};
+  const challenges: SaveV1['challenges'] = {};
+  for (const node of NODES.slice(0, 8)) {
+    rounds[node.id] = { best: 100, count: 1, perfect: true };
+    for (const card of getFlashcards(node.id)) {
+      cards[card.id] = { ...newCard(FIXED_NOW), due: '2099-01-01T00:00:00.000Z', reps: 1, state: 2 };
+    }
+    for (const challenge of getChallenges(node.id)) {
+      challenges[challenge.id] = { passed: true, failedRuns: 0, hintsUsed: 0, xpAwarded: 0, code: null };
+    }
+  }
+  return { quiz: { answers: {}, rounds }, cards, challenges };
+}
+
 function trilha() {
   return within(screen.getByRole('region', { name: 'Trilha' }));
 }
@@ -60,20 +76,50 @@ describe('árvore de habilidades', () => {
     expect(document.getElementById('unit-u1')).not.toBeNull();
   });
 
-  it('mantém o título da página só para leitores de tela', () => {
-    renderWithProgress(<TreePage />);
+  // v4: the h1 is a visible "Trilha" with a summary line and a Continuar CTA.
+  it('mostra o h1 Trilha visível, o resumo e o CTA Continuar', () => {
+    renderWithProgress(<TreePage />, { save: { ...midSave() } });
 
+    const h1 = screen.getByRole('heading', { level: 1, name: 'Trilha' });
+    expect(h1).not.toHaveClass('sr-only');
     expect(
-      screen.getByRole('heading', { level: 1, name: 'DIW Arcade' }),
-    ).toHaveClass('sr-only');
+      screen.getByText('8 de 20 nós concluídos. Você está em Flexbox e Grid.'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Continuar Flexbox e Grid' }),
+    ).toHaveAttribute('href', '/no/n09');
   });
 
-  it('tags exactly n01 as recommended on a fresh save', () => {
+  it('numa trilha nova o resumo diz 0 de 20 e o CTA leva ao n01', () => {
     renderWithProgress(<TreePage />);
 
-    const tags = trilha().getAllByText('Recomendado');
+    expect(screen.getByText(/^0 de 20 nós concluídos\./)).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: /^Continuar / }),
+    ).toHaveAttribute('href', '/no/n01');
+  });
+
+  it('não tem aside Unidades, bloco Projetos nem botões', () => {
+    renderWithProgress(<TreePage />);
+
+    expect(screen.queryByText('Unidades')).toBeNull();
+    expect(screen.queryByText('Projetos')).toBeNull();
+    expect(screen.queryAllByRole('button')).toHaveLength(0);
+  });
+
+  it('titles the page Trilha', () => {
+    renderWithProgress(<TreePage />);
+
+    expect(document.title).toBe('DIW Arcade: Trilha');
+  });
+
+  // v4: the "Recomendado" tag became the "Você está aqui" marker.
+  it('marks exactly n01 as the current node on a fresh save', () => {
+    renderWithProgress(<TreePage />);
+
+    const tags = trilha().getAllByRole('link', { name: /você está aqui/ });
     expect(tags).toHaveLength(1);
-    expect(tags[0]!.closest('a')).toHaveAttribute('href', '/no/n01');
+    expect(tags[0]).toHaveAttribute('href', '/no/n01');
   });
 
   it('recommends the node with the most due cards', () => {
@@ -92,15 +138,20 @@ describe('árvore de habilidades', () => {
 
     renderWithProgress(<TreePage />, { save: { cards } });
 
-    const tags = trilha().getAllByText('Recomendado');
+    // v4: the "Recomendado" tag became the "Você está aqui" marker.
+    const tags = trilha().getAllByRole('link', { name: /você está aqui/ });
     expect(tags).toHaveLength(1);
-    expect(tags[0]!.closest('a')).toHaveAttribute('href', '/no/n09');
+    expect(tags[0]).toHaveAttribute('href', '/no/n09');
   });
 
-  it('shows the node state as text on every node card', () => {
+  it('names every node card with its state', () => {
     renderWithProgress(<TreePage />);
 
-    expect(trilha().getAllByText('Nova')).toHaveLength(NODES.length);
+    // v4: the state is part of the link name ("<título>, Não iniciado").
+    const named = trilha()
+      .getAllByRole('link')
+      .filter((link) => /, Não iniciado(, você está aqui, \d de 4 passos)?$/.test(link.getAttribute('aria-label') ?? ''));
+    expect(named).toHaveLength(NODES.length);
   });
 
   it('draws the decorative connectors out of the accessibility tree', () => {
@@ -112,30 +163,40 @@ describe('árvore de habilidades', () => {
 });
 
 describe('página do nó', () => {
-  it('shows the node title as the h1, with aulas, state and mastery text', () => {
+  it('shows the meta tag "CSS, aula 174" and "1 de 3 pontos de domínio" for n09', () => {
+    renderNode('/no/n09', {
+      save: { quiz: { answers: {}, rounds: { n09: { best: 100, count: 1, perfect: true } } } },
+    });
+    expect(screen.getByText('CSS, aula 174')).toBeInTheDocument();
+    expect(screen.getByText('1 de 3 pontos de domínio')).toBeInTheDocument();
+    expect(
+      screen.getByRole('progressbar', { name: '1 de 3 pontos de domínio' }),
+    ).toBeInTheDocument();
+  });
+
+  it('shows the node title as the h1, with aulas and mastery text', () => {
     renderNode('/no/n07');
 
     expect(
       screen.getByRole('heading', { level: 1, name: 'Propriedades CSS' }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/Aulas:.*172/)).toBeInTheDocument();
-    expect(screen.getByText('Nova')).toBeInTheDocument();
+    // v4: header meta is "<Unidade>, aula N" and the state word moved out of the header.
+    expect(screen.getByText('CSS, aula 172')).toBeInTheDocument();
     expect(
-      screen.getByRole('progressbar', { name: '0 de 3 estrelas' }),
+      screen.getByRole('progressbar', { name: '0 de 3 pontos de domínio' }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: '← Trilha' })).toHaveAttribute(
+    // v4: the arrow is now a decorative pixel icon, so the link name is "Trilha".
+    expect(screen.getByRole('link', { name: 'Trilha' })).toHaveAttribute(
       'href',
       '/trilha',
     );
   });
 
-  it('points Continuar at the first unfinished step and selects its panel', () => {
+  it('opens the first unfinished step and shows only its primary action', () => {
     renderNode('/no/n07');
 
-    expect(screen.getByRole('link', { name: 'Continuar' })).toHaveAttribute(
-      'href',
-      '/no/n07?passo=praticar',
-    );
+    // v4: on the step it would reopen, the quiet "Continuar" duplicated the primary action.
+    expect(screen.queryByRole('link', { name: 'Continuar' })).toBeNull();
     expect(
       document.querySelector('[aria-current="step"]'),
     ).toHaveTextContent('Praticar');
@@ -181,7 +242,10 @@ describe('página do nó', () => {
     expect(
       screen.getByRole('heading', { name: 'O que você já domina' }),
     ).toBeInTheDocument();
-    expect(screen.getAllByText('nova').length).toBe(getFlashcards('n07').length);
+    // v4: unmastered cards read "Falta praticar".
+    expect(screen.getAllByText('Falta praticar').length).toBe(
+      getFlashcards('n07').length,
+    );
   });
 
   it('shows Nó concluído when every available step is done', () => {
@@ -272,5 +336,14 @@ describe('página do nó', () => {
     expect(
       screen.getByRole('link', { name: /Trilha/ }),
     ).toHaveAttribute('href', '/trilha');
+  });
+
+  it('keeps Continuar when it leads to a different step than the one shown', () => {
+    renderNode('/no/n07?passo=fixar');
+
+    expect(screen.getByRole('link', { name: 'Continuar' })).toHaveAttribute(
+      'href',
+      '/no/n07?passo=praticar',
+    );
   });
 });

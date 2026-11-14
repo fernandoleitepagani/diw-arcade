@@ -6,9 +6,9 @@ import type { SaveV1 } from '../../lib/storage';
 export type NodeState = 'nova' | 'em-progresso' | 'dominada';
 
 export const NODE_STATE_LABEL: Readonly<Record<NodeState, string>> = {
-  nova: 'Nova',
-  'em-progresso': 'Em progresso',
-  dominada: 'Dominada',
+  nova: 'Não iniciado',
+  'em-progresso': 'Em andamento',
+  dominada: 'Concluído',
 };
 
 function idsOf(entries: readonly { id: string }[] | undefined): string[] {

@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import {
   useProgress as readProgressContext,
   type ProgressContextValue,
 } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
 import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
-import { Button, PageHeader } from '../../components/ui';
+import { Button } from '../../components/pixel/Button/Button';
+import { PixelIcon } from '../../components/pixel/PixelIcon/PixelIcon';
 import {
   LAB_IDS,
   REPO_URL_PREFIX,
@@ -129,7 +130,7 @@ function LabStepItem({ labId, step, progress }: LabStepItemProps) {
           <div className="labs-code__bar">
             <span className="labs-code__lang">{step.code.lang}</span>
             <Button
-              variant="ghost"
+              variant="quiet"
               onClick={() => {
                 void copyCode();
               }}
@@ -187,17 +188,21 @@ export function LabGuidePage({ lab: givenLab }: LabGuidePageProps = {}) {
 
   return (
     <section className="page labs-page labs-guide">
-      <PageHeader
-        eyebrow="Guia de projeto"
-        title="Laboratório"
-        actions={
-          <span
-            className={complete ? 'labs-guide__count labs-guide__count--done' : 'labs-guide__count'}
-          >
-            {done} de {total} passos
-          </span>
-        }
-      />
+      <div className="labs-guide__crumb">
+        <Link className="labs-guide__back" to="/trilha">
+          <PixelIcon name="left" />
+          Trilha
+        </Link>
+      </div>
+
+      <div className="labs-guide__head">
+        <h1>Laboratório</h1>
+        <span
+          className={complete ? 'labs-guide__count labs-guide__count--done' : 'labs-guide__count'}
+        >
+          {done} de {total} passos
+        </span>
+      </div>
 
       <div className="labs-guide__intro">
         <h2 className="labs-guide__title">{lab.title}</h2>
