@@ -22,8 +22,7 @@ describe('TodayPage', () => {
   it('shows the next-step panel with a 4-segment bar and the node title', () => {
     renderWithProgress(<TodayPage />);
 
-    const panel = screen.getByRole('region', { name: /./, description: '' });
-    expect(panel).toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { level: 2 })[0]).toBeVisible();
     expect(
       screen.getByRole('img', { name: /\d de 4 passos/ }),
     ).toBeInTheDocument();
