@@ -10,6 +10,7 @@ import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Challenge, CodeFiles } from '../../content/schema';
 import { createEmptySave, type SaveV1 } from '../../lib/storage';
+import { SessionBarProvider, useSessionBarState } from '../../components/session';
 import { fixtureChallenge } from '../../test/fixtures';
 import type { RunResult } from '../runner/runner';
 import { ChallengeView, getChallengeNextHref } from './ChallengeView';
@@ -498,5 +499,95 @@ describe('getChallengeNextHref', () => {
         new Date('2026-01-01T12:00:00Z'),
       ),
     ).toBe('/no/n01?passo=praticar');
+  });
+});
+
+describe('ChallengeView terminal and session bar', () => {
+  const threeReqs: Challenge = {
+    ...fixtureChallenge,
+    requirements: [
+      ...fixtureChallenge.requirements,
+      {
+        ...fixtureChallenge.requirements[0]!,
+        id: 'terceiro',
+        label: 'O terceiro requisito.',
+      },
+    ],
+  };
+  const mixed = {
+    status: 'ok' as const,
+    requirements: [
+      { id: 'fundo-escuro', passed: true },
+      { id: 'titulo-visivel', passed: true },
+      { id: 'terceiro', passed: false },
+    ],
+    errors: [],
+  };
+
+  function BarProbe() {
+    const bar = useSessionBarState();
+    return (
+      <output data-testid="bar">{`${bar.value}/${bar.max}/${bar.unit ?? ''}/${bar.exitTo}`}</output>
+    );
+  }
+
+  function renderThree() {
+    return render(
+      <MemoryRouter>
+        <SessionBarProvider>
+          <BarProbe />
+          <ChallengeView
+            challenge={threeReqs}
+            state={emptyState}
+            onRun={vi.fn().mockResolvedValue(mixed)}
+            dispatch={vi.fn()}
+          />
+        </SessionBarProvider>
+      </MemoryRouter>,
+    );
+  }
+
+  it('shows only the prompt line before the first run', () => {
+    renderThree();
+    const terminal = screen.getByRole('log', { name: 'Terminal de testes' });
+    expect(terminal).toHaveTextContent('$ executar testes');
+    expect(within(terminal).queryByText(/passou|falhou/)).toBeNull();
+  });
+
+  it('lists real passou/falhou lines and the count after a run', async () => {
+    const user = userEvent.setup();
+    renderThree();
+    await user.click(screen.getByRole('button', { name: 'Executar testes' }));
+
+    const terminal = await screen.findByRole('log', {
+      name: 'Terminal de testes',
+    });
+    await waitFor(() =>
+      expect(terminal.textContent).toMatch(/falhou O terceiro requisito\./),
+    );
+    const lines = Array.from(terminal.querySelectorAll('div')).map(
+      (line) => line.textContent,
+    );
+    expect(lines[0]).toBe('$ executar testes');
+    expect(lines.slice(1).map((l) => l?.split(' ')[0])).toEqual([
+      'passou',
+      'passou',
+      'falhou',
+    ]);
+    expect(screen.getByText('2 de 3 requisitos')).toBeInTheDocument();
+  });
+
+  it('reports passed requirements to the session bar', async () => {
+    const user = userEvent.setup();
+    renderThree();
+    expect(screen.getByTestId('bar')).toHaveTextContent(
+      `0/3/requisitos/${'/no/' + threeReqs.nodeId}`,
+    );
+    await user.click(screen.getByRole('button', { name: 'Executar testes' }));
+    await waitFor(() =>
+      expect(screen.getByTestId('bar')).toHaveTextContent(
+        `2/3/requisitos/${'/no/' + threeReqs.nodeId}`,
+      ),
+    );
   });
 });
