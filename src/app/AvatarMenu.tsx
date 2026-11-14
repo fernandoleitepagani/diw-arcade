@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from 'react';
 import { Link } from 'react-router';
+import { PixelIcon } from '../components/pixel/PixelIcon/PixelIcon';
 import './AvatarMenu.css';
 
 export function AvatarMenu() {
@@ -71,7 +72,7 @@ export function AvatarMenu() {
         type="button"
       >
         <span className="avatar-menu__badge px">
-          <span aria-hidden="true">A</span>
+          <PixelIcon name="gear" />
         </span>
       </button>
 
