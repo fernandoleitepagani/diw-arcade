@@ -481,10 +481,13 @@ Run `ui-refactor-to-prototype-v4`. Every screen was rebuilt to match the static 
 2. Trilha shows every unit expanded; there is no collapsed "concluida" line.
 3. Desafio keeps a session bar above the title and is not full-bleed.
 4. Desafio uses a dark editor in the light theme, a deliberate fix for axe contrast.
+
 5. Resumo shows the first-try score, not the prototype's "10 de 10" label.
 6. The HUD keeps a daily-goal chip the prototype lacks.
 7. The avatar is a real menu.
 8. Screens the prototype lacks (Progresso, Ajustes, 404, RouteError, Flashcards, Onboarding, Lab guide) are extrapolated from its tokens and primitives.
+
+Desafio layout (post-v4 fix): two columns, editor and preview at 1fr each, instead of the prototype's editor | preview | requisitos at 9/7/4. The three-column preview was only about 384px wide at 1280 and unreadable. Requisitos, hints, Solução and "Ver nó" now sit below, full width (requisitos left, help right; stacked under 900px). The preview has a 480px minimum height that follows the viewport, the workspace breakout is up to 1440px, and phones keep the stacked order. The breakout no longer uses a transform, so the fixed FeedbackBar anchors to the viewport and no longer covers the bottom of the page.
 
 ## Known deviations and loose ends
 - Hoje rows carry a trailing route icon the prototype does not have.

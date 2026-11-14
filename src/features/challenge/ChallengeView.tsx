@@ -449,14 +449,18 @@ export function ChallengeView({
             </div>
           </div>
         </section>
+      </div>
 
+      <div className="challenge-view__below">
         <aside className="challenge-view__sidebar" aria-label="Requisitos">
           <p className="challenge-view__goal">{challenge.goal}</p>
           <RequirementList
             requirements={challenge.requirements}
             results={results}
           />
+        </aside>
 
+        <div className="challenge-view__sidebar challenge-view__help">
           <HintPanel
             hints={challenge.hints}
             hintsUsed={hintsUsed}
@@ -504,7 +508,7 @@ export function ChallengeView({
           >
             Ver nó: {getNode(challenge.nodeId)?.title ?? challenge.nodeId}
           </Link>
-        </aside>
+        </div>
       </div>
 
       {lastRun !== null ? (
