@@ -12,6 +12,13 @@ function setup() {
 }
 
 describe('AvatarMenu', () => {
+  it('shows the player initial in a 36px badge inside the 44px trigger', () => {
+    const { trigger } = setup();
+
+    expect(trigger).toHaveTextContent('A');
+    expect(trigger.querySelector('.avatar-menu__badge')).not.toBeNull();
+  });
+
   it('starts closed with a collapsed trigger', () => {
     const { trigger } = setup();
 

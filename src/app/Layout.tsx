@@ -1,5 +1,7 @@
 import { Suspense, useEffect, useRef } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router';
+import { PixelIcon } from '../components/pixel/PixelIcon/PixelIcon';
+import { ThemeToggle } from '../components/pixel/ThemeToggle/ThemeToggle';
 import { PageSkeleton } from '../components/ui';
 import { Hud } from '../features/hud/Hud';
 import { AvatarMenu } from './AvatarMenu';
@@ -27,21 +29,32 @@ export function Layout() {
         </a>
 
         <header className="shell__header">
-          <NavLink className="shell__brand" to="/?inicio">
-            DIW Arcade
-          </NavLink>
+          <div className="shell__header-in">
+            <NavLink className="shell__brand" to="/?inicio">
+              <PixelIcon name="prompt" scale={3} />
+              DIW Arcade
+            </NavLink>
 
-          <nav className="shell__nav" aria-label="Navegação principal">
-            {NAV_LINKS.map(({ to, label, Icon }) => (
-              <NavLink key={to} className="shell__link" to={to}>
-                <Icon className="shell__icon" />
-                <span className="shell__label">{label}</span>
-              </NavLink>
-            ))}
-          </nav>
+            <nav className="shell__nav" aria-label="Principal">
+              {NAV_LINKS.map(({ to, label, Icon }) => (
+                <NavLink key={to} className="shell__link" to={to}>
+                  <span className="shell__cursor">
+                    <PixelIcon name="cursor" />
+                  </span>
+                  <span className="shell__icon">
+                    <Icon />
+                  </span>
+                  <span className="shell__label">{label}</span>
+                </NavLink>
+              ))}
+            </nav>
 
-          <Hud />
-          <AvatarMenu />
+            <div className="shell__stat">
+              <Hud />
+              <ThemeToggle />
+              <AvatarMenu />
+            </div>
+          </div>
         </header>
 
         <main

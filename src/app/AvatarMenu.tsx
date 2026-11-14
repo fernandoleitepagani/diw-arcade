@@ -70,20 +70,9 @@ export function AvatarMenu() {
         ref={triggerRef}
         type="button"
       >
-        <svg
-          aria-hidden="true"
-          className="avatar-menu__icon"
-          focusable="false"
-          shapeRendering="crispEdges"
-          viewBox="0 0 8 8"
-        >
-          <g fill="currentColor">
-            <rect x="2" y="0" width="4" height="1" />
-            <rect x="1" y="1" width="6" height="3" />
-            <rect x="2" y="4" width="4" height="1" />
-            <rect x="0" y="5" width="8" height="3" />
-          </g>
-        </svg>
+        <span className="avatar-menu__badge px">
+          <span aria-hidden="true">A</span>
+        </span>
       </button>
 
       {open ? (
