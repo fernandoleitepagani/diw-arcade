@@ -5,13 +5,16 @@ import { describe, expect, it } from 'vitest';
 import { renderWithProgress } from '../test/renderWithProgress';
 import { Layout } from './Layout';
 
-function renderLayout() {
+function renderLayout(route?: string) {
   return renderWithProgress(
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<p>Conteúdo</p>} />
+        <Route path="no/:nodeId" element={<p>Nó</p>} />
+        <Route path="hoje" element={<p>Hoje</p>} />
       </Route>
     </Routes>,
+    route ? { route } : undefined,
   );
 }
 
@@ -35,6 +38,26 @@ describe('Layout', () => {
       '/trilha',
       '/progresso',
     ]);
+  });
+
+  it('marks Trilha current on a node route, and only Trilha', () => {
+    renderLayout('/no/n01');
+
+    const nav = screen.getByRole('navigation', { name: 'Principal' });
+    const current = within(nav)
+      .getAllByRole('link')
+      .filter((link) => link.hasAttribute('aria-current'));
+    expect(current.map((link) => link.textContent)).toEqual(['Trilha']);
+  });
+
+  it('marks Hoje current on /hoje', () => {
+    renderLayout('/hoje');
+
+    const nav = screen.getByRole('navigation', { name: 'Principal' });
+    expect(within(nav).getByRole('link', { name: 'Hoje' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
   });
 
   it('keeps the skip link pointing at #conteudo', () => {
