@@ -8,6 +8,13 @@ export interface SrcdocConfig {
   mocks?: Record<string, JsonValue>;
 }
 
+/**
+ * Sandbox tokens of the runner iframe. `allow-forms` lets a submit button fire
+ * the student's `submit` handler; there is no `allow-same-origin`, so the
+ * frame stays an opaque origin. See ADR-0001.
+ */
+export const SANDBOX_FLAGS = 'allow-scripts allow-forms';
+
 const CSP =
   "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; " +
   "img-src data: blob:; font-src data:; media-src data:; connect-src 'none'; " +

@@ -80,6 +80,30 @@ still fails, and a new rule on a baselined route still fails. Only Task 24
 fixed, never adding them. Export `SMOKE_CHROMIUM_PATH` to point at a specific
 Chromium binary.
 
+### Runner probe (`--runner`)
+
+`npm run smoke -- --runner` serves `dist/` plus a blank parent page, opens it
+in Chromium and, in one page and sequentially, loads iframes with
+`SANDBOX_FLAGS`, the srcdoc from `buildSrcdoc` and the real `harness.js`
+(`scripts/lib/runner-probe.ts`). It checks:
+
+- a clicked submit button runs the student's handler, with and without
+  `preventDefault()`, and the guard has already cancelled the event;
+- `form.submit()` and `requestSubmit()` inside a submit handler still end in a
+  `diw:result`;
+- isolation: no `parent.document`, `localStorage` throws, cookies empty or
+  throwing, `top.location` assignment and `target="_top"`/`"_blank"` forms
+  leave the parent URL unchanged, `window.open` returns `null`, no popup page;
+- every reference solution in `src/content/n*/challenges.json` reaches 100%
+  (`runner: N/N soluções de referência passam no Chromium`), and the n20-c02
+  starter fails (negative control).
+
+Each failure prints `runner: FALHOU <probe or challenge id>: <detail>` and the
+run exits 1. It needs a `dist/` build and Chromium like the main smoke, and
+takes about 20 s. `scripts/check` runs it after the other smoke commands. A
+synchronous infinite loop is deliberately not probed: it freezes the headless
+page.
+
 ### Builds must not download browsers
 
 The Playwright version is pinned to `1.56.0`, the release whose

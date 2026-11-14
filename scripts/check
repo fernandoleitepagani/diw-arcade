@@ -13,4 +13,5 @@ npm run build
 # Real-browser gate: catches a blank production bundle that jsdom tests cannot.
 npm run smoke
 npm run smoke -- --selftest
+npm run smoke -- --runner
 [ ! -f scripts/budget.ts ] || npm run budget

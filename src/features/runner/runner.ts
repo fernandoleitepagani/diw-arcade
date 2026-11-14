@@ -4,7 +4,7 @@ import {
   RunnerMessageSchema,
   type RequirementResult,
 } from './messages';
-import { buildSrcdoc, type SrcdocConfig } from './srcdoc';
+import { buildSrcdoc, SANDBOX_FLAGS, type SrcdocConfig } from './srcdoc';
 
 export const TIMEOUT_MESSAGE = 'Tempo esgotado (loop infinito?)';
 
@@ -48,7 +48,7 @@ export function runInIframe(
   options: RunInIframeOptions,
 ): { iframe: HTMLIFrameElement; result: Promise<RunResult> } {
   const iframe = document.createElement('iframe');
-  iframe.setAttribute('sandbox', 'allow-scripts');
+  iframe.setAttribute('sandbox', SANDBOX_FLAGS);
   container.appendChild(iframe);
 
   const nonce = crypto.randomUUID();

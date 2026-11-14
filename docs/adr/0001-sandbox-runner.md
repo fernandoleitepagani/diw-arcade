@@ -22,10 +22,11 @@ the only place where untrusted code executes.
   validator. A student forging their own grade is explicitly out of scope; the
   grade protects curiosity, not a credential.
 - **Isolation:** the code runs in a fresh iframe with
-  `sandbox="allow-scripts"` and nothing else. Without `allow-same-origin` the
-  frame has an opaque origin: it cannot read the parent DOM, its storage,
-  cookies or origin-bound APIs, and it gets no top navigation, popups or form
-  submission.
+  `sandbox="allow-scripts allow-forms"` (`SANDBOX_FLAGS` in `srcdoc.ts`) and
+  nothing else. Without `allow-same-origin` the frame has an opaque origin: it
+  cannot read the parent DOM, its storage, cookies or origin-bound APIs, and
+  it gets no top navigation, popups, modals or downloads. Forms are allowed
+  only so submit handlers run; see "Forms in the sandbox".
 - **Network:** the srcdoc CSP sets `connect-src 'none'` and restricts images,
   fonts and media to `data:`/`blob:`. The harness additionally replaces
   `fetch`: URLs listed in `challenge.mocks` resolve with a synthetic 200
@@ -124,13 +125,50 @@ resolves `{ status: "timeout" }` with every requirement failed and the message
 cleared on the first accepted message. `runInJsdom` uses the same 3000 ms for
 asynchronous stalls.
 
+### Forms in the sandbox
+
+Without `allow-forms` a sandboxed frame blocks form submission before the
+`submit` event is dispatched. A student's `submit` handler therefore never ran
+in a real browser, and every challenge that grades a form (n18-c01, n19-c04,
+n20-c01 to n20-c05) failed there while passing in jsdom, which implements
+neither the sandbox nor the block.
+
+The decision is to add `allow-forms`: `SANDBOX_FLAGS = 'allow-scripts
+allow-forms'`. It is safe because:
+
+- the frame is still an opaque origin: no `allow-same-origin`,
+  `allow-top-navigation*`, `allow-popups`, `allow-modals` or `allow-downloads`;
+- `harness.js` registers, before anything else, a capture-phase `submit`
+  listener on `window` that calls `preventDefault()` and does not stop
+  propagation. Student handlers still run and see `defaultPrevented === true`,
+  but no submit button can navigate the frame;
+- the CSP keeps `form-action 'none'`;
+- `form.submit()` fires no `submit` event, so the guard never sees it, and in
+  Chromium it reloads a sandboxed srcdoc frame even under `form-action 'none'`
+  (measured: the `start` and `pagehide` messages repeat). The harness replaces
+  `HTMLFormElement.prototype.submit` with a no-op. `requestSubmit()` fires a
+  `submit` event and is covered by the guard;
+- the real-browser probe (below) proves the isolation: `parent.document`,
+  `localStorage` and cookies are unreachable, `top.location` assignment does
+  not move the parent, `window.open` returns `null`, and forms with
+  `target="_top"` or `"_blank"` neither navigate the parent nor open a page.
+
+### Real-browser probe
+
+`npm run smoke -- --runner` (ADR-0003) runs the same srcdoc, harness and
+sandbox flags in Chromium: submit with and without `preventDefault`,
+`form.submit()`, `requestSubmit()`, the isolation checks, every reference
+solution and the n20-c02 starter as a negative control. It closes the jsdom
+divergence above: the validator can say a solution passes while the sandbox
+blocks it, and only the probe sees that.
+
 ### Why the parent page sets no CSP
 
 The runner page itself sets no Content-Security-Policy. A parent CSP is
 inherited by a `srcdoc` frame and can only be tightened by the child's meta
 tag, never relaxed. A `script-src` that protects the app would therefore also
 block the inline harness and the student's inline script, which are the point
-of the sandbox. Isolation is instead per frame: `sandbox="allow-scripts"` for
+of the sandbox. Isolation is instead per frame: `sandbox="allow-scripts allow-forms"` for
 origin separation and a meta CSP inside each srcdoc for network separation.
 The app has no runtime network by construction (ESLint bans network globals,
 fonts and assets are bundled), so the parent does not need a CSP to keep user

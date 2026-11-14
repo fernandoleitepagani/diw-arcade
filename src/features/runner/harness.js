@@ -6,6 +6,26 @@
   var nonce = config.nonce || '';
   var errors = [];
 
+  /*
+   * First listener on window, in capture phase: it runs before any student
+   * handler. preventDefault cancels the navigation of a submitted form; it
+   * does not stop propagation, so student handlers still run.
+   */
+  window.addEventListener(
+    'submit',
+    function (event) {
+      event.preventDefault();
+    },
+    true,
+  );
+
+  /*
+   * form.submit() fires no submit event, so the guard never sees it. In
+   * Chromium it reloads a sandboxed srcdoc frame even with CSP form-action
+   * 'none'. Make it a no-op, like the guard does for a clicked submit button.
+   */
+  HTMLFormElement.prototype.submit = function () {};
+
   function describeError(value) {
     if (value && typeof value.message === 'string') {
       return value.message;

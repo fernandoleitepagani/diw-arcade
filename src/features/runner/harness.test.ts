@@ -406,4 +406,51 @@ describe('harness checks', () => {
     expect(message.type).toBe('diw:ready');
     expect(message.errors).toEqual([]);
   });
+
+  it('runs a submit handler that sees the event already cancelled', async () => {
+    const message = await runTest({
+      html: '<form id="f"><button id="go">ok</button></form>',
+      js: [
+        "document.getElementById('f').addEventListener('submit', function (e) {",
+        "  document.body.setAttribute('data-prevented', String(e.defaultPrevented));",
+        '});',
+      ].join('\n'),
+      requirements: [
+        requirement(
+          'cancelado',
+          {
+            kind: 'attr',
+            selector: 'body',
+            name: 'data-prevented',
+            match: { equals: 'true' },
+          },
+          [{ do: 'click', selector: '#go' }],
+        ),
+      ],
+    });
+
+    expect(message.type).toBe('diw:result');
+    expect(message.requirements.map((result) => result.passed)).toEqual([true]);
+  });
+
+  it('turns form.submit() into a no-op so the frame cannot reload', async () => {
+    const message = await runTest({
+      html: '<form id="f"></form>',
+      js: [
+        "document.getElementById('f').submit();",
+        "document.body.setAttribute('data-depois', 'sim');",
+      ].join('\n'),
+      requirements: [
+        requirement('seguiu', {
+          kind: 'attr',
+          selector: 'body',
+          name: 'data-depois',
+          match: { equals: 'sim' },
+        }),
+      ],
+    });
+
+    expect(message.requirements.map((result) => result.passed)).toEqual([true]);
+    expect(message.errors).toEqual([]);
+  });
 });
