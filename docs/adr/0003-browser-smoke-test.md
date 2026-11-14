@@ -98,6 +98,18 @@ in Chromium and, in one page and sequentially, loads iframes with
   (`runner: N/N soluções de referência passam no Chromium`), and the n20-c02
   starter fails (negative control).
 
+- two end-to-end cases on the built `/desafio/n20-c02` page, each in a fresh
+  context seeded with a v2 save (`onboarded: true`, `challenges['n20-c02'].code`
+  holding the draft; the `window === window.top` guard keeps the seed out of the
+  sandboxed preview iframe). Clicking "Executar testes":
+  - with the reference solution as the draft, all 5 requirements are marked
+    passed (`runner: e2e n20-c02 solução OK`);
+  - with `location.reload();` as the JS tab, every requirement shows exactly
+    the navigation message within 1500 ms, measured in the page between the
+    click and the last requirement leaving "pendente", and "Tempo esgotado
+    (loop infinito?)" appears nowhere (`runner: e2e n20-c02 reload OK`, plus
+    the measured ms on the next line). The user-reported scenario.
+
 Each failure prints `runner: FALHOU <probe or challenge id>: <detail>` and the
 run exits 1. It needs a `dist/` build and Chromium like the main smoke, and
 takes about 20 s. `scripts/check` runs it after the other smoke commands. A

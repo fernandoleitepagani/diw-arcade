@@ -37,6 +37,13 @@ const SETTLE_MS = 400;
 /** Janela de observação dos sinais de ciclo de vida e limite do AC4. */
 const NAVIGATION_WINDOW_MS = 2500;
 const NAVIGATION_LIMIT_MS = 1500;
+const SAVE_KEY = 'diw-arcade:save';
+const E2E_ID = 'n20-c02';
+/** Teto de espera pelos resultados na página real (o timeout do runner é maior que o limite). */
+const E2E_CAP_MS = 12_000;
+const NAVIGATION_MESSAGE =
+  'O código recarregou ou navegou a página (location.reload / location.href).';
+const LOOP_MESSAGE = 'Tempo esgotado (loop infinito?)';
 
 interface CaseInput {
   files: CodeFiles;
@@ -410,6 +417,158 @@ async function runHashProbe(env: ProbeEnv): Promise<string | null> {
   return null;
 }
 
+interface E2eOutcome {
+  /** ms entre o clique (no pai) e o último requisito sair de "pendente". */
+  elapsedMs: number;
+  timedOut: boolean;
+  items: { status: string; message: string }[];
+  loopTextOnPage: boolean;
+}
+
+/**
+ * Abre a página real do desafio no app construído com um rascunho salvo
+ * (v2, onboarded), clica em "Executar testes" e mede, dentro da página, o
+ * tempo entre o clique e todos os requisitos saírem de "pendente".
+ */
+async function runE2e(
+  browser: Browser,
+  origin: string,
+  challenge: Challenge,
+  code: CodeFiles,
+): Promise<E2eOutcome> {
+  const context = await browser.newContext({ reducedMotion: 'reduce' });
+  try {
+    const save = {
+      schemaVersion: 2,
+      createdAt: new Date().toISOString(),
+      onboarded: true,
+      xpTotal: 0,
+      challenges: {
+        [challenge.id]: {
+          passed: false,
+          failedRuns: 0,
+          hintsUsed: 0,
+          xpAwarded: 0,
+          code,
+        },
+      },
+    };
+    // Roda também no iframe sandbox da prévia, onde localStorage lança erro.
+    await context.addInitScript('window.__name = (target) => target;');
+    await context.addInitScript(`if (window === window.top) { try {
+      localStorage.setItem(${JSON.stringify(SAVE_KEY)}, ${JSON.stringify(JSON.stringify(save))});
+    } catch {} }`);
+    const page = await context.newPage();
+    await page.goto(`${origin}/desafio/${challenge.id}`, { waitUntil: 'load' });
+    await page
+      .getByRole('button', { name: 'Executar testes' })
+      .waitFor({ state: 'visible', timeout: 15_000 });
+    await page.locator('.requirement-list__item').first().waitFor({ timeout: 15_000 });
+
+    return await page.evaluate(
+      ({ capMs }) =>
+        new Promise<E2eOutcome>((resolve) => {
+          const button = Array.from(document.querySelectorAll('button')).find(
+            (candidate) => candidate.textContent?.trim() === 'Executar testes',
+          );
+          const read = () =>
+            Array.from(document.querySelectorAll('.requirement-list__item')).map(
+              (item) => ({
+                status: /--(pending|passed|failed)\b/.exec(item.className)?.[1] ?? '',
+                message:
+                  item.querySelector('.requirement-list__message')?.textContent ?? '',
+              }),
+            );
+          const startedAt = performance.now();
+          let done = false;
+          const finish = (timedOut: boolean) => {
+            if (done) {
+              return;
+            }
+            done = true;
+            const elapsedMs = Math.round(performance.now() - startedAt);
+            observer.disconnect();
+            window.clearTimeout(timer);
+            resolve({
+              elapsedMs,
+              timedOut,
+              items: read(),
+              loopTextOnPage: document.body.innerText.includes('Tempo esgotado (loop infinito?)'),
+            });
+          };
+          const check = () => {
+            const items = read();
+            if (items.length > 0 && items.every((item) => item.status !== 'pending')) {
+              finish(false);
+            }
+          };
+          const observer = new MutationObserver(check);
+          observer.observe(document.body, {
+            subtree: true,
+            childList: true,
+            attributes: true,
+            characterData: true,
+          });
+          const timer = window.setTimeout(() => finish(true), capMs);
+          if (!button) {
+            finish(true);
+            return;
+          }
+          button.click();
+        }),
+      { capMs: E2E_CAP_MS },
+    );
+  } finally {
+    await context.close();
+  }
+}
+
+async function e2eSolution(browser: Browser, origin: string, challenge: Challenge): Promise<string | null> {
+  const outcome = await runE2e(browser, origin, challenge, challenge.solution);
+  if (outcome.timedOut) {
+    return `sem resultado em ${E2E_CAP_MS} ms`;
+  }
+  const bad = outcome.items
+    .map((item, index) => ({ ...item, id: challenge.requirements[index]?.id ?? String(index) }))
+    .filter((item) => item.status !== 'passed');
+  if (outcome.items.length !== challenge.requirements.length || bad.length > 0) {
+    return `${outcome.items.length} requisitos; não passaram: ${bad.map((item) => `${item.id} (${item.status}: ${item.message})`).join(', ')}`;
+  }
+  return null;
+}
+
+async function e2eReload(
+  browser: Browser,
+  origin: string,
+  challenge: Challenge,
+): Promise<{ problem: string | null; elapsedMs: number }> {
+  const outcome = await runE2e(browser, origin, challenge, {
+    ...challenge.starter,
+    js: 'location.reload();',
+  });
+  const elapsedMs = outcome.elapsedMs;
+  if (outcome.loopTextOnPage) {
+    return { problem: `"${LOOP_MESSAGE}" apareceu na página (${elapsedMs} ms)`, elapsedMs };
+  }
+  if (outcome.timedOut) {
+    return { problem: `sem resultado em ${E2E_CAP_MS} ms`, elapsedMs };
+  }
+  if (elapsedMs > NAVIGATION_LIMIT_MS) {
+    return { problem: `resultado após ${elapsedMs} ms (limite ${NAVIGATION_LIMIT_MS} ms)`, elapsedMs };
+  }
+  if (outcome.items.length !== challenge.requirements.length) {
+    return { problem: `${outcome.items.length} requisitos na página (esperado ${challenge.requirements.length})`, elapsedMs };
+  }
+  const wrong = outcome.items.filter((item) => item.message !== NAVIGATION_MESSAGE);
+  if (wrong.length > 0) {
+    return {
+      problem: `mensagem inesperada em ${wrong.length} requisito(s): ${JSON.stringify(wrong[0])}`,
+      elapsedMs,
+    };
+  }
+  return { problem: null, elapsedMs };
+}
+
 async function pause(ms: number): Promise<void> {
   await new Promise((resolveTimer) => setTimeout(resolveTimer, ms));
 }
@@ -514,6 +673,24 @@ export async function runRunnerProbe(
       console.log(
         `runner: ${passed}/${challenges.length} soluções de referência passam no Chromium`,
       );
+    }
+
+    const e2eChallenge = challenges.find((challenge) => challenge.id === E2E_ID);
+    if (e2eChallenge === undefined) {
+      failures.push(`runner: FALHOU e2e ${E2E_ID}: desafio ausente`);
+    } else {
+      record(
+        `e2e ${E2E_ID} solução`,
+        await e2eSolution(browser, origin, e2eChallenge),
+        `runner: e2e ${E2E_ID} solução OK`,
+      );
+      const reload = await e2eReload(browser, origin, e2eChallenge);
+      record(
+        `e2e ${E2E_ID} reload`,
+        reload.problem,
+        `runner: e2e ${E2E_ID} reload OK`,
+      );
+      console.log(`runner: e2e ${E2E_ID} reload medido em ${reload.elapsedMs} ms`);
     }
 
     const starter = challenges.find((challenge) => challenge.id === 'n20-c02');
