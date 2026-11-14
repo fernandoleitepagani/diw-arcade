@@ -36,8 +36,10 @@
   flex: none;
   align-items: center;
   justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
+  /* 44px hit area; the negative margin keeps the toast layout as it was. */
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: -0.5rem -0.5rem -0.5rem 0;
   padding: 0;
   border: 0;
   border-radius: 0.35rem;
