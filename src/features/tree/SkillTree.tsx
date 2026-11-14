@@ -94,6 +94,7 @@ export function SkillTree({ save, now }: SkillTreeProps) {
             const node = NODE_BY_ID[item.id];
             const place = layout.node[item.id]!;
             const here = item.recommended && !allDone;
+            const steps = here ? getStepsDone(save, item.id, TREE_CONTENT) : 0;
             const disc = here && item.state === 'nova' ? 'current' : DISC_STATE[item.state];
             return (
               <Link
@@ -114,9 +115,13 @@ export function SkillTree({ save, now }: SkillTreeProps) {
                   <span className="sr-only">{item.number}</span>
                   {node.title}
                   {here ? (
-                    <span className="skill-node__sub" aria-hidden="true">
+                    <span
+                      className="skill-node__sub"
+                      aria-hidden="true"
+                      data-text={`Você está aqui, ${steps} de 4 passos`}
+                    >
                       <PixelIcon name="cursor" />
-                      Você está aqui, {getStepsDone(save, item.id, TREE_CONTENT)} de 4 passos
+                      <span className="sr-only">{`Você está aqui, ${steps} de 4 passos`}</span>
                     </span>
                   ) : null}
                   {item.id === lastNodeId ? (

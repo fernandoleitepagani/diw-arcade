@@ -98,6 +98,10 @@
   color: var(--muted);
 }
 
+.skill-node__sub::after {
+  content: attr(data-text);
+}
+
 .skill-node__boss {
   display: inline-block;
   margin-left: 10px;
