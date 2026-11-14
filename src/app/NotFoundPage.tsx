@@ -1,5 +1,5 @@
-import { Link } from 'react-router';
 import { Bit } from '../components/pixel/Bit/Bit';
+import { ButtonLink } from '../components/pixel/Button/Button';
 import { PixelPanel } from '../components/pixel/PixelPanel/PixelPanel';
 import { usePageTitle } from './usePageTitle';
 import './NotFoundPage.css';
@@ -11,9 +11,7 @@ export function NotFoundPage() {
     <PixelPanel as="section" className="not-found">
       <Bit line="Esse caminho não existe. A trilha está logo ali." scale={14} />
       <h1>Página não encontrada</h1>
-      <Link className="not-found__link" to="/">
-        Voltar para a trilha
-      </Link>
+      <ButtonLink to="/">Voltar para a trilha</ButtonLink>
     </PixelPanel>
   );
 }
