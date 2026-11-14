@@ -1,21 +1,7 @@
 :root {
-  --bg: #0a1128;
-  --surface: #111a36;
-  --surface-2: #1a2547;
-  --surface-3: #24305a;
-  --overlay: rgba(5, 9, 24, 0.72);
-  --border: #2c3a66;
-  --text: #e8eefc;
-  --text-muted: #a8b4d4;
-  --accent: #2de2e6;
-  --reward: #ff4fd8;
-  --xp: #ffc23d;
-  --success: #7cff6b;
-  --danger: #ff6b8b;
-  --on-accent: #0a1128;
-  --font-display: "Pixelify Sans";
+  --font-display: 'Pixelify Sans','Hanken Grotesk',system-ui,sans-serif;
   --font-body: "Hanken Grotesk";
-  --font-mono: "JetBrains Mono";
+  --font-mono: 'JetBrains Mono',ui-monospace,monospace;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
