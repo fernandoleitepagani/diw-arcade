@@ -333,6 +333,7 @@ describe('FlashcardSession', () => {
     await user.keyboard('{Enter}');
     await user.keyboard('3');
 
-    expect(bar).toHaveTextContent('2 de 2');
+    // A new card rated Bom returns within 15 minutes, so the total grows.
+    expect(bar).toHaveTextContent('2 de 3');
   });
 });
