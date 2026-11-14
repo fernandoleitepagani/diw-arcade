@@ -143,7 +143,9 @@ iframe window, the nonce matches and the zod schema parses. States:
   `diw:unload` (also while loading) starts a `UNLOAD_GRACE_MS` timer that fails
   with the same message, and `diw:survived` cancels it (see "`diw:unload` is
   provisional" below);
-- running, total timer fires -> fail with "Tempo esgotado (loop infinito?)";
+- running, total timer fires -> fail with "Tempo esgotado (loop infinito?)",
+  or with the navigation message when an accepted `diw:unload` was seen in this
+  run (see "`diw:unload` is provisional" below);
 - `diw:result` (test) or `diw:ready` (preview) -> ok. After settling the
   listener is gone and the grace timer is cleared, so later `diw:unload` and
   `diw:survived` messages are ignored.
@@ -167,9 +169,32 @@ pending failure on `diw:survived` (a `diw:result` or `diw:ready` settles the
 run anyway). A real reload still fails at once through the second
 `diw:started`; an `about:blank` navigation fails after the grace period (about
 230 ms measured end to end). A real unload after a survived one re-arms the
-grace period. A `mailto:` assigned while the document is still loading gets no
-answer in headless Chromium (measured, cause not investigated) and the run
-ends as a timeout; this predates the signals and is not handled.
+grace period.
+
+The grace window is 200 ms against a 30 ms `diw:survived` delay. On a loaded
+machine or a slow frame a late `diw:survived` can lose that race, and the run
+then reports the navigation failure instead of grading. This is a deliberate
+trade-off: a wider window delays every real `about:blank` navigation and the
+failure is at least truthful about what the code did.
+
+A navigation to a URL whose request is still in flight (`location.href =
+'obrigado.html'` with a slow response) posts `diw:survived` 30 ms after
+`beforeunload`, so the parent cancels the grace timer. When the navigation
+commits, the `pagehide` `diw:unload` comes from a frame that no longer matches
+`iframe.contentWindow` and is ignored, and no result ever arrives. The parent
+therefore remembers that an accepted `diw:unload` was seen in the run, and when
+the total timer fires with no result it reports the navigation message instead
+of the loop text. The failure takes the full total budget (3 s) in that case.
+Failing earlier, for example on a second iframe `load` event, was rejected: it
+is a new mechanism with unverified Firefox behaviour, and a fixed short window
+after `diw:unload` would misfire on a `mailto:`/`tel:` run that is still
+grading. A `mailto:` assigned while the document is still loading gets no
+answer in headless Chromium (measured, cause not investigated); the run now
+ends with the navigation message when `diw:unload` was seen, and as a timeout
+when it was not. A genuine loop never posts `diw:unload` and still reports the
+loop text. `npm run smoke -- --runner` proves the slow navigation (probe
+`navegacao-lenta` for the signals, e2e `navegacao lenta` for the message on
+the built page).
 
 Limits. A synchronous infinite loop in the frame is only interrupted when the
 browser runs the sandboxed (opaque-origin) frame in its own process; without

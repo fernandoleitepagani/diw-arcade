@@ -445,6 +445,56 @@ describe('runInIframe lifecycle', () => {
       });
     });
 
+    // A slow relative navigation: diw:survived arrives (request in flight),
+    // the frame is later replaced and its pagehide message is ignored.
+    it('reports NAVIGATION_MESSAGE when the total timer fires after unload + survived with no result', async () => {
+      const { host, iframe, result, nonce } = await start({
+        startTimeoutMs: 500,
+        timeoutMs: 150,
+      });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:unload', nonce });
+      send(iframe, { type: 'diw:survived', nonce });
+
+      await expect(result).resolves.toEqual({
+        status: 'timeout',
+        requirements: [
+          { id: 'alvo-existe', passed: false, message: NAVIGATION_MESSAGE },
+        ],
+        errors: [NAVIGATION_MESSAGE],
+      });
+      expect(host.querySelector('iframe')).toBeNull();
+    });
+
+    it('keeps TIMEOUT_MESSAGE for a diw:survived with no prior diw:unload', async () => {
+      const { iframe, result, nonce } = await start({
+        startTimeoutMs: 500,
+        timeoutMs: 100,
+      });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:survived', nonce });
+
+      await expect(result).resolves.toMatchObject({
+        status: 'timeout',
+        errors: [TIMEOUT_MESSAGE],
+      });
+    });
+
+    it('ignores a diw:unload from the wrong source or nonce when choosing the total-timer message', async () => {
+      const { iframe, result, nonce } = await start({
+        startTimeoutMs: 500,
+        timeoutMs: 100,
+      });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:unload', nonce }, window);
+      send(iframe, { type: 'diw:unload', nonce: 'nonce-errado' });
+      send(iframe, { type: 'diw:survived', nonce });
+
+      await expect(result).resolves.toMatchObject({
+        errors: [TIMEOUT_MESSAGE],
+      });
+    });
+
     it('in preview mode ignores diw:unload and diw:survived after diw:ready', async () => {
       const { iframe, result, nonce } = await start({
         mode: 'preview',
