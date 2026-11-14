@@ -1,17 +1,17 @@
-import { Suspense, useEffect, useRef } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router";
-import { PixelIcon } from "../components/pixel/PixelIcon/PixelIcon";
-import { ThemeToggle } from "../components/pixel/ThemeToggle/ThemeToggle";
-import { PageSkeleton } from "../components/ui";
-import { Hud } from "../features/hud/Hud";
-import { AvatarMenu } from "./AvatarMenu";
-import { ReviewIcon, StatsIcon, TreeIcon } from "./NavIcons";
-import "./Layout.css";
+import { Suspense, useEffect, useRef } from 'react';
+import { Link, NavLink, Outlet, useLocation } from 'react-router';
+import { PixelIcon } from '../components/pixel/PixelIcon/PixelIcon';
+import { ThemeToggle } from '../components/pixel/ThemeToggle/ThemeToggle';
+import { PageSkeleton } from '../components/ui';
+import { Hud } from '../features/hud/Hud';
+import { AvatarMenu } from './AvatarMenu';
+import { ReviewIcon, StatsIcon, TreeIcon } from './NavIcons';
+import './Layout.css';
 
 const NAV_LINKS = [
-  { to: "/hoje", label: "Hoje", Icon: ReviewIcon, also: undefined },
-  { to: "/trilha", label: "Trilha", Icon: TreeIcon, also: "/no/" },
-  { to: "/progresso", label: "Progresso", Icon: StatsIcon, also: undefined },
+  { to: '/hoje', label: 'Hoje', Icon: ReviewIcon, also: undefined },
+  { to: '/trilha', label: 'Trilha', Icon: TreeIcon, also: '/no/' },
+  { to: '/progresso', label: 'Progresso', Icon: StatsIcon, also: undefined },
 ];
 
 /** A node and its sub-routes live on the Trilha, as in the prototype. */
@@ -54,9 +54,9 @@ export function Layout() {
               return (
                 <Link
                   key={to}
-                  className={active ? "shell__link active" : "shell__link"}
+                  className={active ? 'shell__link active' : 'shell__link'}
                   to={to}
-                  aria-current={active ? "page" : undefined}
+                  aria-current={active ? 'page' : undefined}
                 >
                   <span className="shell__cursor">
                     <PixelIcon name="cursor" />
