@@ -125,6 +125,11 @@ export function NodePage() {
     ? requested
     : (next ?? LESSON_STEP_IDS.find((id) => steps[id] !== 'indisponivel') ?? 'ler');
 
+  // Praticar and Fixar already carry the primary action ("Começar quiz",
+  // "Revisar cartas") for the step "Continuar" would reopen.
+  const coversNext =
+    next === current && (current === 'praticar' || current === 'fixar');
+
   const dueCount = getDueCountByNode(save, content, now)[nodeId] ?? 0;
   const newCount = flashcards.filter(
     (flashcard) => save.cards[flashcard.id] === undefined,
@@ -256,7 +261,9 @@ export function NodePage() {
                 labs={getUnitLabs(save, node.unitId)}
               />
             ) : null}
-            {next ? (
+            {next === null ? (
+              <p className="lesson__done">Nó concluído</p>
+            ) : coversNext ? null : (
               <ButtonLink
                 className="lesson__continue"
                 variant="quiet"
@@ -264,8 +271,6 @@ export function NodePage() {
               >
                 Continuar
               </ButtonLink>
-            ) : (
-              <p className="lesson__done">Nó concluído</p>
             )}
           </section>
           <section className="lesson__sect">

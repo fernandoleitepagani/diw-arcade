@@ -192,13 +192,11 @@ describe('página do nó', () => {
     );
   });
 
-  it('points Continuar at the first unfinished step and selects its panel', () => {
+  it('opens the first unfinished step and shows only its primary action', () => {
     renderNode('/no/n07');
 
-    expect(screen.getByRole('link', { name: 'Continuar' })).toHaveAttribute(
-      'href',
-      '/no/n07?passo=praticar',
-    );
+    // v4: on the step it would reopen, the quiet "Continuar" duplicated the primary action.
+    expect(screen.queryByRole('link', { name: 'Continuar' })).toBeNull();
     expect(
       document.querySelector('[aria-current="step"]'),
     ).toHaveTextContent('Praticar');
@@ -338,5 +336,14 @@ describe('página do nó', () => {
     expect(
       screen.getByRole('link', { name: /Trilha/ }),
     ).toHaveAttribute('href', '/trilha');
+  });
+
+  it('keeps Continuar when it leads to a different step than the one shown', () => {
+    renderNode('/no/n07?passo=fixar');
+
+    expect(screen.getByRole('link', { name: 'Continuar' })).toHaveAttribute(
+      'href',
+      '/no/n07?passo=praticar',
+    );
   });
 });
