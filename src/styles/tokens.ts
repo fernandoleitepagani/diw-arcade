@@ -1,7 +1,5 @@
 export const tokens = {
-  fontDisplay: "'Pixelify Sans','Hanken Grotesk',system-ui,sans-serif",
   fontBody: '"Hanken Grotesk"',
-  fontMono: "'JetBrains Mono',ui-monospace,monospace",
   space1: '0.25rem',
   space2: '0.5rem',
   space3: '0.75rem',
@@ -40,9 +38,7 @@ export const tokens = {
 export type TokenName = keyof typeof tokens;
 
 export const cssVars: Record<TokenName, `--${string}`> = {
-  fontDisplay: '--font-display',
   fontBody: '--font-body',
-  fontMono: '--font-mono',
   space1: '--space-1',
   space2: '--space-2',
   space3: '--space-3',

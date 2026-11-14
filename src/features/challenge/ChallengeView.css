@@ -307,7 +307,7 @@
   display: block;
   margin-bottom: 0.2rem;
   color: var(--text-muted);
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-code);
   font-size: 0.75rem;
 }
 
@@ -330,7 +330,7 @@
 
 .challenge-view__solution-state {
   color: var(--text-muted);
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-code);
   font-size: 0.625rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -361,7 +361,7 @@
 .challenge-view__solution-panel h3 {
   margin-bottom: 0.25rem;
   color: var(--accent);
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-code);
   font-size: 0.75rem;
 }
 
@@ -370,7 +370,7 @@
   padding: 0.65rem 0.75rem;
   overflow: auto;
   background: var(--bg);
-  font-family: var(--font-mono), monospace;
+  font-family: var(--font-code);
   font-size: 0.75rem;
   line-height: 1.5;
   white-space: pre-wrap;

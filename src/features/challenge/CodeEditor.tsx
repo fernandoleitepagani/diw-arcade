@@ -83,7 +83,7 @@ const codeTheme = EditorView.theme(
       minHeight: '18rem',
       backgroundColor: 'var(--surface)',
       color: 'var(--text)',
-      fontFamily: 'var(--font-mono), monospace',
+      fontFamily: 'var(--font-code)',
       fontSize: '0.875rem',
     },
     '&.cm-focused': {
