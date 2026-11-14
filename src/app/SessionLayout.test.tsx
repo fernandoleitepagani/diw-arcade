@@ -81,8 +81,9 @@ describe('SessionLayout', () => {
     await user.click(screen.getByRole('button', { name: 'Sair da sessão' }));
 
     await waitFor(() =>
+        // v4: Hoje h1 is the prototype greeting
       expect(
-        screen.getByRole('heading', { level: 1, name: 'Hoje' }),
+        screen.getByRole('heading', { level: 1, name: 'Bom te ver de volta.' }),
       ).toBeInTheDocument(),
     );
   });

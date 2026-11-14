@@ -82,7 +82,8 @@ describe('OnboardingPage', () => {
       expect(router.state.location.pathname).toBe('/hoje');
     });
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Hoje' }),
+      // v4: Hoje h1 is the prototype greeting
+      await screen.findByRole('heading', { level: 1, name: 'Bom te ver de volta.' }),
     ).toBeInTheDocument();
 
     const save = readSave(storage);
@@ -128,7 +129,8 @@ describe('OnboardingPage', () => {
       expect(router.state.location.pathname).toBe('/hoje');
     });
     expect(
-      await screen.findByRole('heading', { level: 1, name: 'Hoje' }),
+      // v4: Hoje h1 is the prototype greeting
+      await screen.findByRole('heading', { level: 1, name: 'Bom te ver de volta.' }),
     ).toBeInTheDocument();
   });
 });
