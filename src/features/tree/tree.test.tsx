@@ -112,18 +112,30 @@ describe('árvore de habilidades', () => {
 });
 
 describe('página do nó', () => {
-  it('shows the node title as the h1, with aulas, state and mastery text', () => {
+  it('shows the meta tag "CSS, aula 174" and "1 de 3 pontos de domínio" for n09', () => {
+    renderNode('/no/n09', {
+      save: { quiz: { answers: {}, rounds: { n09: { best: 100, count: 1, perfect: true } } } },
+    });
+    expect(screen.getByText('CSS, aula 174')).toBeInTheDocument();
+    expect(screen.getByText('1 de 3 pontos de domínio')).toBeInTheDocument();
+    expect(
+      screen.getByRole('progressbar', { name: '1 de 3 pontos de domínio' }),
+    ).toBeInTheDocument();
+  });
+
+  it('shows the node title as the h1, with aulas and mastery text', () => {
     renderNode('/no/n07');
 
     expect(
       screen.getByRole('heading', { level: 1, name: 'Propriedades CSS' }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/Aulas:.*172/)).toBeInTheDocument();
-    expect(screen.getByText('Nova')).toBeInTheDocument();
+    // v4: header meta is "<Unidade>, aula N" and the state word moved out of the header.
+    expect(screen.getByText('CSS, aula 172')).toBeInTheDocument();
     expect(
-      screen.getByRole('progressbar', { name: '0 de 3 estrelas' }),
+      screen.getByRole('progressbar', { name: '0 de 3 pontos de domínio' }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: '← Trilha' })).toHaveAttribute(
+    // v4: the arrow is now a decorative pixel icon, so the link name is "Trilha".
+    expect(screen.getByRole('link', { name: 'Trilha' })).toHaveAttribute(
       'href',
       '/trilha',
     );
@@ -181,7 +193,10 @@ describe('página do nó', () => {
     expect(
       screen.getByRole('heading', { name: 'O que você já domina' }),
     ).toBeInTheDocument();
-    expect(screen.getAllByText('nova').length).toBe(getFlashcards('n07').length);
+    // v4: unmastered cards read "Falta praticar".
+    expect(screen.getAllByText('Falta praticar').length).toBe(
+      getFlashcards('n07').length,
+    );
   });
 
   it('shows Nó concluído when every available step is done', () => {

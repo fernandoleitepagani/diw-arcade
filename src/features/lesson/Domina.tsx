@@ -1,3 +1,4 @@
+import { PixelIcon } from '../../components/pixel/PixelIcon/PixelIcon';
 import type { CardMastery } from './masteryState';
 import './Domina.css';
 
@@ -17,14 +18,20 @@ export function Domina({ items }: { items: readonly DominaItem[] }) {
         <p className="domina__empty">Sem termos neste nó ainda.</p>
       ) : (
         <ul className="domina__list">
-          {items.map((item) => (
-            <li key={item.id} className="domina__row">
-              <span className="domina__front">{item.front}</span>
-              <span className={`domina__state domina__state--${item.state}`}>
-                {item.state}
-              </span>
-            </li>
-          ))}
+          {items.map((item) => {
+            const mastered = item.state === 'dominada';
+            return (
+              <li key={item.id} className="domina__row">
+                <code className="domina__front">{item.front}</code>
+                <span
+                  className={`domina__state${mastered ? ' domina__state--ok' : ''}`}
+                >
+                  {mastered ? <PixelIcon name="check" /> : null}
+                  {mastered ? 'Dominado' : 'Falta praticar'}
+                </span>
+              </li>
+            );
+          })}
         </ul>
       )}
     </section>

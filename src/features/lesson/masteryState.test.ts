@@ -54,13 +54,14 @@ describe('getMasteryStars', () => {
     expect(getMasteryStars({ quiz: true, cards: false, code: true })).toEqual({
       on: 2,
       total: 3,
-      text: '2 de 3 estrelas',
+      // v4: the mastery line reads "pontos de domínio" (still 3 stars underneath).
+      text: '2 de 3 pontos de domínio',
     });
     expect(getMasteryStars({ quiz: false, cards: false, code: false }).text).toBe(
-      '0 de 3 estrelas',
+      '0 de 3 pontos de domínio',
     );
     expect(getMasteryStars({ quiz: true, cards: true, code: true }).text).toBe(
-      '3 de 3 estrelas',
+      '3 de 3 pontos de domínio',
     );
   });
 });
