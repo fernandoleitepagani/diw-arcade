@@ -25,3 +25,15 @@
 .code-editor .cm-placeholder {
   color: var(--text-muted);
 }
+
+/* The CodeMirror syntax palette is neon-on-dark and lives in CodeEditor.tsx,
+   so the editor keeps the dark theme tokens in the light theme too. Without
+   this the comment color fails AA contrast on the white surface. */
+[data-theme='light'] .code-editor {
+  --surface: #161a20;
+  --surface-2: #1b2027;
+  --border: #2a313b;
+  --text: #eceff4;
+  --text-muted: #a3adbb;
+  --accent: #4f8bff;
+}
