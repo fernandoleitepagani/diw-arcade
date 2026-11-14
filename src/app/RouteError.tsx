@@ -1,8 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { Link } from 'react-router';
 import { Bit } from '../components/pixel/Bit/Bit';
+import { Button, ButtonLink } from '../components/pixel/Button/Button';
 import { PixelPanel } from '../components/pixel/PixelPanel/PixelPanel';
-import { Button } from '../components/ui';
 import './RouteError.css';
 
 /**
@@ -34,9 +33,9 @@ export function RouteError() {
       </p>
       <div className="route-error__actions">
         <Button onClick={() => window.location.reload()}>Tentar de novo</Button>
-        <Link className="route-error__link" to="/">
+        <ButtonLink to="/" variant="quiet">
           Voltar para a trilha
-        </Link>
+        </ButtonLink>
       </div>
     </PixelPanel>
   );

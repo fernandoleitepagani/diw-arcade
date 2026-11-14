@@ -3,7 +3,8 @@ import type { ChangeEvent, ReactNode } from 'react';
 import { useProgress } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
 import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
-import { Button, PageHeader } from '../../components/ui';
+import { Button } from '../../components/pixel/Button/Button';
+import { PageHeader } from '../../components/ui';
 import { toDayKey } from '../../lib/game/days';
 import { createSfx } from '../../lib/sound/sfx';
 import { exportSave, parseImport, type SaveV1 } from '../../lib/storage';
@@ -289,7 +290,7 @@ function SettingsContent() {
                 conquistas.
               </p>
             </div>
-            <Button variant="secondary" onClick={handleTestSound}>
+            <Button variant="quiet" onClick={handleTestSound}>
               Testar som
             </Button>
           </div>
@@ -324,8 +325,8 @@ function SettingsContent() {
               onChange={handleImport}
             />
             <p className="settings__hint">
-              Escolha um arquivo exportado do DIW Arcade. O progresso atual só
-              é substituído depois da confirmação.
+              Escolha um arquivo exportado do DIW Arcade. O progresso atual só é
+              substituído depois da confirmação.
             </p>
           </div>
 
@@ -342,7 +343,7 @@ function SettingsContent() {
               </p>
               <div className="settings__actions">
                 <Button onClick={handleConfirmImport}>Confirmar</Button>
-                <Button variant="ghost" onClick={handleCancelImport}>
+                <Button variant="quiet" onClick={handleCancelImport}>
                   Cancelar
                 </Button>
               </div>
@@ -353,9 +354,8 @@ function SettingsContent() {
             <h3>Privacidade</h3>
             <p className="settings__hint">
               Seu progresso fica guardado apenas neste navegador. O DIW Arcade
-              não tem conta nem servidor: nada sai do seu dispositivo. Limpar
-              os dados do site apaga o progresso, então exporte um backup
-              antes.
+              não tem conta nem servidor: nada sai do seu dispositivo. Limpar os
+              dados do site apaga o progresso, então exporte um backup antes.
             </p>
           </div>
 
@@ -384,7 +384,8 @@ function SettingsContent() {
             </div>
             <div className="settings__actions">
               <Button
-                variant="danger"
+                variant="quiet"
+                className="settings__danger-btn"
                 disabled={resetWord !== 'APAGAR'}
                 onClick={handleReset}
               >

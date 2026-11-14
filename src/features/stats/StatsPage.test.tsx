@@ -44,6 +44,32 @@ describe('Heatmap', () => {
     expect(screen.getByText('100%')).toBeInTheDocument();
   });
 
+  it('names every cell by column, node and value, so color is never the only signal', () => {
+    render(
+      <Heatmap
+        rows={[
+          {
+            nodeId: 'n07',
+            title: 'Propriedades CSS',
+            quiz: 75,
+            cards: null,
+            challenges: 100,
+          },
+        ]}
+      />,
+    );
+
+    expect(
+      screen.getByRole('cell', { name: 'Quiz, Propriedades CSS: 75%' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('cell', { name: 'Cartas, Propriedades CSS: sem dados' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('cell', { name: 'Código, Propriedades CSS: 100%' }),
+    ).toBeInTheDocument();
+  });
+
   it('exposes table semantics and a dash for unseen values', () => {
     render(
       <Heatmap

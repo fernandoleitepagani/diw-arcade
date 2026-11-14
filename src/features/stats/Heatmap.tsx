@@ -22,11 +22,21 @@ function levelFor(value: number | null): Level | null {
   return 0;
 }
 
-function Cell({ value }: { value: number | null }) {
+function Cell({
+  column,
+  title,
+  value,
+}: {
+  column: string;
+  title: string;
+  value: number | null;
+}) {
   const level = levelFor(value);
+  const text = value === null ? 'sem dados' : `${Math.round(value)}%`;
 
   return (
     <td
+      aria-label={`${column}, ${title}: ${text}`}
       className="heatmap__cell"
       data-level={level === null ? 'empty' : level}
     >
@@ -53,9 +63,9 @@ export function Heatmap({ rows }: HeatmapProps) {
         {rows.map((row) => (
           <tr key={row.nodeId}>
             <th scope="row">{row.title}</th>
-            <Cell value={row.quiz} />
-            <Cell value={row.cards} />
-            <Cell value={row.challenges} />
+            <Cell column="Quiz" title={row.title} value={row.quiz} />
+            <Cell column="Cartas" title={row.title} value={row.cards} />
+            <Cell column="Código" title={row.title} value={row.challenges} />
           </tr>
         ))}
       </tbody>
