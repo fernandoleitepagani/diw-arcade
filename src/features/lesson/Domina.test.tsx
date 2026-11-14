@@ -17,9 +17,15 @@ describe('Domina', () => {
     const rows = screen.getAllByRole('listitem');
     expect(rows).toHaveLength(3);
     expect(within(rows[0]!).getByText('Seletor')).toBeInTheDocument();
-    expect(within(rows[0]!).getByText('nova')).toBeInTheDocument();
-    expect(within(rows[1]!).getByText('aprendendo')).toBeInTheDocument();
-    expect(within(rows[2]!).getByText('dominada')).toBeInTheDocument();
+    // v4: the prototype shows two states, "Falta praticar" and "Dominado", not the three SRS words.
+    expect(within(rows[0]!).getByText('Falta praticar')).toBeInTheDocument();
+    expect(within(rows[1]!).getByText('Falta praticar')).toBeInTheDocument();
+    expect(within(rows[2]!).getByText('Dominado')).toBeInTheDocument();
+  });
+
+  it('renders the card front as code', () => {
+    render(<Domina items={[{ id: 'a', front: 'display: flex', state: 'dominada' }]} />);
+    expect(screen.getByText('display: flex').tagName).toBe('CODE');
   });
 
   it('shows a short note and no list when there are no cards', () => {

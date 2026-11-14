@@ -13,7 +13,17 @@ const steps = {
 function setup(current: 'ler' | 'praticar' | 'fixar' | 'construir') {
   render(
     <MemoryRouter>
-      <LessonStepper nodeId="n07" steps={steps} current={current} />
+      <LessonStepper
+        nodeId="n07"
+        steps={steps}
+        current={current}
+        counts={{
+          ler: '10 pontos',
+          praticar: '8 de 10 certas',
+          fixar: '6 cartas hoje',
+          construir: '3 desafios',
+        }}
+      />
     </MemoryRouter>,
   );
 }
@@ -46,5 +56,13 @@ describe('LessonStepper', () => {
     expect(screen.getByRole('link', { name: /Praticar/ })).toHaveTextContent('feito');
     expect(screen.getByRole('link', { name: /Fixar/ })).toHaveTextContent('pendente');
     expect(screen.getByRole('link', { name: /Ler/ })).toHaveTextContent('em breve');
+  });
+
+  it('shows each step count under its name', () => {
+    setup('fixar');
+    expect(screen.getByRole('link', { name: /Ler/ })).toHaveTextContent('10 pontos');
+    expect(screen.getByRole('link', { name: /Praticar/ })).toHaveTextContent('8 de 10 certas');
+    expect(screen.getByRole('link', { name: /Fixar/ })).toHaveTextContent('6 cartas hoje');
+    expect(screen.getByRole('link', { name: /Construir/ })).toHaveTextContent('3 desafios');
   });
 });
