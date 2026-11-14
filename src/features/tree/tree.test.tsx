@@ -107,13 +107,19 @@ describe('árvore de habilidades', () => {
     expect(screen.queryAllByRole('button')).toHaveLength(0);
   });
 
+  it('titles the page Trilha', () => {
+    renderWithProgress(<TreePage />);
+
+    expect(document.title).toBe('DIW Arcade: Trilha');
+  });
+
   // v4: the "Recomendado" tag became the "Você está aqui" marker.
   it('marks exactly n01 as the current node on a fresh save', () => {
     renderWithProgress(<TreePage />);
 
-    const tags = trilha().getAllByText(/Você está aqui/);
+    const tags = trilha().getAllByRole('link', { name: /você está aqui/ });
     expect(tags).toHaveLength(1);
-    expect(tags[0]!.closest('a')).toHaveAttribute('href', '/no/n01');
+    expect(tags[0]).toHaveAttribute('href', '/no/n01');
   });
 
   it('recommends the node with the most due cards', () => {
@@ -133,9 +139,9 @@ describe('árvore de habilidades', () => {
     renderWithProgress(<TreePage />, { save: { cards } });
 
     // v4: the "Recomendado" tag became the "Você está aqui" marker.
-    const tags = trilha().getAllByText(/Você está aqui/);
+    const tags = trilha().getAllByRole('link', { name: /você está aqui/ });
     expect(tags).toHaveLength(1);
-    expect(tags[0]!.closest('a')).toHaveAttribute('href', '/no/n09');
+    expect(tags[0]).toHaveAttribute('href', '/no/n09');
   });
 
   it('names every node card with its state', () => {
@@ -144,7 +150,7 @@ describe('árvore de habilidades', () => {
     // v4: the state is part of the link name ("<título>, Não iniciado").
     const named = trilha()
       .getAllByRole('link')
-      .filter((link) => /, Não iniciado$/.test(link.getAttribute('aria-label') ?? ''));
+      .filter((link) => /, Não iniciado(, você está aqui, \d de 4 passos)?$/.test(link.getAttribute('aria-label') ?? ''));
     expect(named).toHaveLength(NODES.length);
   });
 

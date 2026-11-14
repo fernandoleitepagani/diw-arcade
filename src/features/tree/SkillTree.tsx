@@ -103,16 +103,19 @@ export function SkillTree({ save, now }: SkillTreeProps) {
                 to={`/no/${item.id}`}
                 data-node-id={item.id}
                 aria-current={here ? 'location' : undefined}
-                aria-label={`${node.title}, ${NODE_STATE_LABEL[item.state]}`}
+                aria-label={
+                  `${node.title}, ${NODE_STATE_LABEL[item.state]}` +
+                  (here ? `, você está aqui, ${steps} de 4 passos` : '')
+                }
                 style={
                   { top: place.top, '--c': color, '--f': place.f } as CSSProperties
                 }
               >
                 <NodeDisc state={disc} />
-                {/* The number is drawn by CSS from data-n so the visible text is only the
-                    title (axe label-content-name-mismatch); the sr-only copy keeps it in the DOM. */}
+                {/* Number and marker are drawn by CSS (data-n, data-text) so the visible
+                    text is only the title (axe label-content-name-mismatch); the link's
+                    aria-label already names the marker. */}
                 <span className="skill-node__lbl" data-n={item.number}>
-                  <span className="sr-only">{item.number}</span>
                   {node.title}
                   {here ? (
                     <span
@@ -121,7 +124,6 @@ export function SkillTree({ save, now }: SkillTreeProps) {
                       data-text={`Você está aqui, ${steps} de 4 passos`}
                     >
                       <PixelIcon name="cursor" />
-                      <span className="sr-only">{`Você está aqui, ${steps} de 4 passos`}</span>
                     </span>
                   ) : null}
                   {item.id === lastNodeId ? (

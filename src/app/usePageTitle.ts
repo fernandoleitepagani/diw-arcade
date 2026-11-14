@@ -7,7 +7,7 @@ export const DEFAULT_DESCRIPTION =
 
 export const PAGE_DESCRIPTIONS = {
   Hoje: 'Seu próximo passo na trilha de Desenvolvimento de Interfaces Web, escolhido a partir do seu progresso.',
-  'Árvore':
+  Trilha:
     'Sua trilha de Desenvolvimento de Interfaces Web: veja os nós, as estrelas de domínio e o próximo passo recomendado.',
   Revisão:
     'Revise as cartas do dia com repetição espaçada. Cada revisão rende XP e mantém o conteúdo em dia.',
