@@ -35,6 +35,9 @@
 }
 
 .challenge-view__node-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: var(--text);
   font-size: 0.875rem;
   font-weight: 600;
@@ -42,12 +45,22 @@
   text-underline-offset: 3px;
 }
 
+/* The session column is 760px; the three-region workspace breaks out of it. */
+@media (min-width: 721px) {
+  .challenge-view {
+    position: relative;
+    left: 50%;
+    width: min(1280px, calc(100vw - 64px));
+    transform: translateX(-50%);
+  }
+}
+
 .challenge-view__grid {
   display: grid;
   grid-template-columns: minmax(0, 9fr) minmax(0, 7fr) minmax(0, 4fr);
   align-items: stretch;
   border: 2px solid var(--edge);
-  min-height: 560px;
+  min-height: 480px;
 }
 
 .challenge-view__grid > * {

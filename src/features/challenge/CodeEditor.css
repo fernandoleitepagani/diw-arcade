@@ -7,7 +7,7 @@
 
 .code-editor .cm-editor {
   height: 100%;
-  min-height: 18rem;
+  min-height: 11rem;
 }
 
 .code-editor .cm-editor.cm-focused {
@@ -18,7 +18,7 @@
 .code-editor .cm-editor .cm-scroller {
   height: 100%;
   min-height: 0;
-  max-height: 32rem;
+  max-height: 22rem;
   font-family: var(--font-mono), monospace;
 }
 
