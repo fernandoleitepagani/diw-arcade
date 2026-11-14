@@ -1,5 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { NAVIGATION_MESSAGE } from './messages';
 import type { RunResult } from './runner';
 
 const runInIframe = vi.fn();
@@ -35,8 +36,7 @@ describe('SandboxFrame', () => {
   });
 
   it('lists the specific failure message from a failed run', async () => {
-    const message =
-      'O código recarregou ou navegou a página (location.reload / location.href).';
+    const message = NAVIGATION_MESSAGE;
     mockRun({ status: 'timeout', requirements: [], errors: [message] });
 
     await renderAndFlush();

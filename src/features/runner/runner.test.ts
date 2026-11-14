@@ -361,6 +361,109 @@ describe('runInIframe lifecycle', () => {
     });
   });
 
+  // v4: AC4 a diw:unload is provisional; beforeunload also fires for mailto:/tel: links.
+  describe('provisional diw:unload', () => {
+    const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    it('keeps running when diw:survived follows diw:unload, and a later diw:result is ok', async () => {
+      const { iframe, result, nonce } = await start({ timeoutMs: 5000 });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:unload', nonce });
+      await wait(20);
+      send(iframe, { type: 'diw:survived', nonce });
+      // Longer than any sane grace period: the pending failure must be gone.
+      await wait(450);
+      send(iframe, {
+        type: 'diw:result',
+        nonce,
+        requirements: [{ id: 'alvo-existe', passed: true }],
+        errors: [],
+      });
+
+      await expect(result).resolves.toEqual({
+        status: 'ok',
+        requirements: [{ id: 'alvo-existe', passed: true }],
+        errors: [],
+      });
+    });
+
+    it('fails with NAVIGATION_MESSAGE after a short grace when no diw:survived comes', async () => {
+      const { host, iframe, result, nonce } = await start({ timeoutMs: 5000 });
+      send(iframe, { type: 'diw:started', nonce });
+      const before = performance.now();
+      send(iframe, { type: 'diw:unload', nonce });
+
+      await expect(result).resolves.toEqual({
+        status: 'timeout',
+        requirements: [
+          { id: 'alvo-existe', passed: false, message: NAVIGATION_MESSAGE },
+        ],
+        errors: [NAVIGATION_MESSAGE],
+      });
+      const elapsed = performance.now() - before;
+      expect(elapsed).toBeGreaterThanOrEqual(50);
+      expect(elapsed).toBeLessThan(1000);
+      expect(host.querySelector('iframe')).toBeNull();
+    });
+
+    it('fails again when a real unload follows a diw:survived', async () => {
+      const { iframe, result, nonce } = await start({ timeoutMs: 5000 });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:unload', nonce });
+      send(iframe, { type: 'diw:survived', nonce });
+      send(iframe, { type: 'diw:unload', nonce });
+
+      await expect(result).resolves.toMatchObject({
+        status: 'timeout',
+        errors: [NAVIGATION_MESSAGE],
+      });
+    });
+
+    it('still fails at once on a second diw:started during the grace period', async () => {
+      const { iframe, result, nonce } = await start({ timeoutMs: 5000 });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:unload', nonce });
+      const before = performance.now();
+      send(iframe, { type: 'diw:started', nonce });
+
+      await expect(result).resolves.toMatchObject({ errors: [NAVIGATION_MESSAGE] });
+      expect(performance.now() - before).toBeLessThan(40);
+    });
+
+    it('ignores a diw:survived from the wrong source, nonce or shape', async () => {
+      const { iframe, result, nonce } = await start({ timeoutMs: 5000 });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:unload', nonce });
+      send(iframe, { type: 'diw:survived', nonce }, window);
+      send(iframe, { type: 'diw:survived', nonce: 'nonce-errado' });
+      send(iframe, { type: 'diw:survived', nonce: 42 });
+      send(iframe, { type: 'diw:survived' });
+
+      await expect(result).resolves.toMatchObject({
+        status: 'timeout',
+        errors: [NAVIGATION_MESSAGE],
+      });
+    });
+
+    it('in preview mode ignores diw:unload and diw:survived after diw:ready', async () => {
+      const { iframe, result, nonce } = await start({
+        mode: 'preview',
+        timeoutMs: 5000,
+      });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:ready', nonce, errors: [] });
+      send(iframe, { type: 'diw:unload', nonce });
+      send(iframe, { type: 'diw:survived', nonce });
+      await wait(300);
+
+      await expect(result).resolves.toEqual({
+        status: 'ok',
+        requirements: [],
+        errors: [],
+      });
+    });
+  });
+
   it('(g) removes the iframe on every failure path', async () => {
     const hosts: HTMLElement[] = [];
     for (const signal of ['unload', 'startedTwice', 'start', 'total']) {

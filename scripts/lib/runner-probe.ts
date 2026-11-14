@@ -10,6 +10,7 @@ import {
   type CodeFiles,
   type Requirement,
 } from '../../src/content/schema';
+import { NAVIGATION_MESSAGE, TIMEOUT_MESSAGE } from '../../src/features/runner/messages';
 import {
   buildSrcdoc,
   SANDBOX_FLAGS,
@@ -41,9 +42,16 @@ const SAVE_KEY = 'diw-arcade:save';
 const E2E_ID = 'n20-c02';
 /** Teto de espera pelos resultados na página real (o timeout do runner é maior que o limite). */
 const E2E_CAP_MS = 12_000;
-const NAVIGATION_MESSAGE =
-  'O código recarregou ou navegou a página (location.reload / location.href).';
-const LOOP_MESSAGE = 'Tempo esgotado (loop infinito?)';
+/**
+ * Clique do aluno que segue um mailto: na página real do app a correção deve
+ * continuar. Quem prova o diw:survived isoladamente é a sonda mailto-click
+ * (o e2e passa também sem ele quando os requisitos terminam dentro da
+ * tolerância do diw:unload).
+ */
+const MAILTO_JS = `
+document.querySelector('#cadastrar').addEventListener('click', function () {
+  location.href = 'mailto:aluno@example.com';
+});`;
 
 interface CaseInput {
   files: CodeFiles;
@@ -73,13 +81,16 @@ function loadChallenges(): Challenge[] {
     if (!/^n\d{2}$/.test(entry)) {
       continue;
     }
-    let raw: string;
-    try {
-      raw = readFileSync(join(contentDir, entry, 'challenges.json'), 'utf8');
-    } catch {
-      continue;
+    // Sem challenges.json o nível ficaria fora da prova em silêncio: falha.
+    const raw = readFileSync(join(contentDir, entry, 'challenges.json'), 'utf8');
+    const level = z.array(ChallengeSchema).parse(JSON.parse(raw));
+    if (level.length === 0) {
+      throw new Error(`${entry}/challenges.json não tem desafios`);
     }
-    challenges.push(...z.array(ChallengeSchema).parse(JSON.parse(raw)));
+    challenges.push(...level);
+  }
+  if (challenges.length === 0) {
+    throw new Error('nenhum desafio encontrado em src/content');
   }
   return challenges;
 }
@@ -272,7 +283,6 @@ try { void parent.document.body; } catch (e) { mark('i-parent'); }
 try { void localStorage.length; } catch (e) { mark('i-storage'); }
 try { if (document.cookie === '') mark('i-cookie'); } catch (e) { mark('i-cookie'); }
 try { top.location.href = 'http://127.0.0.1:1/top-escape'; } catch (e) {}
-mark('i-top');
 if (window.open('about:blank') === null) mark('i-open');
 ['_top', '_blank'].forEach(function (target) {
   var form = document.getElementById('alvo' + target);
@@ -294,7 +304,6 @@ const ISOLATION_PROBE: Probe = {
       exists('parent-document', '#i-parent'),
       exists('local-storage', '#i-storage'),
       exists('cookie', '#i-cookie'),
-      exists('top-location', '#i-top'),
       exists('window-open', '#i-open'),
       exists('form-top', '#i-form_top', click('#b1')),
       exists('form-blank', '#i-form_blank', click('#b2')),
@@ -310,6 +319,7 @@ const ISOLATION_PROBE: Probe = {
 interface LifecycleOutcome {
   startedCount: number;
   unloadCount: number;
+  survivedCount: number;
   /** ms desde o primeiro diw:started até o primeiro sinal de navegação. */
   signalAfterMs: number | null;
   results: number;
@@ -334,6 +344,7 @@ async function runLifecycle(env: ProbeEnv, input: CaseInput): Promise<LifecycleO
         const out: LifecycleOutcome = {
           startedCount: 0,
           unloadCount: 0,
+          survivedCount: 0,
           signalAfterMs: null,
           results: 0,
           failed: [],
@@ -360,6 +371,8 @@ async function runLifecycle(env: ProbeEnv, input: CaseInput): Promise<LifecycleO
             if (out.signalAfterMs === null && firstStartedAt !== null) {
               out.signalAfterMs = Math.round(now - firstStartedAt);
             }
+          } else if (data.type === 'diw:survived') {
+            out.survivedCount += 1;
           } else if (data.type === 'diw:result') {
             out.results += 1;
             out.failed = (data.requirements ?? [])
@@ -394,6 +407,9 @@ async function runNavigationProbe(
     files: { html: '<p id="alvo">oi</p>', css: '', js },
     requirements: [exists('alvo-existe', '#alvo')],
   });
+  if (outcome.survivedCount > 0) {
+    return `diw:survived após navegação real (${name}): o pai perderia o sinal`;
+  }
   if (outcome.signalAfterMs === null) {
     return `nenhum diw:unload nem segundo diw:started em ${NAVIGATION_WINDOW_MS} ms (${name})`;
   }
@@ -413,6 +429,87 @@ async function runHashProbe(env: ProbeEnv): Promise<string | null> {
   }
   if (outcome.results !== 1 || outcome.failed.length > 0) {
     return `hash não foi corrigido normalmente (resultados=${outcome.results}, falhas=${outcome.failed.join(',')})`;
+  }
+  return null;
+}
+
+/**
+ * `beforeunload` também dispara para navegações que não descarregam a página
+ * (mailto:, tel:). O sinal de descarregamento é provisório: o harness avisa
+ * com diw:survived e a correção segue normalmente, sem NAVEGAÇÃO.
+ */
+const SURVIVING_PROBES: { name: string; html: string; js: string; click: string }[] = [
+  {
+    name: 'mailto-click',
+    html: '<button id="go">Enviar</button>',
+    js: `document.getElementById('go').addEventListener('click', function () {
+  var done = document.createElement('p');
+  done.id = 'feito';
+  document.body.appendChild(done);
+  location.href = 'mailto:aluno@example.com';
+});`,
+    click: '#go',
+  },
+  {
+    name: 'tel-link',
+    html: '<a id="ligar" href="tel:+5531999990000">Ligar</a>',
+    js: `document.getElementById('ligar').addEventListener('click', function () {
+  var done = document.createElement('p');
+  done.id = 'feito';
+  document.body.appendChild(done);
+});`,
+    click: '#ligar',
+  },
+];
+
+async function runSurvivingProbe(
+  env: ProbeEnv,
+  probe: (typeof SURVIVING_PROBES)[number],
+): Promise<string | null> {
+  const outcome = await runLifecycle(env, {
+    files: { html: probe.html, css: '', js: probe.js },
+    requirements: [exists('handler-rodou', '#feito', click(probe.click))],
+  });
+  if (outcome.startedCount !== 1) {
+    return `o frame reiniciou (started=${outcome.startedCount})`;
+  }
+  if (outcome.survivedCount < outcome.unloadCount) {
+    return `diw:unload sem diw:survived (unload=${outcome.unloadCount}, survived=${outcome.survivedCount}): a página seria reprovada como NAVEGAÇÃO`;
+  }
+  if (outcome.results !== 1 || outcome.failed.length > 0) {
+    return `não foi corrigido normalmente (resultados=${outcome.results}, falhas=${outcome.failed.join(',')})`;
+  }
+  return null;
+}
+
+/** Formulário dentro de shadow root: `submit` não é composed e escapa do guard na janela. */
+const SHADOW_PROBES = (['open', 'closed'] as const).map((mode) => ({
+  name: `shadow-${mode}`,
+  html: '<div id="host"></div>',
+  js: `var root = document.getElementById('host').attachShadow({ mode: '${mode}' });
+root.innerHTML = '<form id="f"><input name="q"><button id="go">Enviar</button></form>';
+var btn = root.getElementById('go');
+root.getElementById('f').addEventListener('submit', function () {
+  var done = document.createElement('p');
+  done.id = 'feito';
+  document.body.appendChild(done);
+});
+document.getElementById('host').addEventListener('click', function () { btn.click(); });`,
+}));
+
+async function runShadowProbe(
+  env: ProbeEnv,
+  probe: (typeof SHADOW_PROBES)[number],
+): Promise<string | null> {
+  const outcome = await runLifecycle(env, {
+    files: { html: probe.html, css: '', js: probe.js },
+    requirements: [exists('handler-rodou', '#feito', click('#host'))],
+  });
+  if (outcome.startedCount !== 1 || outcome.unloadCount > 0) {
+    return `o submit recarregou o frame (started=${outcome.startedCount}, unload=${outcome.unloadCount})`;
+  }
+  if (outcome.results !== 1 || outcome.failed.length > 0) {
+    return `não foi corrigido normalmente (resultados=${outcome.results}, falhas=${outcome.failed.join(',')})`;
   }
   return null;
 }
@@ -466,7 +563,7 @@ async function runE2e(
     await page.locator('.requirement-list__item').first().waitFor({ timeout: 15_000 });
 
     return await page.evaluate(
-      ({ capMs }) =>
+      ({ capMs, timeoutText }) =>
         new Promise<E2eOutcome>((resolve) => {
           const button = Array.from(document.querySelectorAll('button')).find(
             (candidate) => candidate.textContent?.trim() === 'Executar testes',
@@ -493,7 +590,7 @@ async function runE2e(
               elapsedMs,
               timedOut,
               items: read(),
-              loopTextOnPage: document.body.innerText.includes('Tempo esgotado (loop infinito?)'),
+              loopTextOnPage: document.body.innerText.includes(timeoutText),
             });
           };
           const check = () => {
@@ -516,15 +613,23 @@ async function runE2e(
           }
           button.click();
         }),
-      { capMs: E2E_CAP_MS },
+      { capMs: E2E_CAP_MS, timeoutText: TIMEOUT_MESSAGE },
     );
   } finally {
     await context.close();
   }
 }
 
-async function e2eSolution(browser: Browser, origin: string, challenge: Challenge): Promise<string | null> {
-  const outcome = await runE2e(browser, origin, challenge, challenge.solution);
+async function e2eSolution(
+  browser: Browser,
+  origin: string,
+  challenge: Challenge,
+  extraJs = '',
+): Promise<string | null> {
+  const outcome = await runE2e(browser, origin, challenge, {
+    ...challenge.solution,
+    js: challenge.solution.js + extraJs,
+  });
   if (outcome.timedOut) {
     return `sem resultado em ${E2E_CAP_MS} ms`;
   }
@@ -541,14 +646,15 @@ async function e2eReload(
   browser: Browser,
   origin: string,
   challenge: Challenge,
+  js = 'location.reload();',
 ): Promise<{ problem: string | null; elapsedMs: number }> {
   const outcome = await runE2e(browser, origin, challenge, {
     ...challenge.starter,
-    js: 'location.reload();',
+    js,
   });
   const elapsedMs = outcome.elapsedMs;
   if (outcome.loopTextOnPage) {
-    return { problem: `"${LOOP_MESSAGE}" apareceu na página (${elapsedMs} ms)`, elapsedMs };
+    return { problem: `"${TIMEOUT_MESSAGE}" apareceu na página (${elapsedMs} ms)`, elapsedMs };
   }
   if (outcome.timedOut) {
     return { problem: `sem resultado em ${E2E_CAP_MS} ms`, elapsedMs };
@@ -585,12 +691,41 @@ async function runSimpleProbe(env: ProbeEnv, probe: Probe): Promise<string | nul
   return null;
 }
 
+/**
+ * `top.location.href = ...` não lança no sandbox (só registra erro no
+ * console), então nenhum marcador dentro do iframe prova a contenção. A prova
+ * é no pai: uma variável de janela criada antes sobrevive (uma navegação a
+ * destruiria) e nenhuma navegação do frame principal aconteceu.
+ */
 async function runIsolation(env: ProbeEnv, popups: string[]): Promise<string | null> {
   const before = env.page.url();
-  const problem = await runSimpleProbe(env, ISOLATION_PROBE);
-  await pause(SETTLE_MS);
+  await env.page.evaluate(() => {
+    (window as unknown as { __runnerProbeAlive: boolean }).__runnerProbeAlive = true;
+  });
+  const mainFrame = env.page.mainFrame();
+  let navigations = 0;
+  const onNavigated = (frame: unknown) => {
+    if (frame === mainFrame) {
+      navigations += 1;
+    }
+  };
+  env.page.on('framenavigated', onNavigated);
+  // Uma navegação do pai destrói o contexto do evaluate: também é falha.
+  const problem = await runSimpleProbe(env, ISOLATION_PROBE).catch(
+    (error: unknown) => `o pai navegou durante a sonda (${String(error).split('\n')[0]})`,
+  );
+  await pause(SETTLE_MS).catch(() => undefined);
+  env.page.off('framenavigated', onNavigated);
   if (problem !== null) {
     return problem;
+  }
+  const alive = await env.page
+    .evaluate(
+      () => (window as unknown as { __runnerProbeAlive?: boolean }).__runnerProbeAlive === true,
+    )
+    .catch(() => false);
+  if (navigations > 0 || !alive) {
+    return `o pai navegou (${navigations} navegação(ões), marcador ${alive ? 'presente' : 'perdido'})`;
   }
   if (env.page.url() !== before) {
     return `o pai navegou de ${before} para ${env.page.url()}`;
@@ -650,6 +785,20 @@ export async function runRunnerProbe(
       );
     }
     record('hash', await runHashProbe(env), 'runner: sonda hash OK');
+    for (const probe of SURVIVING_PROBES) {
+      record(
+        probe.name,
+        await runSurvivingProbe(env, probe),
+        `runner: sonda ${probe.name} OK`,
+      );
+    }
+    for (const probe of SHADOW_PROBES) {
+      record(
+        probe.name,
+        await runShadowProbe(env, probe),
+        `runner: sonda ${probe.name} OK`,
+      );
+    }
 
     const challenges = loadChallenges();
     let passed = 0;
@@ -669,7 +818,11 @@ export async function runRunnerProbe(
         );
       }
     }
-    if (passed === challenges.length) {
+    if (passed !== challenges.length || challenges.length === 0) {
+      failures.push(
+        `runner: FALHOU soluções de referência: ${passed} de ${challenges.length} desafios passaram`,
+      );
+    } else {
       console.log(
         `runner: ${passed}/${challenges.length} soluções de referência passam no Chromium`,
       );
@@ -691,6 +844,29 @@ export async function runRunnerProbe(
         `runner: e2e ${E2E_ID} reload OK`,
       );
       console.log(`runner: e2e ${E2E_ID} reload medido em ${reload.elapsedMs} ms`);
+      const blank = await e2eReload(
+        browser,
+        origin,
+        e2eChallenge,
+        "location.href = 'about:blank';",
+      );
+      record(
+        `e2e ${E2E_ID} about:blank`,
+        blank.problem,
+        `runner: e2e ${E2E_ID} about:blank OK`,
+      );
+      console.log(`runner: e2e ${E2E_ID} about:blank medido em ${blank.elapsedMs} ms`);
+      const mailto = await e2eSolution(
+        browser,
+        origin,
+        e2eChallenge,
+        MAILTO_JS,
+      );
+      record(
+        `e2e ${E2E_ID} mailto`,
+        mailto,
+        `runner: e2e ${E2E_ID} solução com mailto OK`,
+      );
     }
 
     const starter = challenges.find((challenge) => challenge.id === 'n20-c02');

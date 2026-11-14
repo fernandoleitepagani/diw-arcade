@@ -1,16 +1,22 @@
 import type { CodeFiles, JsonValue, Requirement } from '../../content/schema';
 import harnessSource from './harness.js?raw';
 import {
+  NAVIGATION_MESSAGE,
   RunnerMessageSchema,
+  START_FAILED_MESSAGE,
+  TIMEOUT_MESSAGE,
   type RequirementResult,
 } from './messages';
 import { buildSrcdoc, SANDBOX_FLAGS, type SrcdocConfig } from './srcdoc';
 
-export const TIMEOUT_MESSAGE = 'Tempo esgotado (loop infinito?)';
-export const NAVIGATION_MESSAGE =
-  'O código recarregou ou navegou a página (location.reload / location.href).';
-export const START_FAILED_MESSAGE =
-  'O ambiente de testes não iniciou. Tente executar de novo.';
+export { NAVIGATION_MESSAGE, START_FAILED_MESSAGE, TIMEOUT_MESSAGE };
+
+/**
+ * How long a `diw:unload` waits for `diw:survived` before it fails the run.
+ * The harness posts `diw:survived` ~30 ms after `beforeunload`; the rest is
+ * margin for a loaded machine.
+ */
+export const UNLOAD_GRACE_MS = 200;
 
 export interface RunInIframeOptions {
   mode: 'preview' | 'test';
@@ -76,11 +82,13 @@ export function runInIframe(
     let phase: Phase = 'loading';
     let startTimer: number | undefined;
     let totalTimer: number | undefined;
+    let unloadTimer: number | undefined;
 
     function settle(value: RunResult): void {
       phase = 'settled';
       window.clearTimeout(startTimer);
       window.clearTimeout(totalTimer);
+      window.clearTimeout(unloadTimer);
       window.removeEventListener('message', onMessage);
       resolve(value);
     }
@@ -117,7 +125,16 @@ export function runInIframe(
           }
           return;
         case 'diw:unload':
-          fail(NAVIGATION_MESSAGE);
+          // Provisional: beforeunload also fires for mailto:/tel: navigations.
+          // A real reload fails sooner, through the second diw:started.
+          window.clearTimeout(unloadTimer);
+          unloadTimer = window.setTimeout(
+            () => fail(NAVIGATION_MESSAGE),
+            UNLOAD_GRACE_MS,
+          );
+          return;
+        case 'diw:survived':
+          window.clearTimeout(unloadTimer);
           return;
         case 'diw:ready':
         case 'diw:result':

