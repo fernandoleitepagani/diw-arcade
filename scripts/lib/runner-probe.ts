@@ -10,6 +10,7 @@ import {
   type CodeFiles,
   type Requirement,
 } from '../../src/content/schema';
+import { NAVIGATION_MESSAGE, TIMEOUT_MESSAGE } from '../../src/features/runner/messages';
 import {
   buildSrcdoc,
   SANDBOX_FLAGS,
@@ -41,9 +42,16 @@ const SAVE_KEY = 'diw-arcade:save';
 const E2E_ID = 'n20-c02';
 /** Teto de espera pelos resultados na página real (o timeout do runner é maior que o limite). */
 const E2E_CAP_MS = 12_000;
-const NAVIGATION_MESSAGE =
-  'O código recarregou ou navegou a página (location.reload / location.href).';
-const LOOP_MESSAGE = 'Tempo esgotado (loop infinito?)';
+/**
+ * Clique do aluno que segue um mailto: na página real do app a correção deve
+ * continuar. Quem prova o diw:survived isoladamente é a sonda mailto-click
+ * (o e2e passa também sem ele quando os requisitos terminam dentro da
+ * tolerância do diw:unload).
+ */
+const MAILTO_JS = `
+document.querySelector('#cadastrar').addEventListener('click', function () {
+  location.href = 'mailto:aluno@example.com';
+});`;
 
 interface CaseInput {
   files: CodeFiles;
@@ -399,6 +407,9 @@ async function runNavigationProbe(
     files: { html: '<p id="alvo">oi</p>', css: '', js },
     requirements: [exists('alvo-existe', '#alvo')],
   });
+  if (outcome.survivedCount > 0) {
+    return `diw:survived após navegação real (${name}): o pai perderia o sinal`;
+  }
   if (outcome.signalAfterMs === null) {
     return `nenhum diw:unload nem segundo diw:started em ${NAVIGATION_WINDOW_MS} ms (${name})`;
   }
@@ -552,7 +563,7 @@ async function runE2e(
     await page.locator('.requirement-list__item').first().waitFor({ timeout: 15_000 });
 
     return await page.evaluate(
-      ({ capMs }) =>
+      ({ capMs, timeoutText }) =>
         new Promise<E2eOutcome>((resolve) => {
           const button = Array.from(document.querySelectorAll('button')).find(
             (candidate) => candidate.textContent?.trim() === 'Executar testes',
@@ -579,7 +590,7 @@ async function runE2e(
               elapsedMs,
               timedOut,
               items: read(),
-              loopTextOnPage: document.body.innerText.includes('Tempo esgotado (loop infinito?)'),
+              loopTextOnPage: document.body.innerText.includes(timeoutText),
             });
           };
           const check = () => {
@@ -602,15 +613,23 @@ async function runE2e(
           }
           button.click();
         }),
-      { capMs: E2E_CAP_MS },
+      { capMs: E2E_CAP_MS, timeoutText: TIMEOUT_MESSAGE },
     );
   } finally {
     await context.close();
   }
 }
 
-async function e2eSolution(browser: Browser, origin: string, challenge: Challenge): Promise<string | null> {
-  const outcome = await runE2e(browser, origin, challenge, challenge.solution);
+async function e2eSolution(
+  browser: Browser,
+  origin: string,
+  challenge: Challenge,
+  extraJs = '',
+): Promise<string | null> {
+  const outcome = await runE2e(browser, origin, challenge, {
+    ...challenge.solution,
+    js: challenge.solution.js + extraJs,
+  });
   if (outcome.timedOut) {
     return `sem resultado em ${E2E_CAP_MS} ms`;
   }
@@ -627,14 +646,15 @@ async function e2eReload(
   browser: Browser,
   origin: string,
   challenge: Challenge,
+  js = 'location.reload();',
 ): Promise<{ problem: string | null; elapsedMs: number }> {
   const outcome = await runE2e(browser, origin, challenge, {
     ...challenge.starter,
-    js: 'location.reload();',
+    js,
   });
   const elapsedMs = outcome.elapsedMs;
   if (outcome.loopTextOnPage) {
-    return { problem: `"${LOOP_MESSAGE}" apareceu na página (${elapsedMs} ms)`, elapsedMs };
+    return { problem: `"${TIMEOUT_MESSAGE}" apareceu na página (${elapsedMs} ms)`, elapsedMs };
   }
   if (outcome.timedOut) {
     return { problem: `sem resultado em ${E2E_CAP_MS} ms`, elapsedMs };
@@ -690,8 +710,11 @@ async function runIsolation(env: ProbeEnv, popups: string[]): Promise<string | n
     }
   };
   env.page.on('framenavigated', onNavigated);
-  const problem = await runSimpleProbe(env, ISOLATION_PROBE);
-  await pause(SETTLE_MS);
+  // Uma navegação do pai destrói o contexto do evaluate: também é falha.
+  const problem = await runSimpleProbe(env, ISOLATION_PROBE).catch(
+    (error: unknown) => `o pai navegou durante a sonda (${String(error).split('\n')[0]})`,
+  );
+  await pause(SETTLE_MS).catch(() => undefined);
   env.page.off('framenavigated', onNavigated);
   if (problem !== null) {
     return problem;
@@ -821,6 +844,29 @@ export async function runRunnerProbe(
         `runner: e2e ${E2E_ID} reload OK`,
       );
       console.log(`runner: e2e ${E2E_ID} reload medido em ${reload.elapsedMs} ms`);
+      const blank = await e2eReload(
+        browser,
+        origin,
+        e2eChallenge,
+        "location.href = 'about:blank';",
+      );
+      record(
+        `e2e ${E2E_ID} about:blank`,
+        blank.problem,
+        `runner: e2e ${E2E_ID} about:blank OK`,
+      );
+      console.log(`runner: e2e ${E2E_ID} about:blank medido em ${blank.elapsedMs} ms`);
+      const mailto = await e2eSolution(
+        browser,
+        origin,
+        e2eChallenge,
+        MAILTO_JS,
+      );
+      record(
+        `e2e ${E2E_ID} mailto`,
+        mailto,
+        `runner: e2e ${E2E_ID} solução com mailto OK`,
+      );
     }
 
     const starter = challenges.find((challenge) => challenge.id === 'n20-c02');

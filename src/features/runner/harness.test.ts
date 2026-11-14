@@ -76,7 +76,12 @@ async function runHarness(
         return;
       }
       // Lifecycle signals are not the answer; keep waiting for it.
-      if (parsed.data.type === 'diw:started' || parsed.data.type === 'diw:unload') {
+      // v4: diw:survived is a lifecycle signal too.
+      if (
+        parsed.data.type === 'diw:started' ||
+        parsed.data.type === 'diw:unload' ||
+        parsed.data.type === 'diw:survived'
+      ) {
         return;
       }
       clearTimeout(timer);
