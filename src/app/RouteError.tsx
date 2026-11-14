@@ -20,10 +20,6 @@ export function RouteError() {
 
   return (
     <PixelPanel as="section" className="route-error" role="alert">
-      <Bit
-        line="Deu um curto no meu circuito. Bora tentar mais uma vez?"
-        scale={14}
-      />
       <h1 ref={headingRef} tabIndex={-1}>
         Não foi possível carregar esta página
       </h1>
@@ -31,6 +27,10 @@ export function RouteError() {
         A página não carregou. Pode ter sido a conexão ou uma atualização do
         site. Seu progresso continua salvo.
       </p>
+      <Bit
+        line="Deu um curto no meu circuito. Bora tentar mais uma vez?"
+        scale={14}
+      />
       <div className="route-error__actions">
         <Button onClick={() => window.location.reload()}>Tentar de novo</Button>
         <ButtonLink to="/" variant="quiet">
