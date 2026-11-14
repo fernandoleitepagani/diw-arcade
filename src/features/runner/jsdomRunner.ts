@@ -43,7 +43,9 @@ function timeoutResults(challenge: Challenge): JsdomRequirementResult[] {
 /**
  * Runs one challenge submission under JSDOM with the same srcdoc and harness
  * as the browser. The validator calls this for the reference solution and the
- * starter. It cannot interrupt a synchronous infinite loop; see ADR-0001.
+ * starter. It cannot interrupt a synchronous infinite loop, and it implements
+ * neither the sandbox nor navigation, so reload, href and form behaviour are
+ * proved in real Chromium by `npm run smoke -- --runner`; see ADR-0001.
  */
 export async function runInJsdom(
   challenge: Challenge,

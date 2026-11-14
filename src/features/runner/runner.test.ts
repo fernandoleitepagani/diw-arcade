@@ -1,7 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import type { Requirement } from '../../content/schema';
 import { fixtureChallenge } from '../../test/fixtures';
-import { runInIframe } from './runner';
+import {
+  NAVIGATION_MESSAGE,
+  runInIframe,
+  START_FAILED_MESSAGE,
+  TIMEOUT_MESSAGE,
+} from './runner';
 import { runInJsdom } from './jsdomRunner';
 
 const files = {
@@ -60,7 +65,8 @@ afterEach(() => {
 });
 
 describe('runInIframe', () => {
-  it('mounts one fresh iframe with exactly allow-scripts', async () => {
+  // v4: submit must work in the sandbox, so allow-forms joins allow-scripts.
+  it('mounts one fresh iframe with exactly allow-scripts allow-forms', async () => {
     const host = container();
     const { iframe, result } = runInIframe(host, files, {
       mode: 'preview',
@@ -68,7 +74,7 @@ describe('runInIframe', () => {
     });
 
     expect(host.firstElementChild).toBe(iframe);
-    expect(iframe.getAttribute('sandbox')).toBe('allow-scripts');
+    expect(iframe.getAttribute('sandbox')).toBe('allow-scripts allow-forms');
 
     const srcdoc = await waitForSrcdoc(iframe);
     send(iframe, {
@@ -119,6 +125,8 @@ describe('runInIframe', () => {
       timeoutMs: 40,
     });
     const nonce = nonceFromSrcdoc(await waitForSrcdoc(iframe));
+    // v4: without diw:started the run now fails as START_FAILED, so start it.
+    send(iframe, { type: 'diw:started', nonce });
 
     send(
       iframe,
@@ -137,7 +145,7 @@ describe('runInIframe', () => {
       {
         id: 'alvo-existe',
         passed: false,
-        message: 'Tempo esgotado (loop infinito?)',
+        message: TIMEOUT_MESSAGE,
       },
     ]);
   });
@@ -180,7 +188,8 @@ describe('runInIframe', () => {
     await expect(result).resolves.toMatchObject({ status: 'timeout' });
   });
 
-  it('removes the iframe and fails every requirement on timeout', async () => {
+  // v4: a harness that never sent diw:started is START_FAILED, not a timeout.
+  it('removes the iframe and fails every requirement when the sandbox never starts', async () => {
     const host = container();
     const { iframe, result } = runInIframe(host, files, {
       mode: 'test',
@@ -194,15 +203,342 @@ describe('runInIframe', () => {
     expect(value).toEqual({
       status: 'timeout',
       requirements: [
-        {
-          id: 'alvo-existe',
-          passed: false,
-          message: 'Tempo esgotado (loop infinito?)',
-        },
+        { id: 'alvo-existe', passed: false, message: START_FAILED_MESSAGE },
       ],
-      errors: [],
+      errors: [START_FAILED_MESSAGE],
     });
     expect(host.querySelector('iframe')).toBeNull();
+  });
+});
+
+describe('runInIframe lifecycle', () => {
+  async function start(options: {
+    mode?: 'preview' | 'test';
+    timeoutMs?: number;
+    startTimeoutMs?: number;
+  }) {
+    const host = container();
+    const { iframe, result } = runInIframe(host, files, {
+      mode: 'test',
+      requirements,
+      ...options,
+    });
+    const nonce = nonceFromSrcdoc(await waitForSrcdoc(iframe));
+    return { host, iframe, result, nonce };
+  }
+
+  it('(a) fails with START_FAILED_MESSAGE when diw:started never arrives', async () => {
+    const { host, result } = await start({ startTimeoutMs: 20, timeoutMs: 500 });
+
+    await expect(result).resolves.toEqual({
+      status: 'timeout',
+      requirements: [
+        { id: 'alvo-existe', passed: false, message: START_FAILED_MESSAGE },
+      ],
+      errors: [START_FAILED_MESSAGE],
+    });
+    expect(host.querySelector('iframe')).toBeNull();
+  });
+
+  it('(b) fails with TIMEOUT_MESSAGE when started but never answered', async () => {
+    const { host, iframe, result, nonce } = await start({
+      startTimeoutMs: 500,
+      timeoutMs: 60,
+    });
+    send(iframe, { type: 'diw:started', nonce });
+
+    await expect(result).resolves.toEqual({
+      status: 'timeout',
+      requirements: [
+        { id: 'alvo-existe', passed: false, message: TIMEOUT_MESSAGE },
+      ],
+      errors: [TIMEOUT_MESSAGE],
+    });
+    expect(host.querySelector('iframe')).toBeNull();
+  });
+
+  it('(c) fails at once with NAVIGATION_MESSAGE on diw:unload after started', async () => {
+    const { host, iframe, result, nonce } = await start({ timeoutMs: 5000 });
+    send(iframe, { type: 'diw:started', nonce });
+    const before = performance.now();
+    send(iframe, { type: 'diw:unload', nonce });
+
+    await expect(result).resolves.toEqual({
+      status: 'timeout',
+      requirements: [
+        { id: 'alvo-existe', passed: false, message: NAVIGATION_MESSAGE },
+      ],
+      errors: [NAVIGATION_MESSAGE],
+    });
+    expect(performance.now() - before).toBeLessThan(500);
+    expect(host.querySelector('iframe')).toBeNull();
+  });
+
+  it('(c) treats diw:unload while still loading as navigation', async () => {
+    const { iframe, result, nonce } = await start({ timeoutMs: 5000 });
+    send(iframe, { type: 'diw:unload', nonce });
+
+    await expect(result).resolves.toMatchObject({
+      status: 'timeout',
+      errors: [NAVIGATION_MESSAGE],
+    });
+  });
+
+  it('(d) fails with NAVIGATION_MESSAGE on a second diw:started', async () => {
+    const { host, iframe, result, nonce } = await start({ timeoutMs: 5000 });
+    send(iframe, { type: 'diw:started', nonce });
+    send(iframe, { type: 'diw:started', nonce });
+
+    await expect(result).resolves.toMatchObject({
+      status: 'timeout',
+      errors: [NAVIGATION_MESSAGE],
+    });
+    expect(host.querySelector('iframe')).toBeNull();
+  });
+
+  it('(e) resolves ok with a diw:result after diw:started', async () => {
+    const { iframe, result, nonce } = await start({ timeoutMs: 5000 });
+    send(iframe, { type: 'diw:started', nonce });
+    send(iframe, {
+      type: 'diw:result',
+      nonce,
+      requirements: [{ id: 'alvo-existe', passed: true }],
+      errors: [],
+    });
+
+    await expect(result).resolves.toEqual({
+      status: 'ok',
+      requirements: [{ id: 'alvo-existe', passed: true }],
+      errors: [],
+    });
+  });
+
+  it('(e) in preview mode ignores a diw:unload after diw:ready', async () => {
+    const { iframe, result, nonce } = await start({
+      mode: 'preview',
+      timeoutMs: 5000,
+    });
+    send(iframe, { type: 'diw:started', nonce });
+    send(iframe, { type: 'diw:ready', nonce, errors: [] });
+    send(iframe, { type: 'diw:unload', nonce });
+
+    await expect(result).resolves.toEqual({
+      status: 'ok',
+      requirements: [],
+      errors: [],
+    });
+  });
+
+  it('(f) ignores diw:started and diw:unload from the wrong source, nonce or shape', async () => {
+    const { iframe, result, nonce } = await start({
+      startTimeoutMs: 500,
+      timeoutMs: 80,
+    });
+    send(iframe, { type: 'diw:started', nonce });
+
+    for (const type of ['diw:started', 'diw:unload']) {
+      send(iframe, { type, nonce }, window);
+      send(iframe, { type, nonce: 'nonce-errado' });
+      send(iframe, { type, nonce: 42 });
+      send(iframe, { type });
+    }
+
+    await expect(result).resolves.toMatchObject({
+      status: 'timeout',
+      errors: [TIMEOUT_MESSAGE],
+    });
+  });
+
+  it('(f) ignores a diw:started from the wrong source while loading', async () => {
+    const { iframe, result, nonce } = await start({
+      startTimeoutMs: 40,
+      timeoutMs: 500,
+    });
+    send(iframe, { type: 'diw:started', nonce }, window);
+
+    await expect(result).resolves.toMatchObject({
+      errors: [START_FAILED_MESSAGE],
+    });
+  });
+
+  // v4: AC4 a diw:unload is provisional; beforeunload also fires for mailto:/tel: links.
+  describe('provisional diw:unload', () => {
+    const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    it('keeps running when diw:survived follows diw:unload, and a later diw:result is ok', async () => {
+      const { iframe, result, nonce } = await start({ timeoutMs: 5000 });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:unload', nonce });
+      await wait(20);
+      send(iframe, { type: 'diw:survived', nonce });
+      // Longer than any sane grace period: the pending failure must be gone.
+      await wait(450);
+      send(iframe, {
+        type: 'diw:result',
+        nonce,
+        requirements: [{ id: 'alvo-existe', passed: true }],
+        errors: [],
+      });
+
+      await expect(result).resolves.toEqual({
+        status: 'ok',
+        requirements: [{ id: 'alvo-existe', passed: true }],
+        errors: [],
+      });
+    });
+
+    it('fails with NAVIGATION_MESSAGE after a short grace when no diw:survived comes', async () => {
+      const { host, iframe, result, nonce } = await start({ timeoutMs: 5000 });
+      send(iframe, { type: 'diw:started', nonce });
+      const before = performance.now();
+      send(iframe, { type: 'diw:unload', nonce });
+
+      await expect(result).resolves.toEqual({
+        status: 'timeout',
+        requirements: [
+          { id: 'alvo-existe', passed: false, message: NAVIGATION_MESSAGE },
+        ],
+        errors: [NAVIGATION_MESSAGE],
+      });
+      const elapsed = performance.now() - before;
+      expect(elapsed).toBeGreaterThanOrEqual(50);
+      expect(elapsed).toBeLessThan(1000);
+      expect(host.querySelector('iframe')).toBeNull();
+    });
+
+    it('fails again when a real unload follows a diw:survived', async () => {
+      const { iframe, result, nonce } = await start({ timeoutMs: 5000 });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:unload', nonce });
+      send(iframe, { type: 'diw:survived', nonce });
+      send(iframe, { type: 'diw:unload', nonce });
+
+      await expect(result).resolves.toMatchObject({
+        status: 'timeout',
+        errors: [NAVIGATION_MESSAGE],
+      });
+    });
+
+    it('still fails at once on a second diw:started during the grace period', async () => {
+      const { iframe, result, nonce } = await start({ timeoutMs: 5000 });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:unload', nonce });
+      const before = performance.now();
+      send(iframe, { type: 'diw:started', nonce });
+
+      await expect(result).resolves.toMatchObject({ errors: [NAVIGATION_MESSAGE] });
+      expect(performance.now() - before).toBeLessThan(40);
+    });
+
+    it('ignores a diw:survived from the wrong source, nonce or shape', async () => {
+      const { iframe, result, nonce } = await start({ timeoutMs: 5000 });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:unload', nonce });
+      send(iframe, { type: 'diw:survived', nonce }, window);
+      send(iframe, { type: 'diw:survived', nonce: 'nonce-errado' });
+      send(iframe, { type: 'diw:survived', nonce: 42 });
+      send(iframe, { type: 'diw:survived' });
+
+      await expect(result).resolves.toMatchObject({
+        status: 'timeout',
+        errors: [NAVIGATION_MESSAGE],
+      });
+    });
+
+    // A slow relative navigation: diw:survived arrives (request in flight),
+    // the frame is later replaced and its pagehide message is ignored.
+    it('reports NAVIGATION_MESSAGE when the total timer fires after unload + survived with no result', async () => {
+      const { host, iframe, result, nonce } = await start({
+        startTimeoutMs: 500,
+        timeoutMs: 150,
+      });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:unload', nonce });
+      send(iframe, { type: 'diw:survived', nonce });
+
+      await expect(result).resolves.toEqual({
+        status: 'timeout',
+        requirements: [
+          { id: 'alvo-existe', passed: false, message: NAVIGATION_MESSAGE },
+        ],
+        errors: [NAVIGATION_MESSAGE],
+      });
+      expect(host.querySelector('iframe')).toBeNull();
+    });
+
+    it('keeps TIMEOUT_MESSAGE for a diw:survived with no prior diw:unload', async () => {
+      const { iframe, result, nonce } = await start({
+        startTimeoutMs: 500,
+        timeoutMs: 100,
+      });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:survived', nonce });
+
+      await expect(result).resolves.toMatchObject({
+        status: 'timeout',
+        errors: [TIMEOUT_MESSAGE],
+      });
+    });
+
+    it('ignores a diw:unload from the wrong source or nonce when choosing the total-timer message', async () => {
+      const { iframe, result, nonce } = await start({
+        startTimeoutMs: 500,
+        timeoutMs: 100,
+      });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:unload', nonce }, window);
+      send(iframe, { type: 'diw:unload', nonce: 'nonce-errado' });
+      send(iframe, { type: 'diw:survived', nonce });
+
+      await expect(result).resolves.toMatchObject({
+        errors: [TIMEOUT_MESSAGE],
+      });
+    });
+
+    it('in preview mode ignores diw:unload and diw:survived after diw:ready', async () => {
+      const { iframe, result, nonce } = await start({
+        mode: 'preview',
+        timeoutMs: 5000,
+      });
+      send(iframe, { type: 'diw:started', nonce });
+      send(iframe, { type: 'diw:ready', nonce, errors: [] });
+      send(iframe, { type: 'diw:unload', nonce });
+      send(iframe, { type: 'diw:survived', nonce });
+      await wait(300);
+
+      await expect(result).resolves.toEqual({
+        status: 'ok',
+        requirements: [],
+        errors: [],
+      });
+    });
+  });
+
+  it('(g) removes the iframe on every failure path', async () => {
+    const hosts: HTMLElement[] = [];
+    for (const signal of ['unload', 'startedTwice', 'start', 'total']) {
+      const { host, iframe, result, nonce } = await start({
+        startTimeoutMs: signal === 'start' ? 20 : 500,
+        timeoutMs: signal === 'total' ? 40 : 500,
+      });
+      hosts.push(host);
+      if (signal === 'unload') {
+        send(iframe, { type: 'diw:unload', nonce });
+      } else if (signal === 'startedTwice') {
+        send(iframe, { type: 'diw:started', nonce });
+        send(iframe, { type: 'diw:started', nonce });
+      } else if (signal === 'total') {
+        send(iframe, { type: 'diw:started', nonce });
+      }
+      await result;
+    }
+
+    expect(hosts.map((host) => host.querySelector('iframe'))).toEqual([
+      null,
+      null,
+      null,
+      null,
+    ]);
   });
 });
 

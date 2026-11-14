@@ -6,11 +6,56 @@
   var nonce = config.nonce || '';
   var errors = [];
 
+  /*
+   * First listener on window, in capture phase: it runs before any student
+   * handler. preventDefault cancels the navigation of a submitted form; it
+   * does not stop propagation, so student handlers still run.
+   */
+  window.addEventListener(
+    'submit',
+    function (event) {
+      event.preventDefault();
+    },
+    true,
+  );
+
+  /*
+   * form.submit() fires no submit event, so the guard never sees it. In
+   * Chromium it reloads a sandboxed srcdoc frame even with CSP form-action
+   * 'none'. Make it a no-op, like the guard does for a clicked submit button.
+   */
+  HTMLFormElement.prototype.submit = function () {};
+
+  /*
+   * `submit` is not composed: a form inside a shadow root never reaches the
+   * window listener. Give every new shadow root (open or closed; attachShadow
+   * returns both) the same capture-phase guard. Declarative shadow DOM
+   * (<template shadowrootmode>) is created by the parser, not by this call,
+   * and stays unguarded (ADR-0001).
+   */
+  var nativeAttachShadow = Element.prototype.attachShadow;
+  Element.prototype.attachShadow = function (init) {
+    var root = nativeAttachShadow.call(this, init);
+    root.addEventListener(
+      'submit',
+      function (event) {
+        event.preventDefault();
+      },
+      true,
+    );
+    return root;
+  };
+
+  /** Total: a hostile error object must not break the reporting path. */
   function describeError(value) {
-    if (value && typeof value.message === 'string') {
-      return value.message;
+    try {
+      if (value && typeof value.message === 'string') {
+        return value.message;
+      }
+      return String(value);
+    } catch {
+      return 'Erro desconhecido';
     }
-    return String(value);
   }
 
   window.addEventListener('error', function (event) {
@@ -342,11 +387,13 @@
     throw new Error('Ação desconhecida');
   }
 
-  async function runRequirements() {
+  var INTERNAL_ERROR_MESSAGE = 'Erro interno ao avaliar os requisitos.';
+
+  /** Records each result into `results` as it goes, so a throw keeps them. */
+  async function runRequirements(results) {
     var requirements = Array.isArray(config.requirements)
       ? config.requirements
       : [];
-    var results = [];
 
     for (var i = 0; i < requirements.length; i += 1) {
       var requirement = requirements[i];
@@ -370,8 +417,6 @@
       }
       results.push(result);
     }
-
-    return results;
   }
 
   function post(message) {
@@ -382,22 +427,78 @@
     }
   }
 
+  /** Every requirement gets a result, even after an unexpected throw. */
+  function completeResults(results) {
+    var requirements = Array.isArray(config.requirements)
+      ? config.requirements
+      : [];
+    var done = results.map(function (result) {
+      return result.id;
+    });
+    requirements.forEach(function (requirement) {
+      if (done.indexOf(requirement.id) === -1) {
+        results.push({
+          id: requirement.id,
+          passed: false,
+          message: INTERNAL_ERROR_MESSAGE,
+        });
+      }
+    });
+    return results;
+  }
+
   function start() {
     setTimeout(function () {
       if (config.mode === 'test') {
-        runRequirements().then(function (requirements) {
-          post({
-            type: 'diw:result',
-            nonce: nonce,
-            requirements: requirements,
-            errors: errors,
+        var results = [];
+        runRequirements(results)
+          .catch(function (error) {
+            errors.push(describeError(error));
+          })
+          .then(function () {
+            post({
+              type: 'diw:result',
+              nonce: nonce,
+              requirements: completeResults(results),
+              errors: errors,
+            });
           });
-        });
       } else {
         post({ type: 'diw:ready', nonce: nonce, errors: errors });
       }
     }, 100);
   }
+
+  /*
+   * `pagehide` alone is not enough: for location.href = 'about:blank' Chromium
+   * detaches the frame before its postMessage is delivered, while
+   * `beforeunload` still arrives. But `beforeunload` also fires for
+   * navigations that never unload the page (mailto:, tel:), so it is only
+   * provisional: a short timer posts `diw:survived` if this document is still
+   * alive, and the parent then cancels the pending failure. After `pagehide`
+   * the page is gone for good and `diw:survived` is never posted.
+   */
+  var SURVIVED_DELAY_MS = 30;
+  var pageHidden = false;
+
+  function postUnload() {
+    post({ type: 'diw:unload', nonce: nonce });
+  }
+  window.addEventListener('pagehide', function () {
+    pageHidden = true;
+    postUnload();
+  });
+  window.addEventListener('beforeunload', function () {
+    postUnload();
+    setTimeout(function () {
+      if (!pageHidden) {
+        post({ type: 'diw:survived', nonce: nonce });
+      }
+    }, SURVIVED_DELAY_MS);
+  });
+
+  /* Before student code runs: tells the parent this harness is alive. */
+  post({ type: 'diw:started', nonce: nonce });
 
   if (document.readyState === 'complete') {
     start();
