@@ -60,7 +60,8 @@ afterEach(() => {
 });
 
 describe('runInIframe', () => {
-  it('mounts one fresh iframe with exactly allow-scripts', async () => {
+  // v4: submit must work in the sandbox, so allow-forms joins allow-scripts.
+  it('mounts one fresh iframe with exactly allow-scripts allow-forms', async () => {
     const host = container();
     const { iframe, result } = runInIframe(host, files, {
       mode: 'preview',
@@ -68,7 +69,7 @@ describe('runInIframe', () => {
     });
 
     expect(host.firstElementChild).toBe(iframe);
-    expect(iframe.getAttribute('sandbox')).toBe('allow-scripts');
+    expect(iframe.getAttribute('sandbox')).toBe('allow-scripts allow-forms');
 
     const srcdoc = await waitForSrcdoc(iframe);
     send(iframe, {

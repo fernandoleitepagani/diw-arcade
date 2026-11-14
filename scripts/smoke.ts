@@ -21,6 +21,7 @@ import {
   type SmokeViolation,
   type Viewport,
 } from './lib/smoke-routes';
+import { runRunnerProbe } from './lib/runner-probe';
 
 const DIST = fileURLToPath(new URL('../dist', import.meta.url));
 const BLANK_FIXTURE = fileURLToPath(
@@ -56,6 +57,10 @@ const OVERFLOW_FIXTURE = `<!doctype html>
     </div>
   </body>
 </html>`;
+
+/** Página-pai em branco da sonda do runner: só dá uma origem http real. */
+const RUNNER_PAGE =
+  '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>sonda</title></head><body></body></html>';
 
 const MIME_TYPES: Record<string, string> = {
   '.css': 'text/css; charset=utf-8',
@@ -511,7 +516,31 @@ async function runSelftest(): Promise<number> {
   }
 }
 
+async function runRunner(): Promise<number> {
+  try {
+    await stat(resolve(DIST, 'index.html'));
+  } catch {
+    console.error('runner: dist/index.html ausente; rode npm run build antes.');
+    return 1;
+  }
+
+  const server = await serve(DIST, { '/runner-probe.html': RUNNER_PAGE });
+  let browser: Browser | undefined;
+
+  try {
+    browser = await startBrowser();
+    return await runRunnerProbe(browser, server.url);
+  } finally {
+    await browser?.close();
+    await server.close();
+  }
+}
+
 async function main(): Promise<void> {
+  if (process.argv.includes('--runner')) {
+    process.exitCode = await runRunner();
+    return;
+  }
   const selftest = process.argv.includes('--selftest');
   process.exitCode = selftest ? await runSelftest() : await runSmoke();
 }

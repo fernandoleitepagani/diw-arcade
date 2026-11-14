@@ -406,4 +406,30 @@ describe('harness checks', () => {
     expect(message.type).toBe('diw:ready');
     expect(message.errors).toEqual([]);
   });
+
+  it('runs a submit handler that sees the event already cancelled', async () => {
+    const message = await runTest({
+      html: '<form id="f"><button id="go">ok</button></form>',
+      js: [
+        "document.getElementById('f').addEventListener('submit', function (e) {",
+        "  document.body.setAttribute('data-prevented', String(e.defaultPrevented));",
+        '});',
+      ].join('\n'),
+      requirements: [
+        requirement(
+          'cancelado',
+          {
+            kind: 'attr',
+            selector: 'body',
+            name: 'data-prevented',
+            match: { equals: 'true' },
+          },
+          [{ do: 'click', selector: '#go' }],
+        ),
+      ],
+    });
+
+    expect(message.type).toBe('diw:result');
+    expect(message.requirements.map((result) => result.passed)).toEqual([true]);
+  });
 });
