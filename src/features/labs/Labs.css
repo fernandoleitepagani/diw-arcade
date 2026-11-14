@@ -3,7 +3,45 @@
   justify-items: stretch;
 }
 
-/* Guide intro */
+/* Guide header: back link, h1 and count, as the prototype lesson */
+
+.labs-guide__crumb {
+  margin-bottom: -0.5rem;
+}
+
+.labs-guide__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--muted);
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.labs-guide__back:hover {
+  color: var(--text);
+}
+
+.labs-guide__back:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
+.labs-guide__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.labs-guide__head h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.15;
+}
 
 .labs-guide__intro {
   display: grid;
@@ -13,14 +51,11 @@
 
 .labs-guide__title {
   color: var(--text);
-  font-family: var(--font-body), system-ui, sans-serif;
-  font-size: clamp(1.25rem, 2.6vw, 1.6rem);
-  font-weight: 700;
-  line-height: 1.3;
+  font: 600 20px/1.2 var(--font-body);
 }
 
 .labs-page .labs-guide__summary {
-  color: var(--text-muted);
+  color: var(--muted);
   line-height: 1.65;
 }
 
@@ -129,12 +164,12 @@
 
 /* The rubric is taller than the viewport, so it flows with the page instead
    of becoming a scroll region only a pointer user can reach. */
+/* Count: hard 2px edge, no rounding. */
 .labs-guide__count {
   padding: 0.2rem 0.55rem;
-  border: 1px solid var(--edge);
+  border: 2px solid var(--edge);
   color: var(--muted);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
+  font: 400 13px var(--font-mono), monospace;
   white-space: nowrap;
 }
 
@@ -165,10 +200,9 @@
 
 .labs-page .labs-section > h2 {
   padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--border);
+  border-bottom: 2px solid var(--edge);
   color: var(--text);
-  font-size: 1rem;
-  font-weight: 700;
+  font: 600 20px/1.2 var(--font-body);
 }
 
 .labs-rubric {
@@ -181,10 +215,7 @@
 .labs-rubric > li {
   padding-block: var(--space-3);
   padding-inline: var(--space-3) var(--space-4);
-  border-inline-start: 2px solid var(--accent);
-  border-start-end-radius: var(--radius-sm);
-  border-end-end-radius: var(--radius-sm);
-  background: var(--surface-2);
+  border-inline-start: 2px solid var(--edge);
 }
 
 .labs-page .labs-rubric > li > p {
@@ -194,7 +225,7 @@
 
 .labs-page .labs-rubric .labs-source {
   margin-block-start: var(--space-1);
-  color: var(--text-muted);
+  color: var(--muted);
   font-family: var(--font-mono), monospace;
   font-size: 0.75rem;
   line-height: 1.4;
@@ -204,23 +235,18 @@
 
 .labs-tips {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   gap: var(--space-3);
 }
 
-.labs-tips__group {
-  padding: var(--space-4);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--surface-2);
+.labs-tips__group + .labs-tips__group {
+  padding-block-start: var(--space-3);
+  border-block-start: 2px solid var(--edge);
 }
 
 .labs-tips__group h3 {
   margin-bottom: var(--space-2);
-  color: var(--accent);
-  font-family: var(--font-mono), monospace;
-  font-size: 0.8rem;
-  font-weight: 700;
+  color: var(--muted);
+  font: 400 13px var(--font-mono), monospace;
   letter-spacing: 0.08em;
 }
 
@@ -234,33 +260,17 @@
 .labs-tips__group li {
   display: flex;
   gap: var(--space-2);
-  color: var(--text-muted);
+  color: var(--muted);
   font-size: 0.9rem;
   line-height: 1.5;
 }
 
 .labs-tips__group li::before {
   content: "›";
-  color: var(--accent);
-  font-weight: 700;
+  color: var(--text);
 }
 
-.labs-guide__aside .labs-tips {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.labs-guide__aside .labs-tips__group {
-  padding: 0;
-  border: 0;
-  background: none;
-}
-
-.labs-guide__aside .labs-tips__group + .labs-tips__group {
-  padding-block-start: var(--space-3);
-  border-block-start: 1px solid var(--border);
-}
-
-/* Steps */
+/* Steps: notched panel per step, checklist box in the .opt key style. */
 
 .labs-steps {
   display: grid;
@@ -271,14 +281,25 @@
 }
 
 .labs-step {
+  --edge-color: var(--edge);
+  position: relative;
+  isolation: isolate;
   display: grid;
-  grid-template-columns: 2rem minmax(0, 1fr);
+  grid-template-columns: 28px minmax(0, 1fr);
   gap: var(--space-3) var(--space-4);
   padding: var(--space-5);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
+  background: var(--edge-color);
+  clip-path: var(--notch);
   counter-increment: step;
+}
+
+.labs-step::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  z-index: -1;
+  background: var(--panel);
+  clip-path: var(--notch);
 }
 
 .labs-step > * {
@@ -291,65 +312,74 @@
   grid-column: 1;
   grid-row: 1;
   place-items: center;
-  width: 2rem;
-  height: 2rem;
-  border: 1px solid var(--accent);
-  border-radius: var(--radius-sm);
-  color: var(--accent);
-  font-family: var(--font-mono), monospace;
-  font-size: 0.9rem;
-  font-weight: 700;
-  line-height: 1;
+  width: 28px;
+  height: 28px;
+  background: var(--edge-color);
+  color: var(--muted);
+  font: 400 13px var(--font-mono), monospace;
 }
 
 .labs-step[data-done="true"] {
-  border-color: rgb(124 255 107 / 0.45);
+  --edge-color: var(--ok);
 }
 
 .labs-step[data-done="true"]::before {
-  border-color: var(--success);
-  color: var(--success);
+  color: var(--on-u);
 }
 
 .labs-step__title {
   align-self: center;
   color: var(--text);
-  font-size: 1.05rem;
-  font-weight: 700;
-  line-height: 1.35;
+  font: 600 20px/1.2 var(--font-body);
 }
 
 .labs-step__check {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
   justify-self: start;
   min-height: 44px;
-  padding-block: var(--space-1);
-  padding-inline: var(--space-2) var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--surface-2);
   cursor: pointer;
 }
 
 .labs-step__check input {
-  width: 1.1rem;
-  height: 1.1rem;
+  appearance: none;
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
   margin: 0;
-  accent-color: var(--success);
+  border: 2px solid var(--edge);
+  background: var(--panel);
+  color: var(--on-u);
+  font: 400 13px var(--font-mono), monospace;
   cursor: pointer;
 }
 
+.labs-step__check input:checked {
+  border-color: var(--ok);
+  background: var(--ok);
+}
+
+.labs-step__check input:checked::before {
+  content: "✓";
+}
+
+.labs-step__check input:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 2px;
+}
+
 .labs-step__check span {
-  color: var(--text-muted);
+  color: var(--muted);
   font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.4;
 }
 
 .labs-step__check input:checked + span {
-  color: var(--success);
+  color: var(--text);
 }
 
 .labs-page .labs-step__body {
@@ -373,20 +403,19 @@
 .labs-step__checklist li {
   display: flex;
   gap: var(--space-2);
-  color: var(--text-muted);
+  color: var(--muted);
   font-size: 0.9rem;
   line-height: 1.5;
 }
 
 .labs-step__checklist li::before {
   content: "▸";
-  color: var(--accent);
+  color: var(--text);
 }
 
 .labs-code {
   overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border: 2px solid var(--edge);
   background: var(--bg);
 }
 
@@ -397,19 +426,17 @@
   gap: var(--space-2);
   padding-block: var(--space-1);
   padding-inline: var(--space-3) var(--space-1);
-  border-bottom: 1px solid var(--border);
-  background: var(--surface-2);
+  border-bottom: 2px solid var(--edge);
 }
 
 .labs-code__lang {
-  color: var(--text-muted);
+  color: var(--muted);
   font-family: var(--font-mono), monospace;
   font-size: 0.75rem;
 }
 
-.labs-code__bar .ui-button {
-  min-height: 2.25rem;
-  padding-block: 0.35rem;
+.labs-code__bar .btn {
+  min-height: 44px;
   padding-inline: var(--space-3);
   font-size: 0.875rem;
 }
@@ -429,27 +456,21 @@
 }
 
 .labs-page .labs-step__repo {
-  color: var(--text-muted);
+  color: var(--muted);
   font-size: 0.85rem;
   overflow-wrap: anywhere;
 }
 
 .labs-step__repo a {
-  color: var(--accent);
+  color: var(--text);
   font-family: var(--font-mono), monospace;
+  text-underline-offset: 3px;
 }
 
 @media (max-width: 520px) {
   .labs-step {
-    grid-template-columns: 1.75rem minmax(0, 1fr);
     gap: var(--space-2) var(--space-3);
     padding: var(--space-4);
-  }
-
-  .labs-step::before {
-    width: 1.75rem;
-    height: 1.75rem;
-    font-size: 0.8rem;
   }
 
   .labs-code__pre {

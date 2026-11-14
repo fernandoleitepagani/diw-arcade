@@ -1,6 +1,8 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { Route, Routes } from 'react-router';
 import { describe, expect, it } from 'vitest';
+import { SessionLayout } from '../../app/SessionLayout';
 import { BIT_LINES } from '../../content/copy';
 import type { Flashcard } from '../../content/schema';
 import { toDayKey } from '../../lib/game/days';
@@ -311,5 +313,27 @@ describe('FlashcardSession', () => {
     );
 
     expect(container.textContent).not.toContain('·');
+  });
+
+  it('shows the card number in the session bar and advances it after rating', async () => {
+    const user = userEvent.setup();
+    const cards = [makeFlashcard(1), makeFlashcard(2)];
+    renderWithProgress(
+      <Routes>
+        <Route element={<SessionLayout />}>
+          <Route path="/" element={<FlashcardSession flashcards={cards} />} />
+        </Route>
+      </Routes>,
+      { now: FIXED_NOW },
+    );
+
+    const bar = document.querySelector('.session-layout__count');
+    expect(bar).toHaveTextContent('1 de 2');
+
+    await user.keyboard('{Enter}');
+    await user.keyboard('3');
+
+    // A new card rated Bom returns within 15 minutes, so the total grows.
+    expect(bar).toHaveTextContent('2 de 3');
   });
 });
