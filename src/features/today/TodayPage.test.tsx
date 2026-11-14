@@ -29,7 +29,8 @@ describe('TodayPage', () => {
   it('labels the unit with a Tag', () => {
     renderWithProgress(<TodayPage />);
 
-    expect(screen.getByText('Fundamentos da Web')).toBeInTheDocument();
+    // v4: unit renamed to match prototype
+    expect(screen.getByText('Fundamentos')).toBeInTheDocument();
   });
 
   it('puts due cards first', () => {

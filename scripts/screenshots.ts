@@ -239,6 +239,9 @@ async function smallTargets(page: Page): Promise<number> {
       const r = el.getBoundingClientRect();
       const style = getComputedStyle(el);
       if (r.width === 0 || r.height === 0 || style.visibility === 'hidden') return;
+      // Skip link and sr-only elements are visually hidden (1px clip).
+      if (el.matches('.shell__skip, .sr-only, .visually-hidden')) return;
+      if (r.width <= 1 && r.height <= 1) return;
       if (r.width < 44 || r.height < 44) n += 1;
     });
     return n;

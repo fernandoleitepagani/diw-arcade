@@ -136,7 +136,8 @@ describe('ProgressProvider save import', () => {
     await user.click(screen.getByRole('button', { name: 'Importar progresso' }));
 
     expect(
-      screen.queryByText('Unidade concluída: Fundamentos da Web'),
+      // v4: unit renamed to match prototype
+      screen.queryByText('Unidade concluída: Fundamentos'),
     ).not.toBeInTheDocument();
   });
 
@@ -151,7 +152,8 @@ describe('ProgressProvider save import', () => {
     );
 
     expect(
-      screen.getAllByText('Unidade concluída: Fundamentos da Web'),
+      // v4: unit renamed to match prototype
+      screen.getAllByText('Unidade concluída: Fundamentos'),
     ).toHaveLength(1);
   });
 });

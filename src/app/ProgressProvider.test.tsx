@@ -181,7 +181,8 @@ describe('ProgressProvider', () => {
     await user.click(screen.getByRole('button', { name: 'Concluir unidade' }));
 
     expect(
-      screen.getByText('Unidade concluída: Fundamentos da Web'),
+      // v4: unit renamed to match prototype
+      screen.getByText('Unidade concluída: Fundamentos'),
     ).toBeInTheDocument();
   });
 

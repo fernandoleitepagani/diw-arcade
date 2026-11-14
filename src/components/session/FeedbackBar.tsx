@@ -1,4 +1,4 @@
-import { forwardRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import type { ReactNode } from "react";
 import { Button } from "../pixel/Button/Button";
 import { PixelIcon } from "../pixel/PixelIcon/PixelIcon";
@@ -32,9 +32,33 @@ export const FeedbackBar = forwardRef<HTMLButtonElement, FeedbackBarProps>(
     ref,
   ) {
     const correct = verdict === "correct";
+    const barRef = useRef<HTMLDivElement>(null);
+
+    // Publishes the bar height so the toast stack can sit above it.
+    useEffect(() => {
+      const bar = barRef.current;
+      if (!bar) return;
+      const root = document.documentElement;
+      const publish = () =>
+        root.style.setProperty(
+          "--feedback-bar-h",
+          `${bar.getBoundingClientRect().height}px`,
+        );
+      publish();
+      const observer =
+        typeof ResizeObserver === "undefined"
+          ? null
+          : new ResizeObserver(publish);
+      observer?.observe(bar);
+      return () => {
+        observer?.disconnect();
+        root.style.removeProperty("--feedback-bar-h");
+      };
+    }, []);
 
     return (
       <div
+        ref={barRef}
         className={["feedback-bar", `feedback-bar--${verdict}`, className]
           .filter(Boolean)
           .join(" ")}
