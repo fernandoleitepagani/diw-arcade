@@ -301,6 +301,33 @@ describe('ChallengeView', () => {
     expect(follows(run, requirements)).toBe(true);
   });
 
+  it('puts the editor and preview side by side with requisitos below', () => {
+    const { container } = renderView(vi.fn());
+
+    const grid = container.querySelector('.challenge-view__grid') as HTMLElement;
+    const editor = screen.getByRole('region', { name: 'Editor de código' });
+    const preview = screen.getByRole('region', { name: 'Pré-visualização' });
+    const requirements = screen.getByRole('complementary', {
+      name: 'Requisitos',
+    });
+
+    expect(grid.children).toHaveLength(2);
+    expect(grid).toContainElement(editor);
+    expect(grid).toContainElement(preview);
+    expect(grid).not.toContainElement(requirements);
+    expect(
+      Boolean(
+        preview.compareDocumentPosition(requirements) &
+          Node.DOCUMENT_POSITION_FOLLOWING,
+      ),
+    ).toBe(true);
+    expect(
+      requirements.parentElement?.contains(
+        screen.getByRole('link', { name: /Ver nó/ }),
+      ),
+    ).toBe(true);
+  });
+
   it('keeps hint and keyboard copy free of middle dots', async () => {
     const user = userEvent.setup();
     const { container } = renderView(vi.fn());
