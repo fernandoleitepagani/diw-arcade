@@ -32,7 +32,8 @@ function renderApp(path: string, storage: StorageLike) {
 }
 
 const pages = [
-  { path: '/hoje', heading: 'Hoje' },
+  // v4: Hoje h1 is the prototype greeting
+  { path: '/hoje', heading: 'Bom te ver de volta.' },
   {
     path: '/trilha',
     heading: 'DIW Arcade',

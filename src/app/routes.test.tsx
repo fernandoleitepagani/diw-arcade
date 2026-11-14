@@ -26,7 +26,8 @@ function renderAt(path: string) {
 }
 
 const pages = [
-  { path: '/hoje', heading: 'Hoje' },
+  // v4: Hoje h1 is the prototype greeting
+  { path: '/hoje', heading: 'Bom te ver de volta.' },
   { path: '/trilha', heading: 'DIW Arcade' },
   { path: '/progresso', heading: 'Progresso' },
   { path: '/no/n01', heading: 'Introdução à Web e tecnologias' },
