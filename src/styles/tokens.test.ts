@@ -56,6 +56,12 @@ function contrast(foreground: string, background: string): number {
 }
 
 describe('design tokens', () => {
+  it('aliases the display and mono fonts to the v3 font tokens', () => {
+    expect(parseCssTokens(css)['--font-display']).toBe('var(--font-px)');
+    expect(parseCssTokens(css)['--font-mono']).toBe('var(--font-code)');
+    expect(css.toLowerCase()).not.toContain('#0a1128');
+  });
+
   it('keeps tokens.css and tokens.ts in sync', () => {
     const declared = parseCssTokens(css);
 
