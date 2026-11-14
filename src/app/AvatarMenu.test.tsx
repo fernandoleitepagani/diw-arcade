@@ -21,8 +21,9 @@ describe('AvatarMenu', () => {
     const icon = badge?.querySelector('svg.px-i');
     expect(icon).not.toBeNull();
     expect(icon).toHaveAttribute('aria-hidden', 'true');
-    expect(icon).toHaveAttribute('width', '24');
-    expect(icon).toHaveAttribute('height', '24');
+    // v4: same glyph size as the theme toggle icon (default scale, 8x8 at 2x).
+    expect(icon).toHaveAttribute('width', '16');
+    expect(icon).toHaveAttribute('height', '16');
     expect(trigger).not.toHaveTextContent('A');
     expect(trigger).toHaveTextContent('');
   });

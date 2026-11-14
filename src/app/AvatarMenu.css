@@ -11,8 +11,13 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--text);
+  color: var(--muted);
   cursor: pointer;
+}
+
+.avatar-menu__trigger:hover,
+.avatar-menu__trigger[aria-expanded='true'] {
+  color: var(--text);
 }
 
 .avatar-menu__badge {
@@ -20,9 +25,6 @@
   place-items: center;
   width: 36px;
   height: 36px;
-  font-family: var(--font-px);
-  font-size: 20px;
-  font-weight: 700;
 }
 
 .avatar-menu__badge::before {

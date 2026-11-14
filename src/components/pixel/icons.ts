@@ -130,6 +130,16 @@ export const ICON_ROWS = {
     'X......X',
     'XXXXXXXX',
   ],
+  gear: [
+    '.X.XX.X.',
+    'XXXXXXXX',
+    '.XX..XX.',
+    'XX....XX',
+    'XX....XX',
+    '.XX..XX.',
+    'XXXXXXXX',
+    '.X.XX.X.',
+  ],
   cursor: [
     'X.......',
     'XX......',
