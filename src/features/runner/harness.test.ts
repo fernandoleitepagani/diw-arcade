@@ -458,6 +458,39 @@ describe('harness checks', () => {
     expect(message.errors).toEqual([]);
   });
 
+  // v4: submit is not composed, so the window guard never sees a shadow-root form.
+  it.each(['open', 'closed'] as const)(
+    'cancels the submit of a form inside a %s shadow root',
+    async (mode) => {
+      const message = await runTest({
+        html: '<div id="host"></div>',
+        js: [
+          "var root = document.getElementById('host').attachShadow({ mode: '" + mode + "' });",
+          "root.innerHTML = '<form id=\"f\"><button id=\"go\">ok</button></form>';",
+          "root.getElementById('f').addEventListener('submit', function (e) {",
+          "  document.body.setAttribute('data-prevented', String(e.defaultPrevented));",
+          '});',
+          "var btn = root.getElementById('go');",
+          "document.getElementById('host').addEventListener('click', function () { btn.click(); });",
+        ].join('\n'),
+        requirements: [
+          requirement(
+            'cancelado',
+            {
+              kind: 'attr',
+              selector: 'body',
+              name: 'data-prevented',
+              match: { equals: 'true' },
+            },
+            [{ do: 'click', selector: '#host' }],
+          ),
+        ],
+      });
+
+      expect(message.requirements.map((result) => result.passed)).toEqual([true]);
+    },
+  );
+
   describe('lifecycle', () => {
     async function collect(options: HarnessOptions): Promise<string[]> {
       const nonce = 'ciclo-vida';
@@ -503,6 +536,67 @@ describe('harness checks', () => {
         expect(seen).toContain(mode === 'test' ? 'diw:result' : 'diw:ready');
       },
     );
+
+    // v4: AC4 beforeunload is provisional; the harness reports that it survived.
+    it('posts diw:survived after a beforeunload the document outlives', async () => {
+      const nonce = 'ciclo-vida';
+      const srcdoc = buildSrcdoc(
+        { html: '', css: '', js: '' },
+        { nonce, mode: 'preview', parentOrigin: ORIGIN, requirements: [] },
+        harnessSource,
+      );
+      const dom = new JSDOM(srcdoc, {
+        runScripts: 'dangerously',
+        url: ORIGIN,
+        pretendToBeVisual: true,
+        virtualConsole: new VirtualConsole(),
+      });
+      const seen: string[] = [];
+      dom.window.addEventListener('message', (event) => {
+        const parsed = RunnerMessageSchema.safeParse(event.data);
+        if (parsed.success && parsed.data.nonce === nonce) {
+          seen.push(parsed.data.type);
+        }
+      });
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      seen.length = 0;
+      dom.window.dispatchEvent(new dom.window.Event('beforeunload'));
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      dom.window.close();
+
+      expect(seen).toEqual(['diw:unload', 'diw:survived']);
+    });
+
+    it('does not post diw:survived once pagehide has fired', async () => {
+      const nonce = 'ciclo-vida';
+      const srcdoc = buildSrcdoc(
+        { html: '', css: '', js: '' },
+        { nonce, mode: 'preview', parentOrigin: ORIGIN, requirements: [] },
+        harnessSource,
+      );
+      const dom = new JSDOM(srcdoc, {
+        runScripts: 'dangerously',
+        url: ORIGIN,
+        pretendToBeVisual: true,
+        virtualConsole: new VirtualConsole(),
+      });
+      const seen: string[] = [];
+      dom.window.addEventListener('message', (event) => {
+        const parsed = RunnerMessageSchema.safeParse(event.data);
+        if (parsed.success && parsed.data.nonce === nonce) {
+          seen.push(parsed.data.type);
+        }
+      });
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      seen.length = 0;
+      dom.window.dispatchEvent(new dom.window.Event('beforeunload'));
+      dom.window.dispatchEvent(new dom.window.Event('pagehide'));
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      dom.window.close();
+
+      expect(seen).not.toContain('diw:survived');
+      expect(seen).toContain('diw:unload');
+    });
 
     it('posts diw:started synchronously, even when student code throws', async () => {
       const seen = await collect({ js: 'throw new Error("boom");' });
