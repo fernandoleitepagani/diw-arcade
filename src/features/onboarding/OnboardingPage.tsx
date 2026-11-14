@@ -4,7 +4,7 @@ import { useProgress } from '../../app/ProgressProvider';
 import { usePageTitle } from '../../app/usePageTitle';
 import { Bit } from '../../components/pixel/Bit/Bit';
 import { PixelPanel } from '../../components/pixel/PixelPanel/PixelPanel';
-import { Button } from '../../components/ui';
+import { Button } from '../../components/pixel/Button/Button';
 import { pickLine } from '../../content/copy';
 import type { DailyGoal } from '../../lib/progress/events';
 import './OnboardingPage.css';
@@ -82,8 +82,7 @@ export function OnboardingPage() {
               key={goal}
               ref={goal === RECOMMENDED_GOAL ? recommendedRef : undefined}
               className="onboarding__goal"
-              size="lg"
-              variant={goal === RECOMMENDED_GOAL ? 'primary' : 'secondary'}
+              variant={goal === RECOMMENDED_GOAL ? 'primary' : 'quiet'}
               onClick={() => finish(goal)}
             >
               {label}
@@ -93,7 +92,7 @@ export function OnboardingPage() {
 
         <Button
           className="onboarding__skip"
-          variant="ghost"
+          variant="quiet"
           onClick={() => finish()}
         >
           Pular
