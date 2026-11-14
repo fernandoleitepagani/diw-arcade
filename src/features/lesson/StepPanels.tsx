@@ -217,7 +217,11 @@ export function ConstruirPanel({
               <Row
                 key={lab.id}
                 icon="braces"
-                action={{ label: 'Abrir', to: `/laboratorios/${lab.id}` }}
+                action={{
+                  label: 'Abrir',
+                  ariaLabel: `Abrir ${lab.title}`,
+                  to: `/laboratorios/${lab.id}`,
+                }}
               >
                 <b className="lesson-panel__lab-title">{lab.title}</b>
                 <span className="lesson-panel__lab-status">{lab.status}</span>

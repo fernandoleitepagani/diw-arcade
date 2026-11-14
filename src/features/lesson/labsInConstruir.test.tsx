@@ -49,4 +49,15 @@ describe('labs in Construir (AC8)', () => {
     expect(within(row).getByText(lab.title)).toBeInTheDocument();
     expect(within(row).getByText(`1 de ${lab.steps.length} passos`)).toBeInTheDocument();
   });
+
+  it('names each lab link with its own title', () => {
+    renderConstruir('n13', {});
+    const links = screen
+      .getAllByRole('link')
+      .filter((a) => a.getAttribute('href')?.startsWith('/laboratorios/'));
+    expect(links.length).toBeGreaterThan(1);
+    const names = links.map((a) => a.getAttribute('aria-label'));
+    expect(new Set(names).size).toBe(names.length);
+    for (const name of names) expect(name).toMatch(/^Abrir .{3,}/);
+  });
 });

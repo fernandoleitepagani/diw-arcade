@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it } from 'vitest';
 import { getChallenges, getFlashcards, NODES, UNITS, type NodeId } from '../../content';
@@ -65,7 +65,10 @@ describe('SkillTree', () => {
       .filter((link) => /^\/no\//.test(link.getAttribute('href') ?? ''));
     expect(links).toHaveLength(NODES.length);
     for (const [index, link] of links.entries()) {
-      expect(link).toHaveAccessibleName(`${NODES[index]!.title}, Não iniciado`);
+      // v4: the current node's name also carries the "você está aqui" suffix.
+      expect(link.getAttribute('aria-label')).toMatch(
+        new RegExp(`^${NODES[index]!.title}, Não iniciado(, você está aqui, 0 de 4 passos)?$`),
+      );
     }
     expect(screen.queryByText('Em dia')).not.toBeInTheDocument();
   });
@@ -82,7 +85,7 @@ describe('SkillTree', () => {
       }),
     );
 
-    expect(screen.getByRole('link', { name: 'Flexbox e Grid, Em andamento' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /^Flexbox e Grid, Em andamento/ })).toHaveAttribute(
       'href',
       '/no/n09',
     );
@@ -98,9 +101,10 @@ describe('SkillTree', () => {
       .filter((link) => /^\/no\//.test(link.getAttribute('href') ?? ''));
     expect(links).toHaveLength(20);
     expect(links[0]).toHaveAttribute('href', '/no/n01');
-    expect(links[0]).toHaveTextContent('01');
+    // v4: the number is drawn by CSS from data-n.
+    expect(links[0]!.querySelector('.skill-node__lbl')).toHaveAttribute('data-n', '01');
     expect(links[19]).toHaveAttribute('href', '/no/n20');
-    expect(links[19]).toHaveTextContent('20');
+    expect(links[19]!.querySelector('.skill-node__lbl')).toHaveAttribute('data-n', '20');
   });
 
   it('shows the Prova 2 unit heading with its x de y count', () => {
@@ -122,17 +126,20 @@ describe('SkillTree', () => {
   it('marks exactly one node with "Você está aqui, k de 4 passos"', () => {
     renderTree();
 
-    const marker = screen.getByText('Você está aqui, 0 de 4 passos');
-    expect(screen.getAllByText(/Você está aqui/)).toHaveLength(1);
-    expect(marker.closest('a')).toHaveAttribute('href', '/no/n01');
+    // v4: the marker lives in the link's accessible name, not in sr-only text.
+    const marker = screen.getByRole('link', {
+      name: new RegExp(`^${NODES[0]!.title}, Não iniciado, você está aqui, 0 de 4 passos$`),
+    });
+    expect(screen.getAllByRole('link', { name: /você está aqui/ })).toHaveLength(1);
+    expect(marker).toHaveAttribute('href', '/no/n01');
   });
 
   it('counts the finished lesson steps in the marker', () => {
     renderTree(mastered(['n01', 'n02']));
 
-    const marker = screen.getByText(/Você está aqui/);
-    expect(marker.closest('a')).toHaveAttribute('href', '/no/n03');
-    expect(marker).toHaveTextContent('Você está aqui, 0 de 4 passos');
+    // v4: the marker lives in the link's accessible name, not in sr-only text.
+    const marker = screen.getByRole('link', { name: /você está aqui, 0 de 4 passos$/ });
+    expect(marker).toHaveAttribute('href', '/no/n03');
   });
 
   it('keeps every unit expanded, with no buttons and no Projetos block', () => {
@@ -150,7 +157,9 @@ describe('SkillTree', () => {
     renderTree();
 
     const link = screen.getByRole('link', { name: /Introdução à Web/ });
-    expect(within(link).getByText('01').closest('.skill-node__lbl')).not.toBeNull();
+    // v4: the number is drawn by CSS from data-n; no duplicate sr-only copy.
+    expect(link.querySelector('.skill-node__lbl')).toHaveAttribute('data-n', '01');
+    expect(link.querySelector('.sr-only')).toBeNull();
     expect(link.querySelector('.node-disc svg[aria-hidden="true"]')).not.toBeNull();
   });
 });

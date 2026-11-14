@@ -29,7 +29,7 @@ function useOptionalProgress(): ProgressContextValue | null {
 }
 
 export function TreePage() {
-  usePageTitle('Árvore');
+  usePageTitle('Trilha');
   const progress = useOptionalProgress();
   const save = progress?.save ?? ISOLATED_SAVE;
   const now = progress?.now ?? ISOLATED_NOW;

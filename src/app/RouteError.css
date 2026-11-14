@@ -9,6 +9,13 @@
   text-align: center;
 }
 
+.route-error h1 {
+  max-width: 28ch;
+  font-size: clamp(1.25rem, 1rem + 1.2vw, 1.75rem);
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
 .route-error h1:focus-visible {
   outline-offset: 6px;
 }

@@ -7,7 +7,8 @@ import './Row.css';
 export interface RowProps {
   icon: IconName;
   children: ReactNode;
-  action: { label: string; to: string };
+  /** `ariaLabel` gives repeated labels ("Abrir") a distinct accessible name. */
+  action: { label: string; to: string; ariaLabel?: string };
 }
 
 export function Row({ icon, children, action }: RowProps) {
@@ -17,7 +18,7 @@ export function Row({ icon, children, action }: RowProps) {
         <PixelIcon name={icon} scale={3} />
       </span>
       <div className="row__t">{children}</div>
-      <Link className="row__go" to={action.to}>
+      <Link className="row__go" to={action.to} aria-label={action.ariaLabel}>
         {action.label}
         <PixelIcon name="route" />
       </Link>

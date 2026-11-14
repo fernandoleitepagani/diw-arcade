@@ -415,3 +415,9 @@
     animation: none;
   }
 }
+
+/* No rounded corners anywhere: the sandbox frame is square inside the notched device. */
+.challenge-view__device .sandbox-frame__viewport,
+.challenge-view__device .sandbox-frame__report {
+  border-radius: 0;
+}
