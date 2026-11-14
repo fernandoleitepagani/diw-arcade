@@ -83,6 +83,9 @@ export function runInIframe(
     let startTimer: number | undefined;
     let totalTimer: number | undefined;
     let unloadTimer: number | undefined;
+    // An accepted diw:unload was seen: the frame may have left while the
+    // navigation request was still in flight (see the total timer below).
+    let unloadSeen = false;
 
     function settle(value: RunResult): void {
       phase = 'settled';
@@ -127,6 +130,7 @@ export function runInIframe(
         case 'diw:unload':
           // Provisional: beforeunload also fires for mailto:/tel: navigations.
           // A real reload fails sooner, through the second diw:started.
+          unloadSeen = true;
           window.clearTimeout(unloadTimer);
           unloadTimer = window.setTimeout(
             () => fail(NAVIGATION_MESSAGE),
@@ -160,7 +164,10 @@ export function runInIframe(
       startTimer = window.setTimeout(() => fail(START_FAILED_MESSAGE), startMs);
       totalTimer = window.setTimeout(() => {
         if (phase === 'running') {
-          fail(TIMEOUT_MESSAGE);
+          // A slow navigation posts diw:survived while its request is in
+          // flight and the pagehide unload then comes from a replaced frame
+          // that is ignored: no result arrives, but it was not a loop.
+          fail(unloadSeen ? NAVIGATION_MESSAGE : TIMEOUT_MESSAGE);
         }
       }, totalMs);
     });
