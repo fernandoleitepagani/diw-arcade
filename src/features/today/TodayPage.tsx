@@ -99,7 +99,7 @@ export function TodayPage() {
   const unitColor = unit ? UNIT_COLOR[unit.id] : undefined;
 
   return (
-    <div className="page today">
+    <div className="today">
       <h1 className="today__hello">Bom te ver de volta.</h1>
 
       <PixelPanel as="section" className="today__next" aria-labelledby="today-next">
