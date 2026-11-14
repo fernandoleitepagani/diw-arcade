@@ -4,13 +4,13 @@ import { createServer } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { extname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { chromium } from 'playwright';
+import { tmpdir } from 'node:os';
+import { chromium, type Page } from 'playwright';
+import { filterScreens, protoShotName, type ProtoScreen } from './lib/shots';
 import { SMOKE_ROUTES, THEMES, VIEWPORTS } from './lib/smoke-routes';
 
 /** Fora do repositório: nada daqui é commitado. */
-const OUT =
-  process.env.SHOTS_DIR ??
-  '/tmp/claude-1000/-home-fernandoleitepagani-Projects-DIW-Gameplay/e2a8c867-f735-4c99-836d-8d9b268a7f40/scratchpad/shots';
+const OUT = process.env.SHOTS_DIR ?? join(tmpdir(), 'diw-arcade-shots');
 const DIST = fileURLToPath(new URL('../dist', import.meta.url));
 const CONTENT = fileURLToPath(new URL('../src/content', import.meta.url));
 const SAVE_KEY = 'diw-arcade:save';
@@ -164,6 +164,134 @@ async function serve(): Promise<{ url: string; close: () => void }> {
   return { url: `http://127.0.0.1:${port}`, close: () => server.close() };
 }
 
+interface Question {
+  type: 'mcq' | 'tf' | 'fill';
+  prompt: string;
+  options?: string[];
+  answer?: number | boolean;
+  answers?: string[];
+}
+
+const QUESTIONS = JSON.parse(
+  readFileSync(join(CONTENT, 'n09', 'questions.json'), 'utf8'),
+) as Question[];
+
+const squash = (text: string): string => text.replace(/\s+/g, ' ').trim();
+
+/** Responde a questão exibida, certa ou errada, e devolve ao estado com feedback. */
+async function answerShown(page: Page, correct: boolean): Promise<void> {
+  const prompt = squash(
+    await page.locator('.quiz-round__prompt').first().innerText(),
+  );
+  const q = QUESTIONS.find((item) => squash(item.prompt) === prompt);
+  if (!q) throw new Error(`questão não encontrada: ${prompt}`);
+  if (q.type === 'fill') {
+    const input = page.getByLabel('Sua resposta');
+    await input.fill(correct ? (q.answers?.[0] ?? '') : 'resposta errada');
+    await input.press('Enter');
+    return;
+  }
+  let label: string;
+  if (q.type === 'tf') {
+    label = (q.answer === true) === correct ? 'Verdadeiro' : 'Falso';
+  } else {
+    const options = q.options ?? [];
+    const right = q.answer as number;
+    label = options[correct ? right : (right + 1) % options.length] ?? '';
+  }
+  await page.getByText(label, { exact: true }).click();
+  const send = page.getByRole('button', { name: 'Responder' });
+  if ((await send.count()) > 0) await send.click();
+}
+
+async function continueRound(page: Page): Promise<void> {
+  await page.getByRole('button', { name: 'Continuar' }).click();
+}
+
+async function driveQuiz(page: Page, state: ProtoScreen['state']): Promise<void> {
+  await page.waitForSelector('.quiz-round__prompt', { timeout: 15_000 });
+  if (state === 'quiz') return;
+  if (state === 'quiz-erro') {
+    await answerShown(page, false);
+    await page.waitForSelector('.quiz-round__feedback');
+    return;
+  }
+  for (const correct of [false, false]) {
+    await answerShown(page, correct);
+    await continueRound(page);
+  }
+  const summary = page.locator('[aria-label="Resumo da rodada"]');
+  for (let i = 0; i < 60 && (await summary.count()) === 0; i += 1) {
+    await answerShown(page, true);
+    await continueRound(page);
+  }
+  await summary.waitFor();
+}
+
+/** Elementos interativos visíveis com menos de 44px em alguma dimensão. */
+async function smallTargets(page: Page): Promise<number> {
+  return page.evaluate(() => {
+    const nodes = document.querySelectorAll(
+      'a[href], button, input, select, textarea, [role="button"], [role="tab"]',
+    );
+    let n = 0;
+    nodes.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      const style = getComputedStyle(el);
+      if (r.width === 0 || r.height === 0 || style.visibility === 'hidden') return;
+      if (r.width < 44 || r.height < 44) n += 1;
+    });
+    return n;
+  });
+}
+
+async function protoMain(
+  browser: Awaited<ReturnType<typeof chromium.launch>>,
+  baseUrl: string,
+  only: string | undefined,
+): Promise<number> {
+  let count = 0;
+  for (const screen of filterScreens(only)) {
+    for (const viewport of VIEWPORTS) {
+      for (const theme of THEMES) {
+        const context = await browser.newContext({
+          viewport: { width: viewport.width, height: viewport.height },
+          reducedMotion: 'reduce',
+        });
+        const save = SAVES[screen.persona];
+        await context.addInitScript(`if (window === window.top) { try {
+          localStorage.setItem('diw-theme', ${JSON.stringify(theme)});
+          ${
+            save === null
+              ? `localStorage.removeItem(${JSON.stringify(SAVE_KEY)});`
+              : `localStorage.setItem(${JSON.stringify(SAVE_KEY)}, ${JSON.stringify(JSON.stringify(save))});`
+          }
+        } catch {} }`);
+        const page = await context.newPage();
+        await page.goto(`${baseUrl}${screen.path}`, { waitUntil: 'load' });
+        await page
+          .waitForSelector('main h1', { timeout: 15_000 })
+          .catch(() => undefined);
+        if (screen.state) await driveQuiz(page, screen.state);
+        await page.waitForTimeout(300);
+        for (const full of [false, true]) {
+          const name = protoShotName(viewport, theme, screen.screen, full);
+          await page.screenshot({ path: join(OUT, name), fullPage: full });
+          console.log(join(OUT, name));
+          count += 1;
+        }
+        if (viewport.width < 600) {
+          console.log(
+            `alvos<44px: ${await smallTargets(page)} (${screen.screen}, ${theme})`,
+          );
+        }
+        await context.close();
+      }
+    }
+  }
+  return count;
+}
+
 async function main(): Promise<void> {
   mkdirSync(OUT, { recursive: true });
   const server = await serve();
@@ -174,7 +302,14 @@ async function main(): Promise<void> {
       : {}),
   });
   let count = 0;
+  const args = process.argv.slice(2);
+  const onlyIndex = args.indexOf('--only');
+  const only = onlyIndex >= 0 ? args[onlyIndex + 1] : undefined;
   try {
+    if (args.includes('--proto')) {
+      count = await protoMain(browser, server.url, only);
+    } else
+    {
     for (const route of SMOKE_ROUTES) {
       for (const persona of personasFor(route.path, route.seed)) {
         for (const viewport of VIEWPORTS) {
@@ -208,6 +343,7 @@ async function main(): Promise<void> {
           }
         }
       }
+    }
     }
   } finally {
     await browser.close();
