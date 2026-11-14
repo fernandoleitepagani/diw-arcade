@@ -1,67 +1,138 @@
 .lesson-stepper {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--space-2, 8px);
-  margin: 0;
+  --c: var(--accent);
+  display: flex;
+  width: 100%;
+  margin: 0 0 48px;
   padding: 0;
   list-style: none;
 }
 
-.lesson-stepper__link {
+.lesson-stepper__item {
   position: relative;
-  display: grid;
-  gap: 2px;
-  min-height: 56px;
-  padding: 8px 12px;
-  background: var(--edge);
-  color: var(--text);
-  text-decoration: none;
-  clip-path: var(--notch);
+  flex: 1;
+  min-width: 0;
 }
 
-.lesson-stepper__link::before {
+.lesson-stepper__item + .lesson-stepper__item::before {
   content: '';
   position: absolute;
-  inset: 2px;
-  z-index: 0;
-  background: var(--panel);
-  clip-path: var(--notch);
+  top: 27px;
+  left: -22px;
+  width: 18px;
+  height: 3px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--faint) 0 3px,
+    transparent 0 6px
+  );
 }
 
-.lesson-stepper__link > * {
-  position: relative;
-}
-
-.lesson-stepper__item[aria-current='step'] .lesson-stepper__link {
-  background: var(--text);
+.lesson-stepper__link {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  column-gap: 12px;
+  align-items: center;
+  min-height: 56px;
+  padding-right: 12px;
+  color: var(--muted);
+  text-decoration: none;
 }
 
 .lesson-stepper__num {
-  font-family: var(--font-mono), monospace;
-  font-size: 12px;
+  --ring: var(--edge);
+  position: relative;
+  display: grid;
+  grid-row: span 2;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  background: var(--ring);
+  clip-path: var(--notch);
+  color: var(--muted);
+  font: 400 13px var(--font-code);
+}
+
+.lesson-stepper__num::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: var(--bg);
+  clip-path: var(--notch);
+}
+
+.lesson-stepper__num > * {
+  position: relative;
 }
 
 .lesson-stepper__label {
+  align-self: end;
+  color: var(--muted);
+  font-size: 15px;
   font-weight: 600;
+  line-height: 1.2;
 }
 
 .lesson-stepper__status {
+  align-self: start;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
+  line-height: 1.3;
 }
 
-.lesson-stepper__item--indisponivel .lesson-stepper__label {
-  color: var(--muted);
+.lesson-stepper__item--feito .lesson-stepper__num {
+  --ring: var(--c);
+  color: var(--on-u);
 }
 
-/* Ring drawn inside the clip-path so it is not clipped. */
+.lesson-stepper__item--feito .lesson-stepper__num::before {
+  background: var(--c);
+}
+
+.lesson-stepper__item--feito .lesson-stepper__label,
+.lesson-stepper__item[aria-current='step'] .lesson-stepper__label {
+  color: var(--text);
+}
+
+.lesson-stepper__item[aria-current='step'] .lesson-stepper__num {
+  --ring: var(--text);
+  color: var(--text);
+}
+
 .lesson-stepper__link:focus-visible {
   outline: 2px solid var(--text);
-  outline-offset: -6px;
+  outline-offset: 2px;
 }
 
-@media (max-width: 40rem) {
-  .lesson-stepper {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+@media (max-width: 720px) {
+  /* Kept for screen readers, hidden to the eye like the prototype. */
+  .lesson-stepper__status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .lesson-stepper__link {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    row-gap: 4px;
+    padding: 6px 0;
+  }
+
+  .lesson-stepper__num {
+    grid-row: auto;
+  }
+
+  .lesson-stepper__label {
+    align-self: auto;
+    font-size: 13px;
+  }
+
+  .lesson-stepper__item + .lesson-stepper__item::before {
+    top: 24px;
+    left: -10px;
+    width: 12px;
   }
 }

@@ -134,7 +134,8 @@ describe('página do nó', () => {
     expect(
       screen.getByRole('progressbar', { name: '0 de 3 pontos de domínio' }),
     ).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: '← Trilha' })).toHaveAttribute(
+    // v4: the arrow is now a decorative pixel icon, so the link name is "Trilha".
+    expect(screen.getByRole('link', { name: 'Trilha' })).toHaveAttribute(
       'href',
       '/trilha',
     );

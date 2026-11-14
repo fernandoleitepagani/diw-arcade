@@ -45,11 +45,12 @@ describe('Ler layout (?passo=ler)', () => {
     expect(
       stepper.compareDocumentPosition(h1) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
-    expect(screen.getByRole('link', { name: '← Flexbox e Grid' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Flexbox e Grid' })).toHaveAttribute(
       'href',
       '/no/n09',
     );
-    expect(screen.getByText('2 pontos')).toBeInTheDocument();
+    // once in the stepper tile, once in the meta line
+    expect(screen.getAllByText('2 pontos')).toHaveLength(2);
     expect(screen.getByText(/^cerca de \d+ minutos?$/)).toBeInTheDocument();
     const points = screen.getAllByRole('listitem').filter((li) => li.matches('.primer__point'));
     expect(points).toHaveLength(2);

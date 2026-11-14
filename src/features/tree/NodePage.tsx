@@ -34,14 +34,23 @@ import { usePrimer } from '../lesson/usePrimer';
 import { Domina } from '../lesson/Domina';
 import { LessonStepper, STEP_LABEL } from '../lesson/LessonStepper';
 import { getCardMastery, getMasteryStars } from '../lesson/masteryState';
+import { readMinutes } from '../lesson/PrimerView';
 import {
   ConstruirPanel,
   FixarPanel,
   LerPanel,
+  LerStage,
+  plural,
   PraticarPanel,
 } from '../lesson/StepPanels';
+import {
+  getBestRound,
+  getStepCounts,
+  getUnitLabs,
+} from '../lesson/stepCounts';
+import { PixelIcon } from '../../components/pixel/PixelIcon/PixelIcon';
+import { UNIT_COLOR } from '../../styles/unitColors';
 import '../lesson/lesson.css';
-import { getNodeState, NODE_STATE_LABEL } from './nodeState';
 
 const ISOLATED_SAVE = createEmptySave(new Date(0));
 const ISOLATED_NOW = new Date(0);
@@ -80,19 +89,15 @@ export function NodePage() {
   const dispatch = progress?.dispatch ?? NOOP_DISPATCH;
   const now = progress?.now ?? ISOLATED_NOW;
 
-  const back = (
-    <Link className="lesson__back" to="/trilha">
-      ← Trilha
-    </Link>
-  );
-
   if (!node) {
     return (
       <section className="page lesson">
-        <PixelPanel as="section" className="lesson__header">
+        <PixelPanel as="section" className="lesson__stage">
           <h1 className="lesson__title">Nó não encontrado</h1>
           <p>O endereço não corresponde a nenhum nó da árvore.</p>
-          {back}
+          <Link className="lesson__back" to="/trilha">
+            ← Trilha
+          </Link>
         </PixelPanel>
       </section>
     );
@@ -110,7 +115,6 @@ export function NodePage() {
 
   const stars = getStars(save, nodeId, content);
   const mastery = getMasteryStars(stars);
-  const state = getNodeState(save, nodeId, content);
   const steps = getLessonSteps(save, nodeId, content, {
     hasPrimer: hasPrimer(nodeId),
     primersRead: getPrimersRead(save) as ReadonlySet<NodeId>,
@@ -142,76 +146,129 @@ export function NodePage() {
     return count;
   }
 
+  const primerPoints = primer?.points.length;
+  const counts = getStepCounts(save, nodeId, content, {
+    now,
+    primerPoints,
+  });
+  if (hasPrimer(nodeId) && primer === undefined) counts.ler = 'resumo';
+  const best = getBestRound(save, nodeId, questions.length);
+  const unitColor = unit ? UNIT_COLOR[unit.id] : undefined;
+  const aulas = `${node.aulas.length === 1 ? 'aula' : 'aulas'} ${node.aulas.join(', ')}`;
+  const stepper = (
+    <LessonStepper
+      nodeId={nodeId}
+      steps={steps}
+      current={current}
+      counts={counts}
+      color={unitColor}
+    />
+  );
+
+  if (requested === 'ler') {
+    return (
+      <section className="page lesson lesson--ler">
+        <div className="lesson__crumb">
+          <Link className="lesson__back" to={`/no/${nodeId}`}>
+            <PixelIcon name="left" />
+            {node.title}
+          </Link>
+        </div>
+        {stepper}
+        <div className="lesson__prose">
+          <h1>{node.title}</h1>
+          <p className="lesson__meta">
+            {primer ? (
+              <>
+                <span>{plural(primer.points.length, 'ponto', 'pontos')}</span>
+                <span>
+                  cerca de {plural(readMinutes(primer), 'minuto', 'minutos')}
+                </span>
+              </>
+            ) : null}
+            {unit ? <Tag unit={unit.id}>{unit.title}</Tag> : null}
+          </p>
+          <LerPanel
+            primer={primer}
+            read={steps.ler === 'feito'}
+            onRead={() => dispatch({ type: 'primer/read', nodeId })}
+            nextHref={`/no/${nodeId}/quiz`}
+          />
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="page lesson">
-      <PixelPanel as="section" className="lesson__header">
-        {back}
-        <p className="lesson__meta">
-          {unit ? <Tag unit={unit.id}>{unit.title}</Tag> : null}
-          <span>Aulas: {node.aulas.join(', ')}</span>
-          <span>{NODE_STATE_LABEL[state]}</span>
-        </p>
-        <h1 className="lesson__title">{node.title}</h1>
+      <div className="lesson__crumb">
+        <Link className="lesson__back" to="/trilha">
+          <PixelIcon name="left" />
+          Trilha
+        </Link>
+      </div>
+      <div className="lesson__lead">
+        <h1>{node.title}</h1>
+        {unit ? <Tag unit={unit.id}>{`${unit.title}, ${aulas}`}</Tag> : null}
         <div className="lesson__mastery">
-          <SegBar on={mastery.on} total={mastery.total} label={mastery.text} />
-          <span>{mastery.text}</span>
+          <p>{mastery.text}</p>
+          <SegBar
+            on={mastery.on}
+            total={mastery.total}
+            label={mastery.text}
+            color={unitColor}
+          />
         </div>
-      </PixelPanel>
+      </div>
 
       {isEmpty ? (
         <PixelPanel as="section" className="lesson__stage">
           <h2 className="lesson-panel__title">Conteúdo em breve</h2>
         </PixelPanel>
       ) : (
-        <div className="lesson__body">
-          <div className="lesson__main">
-            <LessonStepper nodeId={nodeId} steps={steps} current={current} />
-            <PixelPanel
-              as="section"
-              className="lesson__stage"
-              aria-label={STEP_LABEL[current]}
-            >
-              {current === 'ler' ? (
-                <LerPanel
-                  primer={primer}
-                  read={steps.ler === 'feito'}
-                  onRead={() => dispatch({ type: 'primer/read', nodeId })}
-                />
-              ) : null}
-              {current === 'praticar' ? (
-                <PraticarPanel
-                  nodeId={nodeId}
-                  questionCount={questions.length}
-                  starOn={stars.quiz}
-                />
-              ) : null}
-              {current === 'fixar' ? (
-                <FixarPanel
-                  key={nodeId}
-                  nodeId={nodeId}
-                  dueCount={dueCount}
-                  newCount={newCount}
-                  onIntroduceDeck={introduceDeck}
-                />
-              ) : null}
-              {current === 'construir' ? (
-                <ConstruirPanel challenges={challenges} passed={passed} />
-              ) : null}
-            </PixelPanel>
+        <>
+          {stepper}
+          <section className="lesson__stage" aria-label={STEP_LABEL[current]}>
+            {current === 'ler' ? <LerStage primer={primer} /> : null}
+            {current === 'praticar' ? (
+              <PraticarPanel
+                nodeId={nodeId}
+                questionCount={questions.length}
+                starOn={stars.quiz}
+                best={best}
+              />
+            ) : null}
+            {current === 'fixar' ? (
+              <FixarPanel
+                key={nodeId}
+                nodeId={nodeId}
+                cardCount={flashcards.length}
+                dueCount={dueCount}
+                newCount={newCount}
+                best={best}
+                onIntroduceDeck={introduceDeck}
+              />
+            ) : null}
+            {current === 'construir' ? (
+              <ConstruirPanel
+                challenges={challenges}
+                passed={passed}
+                labs={getUnitLabs(save, node.unitId)}
+              />
+            ) : null}
             {next ? (
               <ButtonLink
                 className="lesson__continue"
+                variant="quiet"
                 to={`/no/${nodeId}?passo=${next}`}
               >
                 Continuar
               </ButtonLink>
             ) : (
-              <p className="lesson__continue">
-                Nó concluído
-              </p>
+              <p className="lesson__done">Nó concluído</p>
             )}
-          </div>
-          <PixelPanel as="aside" className="lesson__aside">
+          </section>
+          <section className="lesson__sect">
             <Domina
               items={flashcards.map((card) => ({
                 id: card.id,
@@ -219,8 +276,8 @@ export function NodePage() {
                 state: getCardMastery(save, card.id),
               }))}
             />
-          </PixelPanel>
-        </div>
+          </section>
+        </>
       )}
     </section>
   );
