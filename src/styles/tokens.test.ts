@@ -57,8 +57,10 @@ function contrast(foreground: string, background: string): number {
 
 describe('design tokens', () => {
   it('aliases the display and mono fonts to the v3 font tokens', () => {
-    expect(parseCssTokens(css)['--font-display']).toBe('var(--font-px)');
-    expect(parseCssTokens(css)['--font-mono']).toBe('var(--font-code)');
+    // Temporary literal copies of the theme.css stacks (a var() would trip the pixel font floor test).
+    const theme = parseCssTokens(themeCss);
+    expect(parseCssTokens(css)['--font-display']).toBe(theme['--font-px']);
+    expect(parseCssTokens(css)['--font-mono']).toBe(theme['--font-code']);
     expect(css.toLowerCase()).not.toContain('#0a1128');
   });
 
