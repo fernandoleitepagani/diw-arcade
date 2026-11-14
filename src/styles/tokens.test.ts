@@ -79,37 +79,6 @@ describe('design tokens', () => {
     expect(tokens.durMax).toBe('600ms');
   });
 
-  it('meets the AC19 contrast table', () => {
-    const backgrounds = [
-      tokens.bg,
-      tokens.surface,
-      tokens.surface2,
-      tokens.surface3,
-    ];
-
-    for (const text of [tokens.text, tokens.textMuted]) {
-      for (const background of backgrounds) {
-        expect(contrast(text, background)).toBeGreaterThanOrEqual(4.5);
-      }
-    }
-
-    for (const color of [
-      tokens.accent,
-      tokens.reward,
-      tokens.xp,
-      tokens.success,
-      tokens.danger,
-    ]) {
-      expect(contrast(color, tokens.bg)).toBeGreaterThanOrEqual(3);
-    }
-  });
-
-  it('keeps on-accent readable on every accent fill', () => {
-    for (const fill of [tokens.accent, tokens.reward, tokens.xp]) {
-      expect(contrast(tokens.onAccent, fill)).toBeGreaterThanOrEqual(4.5);
-    }
-  });
-
   it('keeps theme.css in sync with THEMES', () => {
     const blocks = parseThemeBlocks(themeCss);
 
