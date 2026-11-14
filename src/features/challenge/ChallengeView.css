@@ -6,7 +6,7 @@
   pointer-events: none;
 }
 
-/* Workspace: title row, then editor | preview | requisitos as in the prototype. */
+/* Workspace: title row, then editor | preview side by side, requisitos and help below. */
 .challenge-view {
   display: grid;
   gap: var(--space-4);
@@ -45,19 +45,18 @@
   text-underline-offset: 3px;
 }
 
-/* The session column is 760px; the three-region workspace breaks out of it. */
+/* The session column is 760px; the wide workspace breaks out of it. */
 @media (min-width: 721px) {
   .challenge-view {
-    position: relative;
-    left: 50%;
-    width: min(1280px, calc(100vw - 64px));
-    transform: translateX(-50%);
+    /* No transform here: it would make the fixed FeedbackBar anchor to this box. */
+    width: min(1440px, calc(100vw - 64px));
+    margin-inline: calc(50% - min(1440px, calc(100vw - 64px)) / 2);
   }
 }
 
 .challenge-view__grid {
   display: grid;
-  grid-template-columns: minmax(0, 9fr) minmax(0, 7fr) minmax(0, 4fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: stretch;
   border: 2px solid var(--edge);
   min-height: 480px;
@@ -149,6 +148,9 @@
 
 /* Preview: the "localhost" frame around the sandbox iframe. */
 .challenge-view__pad {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   padding: 16px;
 }
 
@@ -158,6 +160,9 @@
 }
 
 .challenge-view__device {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   padding: 2px;
   background: var(--edge);
   clip-path: var(--notch);
@@ -165,6 +170,7 @@
 
 .challenge-view__chrome {
   display: flex;
+  flex: none;
   align-items: center;
   height: 32px;
   padding: 0 12px;
@@ -175,18 +181,28 @@
 
 .challenge-view__page {
   display: grid;
-  min-height: 200px;
+  flex: 1;
   background: var(--bg);
 }
 
 .challenge-view__page .sandbox-frame {
   grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0;
   min-height: 0;
 }
 
+/* Tall enough to read a real page: 480px up to 736px, following the viewport. */
 .challenge-view__page .sandbox-frame__viewport,
 .challenge-view__page .sandbox-frame__viewport iframe {
-  min-height: 16rem;
+  min-height: clamp(30rem, 62vh, 46rem);
+}
+
+.challenge-view__page .sandbox-frame__viewport {
+  height: 100%;
+}
+
+.challenge-view__page .sandbox-frame__viewport iframe {
+  height: 100%;
 }
 
 .challenge-view__sidebar {
@@ -194,6 +210,16 @@
   align-content: start;
   gap: var(--space-4);
   padding: 16px;
+}
+
+.challenge-view__below {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 2px solid var(--edge);
+}
+
+.challenge-view__below > :first-child {
+  border-inline-end: 2px solid var(--edge);
 }
 
 .challenge-view__sidebar > * {
@@ -388,6 +414,17 @@
 .challenge-view__solution-title:focus-visible {
   outline: 2px solid var(--text);
   outline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+  .challenge-view__below {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .challenge-view__below > :first-child {
+    border-inline-end: 0;
+    border-block-end: 2px solid var(--edge);
+  }
 }
 
 @media (max-width: 720px) {
