@@ -44,6 +44,12 @@ function ConfirmingSession() {
   return <h1>Sessão de teste</h1>;
 }
 
+function UnitSession() {
+  useSessionBar({ value: 2, max: 3, exitTo: '/', unit: 'requisitos' });
+
+  return <h1>Sessão com unidade</h1>;
+}
+
 function renderConfirmingSession() {
   const router = createMemoryRouter(
     [
@@ -97,6 +103,27 @@ describe('SessionLayout', () => {
     const column = heading.closest('.session-page');
     expect(column).not.toBeNull();
     expect(column).toContainElement(container.querySelector('.quiz-round'));
+  });
+
+  it('shows the "n de m" counter next to the segmented bar', async () => {
+    renderConfirmingSession();
+
+    expect(await screen.findByText('1 de 4')).toBeInTheDocument();
+  });
+
+  it('appends the unit to the counter when the session gives one', async () => {
+    const router = createMemoryRouter(
+      [
+        {
+          element: <SessionLayout />,
+          children: [{ path: '/', element: <UnitSession /> }],
+        },
+      ],
+      { initialEntries: ['/'] },
+    );
+    render(<RouterProvider router={router} />);
+
+    expect(await screen.findByText('2 de 3 requisitos')).toBeInTheDocument();
   });
 
   it('puts the flashcards header in the content column', async () => {

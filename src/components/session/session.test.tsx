@@ -138,6 +138,32 @@ describe('SessionSummary', () => {
     expect(screen.getByRole('button', { name: 'Nova rodada' })).toBeInTheDocument();
   });
 
+  it('renders the score, facts, level bar and prose when given', () => {
+    renderSummary({
+      stats: [],
+      bitLine: 'Boa. Só dois deslizes.',
+      score: { right: 8, total: 10 },
+      facts: [
+        { label: 'XP', value: '+40', sprite: 'coin' },
+        { label: 'cartas novas', value: 6 },
+        { label: 'dias de sequência', value: 4, sprite: 'flame' },
+      ],
+      level: { missing: 60, next: 4, on: 4, total: 10 },
+      prose: 'Vamos fixar com 6 cartas?',
+    });
+
+    expect(screen.getByText('Você acertou')).toBeInTheDocument();
+    expect(screen.getByText('8 de 10')).toBeInTheDocument();
+    expect(screen.getByText('Boa. Só dois deslizes.')).toBeInTheDocument();
+    expect(screen.getByText('+40')).toBeInTheDocument();
+    expect(screen.getByText('cartas novas')).toBeInTheDocument();
+    expect(screen.getByText('Faltam 60 XP para o nível 4')).toBeInTheDocument();
+    expect(screen.getByText('Vamos fixar com 6 cartas?')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Rodada concluída' }),
+    ).toBeInTheDocument();
+  });
+
   it('omits the stars block when starsAfter is absent', () => {
     renderSummary();
     expect(screen.queryByText('Estrelas conquistadas')).not.toBeInTheDocument();
