@@ -229,12 +229,12 @@ async function driveQuiz(page: Page, state: ProtoScreen['state']): Promise<void>
 }
 
 /** Elementos interativos visíveis com menos de 44px em alguma dimensão. */
-async function smallTargets(page: Page): Promise<number> {
+async function smallTargets(page: Page): Promise<string[]> {
   return page.evaluate(() => {
     const nodes = document.querySelectorAll(
       'a[href], button, input, select, textarea, [role="button"], [role="tab"]',
     );
-    let n = 0;
+    const found: string[] = [];
     nodes.forEach((el) => {
       const r = el.getBoundingClientRect();
       const style = getComputedStyle(el);
@@ -242,9 +242,13 @@ async function smallTargets(page: Page): Promise<number> {
       // Skip link and sr-only elements are visually hidden (1px clip).
       if (el.matches('.shell__skip, .sr-only, .visually-hidden')) return;
       if (r.width <= 1 && r.height <= 1) return;
-      if (r.width < 44 || r.height < 44) n += 1;
+      if (r.width < 44 || r.height < 44) {
+        const cls = typeof el.className === 'string' ? el.className.trim().replace(/\s+/g, '.') : '';
+        const text = (el.textContent ?? '').replace(/\s+/g, ' ').trim().slice(0, 40);
+        found.push(`${el.tagName.toLowerCase()}${cls ? `.${cls}` : ''} "${text}" ${Math.round(r.width)}x${Math.round(r.height)}`);
+      }
     });
-    return n;
+    return found;
   });
 }
 
@@ -284,9 +288,9 @@ async function protoMain(
           count += 1;
         }
         if (viewport.width < 600) {
-          console.log(
-            `alvos<44px: ${await smallTargets(page)} (${screen.screen}, ${theme})`,
-          );
+          const small = await smallTargets(page);
+          console.log(`alvos<44px: ${small.length} (${screen.screen}, ${theme})`);
+          for (const line of small) console.log(`  - ${line}`);
         }
         await context.close();
       }
