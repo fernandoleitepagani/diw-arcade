@@ -1,7 +1,7 @@
 .code-editor {
   height: 100%;
   overflow: hidden;
-  border: 2px solid var(--edge);
+  border: 0;
   background: var(--surface);
 }
 

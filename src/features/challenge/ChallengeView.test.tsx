@@ -107,8 +107,9 @@ describe('ChallengeView', () => {
     await user.click(screen.getByRole('button', { name: 'Executar testes' }));
 
     expect(await screen.findByText('1 de 2 requisitos')).toBeInTheDocument();
-    expect(screen.getByText('✓')).toBeInTheDocument();
-    expect(screen.getByText('✗')).toBeInTheDocument();
+    // v4: status markers are pixel icons with an accessible name, not glyph text.
+    expect(screen.getByRole('img', { name: 'passou' })).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'falhou' })).toBeInTheDocument();
 
     await waitFor(() =>
       expect(dispatch).toHaveBeenCalledWith({
